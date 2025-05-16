@@ -1,36 +1,132 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Dexter - Next.js Dashboard Application
+
+A modern, well-organized Next.js application with TypeScript and Tailwind CSS.
+
+## Project Structure
+
+```
+src/
+├── app/                 # Next.js app directory
+├── components/          # React components
+│   ├── common/         # Reusable components
+│   ├── dashboard/      # Dashboard-specific components
+│   └── trade/          # Trading-specific components
+├── hooks/              # Custom React hooks
+├── utils/              # Utility functions
+├── styles/             # Global styles and theme
+├── types/              # TypeScript type definitions
+├── constants/          # Application constants
+├── store/              # State management
+├── assets/             # Static assets
+│   ├── images/        # Image assets
+│   │   ├── dashboard/ # Dashboard images
+│   │   ├── trade/     # Trading images
+│   │   └── common/    # Common images
+│   └── icons/         # Icon assets
+├── layouts/            # Layout components
+└── interfaces/         # TypeScript interfaces
+```
+
+## Technology Stack
+
+- Next.js 14
+- TypeScript
+- Tailwind CSS
+- ESLint
+- React
+
+## Design Standards
+
+### Colors
+
+The project uses a comprehensive color system defined in `src/styles/theme.ts`:
+
+- Primary colors (Blue)
+- Neutral colors (Gray)
+- Success colors (Green)
+- Error colors (Red)
+- Warning colors (Yellow)
+
+### Typography
+
+- Primary font: Inter
+- Monospace font: JetBrains Mono
+- Font sizes and line heights are standardized in the theme
+
+### Spacing
+
+A consistent spacing scale is defined in the theme, ranging from 0 to 96 units.
+
+### Breakpoints
+
+Standard breakpoints for responsive design:
+
+- sm: 640px
+- md: 768px
+- lg: 1024px
+- xl: 1280px
+- 2xl: 1536px
+
+### Animations
+
+Common animations are defined in `src/styles/animations.ts`:
+
+- Fade in/out
+- Slide in from different directions
+- Scale in/out
+- Bounce
+- Pulse
+- Spin
+
+## Component Guidelines
+
+1. Components should be reusable and modular
+2. Maximum component size: 600 lines
+3. Use TypeScript interfaces for props
+4. Implement proper error handling
+5. Follow accessibility best practices
+
+## State Management
+
+- Use React Context for global state
+- Implement custom hooks for reusable logic
+- Keep components focused and maintainable
+
+## Code Organization
+
+1. Keep interfaces in separate files
+2. Implement hooks in the hooks directory
+3. Place utility functions in the utils directory
+4. Maintain consistent file naming conventions
 
 ## Getting Started
 
-First, run the development server:
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Run the development server:
+   ```bash
+   npm run dev
+   ```
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Development Guidelines
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1. Follow TypeScript best practices
+2. Use Tailwind CSS for styling
+3. Write clean, maintainable code
+4. Document complex logic
+5. Test components thoroughly
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Contributing
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Create a new branch for your feature
+2. Follow the established code style
+3. Write clear commit messages
+4. Submit a pull request
 
-## Learn More
+## License
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT License

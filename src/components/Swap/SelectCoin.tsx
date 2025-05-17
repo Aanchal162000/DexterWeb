@@ -270,7 +270,7 @@ function SelectCoin({
       <div className="h-full mt-3 px-1 pb-3 overflow-hidden flex flex-col min-h-[420px] max-h-[440px]">
         <div className="h-fit flex gap-3 w-full px-3">
           {!isNetworkOpen && (
-            <div className="flex items-center justify-between border border-[#818284] rounded-md px-3 py-1.5 w-full">
+            <div className="flex items-center justify-between border border-primary-100 rounded-md px-3 py-1.5 w-full">
               <input
                 placeholder="Search Tokens"
                 className="p-1 bg-transparent w-[calc(100%)] !outline-none text-sm placeholder:text-[#999999]"
@@ -287,7 +287,7 @@ function SelectCoin({
           )}
           {!isFiatBridge && (
             <button
-              className={`relative rounded-md flex flex-row justify-between items-center w-full border px-2 border-[#818284] text-xs md:text-sm py-2  ${
+              className={`relative rounded-md flex flex-row justify-between items-center w-full border px-2 border-primary-100 text-xs md:text-sm py-2  ${
                 selectedNetwork ? "text-white" : "text-[#818284]"
               }`}
               // disabled={fromOrTo === "ToSelection"}

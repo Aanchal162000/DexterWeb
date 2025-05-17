@@ -30,7 +30,7 @@ const VirtualCard: React.FC<VirtualCardProps> = ({
       </div>
       {showBuyButton && onBuyClick && (
         <button
-          className="w-full mt-3 py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors text-sm"
+          className="w-full mt-3 py-2 px-4 bg-primary-100 hover:bg-primary-100/70 text-black rounded-lg transition-colors text-sm"
           onClick={() => onBuyClick(virtual)}
         >
           Buy Now

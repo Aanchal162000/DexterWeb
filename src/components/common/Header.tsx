@@ -16,7 +16,7 @@ const Header = (props: any) => {
   console.log("networkss", network);
 
   return (
-    <div className="relative flex items-center sm:justify-between justify-center w-screen bg-[#15181B]/80 border-b-[1px] border-primary-100/60 px-14 py-3 z-30">
+    <div className="relative flex items-center sm:justify-between justify-center w-full h-[4.8rem] bg-[#15181B]/80 border-b-[1px] border-primary-100/60 px-14 py-2 z-30">
       <Image src="/Login/logo.png" alt="Dexter" height={130} width={110} />
       <div className="relative flex flex-row space-x-4">
         <div className="relative flex flex-row space-x-4 justify-center items-center">

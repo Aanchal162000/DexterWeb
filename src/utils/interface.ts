@@ -254,3 +254,17 @@ export interface ISymbiosisSwapResponse {
   amountOut: string;
   amountOutMin: string;
 }
+
+export interface IVirtual {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  image: string;
+}
+
+export interface IBuyModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  virtual: IVirtual | null;
+}

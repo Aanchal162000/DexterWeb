@@ -1,14 +1,24 @@
 "use client";
 
-import React from "react";
+import React, { ReactNode } from "react";
 import { useLoginContext } from "../context/LoginContext";
 import Footer from "./common/Footer";
 import Image from "next/image";
 import Header from "./common/Header";
 import Swap from "./Swap/Swap";
+import { IRouter, TRoute } from "@/utils/interface";
+import { headerRoutes } from "@/constants/config";
+import Snipe from "./Snipe/Snipe";
+
+export type IRouterKey = (typeof headerRoutes)[number]["id"];
+
+export const Router: { [key: IRouterKey]: ReactNode } = {
+  Trade: <Swap />,
+  Snipe: <Snipe />,
+};
 
 const Dashboard = () => {
-  const { address } = useLoginContext();
+  const { address, activeTab } = useLoginContext();
 
   return (
     <div className="relative h-full w-full">
@@ -16,7 +26,7 @@ const Dashboard = () => {
 
       <div className="relative flex flex-col z-20 w-full h-[calc(100vh-6.8vh)]">
         <Header />
-        <Swap />
+        {Router[activeTab]}
       </div>
       <Footer />
     </div>

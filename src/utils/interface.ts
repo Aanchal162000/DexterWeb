@@ -232,13 +232,7 @@ export interface IAssetsData {
   imgNetwork: string;
 }
 
-export type TRoute =
-  | "Trade"
-  | "Frontier"
-  | "Leaderboard"
-  | "Early Access Perks"
-  | "FAQs"
-  | "Help Center";
+export type TRoute = "Trade" | "Snipe" | "Alerts" | "DCA" | "Support";
 
 export interface IRouter {
   id: string;

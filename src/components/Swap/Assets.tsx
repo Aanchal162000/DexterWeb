@@ -181,12 +181,12 @@ const Assets = ({
           >
             <tr>
               {new Array(5).fill(0).map((_, index) => (
-                <th key={index} className="h-[1px] p-0 bg-[#818284]/70"></th>
+                <th key={index} className="h-[1px] p-0 bg-[#26fcfc]/70"></th>
               ))}
             </tr>
             <tr
               className={clsx(
-                "##[&>th]:border-y text-prime-zinc-100 [&>th]:border-primary-100 text-sm [&>th:first-child]:pl-8 [&>th:last-child]:pr-8 [&>th]:py-2 [&>th]:px-[0.7rem]"
+                " text-prime-zinc-100  text-sm [&>th:first-child]:pl-8 [&>th:last-child]:pr-8 [&>th]:py-2 [&>th]:px-[0.7rem]"
               )}
             >
               <th>Holdings</th>
@@ -197,7 +197,7 @@ const Assets = ({
             </tr>
             <tr>
               {new Array(5).fill(0).map((_, index) => (
-                <th key={index} className="h-[1px] p-0 bg-[#818284]/70"></th>
+                <th key={index} className="h-[1px] p-0 bg-[#26fcfc]/70"></th>
               ))}
             </tr>
           </thead>
@@ -281,7 +281,7 @@ const Assets = ({
       </div>
 
       {/* Pagination */}
-      <div className="relative w-full px-4 !!py-3 py-2 border-t border-primary-100 mt-auto flex items-center justify-center">
+      <div className="relative w-full px-4 !!py-3 py-2 border-t border-primary-100/70 mt-auto flex items-center justify-center">
         {/* <Pagination setCurrentPageNo={setCurrentPageNo} currentPageNo={currentPageNo} totalPages={totalPages} /> */}
         <div className="invisible">.</div>
         <span className="absolute text-xs right-9 top-1/2 -translate-y-1/2 font-bold text-prime-zinc-100 flex items-center flex-nowrap text-nowrap">

@@ -502,8 +502,23 @@ export const headerRoutes: IRouter[] = [
     isActive: true,
   },
   {
-    id: "help-center",
-    name: "Help Center",
+    id: "snipe",
+    name: "Snipe",
+    isActive: true,
+  },
+  {
+    id: "alerts",
+    name: "Alerts",
+    isActive: true,
+  },
+  {
+    id: "DCA",
+    name: "DCA",
+    isActive: true,
+  },
+  {
+    id: "Support",
+    name: "Support",
     isActive: true,
   },
 ] as const;

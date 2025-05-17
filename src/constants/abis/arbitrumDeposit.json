@@ -1,0 +1,33 @@
+[
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "destination",
+        "type": "bytes21"
+      }
+    ],
+    "name": "deposit",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "name": "lockPartisia",
+    "type": "function",
+    "inputs": [
+      {
+        "type": "bytes",
+        "name": "_data"
+      },
+      {
+        "type": "bytes21",
+        "name": "_username"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "outputs": [],
+    "constant": false
+  }
+]

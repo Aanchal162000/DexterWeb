@@ -1,28 +1,94 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@layer utilities {
+  .text-mandatory {
+    @apply after:content-['*'] after:text-red-500 after:-translate-y-1 after:translate-x-1;
+  }
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+  font-family: "Lato", sans-serif;
+  font-size: 14px;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+*::-webkit-scrollbar {
+  display: none;
+}
+
+.rotate {
+  transform-origin: 450px 700px;
+  animation: rotate 10s linear infinite;
+  backface-visibility: hidden; /* Optimize rendering during animation */
+}
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.scrollbar::-webkit-scrollbar {
+  display: block;
+}
+
+.small-bar::-webkit-scrollbar {
+  width: 4px;
+  height: 10px;
+  display: block;
+  transition: all 0.3s ease-in-out;
+}
+
+.small-bar-hidden::-webkit-scrollbar-thumb {
+  border-radius: 2px;
+  background: #5a5a5a11 !important;
+}
+
+.small-bar-hidden::-webkit-scrollbar-thumb:hover {
+  background: #686b6e11 !important;
+}
+
+.small-bar::-webkit-scrollbar-thumb {
+  border-radius: 2px;
+  background: #26fcfc;
+}
+
+.small-bar::-webkit-scrollbar-thumb:hover {
+  background: #26fcfc;
+}
+.small-bar::-webkit-scrollbar-track {
+  background: #0d0d0d11;
+  border-radius: 3px;
 }

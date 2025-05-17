@@ -1,0 +1,560 @@
+[
+  {
+    "id": null,
+    "address": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "name": "Ether",
+    "shortName": "ETH",
+    "decimals": 18,
+    "chainId": 8453,
+    "logo": "https://raw.githubusercontent.com/baseswapfi/default-token-list/main/images/ETH.webp",
+    "tradeable": true,
+    "isQuoteToken": false,
+    "isStableCoin": false,
+    "currentPrice": {
+      "price": 2369.14,
+      "__typename": "GqlTokenCurrentPrice"
+    },
+    "__typename": "GqlToken",
+    "coingeckoId": "ethereum"
+  },
+  {
+    "id": "8453-0x940181a94a35a4569e4529a3cdfb74e38fd98631",
+    "address": "0x940181a94a35a4569e4529a3cdfb74e38fd98631",
+    "name": "Aerodrome",
+    "shortName": "AERO",
+    "decimals": 18,
+    "chainId": 8453,
+    "logo": "https://raw.githubusercontent.com/baseswapfi/default-token-list/main/images/aero.png?raw=true",
+    "tradeable": true,
+    "isQuoteToken": false,
+    "isStableCoin": false,
+    "currentPrice": {
+      "price": 1.17,
+      "__typename": "GqlTokenCurrentPrice"
+    },
+    "__typename": "GqlToken",
+    "coingeckoId": "aerodrome-finance"
+  },
+  {
+    "id": "8453-0xeb466342c4d449bc9f53a865d5cb90586f405215",
+    "address": "0xeb466342c4d449bc9f53a865d5cb90586f405215",
+    "name": "axlUSDC",
+    "shortName": "axlUSDC",
+    "decimals": 6,
+    "chainId": 8453,
+    "logo": "https://assets.coingecko.com/coins/images/26476/standard/uausdc_D_3x.png?1696525548",
+    "tradeable": true,
+    "isQuoteToken": false,
+    "isStableCoin": true,
+    "currentPrice": {
+      "price": 0.997996,
+      "__typename": "GqlTokenCurrentPrice"
+    },
+    "__typename": "GqlToken",
+    "coingeckoId": "axlusdc"
+  },
+  {
+    "id": "8453-0xbe5614875952b1683cb0a2c20e6509be46d353a4",
+    "address": "0xbe5614875952b1683cb0a2c20e6509be46d353a4",
+    "name": "Baby Brett",
+    "shortName": "BBRETT",
+    "decimals": 9,
+    "chainId": 8453,
+    "logo": "https://raw.githubusercontent.com/baseswapfi/default-token-list/main/images/BBRETT.webp",
+    "tradeable": true,
+    "isQuoteToken": false,
+    "isStableCoin": false,
+    "currentPrice": {
+      "price": 0.004983,
+      "__typename": "GqlTokenCurrentPrice"
+    },
+    "__typename": "GqlToken",
+    "coingeckoId": "baby-brett-on-base"
+  },
+  {
+    "id": "8453-0xbc45647ea894030a4e9801ec03479739fa2485f0",
+    "address": "0xbc45647ea894030a4e9801ec03479739fa2485f0",
+    "name": "Basenji",
+    "shortName": "BENJI",
+    "decimals": 18,
+    "chainId": 8453,
+    "logo": "https://raw.githubusercontent.com/baseswapfi/default-token-list/main/images/BENJI.jpg",
+    "tradeable": true,
+    "isQuoteToken": false,
+    "isStableCoin": false,
+    "currentPrice": {
+      "price": 0.02571,
+      "__typename": "GqlTokenCurrentPrice"
+    },
+    "__typename": "GqlToken",
+    "coingeckoId": "basenji"
+  },
+  {
+    "id": "8453-0x532f27101965dd16442e59d40670faf5ebb142e4",
+    "address": "0x532f27101965dd16442e59d40670faf5ebb142e4",
+    "name": "Brett",
+    "shortName": "BRETT",
+    "decimals": 18,
+    "chainId": 8453,
+    "logo": "https://raw.githubusercontent.com/baseswapfi/default-token-list/a4c368189b68c7a2eacb5bdb8546d7e9ae18f617/images/brett.png",
+    "tradeable": true,
+    "isQuoteToken": false,
+    "isStableCoin": false,
+    "currentPrice": {
+      "price": 0.08229,
+      "__typename": "GqlTokenCurrentPrice"
+    },
+    "__typename": "GqlToken",
+    "coingeckoId": "based-brett"
+  },
+  {
+    "id": "8453-0x78a087d713be963bf307b18f2ff8122ef9a63ae9",
+    "address": "0x78a087d713be963bf307b18f2ff8122ef9a63ae9",
+    "name": "BaseSwap Token",
+    "shortName": "BSWAP",
+    "decimals": 18,
+    "chainId": 8453,
+    "logo": "https://raw.githubusercontent.com/baseswapfi/default-token-list/a92cc10e30462a2ab4585138edf89872c5722ef5/images/bswap.png",
+    "tradeable": true,
+    "isQuoteToken": true,
+    "isStableCoin": false,
+    "currentPrice": {
+      "price": 0.228,
+      "__typename": "GqlTokenCurrentPrice"
+    },
+    "__typename": "GqlToken",
+    "coingeckoId": "baseswap"
+  },
+  {
+    "id": "8453-0xd5046b976188eb40f6de40fb527f89c05b323385",
+    "address": "0xd5046b976188eb40f6de40fb527f89c05b323385",
+    "name": "Base X",
+    "shortName": "BSX",
+    "decimals": 18,
+    "chainId": 8453,
+    "logo": "https://raw.githubusercontent.com/baseswapfi/default-token-list/a92cc10e30462a2ab4585138edf89872c5722ef5/images/bsx.png",
+    "tradeable": true,
+    "isQuoteToken": false,
+    "isStableCoin": false,
+    "currentPrice": {
+      "price": 0.03228,
+      "__typename": "GqlTokenCurrentPrice"
+    },
+    "__typename": "GqlToken",
+    "coingeckoId": "basex"
+  },
+  {
+    "id": "8453-0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf",
+    "address": "0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf",
+    "name": "Coinbase Wrapped BTC",
+    "shortName": "cbBTC",
+    "decimals": 8,
+    "chainId": 8453,
+    "logo": "https://raw.githubusercontent.com/baseswapfi/default-token-list/main/images/cbBTC.png",
+    "tradeable": true,
+    "isQuoteToken": false,
+    "isStableCoin": false,
+    "currentPrice": {
+      "price": 60030,
+      "__typename": "GqlTokenCurrentPrice"
+    },
+    "__typename": "GqlToken",
+    "coingeckoId": "coinbase-wrapped-btc"
+  },
+  {
+    "id": "8453-0x5babfc2f240bc5de90eb7e19d789412db1dec402",
+    "address": "0x5babfc2f240bc5de90eb7e19d789412db1dec402",
+    "name": "CIRCLE",
+    "shortName": "CIRCLE",
+    "decimals": 18,
+    "chainId": 8453,
+    "logo": "https://raw.githubusercontent.com/baseswapfi/default-token-list/main/images/CIRCLE.png?raw=true",
+    "tradeable": true,
+    "isQuoteToken": false,
+    "isStableCoin": false,
+    "currentPrice": {
+      "price": 3.72,
+      "__typename": "GqlTokenCurrentPrice"
+    },
+    "__typename": "GqlToken",
+    "coingeckoId": "burning-circle"
+  },
+  {
+    "id": "8453-0x4dd9077269dd08899f2a9e73507125962b5bc87f",
+    "address": "0x4dd9077269dd08899f2a9e73507125962b5bc87f",
+    "name": "Crash",
+    "shortName": "CRASH",
+    "decimals": 18,
+    "chainId": 8453,
+    "logo": "https://raw.githubusercontent.com/baseswapfi/default-token-list/main/images/CRASH.webp",
+    "tradeable": true,
+    "isQuoteToken": false,
+    "isStableCoin": false,
+    "currentPrice": {
+      "price": 0.006978,
+      "__typename": "GqlTokenCurrentPrice"
+    },
+    "__typename": "GqlToken",
+    "coingeckoId": "crash-on-base"
+  },
+  {
+    "id": "8453-0x50c5725949a6f0c72e6c4a641f24049a917db0cb",
+    "address": "0x50c5725949a6f0c72e6c4a641f24049a917db0cb",
+    "name": "DAI Stablecoin Token",
+    "shortName": "DAI",
+    "decimals": 18,
+    "chainId": 8453,
+    "logo": "https://assets.coingecko.com/coins/images/9956/standard/Badge_Dai.png?1696509996",
+    "tradeable": true,
+    "isQuoteToken": true,
+    "isStableCoin": true,
+    "currentPrice": {
+      "price": 0.996884,
+      "__typename": "GqlTokenCurrentPrice"
+    },
+    "__typename": "GqlToken",
+    "coingeckoId": "l2-standard-bridged-dai-base"
+  },
+  {
+    "id": "8453-0x4ed4e862860bed51a9570b96d89af5e1b0efefed",
+    "address": "0x4ed4e862860bed51a9570b96d89af5e1b0efefed",
+    "name": "Degen",
+    "shortName": "DEGEN",
+    "decimals": 18,
+    "chainId": 8453,
+    "logo": "https://raw.githubusercontent.com/baseswapfi/default-token-list/a4c368189b68c7a2eacb5bdb8546d7e9ae18f617/images/degen.png",
+    "tradeable": true,
+    "isQuoteToken": false,
+    "isStableCoin": false,
+    "currentPrice": {
+      "price": 0.00935,
+      "__typename": "GqlTokenCurrentPrice"
+    },
+    "__typename": "GqlToken",
+    "coingeckoId": "degen-base"
+  },
+  {
+    "id": "8453-0xafb89a09d82fbde58f18ac6437b3fc81724e4df6",
+    "address": "0xafb89a09d82fbde58f18ac6437b3fc81724e4df6",
+    "name": "The Doge NFT",
+    "shortName": "DOG",
+    "decimals": 18,
+    "chainId": 8453,
+    "logo": "https://raw.githubusercontent.com/baseswapfi/default-token-list/a4c368189b68c7a2eacb5bdb8546d7e9ae18f617/images/thedognft.png",
+    "tradeable": true,
+    "isQuoteToken": false,
+    "isStableCoin": false,
+    "currentPrice": {
+      "price": 0.003163,
+      "__typename": "GqlTokenCurrentPrice"
+    },
+    "__typename": "GqlToken",
+    "coingeckoId": "the-doge-nft"
+  },
+  {
+    "id": "8453-0x6921b130d297cc43754afba22e5eac0fbf8db75b",
+    "address": "0x6921b130d297cc43754afba22e5eac0fbf8db75b",
+    "name": "doginme",
+    "shortName": "doginme",
+    "decimals": 18,
+    "chainId": 8453,
+    "logo": "https://raw.githubusercontent.com/baseswapfi/default-token-list/a4c368189b68c7a2eacb5bdb8546d7e9ae18f617/images/doginme.png",
+    "tradeable": true,
+    "isQuoteToken": false,
+    "isStableCoin": false,
+    "currentPrice": {
+      "price": 0.0002397,
+      "__typename": "GqlTokenCurrentPrice"
+    },
+    "__typename": "GqlToken",
+    "coingeckoId": "doginme"
+  },
+  {
+    "id": "8453-0x60a3e35cc302bfa44cb288bc5a4f316fdb1adb42",
+    "address": "0x60a3e35cc302bfa44cb288bc5a4f316fdb1adb42",
+    "name": "EURC",
+    "shortName": "EURC",
+    "decimals": 6,
+    "chainId": 8453,
+    "logo": "https://assets.coingecko.com/coins/images/26045/standard/euro.png?1696525125",
+    "tradeable": true,
+    "isQuoteToken": false,
+    "isStableCoin": false,
+    "currentPrice": {
+      "price": 1.087,
+      "__typename": "GqlTokenCurrentPrice"
+    },
+    "__typename": "GqlToken",
+    "coingeckoId": "euro-coin"
+  },
+  {
+    "id": "8453-0xbeb0fd48c2ba0f1aacad2814605f09e08a96b94e",
+    "address": "0xbeb0fd48c2ba0f1aacad2814605f09e08a96b94e",
+    "name": "GameStop",
+    "shortName": "GME",
+    "decimals": 9,
+    "chainId": 8453,
+    "logo": "https://raw.githubusercontent.com/baseswapfi/default-token-list/main/images/GME.png",
+    "tradeable": true,
+    "isQuoteToken": false,
+    "isStableCoin": false,
+    "currentPrice": {
+      "price": 0.00511,
+      "__typename": "GqlTokenCurrentPrice"
+    },
+    "__typename": "GqlToken",
+    "coingeckoId": "gamestop-2"
+  },
+  {
+    "id": "8453-0xb1a03eda10342529bbf8eb700a06c60441fef25d",
+    "address": "0xb1a03eda10342529bbf8eb700a06c60441fef25d",
+    "name": "Mister Miggles",
+    "shortName": "MIGGLES",
+    "decimals": 18,
+    "chainId": 8453,
+    "logo": "https://raw.githubusercontent.com/baseswapfi/default-token-list/main/images/MIGGLES.webp",
+    "tradeable": true,
+    "isQuoteToken": false,
+    "isStableCoin": false,
+    "currentPrice": {
+      "price": 0.0353,
+      "__typename": "GqlTokenCurrentPrice"
+    },
+    "__typename": "GqlToken",
+    "coingeckoId": "mister-miggles"
+  },
+  {
+    "id": "8453-0x4a3a6dd60a34bb2aba60d73b4c88315e9ceb6a3d",
+    "address": "0x4a3a6dd60a34bb2aba60d73b4c88315e9ceb6a3d",
+    "name": "Magic Internet Money",
+    "shortName": "MIM",
+    "decimals": 18,
+    "chainId": 8453,
+    "logo": "https://assets.coingecko.com/coins/images/16786/standard/mimlogopng.png?1696516358",
+    "tradeable": true,
+    "isQuoteToken": false,
+    "isStableCoin": true,
+    "currentPrice": {
+      "price": 0.9844,
+      "__typename": "GqlTokenCurrentPrice"
+    },
+    "__typename": "GqlToken",
+    "coingeckoId": "magic-internet-money-base"
+  },
+  {
+    "id": "8453-0xf6e932ca12afa26665dc4dde7e27be02a7c02e50",
+    "address": "0xf6e932ca12afa26665dc4dde7e27be02a7c02e50",
+    "name": "Mochi",
+    "shortName": "MOCHI",
+    "decimals": 18,
+    "chainId": 8453,
+    "logo": "https://assets.coingecko.com/coins/images/33083/standard/mochi200.png?1703024216",
+    "tradeable": true,
+    "isQuoteToken": false,
+    "isStableCoin": false,
+    "currentPrice": {
+      "price": 0.00001007,
+      "__typename": "GqlTokenCurrentPrice"
+    },
+    "__typename": "GqlToken",
+    "coingeckoId": "mochi-thecatcoin"
+  },
+  {
+    "id": "8453-0xa3d1a8deb97b111454b294e2324efad13a9d8396",
+    "address": "0xa3d1a8deb97b111454b294e2324efad13a9d8396",
+    "name": "Overnight Finance",
+    "shortName": "OVN",
+    "decimals": 18,
+    "chainId": 8453,
+    "logo": "https://raw.githubusercontent.com/baseswapfi/default-token-list/d4e1b42de15284343d047629699c05779de26b8e/images/OVN.svg",
+    "tradeable": true,
+    "isQuoteToken": false,
+    "isStableCoin": false,
+    "currentPrice": {
+      "price": 23.97,
+      "__typename": "GqlTokenCurrentPrice"
+    },
+    "__typename": "GqlToken",
+    "coingeckoId": "overnight-finance"
+  },
+  {
+    "id": "8453-0xd722e55c1d9d9fa0021a5215cbb904b92b3dc5d4",
+    "address": "0xd722e55c1d9d9fa0021a5215cbb904b92b3dc5d4",
+    "name": "Radiant",
+    "shortName": "RDNT",
+    "decimals": 18,
+    "chainId": 8453,
+    "logo": "https://raw.githubusercontent.com/baseswapfi/default-token-list/main/images/radiant.svg",
+    "tradeable": true,
+    "isQuoteToken": false,
+    "isStableCoin": false,
+    "currentPrice": {
+      "price": 0.06565,
+      "__typename": "GqlTokenCurrentPrice"
+    },
+    "__typename": "GqlToken",
+    "coingeckoId": "radiant-capital"
+  },
+  {
+    "id": "8453-0x1c7a460413dd4e964f96d8dfc56e7223ce88cd85",
+    "address": "0x1c7a460413dd4e964f96d8dfc56e7223ce88cd85",
+    "name": "Seamless",
+    "shortName": "SEAM",
+    "decimals": 18,
+    "chainId": 8453,
+    "logo": "https://raw.githubusercontent.com/baseswapfi/default-token-list/7a0b25f64d57504139e6b425ba93a1973c89fbfa/images/SEAM.webp",
+    "tradeable": true,
+    "isQuoteToken": false,
+    "isStableCoin": false,
+    "currentPrice": {
+      "price": 1.18,
+      "__typename": "GqlTokenCurrentPrice"
+    },
+    "__typename": "GqlToken",
+    "coingeckoId": "seamless-protocol"
+  },
+  {
+    "id": "8453-0x546d239032b24eceee0cb05c92fc39090846adc7",
+    "address": "0x546d239032b24eceee0cb05c92fc39090846adc7",
+    "name": "SEED",
+    "shortName": "SEED",
+    "decimals": 18,
+    "chainId": 8453,
+    "logo": "https://raw.githubusercontent.com/baseswapfi/default-token-list/a4c368189b68c7a2eacb5bdb8546d7e9ae18f617/images/seed.png",
+    "tradeable": true,
+    "isQuoteToken": false,
+    "isStableCoin": false,
+    "currentPrice": {
+      "price": 0.03173,
+      "__typename": "GqlTokenCurrentPrice"
+    },
+    "__typename": "GqlToken",
+    "coingeckoId": "seed-2"
+  },
+  {
+    "id": "8453-0x236aa50979d5f3de3bd1eeb40e81137f22ab794b",
+    "address": "0x236aa50979d5f3de3bd1eeb40e81137f22ab794b",
+    "name": "Threshold Bitcoin",
+    "shortName": "tBTC",
+    "decimals": 18,
+    "chainId": 8453,
+    "logo": "https://assets.coingecko.com/coins/images/11224/standard/0x18084fba666a33d37592fa2633fd49a74dd93a88.png?1696511155",
+    "tradeable": true,
+    "isQuoteToken": false,
+    "isStableCoin": false,
+    "currentPrice": {
+      "price": 59860.99,
+      "__typename": "GqlTokenCurrentPrice"
+    },
+    "__typename": "GqlToken",
+    "coingeckoId": "tbtc"
+  },
+  {
+    "id": "8453-0xac1bd2486aaf3b5c0fc3fd868558b082a531b2b4",
+    "address": "0xac1bd2486aaf3b5c0fc3fd868558b082a531b2b4",
+    "name": "Toshi",
+    "shortName": "TOSHI",
+    "decimals": 18,
+    "chainId": 8453,
+    "logo": "https://assets.coingecko.com/coins/images/31126/standard/2023-08-11_13.21.24.png?1697025145",
+    "tradeable": true,
+    "isQuoteToken": false,
+    "isStableCoin": false,
+    "currentPrice": {
+      "price": 0.0001592,
+      "__typename": "GqlTokenCurrentPrice"
+    },
+    "__typename": "GqlToken",
+    "coingeckoId": "toshi"
+  },
+  {
+    "id": "8453-0x65e570b560027f493f2b1907e8e8e3b9546053bd",
+    "address": "0x65e570b560027f493f2b1907e8e8e3b9546053bd",
+    "name": "Tyler",
+    "shortName": "TYLER",
+    "decimals": 18,
+    "chainId": 8453,
+    "logo": "https://raw.githubusercontent.com/baseswapfi/default-token-list/refs/heads/main/images/TYLER.webp",
+    "tradeable": true,
+    "isQuoteToken": false,
+    "isStableCoin": false,
+    "currentPrice": {
+      "price": 0.0007855,
+      "__typename": "GqlTokenCurrentPrice"
+    },
+    "__typename": "GqlToken",
+    "coingeckoId": "tyler"
+  },
+  {
+    "id": "8453-0xd9aaec86b65d86f6a7b5b1b0c42ffa531710b6ca",
+    "address": "0xd9aaec86b65d86f6a7b5b1b0c42ffa531710b6ca",
+    "name": "USD Base Coin",
+    "shortName": "USDbC",
+    "decimals": 6,
+    "chainId": 8453,
+    "logo": "https://lcw.nyc3.cdn.digitaloceanspaces.com/production/currencies/64/usdbc.webp",
+    "tradeable": true,
+    "isQuoteToken": false,
+    "isStableCoin": true,
+    "currentPrice": {
+      "price": 0.997996,
+      "__typename": "GqlTokenCurrentPrice"
+    },
+    "__typename": "GqlToken",
+    "coingeckoId": "bridged-usd-coin-base"
+  },
+  {
+    "id": "8453-0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+    "address": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+    "name": "USDC Stablecoin",
+    "shortName": "USDC",
+    "decimals": 6,
+    "chainId": 8453,
+    "logo": "https://raw.githubusercontent.com/baseswapfi/default-token-list/e795e1fd73f94fbf6943ac043e94fd9c1dcbc40b/images/USDC.svg",
+    "tradeable": true,
+    "isQuoteToken": true,
+    "isStableCoin": true,
+    "currentPrice": {
+      "price": 0.997996,
+      "__typename": "GqlTokenCurrentPrice"
+    },
+    "__typename": "GqlToken",
+    "coingeckoId": "usd-coin"
+  },
+  {
+    "id": "8453-0x04d5ddf5f3a8939889f11e97f8c4bb48317f1938",
+    "address": "0x04d5ddf5f3a8939889f11e97f8c4bb48317f1938",
+    "name": "USDz",
+    "shortName": "USDz",
+    "decimals": 18,
+    "chainId": 8453,
+    "logo": "https://raw.githubusercontent.com/baseswapfi/default-token-list/main/images/USDz.png",
+    "tradeable": true,
+    "isQuoteToken": false,
+    "isStableCoin": false,
+    "currentPrice": {
+      "price": 0.9992,
+      "__typename": "GqlTokenCurrentPrice"
+    },
+    "__typename": "GqlToken",
+    "coingeckoId": "anzen-usdz"
+  },
+  {
+    "id": "8453-0x4200000000000000000000000000000000000006",
+    "address": "0x4200000000000000000000000000000000000006",
+    "name": "Wrapped Ether",
+    "shortName": "WETH",
+    "decimals": 18,
+    "chainId": 8453,
+    "logo": "https://raw.githubusercontent.com/baseswapfi/default-token-list/main/images/ETH.webp",
+    "tradeable": true,
+    "isQuoteToken": true,
+    "isStableCoin": false,
+    "currentPrice": {
+      "price": 2369.14,
+      "__typename": "GqlTokenCurrentPrice"
+    },
+    "__typename": "GqlToken",
+    "coingeckoId": "l2-standard-bridged-weth-base"
+  }
+]

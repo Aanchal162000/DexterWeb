@@ -2,6 +2,7 @@ import {
   OnLoadingComplete,
   PlaceholderValue,
 } from "next/dist/shared/lib/get-img-props";
+import { ethers } from "ethers";
 
 export type TCustomImageProp = Omit<
   React.DetailedHTMLProps<
@@ -32,3 +33,18 @@ export type TCustomImageProp = Omit<
   isBg?: boolean;
   fullRadius?: boolean;
 } & React.RefAttributes<HTMLImageElement | null>;
+
+export interface INetworkCard {
+  name: string;
+  status: "active" | "inactive" | "coming-soon";
+  image: string;
+  id: number | string;
+  explorer?: string;
+  code: string;
+}
+export type Tabs = "Trade" | "Alerts" | "Support" | "DCA" | "Snipe";
+export interface INetworkData {
+  account: string;
+  provider: ethers.providers.Web3Provider;
+  chainId: string | number;
+}

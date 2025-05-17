@@ -1,0 +1,4573 @@
+[
+  {
+    "address": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+    "shortName": "ETH",
+    "decimals": 18,
+    "name": "Ether",
+    "coingeckoId": "ethereum",
+    "aggregators": [],
+    "logo": "/coins/ETH.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x0000000000000000000000000000000000000000/thumbnail.png",
+    "chainId": 42161
+  },
+  {
+    "address": "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1",
+    "shortName": "DAI",
+    "decimals": 18,
+    "name": "Dai Stablecoin",
+    "coingeckoId": "dai",
+    "aggregators": [
+      "arbitrumBridge",
+      "arbitrumWhitelist",
+      "balancer",
+      "coinGecko",
+      "sushiSwap",
+      "traderJoe",
+      "uniswapLabs",
+      "oneInch",
+      "liFi",
+      "xSwap",
+      "socket",
+      "rubic",
+      "squid"
+    ],
+    "storage": {
+      "balance": 2,
+      "approval": 3
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xda10009cbd5d07dd0cecc66161fc93d7c9000da1.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xda10009cbd5d07dd0cecc66161fc93d7c9000da1/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "makerdao-arbitrum-bridged-dai-arbitrum-one"
+  },
+  {
+    "address": "0xf97f4df75117a78c1a5a0dbb814af92458539fb4",
+    "shortName": "LINK",
+    "decimals": 18,
+    "name": "ChainLink Token",
+    "coingeckoId": "chainlink",
+    "aggregators": [
+      "arbitrumBridge",
+      "arbitrumWhitelist",
+      "balancer",
+      "coinGecko",
+      "sushiSwap",
+      "traderJoe",
+      "uniswapLabs",
+      "oneInch",
+      "liFi",
+      "xSwap",
+      "socket",
+      "rubic",
+      "squid"
+    ],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xf97f4df75117a78c1a5a0dbb814af92458539fb4.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xf97f4df75117a78c1a5a0dbb814af92458539fb4/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "chainlink"
+  },
+  {
+    "address": "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9",
+    "shortName": "USDT",
+    "decimals": 6,
+    "name": "Tether USD",
+    "coingeckoId": "arbitrum-bridged-usdt-arbitrum",
+    "aggregators": [
+      "arbitrumBridge",
+      "arbitrumWhitelist",
+      "balancer",
+      "coinGecko",
+      "sushiSwap",
+      "traderJoe",
+      "uniswapLabs",
+      "oneInch",
+      "liFi",
+      "xSwap",
+      "socket",
+      "rubic",
+      "squid"
+    ],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "/coins/USDT.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "arbitrum-bridged-usdt-arbitrum"
+  },
+  {
+    "address": "0x2f2a2543b76a4166549f7aab2e75bef0aefc5b0f",
+    "shortName": "WBTC",
+    "decimals": 8,
+    "name": "Wrapped BTC",
+    "coingeckoId": "wrapped-bitcoin",
+    "aggregators": [
+      "arbitrumBridge",
+      "arbitrumWhitelist",
+      "balancer",
+      "coinGecko",
+      "sushiSwap",
+      "traderJoe",
+      "uniswapLabs",
+      "oneInch",
+      "liFi",
+      "xSwap",
+      "socket",
+      "rubic",
+      "squid"
+    ],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x2f2a2543b76a4166549f7aab2e75bef0aefc5b0f.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x2f2a2543b76a4166549f7aab2e75bef0aefc5b0f/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "arbitrum-bridged-wbtc-arbitrum-one"
+  },
+  {
+    "address": "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+    "shortName": "WETH",
+    "decimals": 18,
+    "name": "Wrapped Ether",
+    "coingeckoId": "weth",
+    "aggregators": [
+      "arbitrumBridge",
+      "arbitrumWhitelist",
+      "balancer",
+      "coinGecko",
+      "sushiSwap",
+      "traderJoe",
+      "uniswapLabs",
+      "oneInch",
+      "liFi",
+      "xSwap",
+      "socket",
+      "rubic",
+      "squid"
+    ],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x82af49447d8a07e3bd95bd0d56f35241523fbab1.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x82af49447d8a07e3bd95bd0d56f35241523fbab1/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "arbitrum-bridged-weth-arbitrum-one"
+  },
+  {
+    "address": "0x6c2c06790b3e3e3c38e12ee22f8183b37a13ee55",
+    "shortName": "DPX",
+    "decimals": 18,
+    "name": "Dopex Governance Token",
+    "coingeckoId": "dopex",
+    "aggregators": [
+      "arbitrumBridge",
+      "arbitrumWhitelist",
+      "balancer",
+      "coinGecko",
+      "sushiSwap",
+      "traderJoe",
+      "oneInch",
+      "liFi",
+      "xSwap",
+      "socket",
+      "rubic",
+      "squid"
+    ],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x6c2c06790b3e3e3c38e12ee22f8183b37a13ee55.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x6c2c06790b3e3e3c38e12ee22f8183b37a13ee55/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "dopex"
+  },
+  {
+    "address": "0xd4d42f0b6def4ce0383636770ef773390d85c61a",
+    "shortName": "SUSHI",
+    "decimals": 18,
+    "name": "SushiToken",
+    "coingeckoId": "sushi",
+    "aggregators": [
+      "arbitrumBridge",
+      "arbitrumWhitelist",
+      "balancer",
+      "coinGecko",
+      "sushiSwap",
+      "uniswapLabs",
+      "oneInch",
+      "liFi",
+      "xSwap",
+      "socket",
+      "rubic",
+      "squid"
+    ],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xd4d42f0b6def4ce0383636770ef773390d85c61a.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xd4d42f0b6def4ce0383636770ef773390d85c61a/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "sushi"
+  },
+  {
+    "address": "0xfa7f8980b0f1e64a2062791cc3b0871572f1f7f0",
+    "shortName": "UNI",
+    "decimals": 18,
+    "name": "Uniswap",
+    "coingeckoId": "uniswap",
+    "aggregators": [
+      "arbitrumBridge",
+      "arbitrumWhitelist",
+      "balancer",
+      "coinGecko",
+      "sushiSwap",
+      "uniswapLabs",
+      "oneInch",
+      "liFi",
+      "xSwap",
+      "socket",
+      "rubic",
+      "squid"
+    ],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xfa7f8980b0f1e64a2062791cc3b0871572f1f7f0.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xfa7f8980b0f1e64a2062791cc3b0871572f1f7f0/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "uniswap"
+  },
+  {
+    "address": "0x040d1edc9569d4bab2d15287dc5a4f10f56a56b8",
+    "shortName": "BAL",
+    "decimals": 18,
+    "name": "Balancer",
+    "coingeckoId": "balancer",
+    "aggregators": [
+      "arbitrumBridge",
+      "arbitrumWhitelist",
+      "balancer",
+      "coinGecko",
+      "sushiSwap",
+      "uniswapLabs",
+      "oneInch",
+      "liFi",
+      "socket",
+      "rubic",
+      "squid"
+    ],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x040d1edc9569d4bab2d15287dc5a4f10f56a56b8.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x040d1edc9569d4bab2d15287dc5a4f10f56a56b8/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "balancer"
+  },
+  {
+    "address": "0x354a6da3fcde098f8389cad84b0182725c6c91de",
+    "shortName": "COMP",
+    "decimals": 18,
+    "name": "Compound",
+    "coingeckoId": "compound-governance-token",
+    "aggregators": [
+      "arbitrumBridge",
+      "arbitrumWhitelist",
+      "balancer",
+      "coinGecko",
+      "sushiSwap",
+      "uniswapLabs",
+      "oneInch",
+      "liFi",
+      "xSwap",
+      "socket",
+      "rubic"
+    ],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x354a6da3fcde098f8389cad84b0182725c6c91de.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x354a6da3fcde098f8389cad84b0182725c6c91de/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "compound-governance-token"
+  },
+  {
+    "address": "0x11cdb42b0eb46d95f990bedd4695a6e3fa034978",
+    "shortName": "CRV",
+    "decimals": 18,
+    "name": "Curve DAO Token",
+    "coingeckoId": "curve-dao-token",
+    "aggregators": [
+      "arbitrumBridge",
+      "arbitrumWhitelist",
+      "balancer",
+      "coinGecko",
+      "sushiSwap",
+      "uniswapLabs",
+      "oneInch",
+      "liFi",
+      "xSwap",
+      "socket",
+      "rubic"
+    ],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x11cdb42b0eb46d95f990bedd4695a6e3fa034978.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x11cdb42b0eb46d95f990bedd4695a6e3fa034978/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "curve-dao-token"
+  },
+  {
+    "address": "0x539bde0d7dbd336b79148aa742883198bbf60342",
+    "shortName": "MAGIC",
+    "decimals": 18,
+    "name": "MAGIC",
+    "coingeckoId": "magic",
+    "aggregators": [
+      "arbitrumBridge",
+      "arbitrumWhitelist",
+      "coinGecko",
+      "sushiSwap",
+      "traderJoe",
+      "uniswapLabs",
+      "liFi",
+      "xSwap",
+      "socket",
+      "rubic",
+      "squid"
+    ],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x539bde0d7dbd336b79148aa742883198bbf60342.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x539bde0d7dbd336b79148aa742883198bbf60342/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "magic"
+  },
+  {
+    "address": "0x3e6648c5a70a150a88bce65f4ad4d506fe15d2af",
+    "shortName": "SPELL",
+    "decimals": 18,
+    "name": "Spell Token",
+    "coingeckoId": "spell-token",
+    "aggregators": [
+      "arbitrumBridge",
+      "arbitrumWhitelist",
+      "coinGecko",
+      "sushiSwap",
+      "uniswapLabs",
+      "oneInch",
+      "liFi",
+      "xSwap",
+      "socket",
+      "rubic",
+      "squid"
+    ],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x3e6648c5a70a150a88bce65f4ad4d506fe15d2af.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x3e6648c5a70a150a88bce65f4ad4d506fe15d2af/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "spell-token"
+  },
+  {
+    "address": "0xa0b862f60edef4452f25b4160f177db44deb6cf1",
+    "shortName": "GNO",
+    "decimals": 18,
+    "name": "Gnosis Token",
+    "coingeckoId": "gnosis",
+    "aggregators": [
+      "arbitrumBridge",
+      "arbitrumWhitelist",
+      "balancer",
+      "coinGecko",
+      "sushiSwap",
+      "uniswapLabs",
+      "oneInch",
+      "liFi",
+      "socket",
+      "rubic"
+    ],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xa0b862f60edef4452f25b4160f177db44deb6cf1.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xa0b862f60edef4452f25b4160f177db44deb6cf1/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "gnosis"
+  },
+  {
+    "address": "0xa970af1a584579b618be4d69ad6f73459d112f95",
+    "shortName": "SUSD",
+    "decimals": 18,
+    "name": "Synth sUSD",
+    "coingeckoId": "nusd",
+    "aggregators": [
+      "arbitrumBridge",
+      "arbitrumWhitelist",
+      "balancer",
+      "coinGecko",
+      "sushiSwap",
+      "uniswapLabs",
+      "liFi",
+      "xSwap",
+      "socket",
+      "rubic"
+    ],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xa970af1a584579b618be4d69ad6f73459d112f95.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xa970af1a584579b618be4d69ad6f73459d112f95/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "nusd"
+  },
+  {
+    "address": "0x912ce59144191c1204e64559fe8253a0e49e6548",
+    "shortName": "ARB",
+    "decimals": 18,
+    "name": "Arbitrum",
+    "coingeckoId": "arbitrum",
+    "aggregators": ["coinGecko", "sushiSwap", "traderJoe", "uniswapLabs", "oneInch", "liFi", "xSwap", "socket", "rubic", "squid"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x912ce59144191c1204e64559fe8253a0e49e6548.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x912ce59144191c1204e64559fe8253a0e49e6548/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "arbitrum"
+  },
+  {
+    "address": "0xfc5a1a6eb076a2c7ad06ed22c90d7e710e35ad0a",
+    "shortName": "GMX",
+    "decimals": 18,
+    "name": "GMX",
+    "coingeckoId": "gmx",
+    "aggregators": ["coinGecko", "sushiSwap", "traderJoe", "uniswapLabs", "oneInch", "liFi", "xSwap", "socket", "rubic", "squid"],
+    "storage": {
+      "balance": 5,
+      "approval": 6
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xfc5a1a6eb076a2c7ad06ed22c90d7e710e35ad0a.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xfc5a1a6eb076a2c7ad06ed22c90d7e710e35ad0a/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "gmx"
+  },
+  {
+    "address": "0xaf88d065e77c8cc2239327c5edb3a432268e5831",
+    "shortName": "USDC",
+    "decimals": 6,
+    "name": "USDC",
+    "coingeckoId": "usd-coin",
+    "aggregators": ["coinGecko", "sushiSwap", "traderJoe", "uniswapLabs", "oneInch", "liFi", "xSwap", "socket", "rubic", "squid"],
+    "storage": {
+      "balance": 9,
+      "approval": 10
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xaf88d065e77c8cc2239327c5edb3a432268e5831.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xaf88d065e77c8cc2239327c5edb3a432268e5831/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "usd-coin"
+  },
+  {
+    "address": "0x3a8b787f78d775aecfeea15706d4221b40f345ab",
+    "shortName": "CELR",
+    "decimals": 18,
+    "name": "CelerToken",
+    "coingeckoId": "celer-network",
+    "aggregators": ["arbitrumBridge", "arbitrumWhitelist", "coinGecko", "sushiSwap", "uniswapLabs", "oneInch", "liFi", "socket", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x3a8b787f78d775aecfeea15706d4221b40f345ab.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x3a8b787f78d775aecfeea15706d4221b40f345ab/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "celer-network"
+  },
+  {
+    "address": "0x9623063377ad1b27544c965ccd7342f7ea7e88c7",
+    "shortName": "GRT",
+    "decimals": 18,
+    "name": "Graph Token",
+    "coingeckoId": "the-graph",
+    "aggregators": ["arbitrumBridge", "arbitrumWhitelist", "coinGecko", "uniswapLabs", "oneInch", "liFi", "xSwap", "socket", "rubic"],
+    "storage": {
+      "balance": 52,
+      "approval": 53
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x9623063377ad1b27544c965ccd7342f7ea7e88c7.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x9623063377ad1b27544c965ccd7342f7ea7e88c7/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "the-graph"
+  },
+  {
+    "address": "0x99f40b01ba9c469193b360f72740e416b17ac332",
+    "shortName": "MATH",
+    "decimals": 18,
+    "name": "MATH Token",
+    "coingeckoId": "math",
+    "aggregators": ["arbitrumBridge", "arbitrumWhitelist", "coinGecko", "sushiSwap", "uniswapLabs", "oneInch", "liFi", "socket", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x99f40b01ba9c469193b360f72740e416b17ac332.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x99f40b01ba9c469193b360f72740e416b17ac332/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "math"
+  },
+  {
+    "address": "0x51fc0f6660482ea73330e414efd7808811a57fa2",
+    "shortName": "PREMIA",
+    "decimals": 18,
+    "name": "Premia",
+    "coingeckoId": "premia",
+    "aggregators": ["arbitrumBridge", "arbitrumWhitelist", "coinGecko", "sushiSwap", "oneInch", "liFi", "socket", "rubic", "squid"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x51fc0f6660482ea73330e414efd7808811a57fa2.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x51fc0f6660482ea73330e414efd7808811a57fa2/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "premia"
+  },
+  {
+    "address": "0xcafcd85d8ca7ad1e1c6f82f651fa15e33aefd07b",
+    "shortName": "WOO",
+    "decimals": 18,
+    "name": "Wootrade Network",
+    "coingeckoId": "woo-network",
+    "aggregators": ["arbitrumBridge", "arbitrumWhitelist", "coinGecko", "sushiSwap", "traderJoe", "uniswapLabs", "liFi", "socket", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xcafcd85d8ca7ad1e1c6f82f651fa15e33aefd07b.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xcafcd85d8ca7ad1e1c6f82f651fa15e33aefd07b/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "woo-network"
+  },
+  {
+    "address": "0x82e3a8f066a6989666b031d916c43672085b1582",
+    "shortName": "YFI",
+    "decimals": 18,
+    "name": "yearn.finance",
+    "coingeckoId": "yearn-finance",
+    "aggregators": ["arbitrumBridge", "arbitrumWhitelist", "balancer", "coinGecko", "sushiSwap", "uniswapLabs", "liFi", "socket", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x82e3a8f066a6989666b031d916c43672085b1582.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x82e3a8f066a6989666b031d916c43672085b1582/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "yearn-finance"
+  },
+  {
+    "address": "0xbfa641051ba0a0ad1b0acf549a89536a0d76472e",
+    "shortName": "BADGER",
+    "decimals": 18,
+    "name": "Badger",
+    "coingeckoId": "badger-dao",
+    "aggregators": ["arbitrumBridge", "arbitrumWhitelist", "coinGecko", "uniswapLabs", "oneInch", "liFi", "socket", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xbfa641051ba0a0ad1b0acf549a89536a0d76472e.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xbfa641051ba0a0ad1b0acf549a89536a0d76472e/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "badger-dao"
+  },
+  {
+    "address": "0xf4d48ce3ee1ac3651998971541badbb9a14d7234",
+    "shortName": "CREAM",
+    "decimals": 18,
+    "name": "Cream",
+    "coingeckoId": "cream-2",
+    "aggregators": ["arbitrumBridge", "arbitrumWhitelist", "balancer", "coinGecko", "sushiSwap", "liFi", "socket", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xf4d48ce3ee1ac3651998971541badbb9a14d7234.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xf4d48ce3ee1ac3651998971541badbb9a14d7234/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "cream-2"
+  },
+  {
+    "address": "0xc3ae0333f0f34aa734d5493276223d95b8f9cb37",
+    "shortName": "DXD",
+    "decimals": 18,
+    "name": "DXdao",
+    "coingeckoId": "dxdao",
+    "aggregators": ["arbitrumBridge", "arbitrumWhitelist", "balancer", "coinGecko", "sushiSwap", "oneInch", "socket", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xc3ae0333f0f34aa734d5493276223d95b8f9cb37.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xc3ae0333f0f34aa734d5493276223d95b8f9cb37/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "dxdao"
+  },
+  {
+    "address": "0x07e49d5de43dda6162fa28d24d5935c151875283",
+    "shortName": "GOVI",
+    "decimals": 18,
+    "name": "GOVI",
+    "coingeckoId": "govi",
+    "aggregators": ["arbitrumBridge", "arbitrumWhitelist", "coinGecko", "sushiSwap", "liFi", "socket", "rubic", "squid"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x07e49d5de43dda6162fa28d24d5935c151875283.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x07e49d5de43dda6162fa28d24d5935c151875283/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "govi"
+  },
+  {
+    "address": "0x4e352cf164e64adcbad318c3a1e222e9eba4ce42",
+    "shortName": "MCB",
+    "decimals": 18,
+    "name": "MUX Protocol",
+    "coingeckoId": "mcdex",
+    "aggregators": ["arbitrumBridge", "arbitrumWhitelist", "coinGecko", "sushiSwap", "oneInch", "liFi", "socket", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x4e352cf164e64adcbad318c3a1e222e9eba4ce42.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x4e352cf164e64adcbad318c3a1e222e9eba4ce42/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "mcdex"
+  },
+  {
+    "address": "0xef888bca6ab6b1d26dbec977c455388ecd794794",
+    "shortName": "RGT",
+    "decimals": 18,
+    "name": "Rari Governance Token",
+    "coingeckoId": "rari-governance-token",
+    "aggregators": ["arbitrumBridge", "arbitrumWhitelist", "balancer", "coinGecko", "sushiSwap", "uniswapLabs", "socket", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xef888bca6ab6b1d26dbec977c455388ecd794794.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xef888bca6ab6b1d26dbec977c455388ecd794794/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "rari-governance-token"
+  },
+  {
+    "address": "0xfea7a6a0b346362bf88a9e4a88416b77a57d6c2a",
+    "shortName": "MIM",
+    "decimals": 18,
+    "name": "Magic Internet Money  Arbitrum ",
+    "coingeckoId": "magic-internet-money-arbitrum",
+    "aggregators": ["coinGecko", "sushiSwap", "oneInch", "liFi", "xSwap", "socket", "rubic", "squid"],
+    "storage": {
+      "balance": 2,
+      "approval": 16
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xfea7a6a0b346362bf88a9e4a88416b77a57d6c2a.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xfea7a6a0b346362bf88a9e4a88416b77a57d6c2a/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "magic-internet-money-arbitrum"
+  },
+  {
+    "address": "0x088cd8f5ef3652623c22d48b1605dcfe860cd704",
+    "shortName": "VELA",
+    "decimals": 18,
+    "name": "Vela Token",
+    "coingeckoId": "vela-token",
+    "aggregators": ["coinGecko", "sushiSwap", "traderJoe", "oneInch", "liFi", "socket", "rubic", "squid"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x088cd8f5ef3652623c22d48b1605dcfe860cd704.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x088cd8f5ef3652623c22d48b1605dcfe860cd704/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "vela-token"
+  },
+  {
+    "address": "0x5979d7b546e38e414f7e9822514be443a4800529",
+    "shortName": "WSTETH",
+    "decimals": 18,
+    "name": "Wrapped stETH",
+    "coingeckoId": "wrapped-steth",
+    "aggregators": ["coinGecko", "traderJoe", "oneInch", "liFi", "xSwap", "socket", "rubic", "squid"],
+    "storage": {
+      "balance": 1,
+      "approval": 2
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x5979d7b546e38e414f7e9822514be443a4800529.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x5979d7b546e38e414f7e9822514be443a4800529/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "arbitrum-bridged-wsteth-arbitrum"
+  },
+  {
+    "address": "0x17fc002b466eec40dae837fc4be5c67993ddbd6f",
+    "shortName": "FRAX",
+    "decimals": 18,
+    "name": "Frax",
+    "coingeckoId": "frax",
+    "aggregators": ["coinGecko", "sushiSwap", "oneInch", "liFi", "xSwap", "socket", "rubic", "squid"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x17fc002b466eec40dae837fc4be5c67993ddbd6f.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x17fc002b466eec40dae837fc4be5c67993ddbd6f/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "frax"
+  },
+  {
+    "address": "0x8038f3c971414fd1fc220ba727f2d4a0fc98cb65",
+    "shortName": "DHT",
+    "decimals": 18,
+    "name": "dHedge DAO Token",
+    "coingeckoId": "dhedge-dao",
+    "aggregators": ["arbitrumBridge", "arbitrumWhitelist", "balancer", "coinGecko", "oneInch", "socket", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x8038f3c971414fd1fc220ba727f2d4a0fc98cb65.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x8038f3c971414fd1fc220ba727f2d4a0fc98cb65/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "dhedge-dao"
+  },
+  {
+    "address": "0x69eb4fa4a2fbd498c257c57ea8b7655a2559a581",
+    "shortName": "DODO",
+    "decimals": 18,
+    "name": "DODO bird",
+    "coingeckoId": "dodo",
+    "aggregators": ["arbitrumBridge", "arbitrumWhitelist", "coinGecko", "sushiSwap", "liFi", "socket", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x69eb4fa4a2fbd498c257c57ea8b7655a2559a581.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x69eb4fa4a2fbd498c257c57ea8b7655a2559a581/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "dodo"
+  },
+  {
+    "address": "0x4425742f1ec8d98779690b5a3a6276db85ddc01a",
+    "shortName": "DOG",
+    "decimals": 18,
+    "name": "The Doge NFT",
+    "coingeckoId": "the-doge-nft",
+    "aggregators": ["arbitrumBridge", "arbitrumWhitelist", "coinGecko", "sushiSwap", "liFi", "socket", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x4425742f1ec8d98779690b5a3a6276db85ddc01a.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x4425742f1ec8d98779690b5a3a6276db85ddc01a/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "the-doge-nft"
+  },
+  {
+    "address": "0xf80d589b3dbe130c270a69f1a69d050f268786df",
+    "shortName": "FLUX",
+    "decimals": 18,
+    "name": "Flux",
+    "coingeckoId": "flux",
+    "aggregators": ["arbitrumBridge", "arbitrumWhitelist", "coinGecko", "sushiSwap", "liFi", "socket", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 8
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xf80d589b3dbe130c270a69f1a69d050f268786df.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xf80d589b3dbe130c270a69f1a69d050f268786df/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "flux"
+  },
+  {
+    "address": "0x46d0ce7de6247b0a95f67b43b589b4041bae7fbe",
+    "shortName": "LRC",
+    "decimals": 18,
+    "name": "LoopringCoin V2",
+    "coingeckoId": "loopring",
+    "aggregators": ["arbitrumBridge", "arbitrumWhitelist", "coinGecko", "uniswapLabs", "liFi", "socket", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x46d0ce7de6247b0a95f67b43b589b4041bae7fbe.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x46d0ce7de6247b0a95f67b43b589b4041bae7fbe/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "loopring"
+  },
+  {
+    "address": "0x965772e0e9c84b6f359c8597c891108dcf1c5b1a",
+    "shortName": "PICKLE",
+    "decimals": 18,
+    "name": "PickleToken",
+    "coingeckoId": "pickle-finance",
+    "aggregators": ["arbitrumBridge", "arbitrumWhitelist", "balancer", "coinGecko", "liFi", "socket", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x965772e0e9c84b6f359c8597c891108dcf1c5b1a.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x965772e0e9c84b6f359c8597c891108dcf1c5b1a/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "pickle-finance"
+  },
+  {
+    "address": "0x5575552988a3a80504bbaeb1311674fcfd40ad4b",
+    "shortName": "SPA",
+    "decimals": 18,
+    "name": "Sperax",
+    "coingeckoId": "sperax",
+    "aggregators": ["arbitrumBridge", "arbitrumWhitelist", "coinGecko", "traderJoe", "liFi", "socket", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x5575552988a3a80504bbaeb1311674fcfd40ad4b.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x5575552988a3a80504bbaeb1311674fcfd40ad4b/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "sperax"
+  },
+  {
+    "address": "0x326c33fd1113c1f29b35b4407f3d6312a8518431",
+    "shortName": "STRP",
+    "decimals": 18,
+    "name": "Strips Token",
+    "coingeckoId": "strips-finance",
+    "aggregators": ["arbitrumBridge", "arbitrumWhitelist", "coinGecko", "sushiSwap", "liFi", "socket", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x326c33fd1113c1f29b35b4407f3d6312a8518431.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x326c33fd1113c1f29b35b4407f3d6312a8518431/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "strips-finance"
+  },
+  {
+    "address": "0xde903e2712288a1da82942dddf2c20529565ac30",
+    "shortName": "SWPR",
+    "decimals": 18,
+    "name": "Swapr",
+    "coingeckoId": "swapr",
+    "aggregators": ["arbitrumBridge", "arbitrumWhitelist", "coinGecko", "oneInch", "liFi", "socket", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xde903e2712288a1da82942dddf2c20529565ac30.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xde903e2712288a1da82942dddf2c20529565ac30/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "swapr"
+  },
+  {
+    "address": "0x4d15a3a2286d883af0aa1b3f21367843fac63e07",
+    "shortName": "TUSD",
+    "decimals": 18,
+    "name": "TrueUSD",
+    "coingeckoId": "bridged-trueusd",
+    "aggregators": ["arbitrumBridge", "arbitrumWhitelist", "balancer", "coinGecko", "liFi", "socket", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x4d15a3a2286d883af0aa1b3f21367843fac63e07.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x4d15a3a2286d883af0aa1b3f21367843fac63e07/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "bridged-trueusd"
+  },
+  {
+    "address": "0x51318b7d00db7acc4026c88c3952b66278b6a67f",
+    "shortName": "PLS",
+    "decimals": 18,
+    "name": "PlutusDAO",
+    "coingeckoId": "plutusdao",
+    "aggregators": ["coinGecko", "sushiSwap", "traderJoe", "liFi", "xSwap", "rubic", "squid"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x51318b7d00db7acc4026c88c3952b66278b6a67f.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x51318b7d00db7acc4026c88c3952b66278b6a67f/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "plutusdao"
+  },
+  {
+    "address": "0xd77b108d4f6cefaa0cae9506a934e825becca46e",
+    "shortName": "WINR",
+    "decimals": 18,
+    "name": "WINR Protocol",
+    "coingeckoId": "winr-protocol",
+    "aggregators": ["coinGecko", "traderJoe", "oneInch", "liFi", "xSwap", "socket", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xd77b108d4f6cefaa0cae9506a934e825becca46e.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xd77b108d4f6cefaa0cae9506a934e825becca46e/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "winr-protocol"
+  },
+  {
+    "address": "0x3082cc23568ea640225c2467653db90e9250aaa0",
+    "shortName": "RDNT",
+    "decimals": 18,
+    "name": "Radiant Capital",
+    "coingeckoId": "radiant-capital",
+    "aggregators": ["coinGecko", "sushiSwap", "traderJoe", "oneInch", "liFi", "socket", "rubic"],
+    "storage": {
+      "balance": 8,
+      "approval": 9
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x3082cc23568ea640225c2467653db90e9250aaa0.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x3082cc23568ea640225c2467653db90e9250aaa0/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "radiant-capital"
+  },
+  {
+    "address": "0x323665443cef804a3b5206103304bd4872ea4253",
+    "shortName": "USDV",
+    "decimals": 6,
+    "name": "Verified USD",
+    "coingeckoId": "verified-usd-foundation-usdv",
+    "aggregators": ["coinGecko", "sushiSwap", "traderJoe", "oneInch", "liFi", "socket", "rubic"],
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x323665443cef804a3b5206103304bd4872ea4253.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x323665443cef804a3b5206103304bd4872ea4253/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "verified-usd-foundation-usdv"
+  },
+  {
+    "address": "0xec70dcb4a1efa46b8f2d97c310c9c4790ba5ffa8",
+    "shortName": "RETH",
+    "decimals": 18,
+    "name": "Rocket Pool ETH",
+    "coingeckoId": "rocket-pool-eth",
+    "aggregators": ["coinGecko", "oneInch", "liFi", "xSwap", "socket", "rubic", "squid"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xec70dcb4a1efa46b8f2d97c310c9c4790ba5ffa8.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xec70dcb4a1efa46b8f2d97c310c9c4790ba5ffa8/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "rocket-pool-eth"
+  },
+  {
+    "address": "0x93b346b6bc2548da6a1e7d98e9a421b42541425b",
+    "shortName": "LUSD",
+    "decimals": 18,
+    "name": "Liquity USD",
+    "coingeckoId": "liquity-usd",
+    "aggregators": ["coinGecko", "uniswapLabs", "liFi", "xSwap", "socket", "rubic", "squid"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x93b346b6bc2548da6a1e7d98e9a421b42541425b.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x93b346b6bc2548da6a1e7d98e9a421b42541425b/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "liquity-usd"
+  },
+  {
+    "address": "0x1debd73e752beaf79865fd6446b0c970eae7732f",
+    "shortName": "CBETH",
+    "decimals": 18,
+    "name": "Coinbase Wrapped Staked ETH",
+    "coingeckoId": "coinbase-wrapped-staked-eth",
+    "aggregators": ["coinGecko", "sushiSwap", "uniswapLabs", "liFi", "socket", "rubic", "squid"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x1debd73e752beaf79865fd6446b0c970eae7732f.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x1debd73e752beaf79865fd6446b0c970eae7732f/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "coinbase-wrapped-staked-eth"
+  },
+  {
+    "address": "0x8d9ba570d6cb60c7e3e0f31343efe75ab8e65fb1",
+    "shortName": "GOHM",
+    "decimals": 18,
+    "name": "Governance OHM",
+    "coingeckoId": "governance-ohm",
+    "aggregators": ["coinGecko", "sushiSwap", "liFi", "xSwap", "socket", "rubic", "squid"],
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x8d9ba570d6cb60c7e3e0f31343efe75ab8e65fb1.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x8d9ba570d6cb60c7e3e0f31343efe75ab8e65fb1/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "governance-ohm"
+  },
+  {
+    "address": "0x6694340fc020c5e6b96567843da2df01b2ce1eb6",
+    "shortName": "STG",
+    "decimals": 18,
+    "name": "Stargate Finance",
+    "coingeckoId": "stargate-finance",
+    "aggregators": ["coinGecko", "sushiSwap", "traderJoe", "oneInch", "liFi", "socket", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x6694340fc020c5e6b96567843da2df01b2ce1eb6.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x6694340fc020c5e6b96567843da2df01b2ce1eb6/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "stargate-finance"
+  },
+  {
+    "address": "0x13ad51ed4f1b7e9dc168d8a00cb3f4ddd85efa60",
+    "shortName": "LDO",
+    "decimals": 18,
+    "name": "Lido DAO",
+    "coingeckoId": "lido-dao",
+    "aggregators": ["coinGecko", "uniswapLabs", "oneInch", "liFi", "xSwap", "socket", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x13ad51ed4f1b7e9dc168d8a00cb3f4ddd85efa60.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x13ad51ed4f1b7e9dc168d8a00cb3f4ddd85efa60/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "lido-dao"
+  },
+  {
+    "address": "0x0d81e50bc677fa67341c44d7eaa9228dee64a4e1",
+    "shortName": "BOND",
+    "decimals": 18,
+    "name": "BarnBridge Governance Token",
+    "coingeckoId": "barnbridge",
+    "aggregators": ["arbitrumBridge", "arbitrumWhitelist", "coinGecko", "uniswapLabs", "socket", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x0d81e50bc677fa67341c44d7eaa9228dee64a4e1.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x0d81e50bc677fa67341c44d7eaa9228dee64a4e1/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "barnbridge"
+  },
+  {
+    "address": "0xae6aab43c4f3e0cea4ab83752c278f8debaba689",
+    "shortName": "DF",
+    "decimals": 18,
+    "name": "dForce",
+    "coingeckoId": "dforce-token",
+    "aggregators": ["arbitrumBridge", "arbitrumWhitelist", "coinGecko", "liFi", "socket", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xae6aab43c4f3e0cea4ab83752c278f8debaba689.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xae6aab43c4f3e0cea4ab83752c278f8debaba689/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "dforce-token"
+  },
+  {
+    "address": "0xb965029343d55189c25a7f3e0c9394dc0f5d41b1",
+    "shortName": "NDX",
+    "decimals": 18,
+    "name": "Indexed",
+    "coingeckoId": "indexed-finance",
+    "aggregators": ["arbitrumBridge", "arbitrumWhitelist", "balancer", "coinGecko", "socket", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xb965029343d55189c25a7f3e0c9394dc0f5d41b1.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xb965029343d55189c25a7f3e0c9394dc0f5d41b1/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "indexed-finance"
+  },
+  {
+    "address": "0x753d224bcf9aafacd81558c32341416df61d3dac",
+    "shortName": "PERP",
+    "decimals": 18,
+    "name": "Perpetual",
+    "coingeckoId": "perpetual-protocol",
+    "aggregators": ["arbitrumBridge", "arbitrumWhitelist", "coinGecko", "uniswapLabs", "socket", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x753d224bcf9aafacd81558c32341416df61d3dac.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x753d224bcf9aafacd81558c32341416df61d3dac/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "perpetual-protocol"
+  },
+  {
+    "address": "0x7ba4a00d54a07461d9db2aef539e91409943adc9",
+    "shortName": "SDT",
+    "decimals": 18,
+    "name": "Stake DAO Token",
+    "coingeckoId": "stake-dao",
+    "aggregators": ["arbitrumBridge", "arbitrumWhitelist", "coinGecko", "sushiSwap", "socket", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x7ba4a00d54a07461d9db2aef539e91409943adc9.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x7ba4a00d54a07461d9db2aef539e91409943adc9/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "stake-dao"
+  },
+  {
+    "address": "0x10393c20975cf177a3513071bc110f7962cd67da",
+    "shortName": "JONES",
+    "decimals": 18,
+    "name": "Jones DAO",
+    "coingeckoId": "jones-dao",
+    "aggregators": ["coinGecko", "sushiSwap", "liFi", "xSwap", "rubic", "squid"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x10393c20975cf177a3513071bc110f7962cd67da.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x10393c20975cf177a3513071bc110f7962cd67da/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "jones-dao"
+  },
+  {
+    "address": "0xed3fb761414da74b74f33e5c5a1f78104b188dfc",
+    "shortName": "NYAN",
+    "decimals": 18,
+    "name": "ArbiNYAN",
+    "coingeckoId": "arbinyan",
+    "aggregators": ["coinGecko", "sushiSwap", "liFi", "socket", "rubic", "squid"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xed3fb761414da74b74f33e5c5a1f78104b188dfc.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xed3fb761414da74b74f33e5c5a1f78104b188dfc/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "arbinyan"
+  },
+  {
+    "address": "0x0c880f6761f1af8d9aa9c466984b80dab9a8c9e8",
+    "shortName": "PENDLE",
+    "decimals": 18,
+    "name": "Pendle",
+    "coingeckoId": "pendle",
+    "aggregators": ["coinGecko", "traderJoe", "oneInch", "liFi", "socket", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x0c880f6761f1af8d9aa9c466984b80dab9a8c9e8.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x0c880f6761f1af8d9aa9c466984b80dab9a8c9e8/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "pendle"
+  },
+  {
+    "address": "0x371c7ec6d8039ff7933a2aa28eb827ffe1f52f07",
+    "shortName": "JOE",
+    "decimals": 18,
+    "name": "JOE",
+    "coingeckoId": "joe",
+    "aggregators": ["coinGecko", "traderJoe", "oneInch", "liFi", "socket", "rubic"],
+    "storage": {
+      "balance": 9,
+      "approval": 10
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x371c7ec6d8039ff7933a2aa28eb827ffe1f52f07.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x371c7ec6d8039ff7933a2aa28eb827ffe1f52f07/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "joe"
+  },
+  {
+    "address": "0xb766039cc6db368759c1e56b79affe831d0cc507",
+    "shortName": "RPL",
+    "decimals": 18,
+    "name": "Rocket Pool",
+    "coingeckoId": "rocket-pool",
+    "aggregators": ["coinGecko", "oneInch", "liFi", "xSwap", "socket", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xb766039cc6db368759c1e56b79affe831d0cc507.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xb766039cc6db368759c1e56b79affe831d0cc507/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "rocket-pool"
+  },
+  {
+    "address": "0xb64e280e9d1b5dbec4accedb2257a87b400db149",
+    "shortName": "LVL",
+    "decimals": 18,
+    "name": "Level",
+    "coingeckoId": "level",
+    "aggregators": ["coinGecko", "traderJoe", "oneInch", "liFi", "socket", "rubic"],
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xb64e280e9d1b5dbec4accedb2257a87b400db149.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xb64e280e9d1b5dbec4accedb2257a87b400db149/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "level"
+  },
+  {
+    "address": "0x9d2f299715d94d8a7e6f5eaa8e654e8c74a988a7",
+    "shortName": "FXS",
+    "decimals": 18,
+    "name": "Frax Share",
+    "coingeckoId": "frax-share",
+    "aggregators": ["coinGecko", "sushiSwap", "liFi", "xSwap", "socket", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x9d2f299715d94d8a7e6f5eaa8e654e8c74a988a7.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x9d2f299715d94d8a7e6f5eaa8e654e8c74a988a7/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "frax-share"
+  },
+  {
+    "address": "0x2416092f143378750bb29b79ed961ab195cceea5",
+    "shortName": "EZETH",
+    "decimals": 18,
+    "name": "Renzo Restaked ETH",
+    "coingeckoId": "renzo-restaked-eth",
+    "aggregators": ["coinGecko", "oneInch", "liFi", "xSwap", "socket", "rubic"],
+    "storage": {
+      "approval": 52,
+      "balance": 51
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x2416092f143378750bb29b79ed961ab195cceea5.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x2416092f143378750bb29b79ed961ab195cceea5/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "renzo-restaked-eth"
+  },
+  {
+    "address": "0x7cb16cb78ea464ad35c8a50abf95dff3c9e09d5d",
+    "shortName": "0XBTC",
+    "decimals": 8,
+    "name": "0xBitcoin Token",
+    "coingeckoId": "oxbitcoin",
+    "aggregators": ["arbitrumBridge", "arbitrumWhitelist", "coinGecko", "socket", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x7cb16cb78ea464ad35c8a50abf95dff3c9e09d5d.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x7cb16cb78ea464ad35c8a50abf95dff3c9e09d5d/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "oxbitcoin"
+  },
+  {
+    "address": "0x9b3fa2a7c3eb36d048a5d38d81e7fafc6bc47b25",
+    "shortName": "ALN",
+    "decimals": 18,
+    "name": "Aluna",
+    "coingeckoId": "aluna",
+    "aggregators": ["arbitrumBridge", "arbitrumWhitelist", "coinGecko", "socket", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x9b3fa2a7c3eb36d048a5d38d81e7fafc6bc47b25.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x9b3fa2a7c3eb36d048a5d38d81e7fafc6bc47b25/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "aluna"
+  },
+  {
+    "address": "0xea986d33ef8a20a96120ecc44dbdd49830192043",
+    "shortName": "AUC",
+    "decimals": 18,
+    "name": "Auctus Token",
+    "coingeckoId": "auctus",
+    "aggregators": ["arbitrumBridge", "arbitrumWhitelist", "coinGecko", "socket", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xea986d33ef8a20a96120ecc44dbdd49830192043.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xea986d33ef8a20a96120ecc44dbdd49830192043/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "auctus"
+  },
+  {
+    "address": "0x488cc08935458403a0458e45e20c0159c8ab2c92",
+    "shortName": "FST",
+    "decimals": 18,
+    "name": "Futureswap Token",
+    "coingeckoId": "futureswap",
+    "aggregators": ["arbitrumBridge", "arbitrumWhitelist", "coinGecko", "socket", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x488cc08935458403a0458e45e20c0159c8ab2c92.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x488cc08935458403a0458e45e20c0159c8ab2c92/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "futureswap"
+  },
+  {
+    "address": "0xa684cd057951541187f288294a1e1c2646aa2d24",
+    "shortName": "VSTA",
+    "decimals": 18,
+    "name": "Vesta Finance",
+    "coingeckoId": "vesta-finance",
+    "aggregators": ["balancer", "coinGecko", "traderJoe", "liFi", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xa684cd057951541187f288294a1e1c2646aa2d24.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xa684cd057951541187f288294a1e1c2646aa2d24/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "vesta-finance"
+  },
+  {
+    "address": "0x4cfa50b7ce747e2d61724fcac57f24b748ff2b2a",
+    "shortName": "FUSDC",
+    "decimals": 6,
+    "name": "Fluid USDC",
+    "coingeckoId": "fluid-usdc",
+    "aggregators": ["coinGecko", "sushiSwap", "traderJoe", "liFi", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x4cfa50b7ce747e2d61724fcac57f24b748ff2b2a.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x4cfa50b7ce747e2d61724fcac57f24b748ff2b2a/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "fluid-usdc"
+  },
+  {
+    "address": "0x3d9907f9a368ad0a51be60f7da3b97cf940982d8",
+    "shortName": "GRAIL",
+    "decimals": 18,
+    "name": "Camelot Token",
+    "coingeckoId": "camelot-token",
+    "aggregators": ["coinGecko", "traderJoe", "liFi", "rubic", "squid"],
+    "storage": {
+      "balance": 1,
+      "approval": 2
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x3d9907f9a368ad0a51be60f7da3b97cf940982d8.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x3d9907f9a368ad0a51be60f7da3b97cf940982d8/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "camelot-token"
+  },
+  {
+    "address": "0xd74f5255d557944cf7dd0e45ff521520002d5748",
+    "shortName": "USDS",
+    "decimals": 18,
+    "name": "Sperax USD",
+    "coingeckoId": "sperax-usd",
+    "aggregators": ["coinGecko", "oneInch", "liFi", "socket", "rubic"],
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xd74f5255d557944cf7dd0e45ff521520002d5748.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xd74f5255d557944cf7dd0e45ff521520002d5748/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "sperax-usd"
+  },
+  {
+    "address": "0x417a1afd44250314bffb11ff68e989775e990ab6",
+    "shortName": "VOLTA",
+    "decimals": 18,
+    "name": "Volta Protocol",
+    "coingeckoId": "volta-protocol",
+    "aggregators": ["coinGecko", "oneInch", "liFi", "socket", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x417a1afd44250314bffb11ff68e989775e990ab6.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x417a1afd44250314bffb11ff68e989775e990ab6/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "volta-protocol"
+  },
+  {
+    "address": "0xc19669a405067927865b40ea045a2baabbbe57f5",
+    "shortName": "STAR",
+    "decimals": 18,
+    "name": "Star",
+    "coingeckoId": "preon-star",
+    "aggregators": ["coinGecko", "oneInch", "liFi", "socket", "rubic"],
+    "storage": {
+      "balance": 8,
+      "approval": 9
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xc19669a405067927865b40ea045a2baabbbe57f5.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xc19669a405067927865b40ea045a2baabbbe57f5/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "preon-star"
+  },
+  {
+    "address": "0x2cab3abfc1670d1a452df502e216a66883cdf079",
+    "shortName": "L2DAO",
+    "decimals": 18,
+    "name": "Layer2DAO",
+    "coingeckoId": "layer2dao",
+    "aggregators": ["coinGecko", "traderJoe", "liFi", "socket", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x2cab3abfc1670d1a452df502e216a66883cdf079.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x2cab3abfc1670d1a452df502e216a66883cdf079/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "layer2dao"
+  },
+  {
+    "address": "0x9ed7e4b1bff939ad473da5e7a218c771d1569456",
+    "shortName": "REUNI",
+    "decimals": 6,
+    "name": "Reunit Wallet",
+    "coingeckoId": "reunit-wallet",
+    "aggregators": ["coinGecko", "oneInch", "liFi", "socket", "rubic"],
+    "storage": {
+      "balance": 7,
+      "approval": 8
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x9ed7e4b1bff939ad473da5e7a218c771d1569456.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x9ed7e4b1bff939ad473da5e7a218c771d1569456/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "reunit-wallet"
+  },
+  {
+    "address": "0x498bf2b1e120fed3ad3d42ea2165e9b73f99c1e5",
+    "shortName": "CRVUSD",
+    "decimals": 18,
+    "name": "crvUSD",
+    "coingeckoId": "crvusd",
+    "aggregators": ["coinGecko", "oneInch", "liFi", "socket", "rubic"],
+    "storage": {
+      "approval": 52,
+      "balance": 51
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x498bf2b1e120fed3ad3d42ea2165e9b73f99c1e5.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x498bf2b1e120fed3ad3d42ea2165e9b73f99c1e5/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "crvusd"
+  },
+  {
+    "address": "0x0341c0c0ec423328621788d4854119b97f44e391",
+    "shortName": "SILO",
+    "decimals": 18,
+    "name": "Silo Finance",
+    "coingeckoId": "silo-finance",
+    "aggregators": ["coinGecko", "sushiSwap", "liFi", "rubic", "squid"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x0341c0c0ec423328621788d4854119b97f44e391.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x0341c0c0ec423328621788d4854119b97f44e391/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "silo-finance"
+  },
+  {
+    "address": "0x079504b86d38119f859c4194765029f692b7b7aa",
+    "shortName": "LYRA",
+    "decimals": 18,
+    "name": "Lyra Finance",
+    "coingeckoId": "lyra-finance",
+    "aggregators": ["coinGecko", "oneInch", "liFi", "socket", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x079504b86d38119f859c4194765029f692b7b7aa.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x079504b86d38119f859c4194765029f692b7b7aa/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "lyra-finance"
+  },
+  {
+    "address": "0xa68ec98d7ca870cf1dd0b00ebbb7c4bf60a8e74d",
+    "shortName": "BICO",
+    "decimals": 18,
+    "name": "Biconomy",
+    "coingeckoId": "biconomy",
+    "aggregators": ["coinGecko", "uniswapLabs", "liFi", "socket", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xa68ec98d7ca870cf1dd0b00ebbb7c4bf60a8e74d.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xa68ec98d7ca870cf1dd0b00ebbb7c4bf60a8e74d/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "biconomy"
+  },
+  {
+    "address": "0x9e758b8a98a42d612b3d38b66a22074dc03d7370",
+    "shortName": "SIS",
+    "decimals": 18,
+    "name": "Symbiosis",
+    "coingeckoId": "symbiosis-finance",
+    "aggregators": ["coinGecko", "oneInch", "liFi", "socket", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x9e758b8a98a42d612b3d38b66a22074dc03d7370.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x9e758b8a98a42d612b3d38b66a22074dc03d7370/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "symbiosis-finance"
+  },
+  {
+    "address": "0x10010078a54396f62c96df8532dc2b4847d47ed3",
+    "shortName": "HND",
+    "decimals": 18,
+    "name": "Hundred Finance",
+    "coingeckoId": "hundred-finance",
+    "aggregators": ["coinGecko", "sushiSwap", "liFi", "socket", "rubic"],
+    "storage": {
+      "balance": 2,
+      "approval": 16
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x10010078a54396f62c96df8532dc2b4847d47ed3.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x10010078a54396f62c96df8532dc2b4847d47ed3/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "hundred-finance"
+  },
+  {
+    "address": "0x55ff62567f09906a85183b866df84bf599a4bf70",
+    "shortName": "KROM",
+    "decimals": 18,
+    "name": "Kromatika",
+    "coingeckoId": "kromatika",
+    "aggregators": ["coinGecko", "oneInch", "liFi", "socket", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x55ff62567f09906a85183b866df84bf599a4bf70.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x55ff62567f09906a85183b866df84bf599a4bf70/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "kromatika"
+  },
+  {
+    "address": "0xee9801669c6138e84bd50deb500827b776777d28",
+    "shortName": "O3",
+    "decimals": 18,
+    "name": "O3 Swap",
+    "coingeckoId": "o3-swap",
+    "aggregators": ["coinGecko", "sushiSwap", "liFi", "socket", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xee9801669c6138e84bd50deb500827b776777d28.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xee9801669c6138e84bd50deb500827b776777d28/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "o3-swap"
+  },
+  {
+    "address": "0x123389c2f0e9194d9ba98c21e63c375b67614108",
+    "shortName": "EMAX",
+    "decimals": 18,
+    "name": "EthereumMax",
+    "coingeckoId": "ethereummax",
+    "aggregators": ["coinGecko", "sushiSwap", "oneInch", "socket", "rubic"],
+    "storage": {
+      "balance": 6,
+      "approval": 10
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x123389c2f0e9194d9ba98c21e63c375b67614108.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x123389c2f0e9194d9ba98c21e63c375b67614108/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "ethereummax"
+  },
+  {
+    "address": "0xc5102fe9359fd9a28f877a67e36b0f050d81a3cc",
+    "shortName": "HOP",
+    "decimals": 18,
+    "name": "Hop Protocol",
+    "coingeckoId": "hop-protocol",
+    "aggregators": ["coinGecko", "oneInch", "liFi", "socket", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xc5102fe9359fd9a28f877a67e36b0f050d81a3cc.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xc5102fe9359fd9a28f877a67e36b0f050d81a3cc/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "hop-protocol"
+  },
+  {
+    "address": "0x23ee2343b892b1bb63503a4fabc840e0e2c6810f",
+    "shortName": "AXL",
+    "decimals": 6,
+    "name": "Axelar",
+    "coingeckoId": "axelar",
+    "aggregators": ["coinGecko", "uniswapLabs", "liFi", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x23ee2343b892b1bb63503a4fabc840e0e2c6810f.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x23ee2343b892b1bb63503a4fabc840e0e2c6810f/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "axelar"
+  },
+  {
+    "address": "0x982239d38af50b0168da33346d85fb12929c4c07",
+    "shortName": "TROVE",
+    "decimals": 18,
+    "name": "Arbitrove Governance Token",
+    "coingeckoId": "nitro-cartel",
+    "aggregators": ["coinGecko", "traderJoe", "liFi", "rubic"],
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x982239d38af50b0168da33346d85fb12929c4c07.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x982239d38af50b0168da33346d85fb12929c4c07/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "nitro-cartel"
+  },
+  {
+    "address": "0xf93fc7d6508ae2faf8fc5675e896bc38d6e7212c",
+    "shortName": "YOU",
+    "decimals": 18,
+    "name": "U Protocol",
+    "coingeckoId": "u-protocol",
+    "aggregators": ["coinGecko", "traderJoe", "liFi", "rubic"],
+    "storage": {
+      "approval": 9,
+      "balance": 8
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xf93fc7d6508ae2faf8fc5675e896bc38d6e7212c.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xf93fc7d6508ae2faf8fc5675e896bc38d6e7212c/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "u-protocol"
+  },
+  {
+    "address": "0xd5954c3084a1ccd70b4da011e67760b8e78aee84",
+    "shortName": "ARX",
+    "decimals": 18,
+    "name": "Arbidex",
+    "coingeckoId": "arbitrum-exchange",
+    "aggregators": ["coinGecko", "liFi", "rubic", "squid"],
+    "storage": {
+      "balance": 1,
+      "approval": 2
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xd5954c3084a1ccd70b4da011e67760b8e78aee84.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xd5954c3084a1ccd70b4da011e67760b8e78aee84/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "arbitrum-exchange"
+  },
+  {
+    "address": "0x95146881b86b3ee99e63705ec87afe29fcc044d9",
+    "shortName": "VRTX",
+    "decimals": 18,
+    "name": "Vertex",
+    "coingeckoId": "vertex-protocol",
+    "aggregators": ["coinGecko", "traderJoe", "liFi", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x95146881b86b3ee99e63705ec87afe29fcc044d9.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x95146881b86b3ee99e63705ec87afe29fcc044d9/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "vertex-protocol"
+  },
+  {
+    "address": "0x4cb9a7ae498cedcbb5eae9f25736ae7d428c9d66",
+    "shortName": "XAI",
+    "decimals": 18,
+    "name": "Xai",
+    "coingeckoId": "xai-blockchain",
+    "aggregators": ["coinGecko", "traderJoe", "liFi", "rubic"],
+    "storage": {
+      "approval": 52,
+      "balance": 51
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x4cb9a7ae498cedcbb5eae9f25736ae7d428c9d66.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x4cb9a7ae498cedcbb5eae9f25736ae7d428c9d66/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "xai-blockchain"
+  },
+  {
+    "address": "0x816e21c33fa5f8440ebcdf6e01d39314541bea72",
+    "shortName": "LQDR",
+    "decimals": 18,
+    "name": "LiquidDriver",
+    "coingeckoId": "liquiddriver",
+    "aggregators": ["coinGecko", "liFi", "rubic", "squid"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x816e21c33fa5f8440ebcdf6e01d39314541bea72.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x816e21c33fa5f8440ebcdf6e01d39314541bea72/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "liquiddriver"
+  },
+  {
+    "address": "0x8b0e6f19ee57089f7649a455d89d7bc6314d04e8",
+    "shortName": "DMT",
+    "decimals": 18,
+    "name": "Dream Machine Token",
+    "coingeckoId": "dream-machine-token",
+    "aggregators": ["coinGecko", "traderJoe", "liFi", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x8b0e6f19ee57089f7649a455d89d7bc6314d04e8.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x8b0e6f19ee57089f7649a455d89d7bc6314d04e8/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "dream-machine-token"
+  },
+  {
+    "address": "0xccd05a0fcfc1380e9da27862adb2198e58e0d66f",
+    "shortName": "ANIMA",
+    "decimals": 18,
+    "name": "ANIMA",
+    "coingeckoId": "anima",
+    "aggregators": ["coinGecko", "sushiSwap", "liFi", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xccd05a0fcfc1380e9da27862adb2198e58e0d66f.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xccd05a0fcfc1380e9da27862adb2198e58e0d66f/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "anima"
+  },
+  {
+    "address": "0x3b475f6f2f41853706afc9fa6a6b8c5df1a2724c",
+    "shortName": "ZYB",
+    "decimals": 18,
+    "name": "Zyberswap",
+    "coingeckoId": "zyberswap",
+    "aggregators": ["coinGecko", "liFi", "rubic", "squid"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x3b475f6f2f41853706afc9fa6a6b8c5df1a2724c.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x3b475f6f2f41853706afc9fa6a6b8c5df1a2724c/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "zyberswap"
+  },
+  {
+    "address": "0x1a5b0aaf478bf1fda7b934c76e7692d722982a6d",
+    "shortName": "BFR",
+    "decimals": 18,
+    "name": "Buffer Token",
+    "coingeckoId": "ibuffer-token",
+    "aggregators": ["coinGecko", "traderJoe", "liFi", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x1a5b0aaf478bf1fda7b934c76e7692d722982a6d.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x1a5b0aaf478bf1fda7b934c76e7692d722982a6d/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "ibuffer-token"
+  },
+  {
+    "address": "0xf19547f9ed24aa66b03c3a552d181ae334fbb8db",
+    "shortName": "LODE",
+    "decimals": 18,
+    "name": "Lodestar",
+    "coingeckoId": "lodestar",
+    "aggregators": ["coinGecko", "traderJoe", "liFi", "rubic"],
+    "storage": {
+      "balance": 1,
+      "approval": 0
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xf19547f9ed24aa66b03c3a552d181ae334fbb8db.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xf19547f9ed24aa66b03c3a552d181ae334fbb8db/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "lodestar"
+  },
+  {
+    "address": "0x7f465507f058e17ad21623927a120ac05ca32741",
+    "shortName": "ARC",
+    "decimals": 18,
+    "name": "Arcadeum",
+    "coingeckoId": "arcadeum",
+    "aggregators": ["coinGecko", "traderJoe", "liFi", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x7f465507f058e17ad21623927a120ac05ca32741.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x7f465507f058e17ad21623927a120ac05ca32741/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "arcadeum"
+  },
+  {
+    "address": "0x000f1720a263f96532d1ac2bb9cdc12b72c6f386",
+    "shortName": "FLY",
+    "decimals": 6,
+    "name": "Fluidity",
+    "coingeckoId": "fluidity",
+    "aggregators": ["coinGecko", "traderJoe", "liFi", "rubic"],
+    "storage": {
+      "approval": 5,
+      "balance": 4
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x000f1720a263f96532d1ac2bb9cdc12b72c6f386.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x000f1720a263f96532d1ac2bb9cdc12b72c6f386/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "fluidity"
+  },
+  {
+    "address": "0x00cbcf7b3d37844e44b888bc747bdd75fcf4e555",
+    "shortName": "XPET",
+    "decimals": 18,
+    "name": "xPet tech",
+    "coingeckoId": "xpet-tech",
+    "aggregators": ["coinGecko", "liFi", "xSwap", "rubic"],
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x00cbcf7b3d37844e44b888bc747bdd75fcf4e555.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x00cbcf7b3d37844e44b888bc747bdd75fcf4e555/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "xpet-tech"
+  },
+  {
+    "address": "0xef261714f7e5ba6b86f4780eb6e3bf26b10729cf",
+    "shortName": "LOTUS",
+    "decimals": 18,
+    "name": "White Lotus",
+    "coingeckoId": "white-lotus",
+    "aggregators": ["coinGecko", "traderJoe", "liFi", "rubic"],
+    "storage": {
+      "balance": 3,
+      "approval": 4
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xef261714f7e5ba6b86f4780eb6e3bf26b10729cf.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xef261714f7e5ba6b86f4780eb6e3bf26b10729cf/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "white-lotus"
+  },
+  {
+    "address": "0xf8388c2b6edf00e2e27eef5200b1befb24ce141d",
+    "shortName": "NOLA",
+    "decimals": 18,
+    "name": "Nola",
+    "coingeckoId": "nola",
+    "aggregators": ["coinGecko", "sushiSwap", "liFi", "rubic"],
+    "storage": {},
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xf8388c2b6edf00e2e27eef5200b1befb24ce141d.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xf8388c2b6edf00e2e27eef5200b1befb24ce141d/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "nola"
+  },
+  {
+    "address": "0x602eb0d99a5e3e76d1510372c4d2020e12eaea8a",
+    "shortName": "PSI",
+    "decimals": 9,
+    "name": "TridentDAO",
+    "coingeckoId": "tridentdao",
+    "aggregators": ["coinGecko", "traderJoe", "liFi", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x602eb0d99a5e3e76d1510372c4d2020e12eaea8a.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x602eb0d99a5e3e76d1510372c4d2020e12eaea8a/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "tridentdao"
+  },
+  {
+    "address": "0x6daf586b7370b14163171544fca24abcc0862ac5",
+    "shortName": "BPET",
+    "decimals": 18,
+    "name": "xPet tech BPET",
+    "coingeckoId": "xpet-tech-bpet",
+    "aggregators": ["coinGecko", "liFi", "xSwap", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x6daf586b7370b14163171544fca24abcc0862ac5.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x6daf586b7370b14163171544fca24abcc0862ac5/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "xpet-tech-bpet"
+  },
+  {
+    "address": "0x6609be1547166d1c4605f3a243fdcff467e600c3",
+    "shortName": "NEU",
+    "decimals": 18,
+    "name": "Neutra Finance",
+    "coingeckoId": "neutra-finance",
+    "aggregators": ["coinGecko", "liFi", "xSwap", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x6609be1547166d1c4605f3a243fdcff467e600c3.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x6609be1547166d1c4605f3a243fdcff467e600c3/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "neutra-finance"
+  },
+  {
+    "address": "0x6dd963c510c2d2f09d5eddb48ede45fed063eb36",
+    "shortName": "FCTR",
+    "decimals": 18,
+    "name": "FactorDAO",
+    "coingeckoId": "factor",
+    "aggregators": ["coinGecko", "traderJoe", "liFi", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x6dd963c510c2d2f09d5eddb48ede45fed063eb36.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x6dd963c510c2d2f09d5eddb48ede45fed063eb36/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "factor"
+  },
+  {
+    "address": "0x155f0dd04424939368972f4e1838687d6a831151",
+    "shortName": "ADOGE",
+    "decimals": 18,
+    "name": "ArbiDoge",
+    "coingeckoId": "arbidoge",
+    "aggregators": ["coinGecko", "sushiSwap", "socket", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x155f0dd04424939368972f4e1838687d6a831151.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x155f0dd04424939368972f4e1838687d6a831151/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "arbidoge"
+  },
+  {
+    "address": "0x1c43d05be7e5b54d506e3ddb6f0305e8a66cd04e",
+    "shortName": "ZTX",
+    "decimals": 18,
+    "name": "ZTX",
+    "coingeckoId": "ztx",
+    "aggregators": ["coinGecko", "sushiSwap", "liFi", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x1c43d05be7e5b54d506e3ddb6f0305e8a66cd04e.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x1c43d05be7e5b54d506e3ddb6f0305e8a66cd04e/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "ztx"
+  },
+  {
+    "address": "0xaaa6c1e32c55a7bfa8066a6fae9b42650f262418",
+    "shortName": "RAM",
+    "decimals": 18,
+    "name": "Ramses Exchange",
+    "coingeckoId": "ramses-exchange",
+    "aggregators": ["coinGecko", "liFi", "rubic", "squid"],
+    "storage": {
+      "balance": 2,
+      "approval": 3
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xaaa6c1e32c55a7bfa8066a6fae9b42650f262418.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xaaa6c1e32c55a7bfa8066a6fae9b42650f262418/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "ramses-exchange"
+  },
+  {
+    "address": "0x60d01ec2d5e98ac51c8b4cf84dfcce98d527c747",
+    "shortName": "IZI",
+    "decimals": 18,
+    "name": "iZUMi Finance",
+    "coingeckoId": "izumi-finance",
+    "aggregators": ["coinGecko", "liFi", "socket", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x60d01ec2d5e98ac51c8b4cf84dfcce98d527c747.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x60d01ec2d5e98ac51c8b4cf84dfcce98d527c747/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "izumi-finance"
+  },
+  {
+    "address": "0x9f6abbf0ba6b5bfa27f4deb6597cc6ec20573fda",
+    "shortName": "FRM",
+    "decimals": 18,
+    "name": "Ferrum Network",
+    "coingeckoId": "ferrum-network",
+    "aggregators": ["coinGecko", "sushiSwap", "liFi", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x9f6abbf0ba6b5bfa27f4deb6597cc6ec20573fda.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x9f6abbf0ba6b5bfa27f4deb6597cc6ec20573fda/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "ferrum-network"
+  },
+  {
+    "address": "0x7f4db37d7beb31f445307782bc3da0f18df13696",
+    "shortName": "YAK",
+    "decimals": 18,
+    "name": "Yield Yak",
+    "coingeckoId": "yield-yak",
+    "aggregators": ["coinGecko", "traderJoe", "liFi", "rubic"],
+    "storage": {
+      "balance": 8,
+      "approval": 9
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x7f4db37d7beb31f445307782bc3da0f18df13696.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x7f4db37d7beb31f445307782bc3da0f18df13696/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "yield-yak"
+  },
+  {
+    "address": "0xa23e44aea714fbbc08ef28340d78067b9a8cad73",
+    "shortName": "LBR",
+    "decimals": 18,
+    "name": "Lybra",
+    "coingeckoId": "lybra-finance",
+    "aggregators": ["coinGecko", "traderJoe", "liFi", "rubic"],
+    "storage": {
+      "balance": 8,
+      "approval": 9
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xa23e44aea714fbbc08ef28340d78067b9a8cad73.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xa23e44aea714fbbc08ef28340d78067b9a8cad73/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "lybra-finance"
+  },
+  {
+    "address": "0x35751007a407ca6feffe80b3cb397736d2cf4dbe",
+    "shortName": "WEETH",
+    "decimals": 18,
+    "name": "Wrapped eETH",
+    "coingeckoId": "wrapped-eeth",
+    "aggregators": ["coinGecko", "liFi", "xSwap", "rubic"],
+    "storage": {
+      "approval": 52,
+      "balance": 51
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x35751007a407ca6feffe80b3cb397736d2cf4dbe.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x35751007a407ca6feffe80b3cb397736d2cf4dbe/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "wrapped-eeth"
+  },
+  {
+    "address": "0x894134a25a5fac1c2c26f1d8fbf05111a3cb9487",
+    "shortName": "GRAI",
+    "decimals": 18,
+    "name": "Grai",
+    "coingeckoId": "grai",
+    "aggregators": ["coinGecko", "traderJoe", "liFi", "rubic"],
+    "storage": {
+      "balance": 10,
+      "approval": 11
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x894134a25a5fac1c2c26f1d8fbf05111a3cb9487.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x894134a25a5fac1c2c26f1d8fbf05111a3cb9487/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "grai"
+  },
+  {
+    "address": "0xba0dda8762c24da9487f5fa026a9b64b695a07ea",
+    "shortName": "OX",
+    "decimals": 18,
+    "name": "OX Coin",
+    "coingeckoId": "ox-fun",
+    "aggregators": ["coinGecko", "liFi", "socket", "rubic"],
+    "storage": {
+      "approval": 8,
+      "balance": 7
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xba0dda8762c24da9487f5fa026a9b64b695a07ea.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xba0dda8762c24da9487f5fa026a9b64b695a07ea/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "ox-fun"
+  },
+  {
+    "address": "0xdcbf4cb83d27c408b30dd7f39bfcabd7176b1ba3",
+    "shortName": "OOE",
+    "decimals": 18,
+    "name": "OpenOcean",
+    "coingeckoId": "openocean",
+    "aggregators": ["coinGecko", "traderJoe", "liFi", "rubic"],
+    "storage": {
+      "approval": 8
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xdcbf4cb83d27c408b30dd7f39bfcabd7176b1ba3.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xdcbf4cb83d27c408b30dd7f39bfcabd7176b1ba3/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "openocean"
+  },
+  {
+    "address": "0xa3d1a8deb97b111454b294e2324efad13a9d8396",
+    "shortName": "OVN",
+    "decimals": 18,
+    "name": "Overnight Finance",
+    "coingeckoId": "overnight-finance",
+    "aggregators": ["coinGecko", "liFi", "rubic", "squid"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xa3d1a8deb97b111454b294e2324efad13a9d8396.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xa3d1a8deb97b111454b294e2324efad13a9d8396/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "overnight-finance"
+  },
+  {
+    "address": "0x94025780a1ab58868d9b2dbbb775f44b32e8e6e5",
+    "shortName": "BETS",
+    "decimals": 18,
+    "name": "BetSwirl",
+    "coingeckoId": "betswirl",
+    "aggregators": ["coinGecko", "traderJoe", "liFi", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x94025780a1ab58868d9b2dbbb775f44b32e8e6e5.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x94025780a1ab58868d9b2dbbb775f44b32e8e6e5/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "betswirl"
+  },
+  {
+    "address": "0x09199d9a5f4448d0848e4395d065e1ad9c4a1f74",
+    "shortName": "BONK",
+    "decimals": 5,
+    "name": "Bonk",
+    "coingeckoId": "bonk",
+    "aggregators": ["coinGecko", "xSwap", "socket", "rubic"],
+    "storage": {
+      "balance": 5,
+      "approval": 6
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x09199d9a5f4448d0848e4395d065e1ad9c4a1f74.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x09199d9a5f4448d0848e4395d065e1ad9c4a1f74/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "bonk"
+  },
+  {
+    "address": "0x680447595e8b7b3aa1b43beb9f6098c79ac2ab3f",
+    "shortName": "USDD",
+    "decimals": 18,
+    "name": "USDD",
+    "coingeckoId": "usdd",
+    "aggregators": ["coinGecko", "liFi", "socket", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x680447595e8b7b3aa1b43beb9f6098c79ac2ab3f.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x680447595e8b7b3aa1b43beb9f6098c79ac2ab3f/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "usdd"
+  },
+  {
+    "address": "0x55678cd083fcdc2947a0df635c93c838c89454a3",
+    "shortName": "LON",
+    "decimals": 18,
+    "name": "Tokenlon",
+    "coingeckoId": "tokenlon",
+    "aggregators": ["coinGecko", "sushiSwap", "liFi", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x55678cd083fcdc2947a0df635c93c838c89454a3.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x55678cd083fcdc2947a0df635c93c838c89454a3/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "tokenlon"
+  },
+  {
+    "address": "0x6a7661795c374c0bfc635934efaddff3a7ee23b6",
+    "shortName": "DOLA",
+    "decimals": 18,
+    "name": "DOLA",
+    "coingeckoId": "dola-usd",
+    "aggregators": ["coinGecko", "liFi", "socket", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x6a7661795c374c0bfc635934efaddff3a7ee23b6.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x6a7661795c374c0bfc635934efaddff3a7ee23b6/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "dola-usd"
+  },
+  {
+    "address": "0xe85b662fe97e8562f4099d8a1d5a92d4b453bf30",
+    "shortName": "THALES",
+    "decimals": 18,
+    "name": "Thales",
+    "coingeckoId": "thales",
+    "aggregators": ["coinGecko", "liFi", "socket", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xe85b662fe97e8562f4099d8a1d5a92d4b453bf30.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xe85b662fe97e8562f4099d8a1d5a92d4b453bf30/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "thales"
+  },
+  {
+    "address": "0x178412e79c25968a32e89b11f63b33f733770c2a",
+    "shortName": "FRXETH",
+    "decimals": 18,
+    "name": "Frax Ether",
+    "coingeckoId": "frax-ether",
+    "aggregators": ["coinGecko", "liFi", "xSwap", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x178412e79c25968a32e89b11f63b33f733770c2a.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x178412e79c25968a32e89b11f63b33f733770c2a/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "frax-ether"
+  },
+  {
+    "address": "0xa61f74247455a40b01b0559ff6274441fafa22a3",
+    "shortName": "MGP",
+    "decimals": 18,
+    "name": "Magpie",
+    "coingeckoId": "magpie",
+    "aggregators": ["coinGecko", "traderJoe", "liFi", "rubic"],
+    "storage": {
+      "balance": 5,
+      "approval": 6
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xa61f74247455a40b01b0559ff6274441fafa22a3.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xa61f74247455a40b01b0559ff6274441fafa22a3/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "magpie"
+  },
+  {
+    "address": "0xadf5dd3e51bf28ab4f07e684ecf5d00691818790",
+    "shortName": "ICHI",
+    "decimals": 18,
+    "name": "ICHI",
+    "coingeckoId": "ichi-farm",
+    "aggregators": ["coinGecko", "liFi", "socket", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xadf5dd3e51bf28ab4f07e684ecf5d00691818790.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xadf5dd3e51bf28ab4f07e684ecf5d00691818790/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "ichi-farm"
+  },
+  {
+    "address": "0x3a18dcc9745edcd1ef33ecb93b0b6eba5671e7ca",
+    "shortName": "KUJI",
+    "decimals": 6,
+    "name": "Kujira",
+    "coingeckoId": "kujira",
+    "aggregators": ["coinGecko", "liFi", "rubic", "squid"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x3a18dcc9745edcd1ef33ecb93b0b6eba5671e7ca.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x3a18dcc9745edcd1ef33ecb93b0b6eba5671e7ca/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "kujira"
+  },
+  {
+    "address": "0x18c11fd286c5ec11c3b683caa813b77f5163a122",
+    "shortName": "GNS",
+    "decimals": 18,
+    "name": "Gains Network",
+    "coingeckoId": "gains-network",
+    "aggregators": ["coinGecko", "traderJoe", "liFi", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x18c11fd286c5ec11c3b683caa813b77f5163a122.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x18c11fd286c5ec11c3b683caa813b77f5163a122/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "gains-network"
+  },
+  {
+    "address": "0x431402e8b9de9aa016c743880e04e517074d8cec",
+    "shortName": "HEGIC",
+    "decimals": 18,
+    "name": "Hegic",
+    "coingeckoId": "hegic",
+    "aggregators": ["coinGecko", "traderJoe", "liFi", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x431402e8b9de9aa016c743880e04e517074d8cec.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x431402e8b9de9aa016c743880e04e517074d8cec/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "hegic"
+  },
+  {
+    "address": "0xe4dddfe67e7164b0fe14e218d80dc4c08edc01cb",
+    "shortName": "KNC",
+    "decimals": 18,
+    "name": "Kyber Network Crystal",
+    "coingeckoId": "kyber-network-crystal",
+    "aggregators": ["coinGecko", "liFi", "rubic", "squid"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xe4dddfe67e7164b0fe14e218d80dc4c08edc01cb.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xe4dddfe67e7164b0fe14e218d80dc4c08edc01cb/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "kyber-network-crystal"
+  },
+  {
+    "address": "0x289ba1701c2f088cf0faf8b3705246331cb8a839",
+    "shortName": "LPT",
+    "decimals": 18,
+    "name": "Livepeer",
+    "coingeckoId": "livepeer",
+    "aggregators": ["coinGecko", "uniswapLabs", "liFi", "rubic"],
+    "storage": {
+      "balance": 1,
+      "approval": 2
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x289ba1701c2f088cf0faf8b3705246331cb8a839.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x289ba1701c2f088cf0faf8b3705246331cb8a839/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "livepeer"
+  },
+  {
+    "address": "0x7b5eb3940021ec0e8e463d5dbb4b7b09a89ddf96",
+    "shortName": "WOM",
+    "decimals": 18,
+    "name": "Wombat Exchange",
+    "coingeckoId": "wombat-exchange",
+    "aggregators": ["coinGecko", "traderJoe", "liFi", "rubic"],
+    "storage": {
+      "balance": 5,
+      "approval": 6
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x7b5eb3940021ec0e8e463d5dbb4b7b09a89ddf96.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x7b5eb3940021ec0e8e463d5dbb4b7b09a89ddf96/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "wombat-exchange"
+  },
+  {
+    "address": "0xfb9e5d956d889d91a82737b9bfcdac1dce3e1449",
+    "shortName": "LQTY",
+    "decimals": 18,
+    "name": "Liquity",
+    "coingeckoId": "liquity",
+    "aggregators": ["coinGecko", "uniswapLabs", "liFi", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xfb9e5d956d889d91a82737b9bfcdac1dce3e1449.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xfb9e5d956d889d91a82737b9bfcdac1dce3e1449/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "liquity"
+  },
+  {
+    "address": "0xcf985aba4647a432e60efceeb8054bbd64244305",
+    "shortName": "EUROE",
+    "decimals": 6,
+    "name": "EUROe Stablecoin",
+    "coingeckoId": "euroe-stablecoin",
+    "aggregators": ["coinGecko", "sushiSwap", "liFi", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xcf985aba4647a432e60efceeb8054bbd64244305.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xcf985aba4647a432e60efceeb8054bbd64244305/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "euroe-stablecoin"
+  },
+  {
+    "address": "0x498c620c7c91c6eba2e3cd5485383f41613b7eb6",
+    "shortName": "AMKT",
+    "decimals": 18,
+    "name": "Alongside Crypto Market Index",
+    "coingeckoId": "alongside-crypto-market-index",
+    "aggregators": ["coinGecko", "liFi", "socket", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x498c620c7c91c6eba2e3cd5485383f41613b7eb6.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x498c620c7c91c6eba2e3cd5485383f41613b7eb6/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "alongside-crypto-market-index"
+  },
+  {
+    "address": "0xda0a57b710768ae17941a9fa33f8b720c8bd9ddd",
+    "shortName": "POND",
+    "decimals": 18,
+    "name": "Marlin",
+    "coingeckoId": "marlin",
+    "aggregators": ["coinGecko", "uniswapLabs", "liFi", "rubic"],
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xda0a57b710768ae17941a9fa33f8b720c8bd9ddd.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xda0a57b710768ae17941a9fa33f8b720c8bd9ddd/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "marlin"
+  },
+  {
+    "address": "0x0c5fa0e07949f941a6c2c29a008252db1527d6ee",
+    "shortName": "OPUL",
+    "decimals": 18,
+    "name": "Opulous",
+    "coingeckoId": "opulous",
+    "aggregators": ["coinGecko", "traderJoe", "liFi", "rubic"],
+    "storage": {},
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x0c5fa0e07949f941a6c2c29a008252db1527d6ee.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x0c5fa0e07949f941a6c2c29a008252db1527d6ee/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "opulous"
+  },
+  {
+    "address": "0xa334884bf6b0a066d553d19e507315e839409e62",
+    "shortName": "ERN",
+    "decimals": 18,
+    "name": "Ethos Reserve Note",
+    "coingeckoId": "ethos-reserve-note",
+    "aggregators": ["coinGecko", "liFi", "rubic", "squid"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xa334884bf6b0a066d553d19e507315e839409e62.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xa334884bf6b0a066d553d19e507315e839409e62/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "ethos-reserve-note"
+  },
+  {
+    "address": "0x319f865b287fcc10b30d8ce6144e8b6d1b476999",
+    "shortName": "CTSI",
+    "decimals": 18,
+    "name": "Cartesi",
+    "coingeckoId": "cartesi",
+    "aggregators": ["coinGecko", "uniswapLabs", "liFi", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x319f865b287fcc10b30d8ce6144e8b6d1b476999.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x319f865b287fcc10b30d8ce6144e8b6d1b476999/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "cartesi"
+  },
+  {
+    "address": "0x21e60ee73f17ac0a411ae5d690f908c3ed66fe12",
+    "shortName": "DERI",
+    "decimals": 18,
+    "name": "Deri Protocol",
+    "coingeckoId": "deri-protocol",
+    "aggregators": ["coinGecko", "liFi", "socket", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x21e60ee73f17ac0a411ae5d690f908c3ed66fe12.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x21e60ee73f17ac0a411ae5d690f908c3ed66fe12/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "deri-protocol"
+  },
+  {
+    "address": "0xbc011a12da28e8f0f528d9ee5e7039e22f91cf18",
+    "shortName": "SWETH",
+    "decimals": 18,
+    "name": "Swell Ethereum",
+    "coingeckoId": "sweth",
+    "aggregators": ["coinGecko", "traderJoe", "liFi", "rubic"],
+    "storage": {
+      "balance": 7,
+      "approval": 8
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xbc011a12da28e8f0f528d9ee5e7039e22f91cf18.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xbc011a12da28e8f0f528d9ee5e7039e22f91cf18/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "sweth"
+  },
+  {
+    "address": "0x00e1724885473b63bce08a9f0a52f35b0979e35a",
+    "shortName": "OATH",
+    "decimals": 18,
+    "name": "OATH",
+    "coingeckoId": "oath",
+    "aggregators": ["coinGecko", "liFi", "rubic", "squid"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x00e1724885473b63bce08a9f0a52f35b0979e35a.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x00e1724885473b63bce08a9f0a52f35b0979e35a/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "oath"
+  },
+  {
+    "address": "0x4e51ac49bc5e2d87e0ef713e9e5ab2d71ef4f336",
+    "shortName": "CELO",
+    "decimals": 18,
+    "name": "Celo  Wormhole ",
+    "coingeckoId": "celo-wormhole",
+    "aggregators": ["coinGecko", "uniswapLabs", "liFi", "rubic"],
+    "storage": {
+      "balance": 5,
+      "approval": 6
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x4e51ac49bc5e2d87e0ef713e9e5ab2d71ef4f336.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x4e51ac49bc5e2d87e0ef713e9e5ab2d71ef4f336/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "celo-wormhole"
+  },
+  {
+    "address": "0x9e20461bc2c4c980f62f1b279d71734207a6a356",
+    "shortName": "OMNI",
+    "decimals": 18,
+    "name": "OmniCat",
+    "coingeckoId": "omnicat",
+    "aggregators": ["coinGecko", "sushiSwap", "liFi", "rubic"],
+    "storage": {},
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x9e20461bc2c4c980f62f1b279d71734207a6a356.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x9e20461bc2c4c980f62f1b279d71734207a6a356/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "omnicat"
+  },
+  {
+    "address": "0x080f6aed32fc474dd5717105dba5ea57268f46eb",
+    "shortName": "SYN",
+    "decimals": 18,
+    "name": "Synapse",
+    "coingeckoId": "synapse-2",
+    "aggregators": ["coinGecko", "liFi", "socket", "rubic"],
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x080f6aed32fc474dd5717105dba5ea57268f46eb.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x080f6aed32fc474dd5717105dba5ea57268f46eb/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "synapse-2"
+  },
+  {
+    "address": "0x21ccbc5e7f353ec43b2f5b1fb12c3e9d89d30dca",
+    "shortName": "BDT",
+    "decimals": 18,
+    "name": "BlackDragon",
+    "coingeckoId": "blackdragon-token",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "approval": 2,
+      "balance": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x21ccbc5e7f353ec43b2f5b1fb12c3e9d89d30dca.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x21ccbc5e7f353ec43b2f5b1fb12c3e9d89d30dca/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "blackdragon-token"
+  },
+  {
+    "address": "0x3a33473d7990a605a88ac72a78ad4efc40a54adb",
+    "shortName": "TIG",
+    "decimals": 18,
+    "name": "Tigris",
+    "coingeckoId": "tigris",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 7,
+      "approval": 8
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x3a33473d7990a605a88ac72a78ad4efc40a54adb.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x3a33473d7990a605a88ac72a78ad4efc40a54adb/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "tigris"
+  },
+  {
+    "address": "0xaae0c3856e665ff9b3e2872b6d75939d810b7e40",
+    "shortName": "YFX",
+    "decimals": 18,
+    "name": "YieldFarming Index",
+    "coingeckoId": "yieldfarming-index",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 1,
+      "approval": 2
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xaae0c3856e665ff9b3e2872b6d75939d810b7e40.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xaae0c3856e665ff9b3e2872b6d75939d810b7e40/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "yieldfarming-index"
+  },
+  {
+    "address": "0xee9857de0e55d4a54d36a5a5a73a15e57435fdca",
+    "shortName": "ODIN",
+    "decimals": 18,
+    "name": "AsgardX",
+    "coingeckoId": "asgardx",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 4,
+      "approval": 5
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xee9857de0e55d4a54d36a5a5a73a15e57435fdca.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xee9857de0e55d4a54d36a5a5a73a15e57435fdca/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "asgardx"
+  },
+  {
+    "address": "0xc24a365a870821eb83fd216c9596edd89479d8d7",
+    "shortName": "G3",
+    "decimals": 18,
+    "name": "GAM3S GG",
+    "coingeckoId": "gam3s-gg",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "approval": 1,
+      "balance": 0
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xc24a365a870821eb83fd216c9596edd89479d8d7.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xc24a365a870821eb83fd216c9596edd89479d8d7/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "gam3s-gg"
+  },
+  {
+    "address": "0x1dd6b5f9281c6b4f043c02a83a46c2772024636c",
+    "shortName": "LUAUSD",
+    "decimals": 18,
+    "name": "Lumi Finance LUAUSD",
+    "coingeckoId": "lumi-finance-luausd",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x1dd6b5f9281c6b4f043c02a83a46c2772024636c.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x1dd6b5f9281c6b4f043c02a83a46c2772024636c/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "lumi-finance-luausd"
+  },
+  {
+    "address": "0x352f4bf396a7353a0877f99e99757e5d294df374",
+    "shortName": "SUNDAE",
+    "decimals": 18,
+    "name": "Sundae the Dog",
+    "coingeckoId": "sundae-the-dog",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x352f4bf396a7353a0877f99e99757e5d294df374.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x352f4bf396a7353a0877f99e99757e5d294df374/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "sundae-the-dog"
+  },
+  {
+    "address": "0x07dd5beaffb65b8ff2e575d500bdf324a05295dc",
+    "shortName": "ARBI",
+    "decimals": 18,
+    "name": "ArbiPad",
+    "coingeckoId": "arbipad",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 1,
+      "approval": 2
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x07dd5beaffb65b8ff2e575d500bdf324a05295dc.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x07dd5beaffb65b8ff2e575d500bdf324a05295dc/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "arbipad"
+  },
+  {
+    "address": "0x033f193b3fceb22a440e89a2867e8fee181594d9",
+    "shortName": "RDO",
+    "decimals": 18,
+    "name": "Rodeo Finance",
+    "coingeckoId": "rodeo-finance",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 3,
+      "approval": 4
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x033f193b3fceb22a440e89a2867e8fee181594d9.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x033f193b3fceb22a440e89a2867e8fee181594d9/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "rodeo-finance"
+  },
+  {
+    "address": "0x772598e9e62155d7fdfe65fdf01eb5a53a8465be",
+    "shortName": "EMP",
+    "decimals": 18,
+    "name": "Empyreal",
+    "coingeckoId": "empyreal",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x772598e9e62155d7fdfe65fdf01eb5a53a8465be.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x772598e9e62155d7fdfe65fdf01eb5a53a8465be/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "empyreal"
+  },
+  {
+    "address": "0x463913d3a3d3d291667d53b8325c598eb88d3b0e",
+    "shortName": "SLIZ",
+    "decimals": 18,
+    "name": "SolidLizard",
+    "coingeckoId": "solidlizard",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 1,
+      "approval": 2
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x463913d3a3d3d291667d53b8325c598eb88d3b0e.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x463913d3a3d3d291667d53b8325c598eb88d3b0e/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "solidlizard"
+  },
+  {
+    "address": "0x7f7d7806f4eb90d63b0b278daf32a2db2c2001bd",
+    "shortName": "BONUS",
+    "decimals": 18,
+    "name": "BonusBlock",
+    "coingeckoId": "bonusblock",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "approval": 1,
+      "balance": 0
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x7f7d7806f4eb90d63b0b278daf32a2db2c2001bd.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x7f7d7806f4eb90d63b0b278daf32a2db2c2001bd/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "bonusblock"
+  },
+  {
+    "address": "0x0bbf664d46becc28593368c97236faa0fb397595",
+    "shortName": "KNOX",
+    "decimals": 18,
+    "name": "KNOX Dollar",
+    "coingeckoId": "knox-dollar",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {},
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x0bbf664d46becc28593368c97236faa0fb397595.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x0bbf664d46becc28593368c97236faa0fb397595/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "knox-dollar"
+  },
+  {
+    "address": "0xc8ccbd97b96834b976c995a67bf46e5754e2c48e",
+    "shortName": "PLX",
+    "decimals": 18,
+    "name": "Parallax",
+    "coingeckoId": "parallax",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xc8ccbd97b96834b976c995a67bf46e5754e2c48e.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xc8ccbd97b96834b976c995a67bf46e5754e2c48e/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "parallax"
+  },
+  {
+    "address": "0xd07d35368e04a839dee335e213302b21ef14bb4a",
+    "shortName": "CRYSTAL",
+    "decimals": 18,
+    "name": "Crystal",
+    "coingeckoId": "crystal-erc404",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "approval": 6
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xd07d35368e04a839dee335e213302b21ef14bb4a.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xd07d35368e04a839dee335e213302b21ef14bb4a/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "crystal-erc404"
+  },
+  {
+    "address": "0x89c49a3fa372920ac23ce757a029e6936c0b8e02",
+    "shortName": "CU",
+    "decimals": 18,
+    "name": "Crypto Unicorns",
+    "coingeckoId": "crypto-unicorns",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {},
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x89c49a3fa372920ac23ce757a029e6936c0b8e02.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x89c49a3fa372920ac23ce757a029e6936c0b8e02/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "crypto-unicorns"
+  },
+  {
+    "address": "0xcbe94d75ec713b7ead84f55620dc3174beeb1cfe",
+    "shortName": "FORE",
+    "decimals": 18,
+    "name": "FORE Protocol",
+    "coingeckoId": "fore-protocol",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xcbe94d75ec713b7ead84f55620dc3174beeb1cfe.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xcbe94d75ec713b7ead84f55620dc3174beeb1cfe/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "fore-protocol"
+  },
+  {
+    "address": "0xbfbcfe8873fe28dfa25f1099282b088d52bbad9c",
+    "shortName": "EQB",
+    "decimals": 18,
+    "name": "Equilibria Finance",
+    "coingeckoId": "equilibria-finance",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xbfbcfe8873fe28dfa25f1099282b088d52bbad9c.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xbfbcfe8873fe28dfa25f1099282b088d52bbad9c/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "equilibria-finance"
+  },
+  {
+    "address": "0xc3abc47863524ced8daf3ef98d74dd881e131c38",
+    "shortName": "LUA",
+    "decimals": 18,
+    "name": "Lumi Finance",
+    "coingeckoId": "lumi-finance",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xc3abc47863524ced8daf3ef98d74dd881e131c38.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xc3abc47863524ced8daf3ef98d74dd881e131c38/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "lumi-finance"
+  },
+  {
+    "address": "0x6bcc14b02cd624ebe1a8a665cb6d4067aa097230",
+    "shortName": "FOX",
+    "decimals": 18,
+    "name": "Foxify",
+    "coingeckoId": "foxify",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x6bcc14b02cd624ebe1a8a665cb6d4067aa097230.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x6bcc14b02cd624ebe1a8a665cb6d4067aa097230/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "foxify"
+  },
+  {
+    "address": "0xa2f9ecf83a48b86265ff5fd36cdbaaa1f349916c",
+    "shortName": "GOB",
+    "decimals": 18,
+    "name": "Goons of Balatroon",
+    "coingeckoId": "goons-of-balatroon",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xa2f9ecf83a48b86265ff5fd36cdbaaa1f349916c.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xa2f9ecf83a48b86265ff5fd36cdbaaa1f349916c/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "goons-of-balatroon"
+  },
+  {
+    "address": "0x76bc2e765414e6c8b596c0f52c4240f80268f41d",
+    "shortName": "UIBT",
+    "decimals": 18,
+    "name": "Unibit",
+    "coingeckoId": "unibit",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "approval": 4,
+      "balance": 3
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x76bc2e765414e6c8b596c0f52c4240f80268f41d.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x76bc2e765414e6c8b596c0f52c4240f80268f41d/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "unibit"
+  },
+  {
+    "address": "0xd26b0c6ef8581e921ae41c66e508c62a581b709d",
+    "shortName": "SEX",
+    "decimals": 18,
+    "name": "Sexone",
+    "coingeckoId": "sexone",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xd26b0c6ef8581e921ae41c66e508c62a581b709d.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xd26b0c6ef8581e921ae41c66e508c62a581b709d/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "sexone"
+  },
+  {
+    "address": "0x15b2fb8f08e4ac1ce019eadae02ee92aedf06851",
+    "shortName": "CHR",
+    "decimals": 18,
+    "name": "Chronos Finance",
+    "coingeckoId": "chronos-finance",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 1,
+      "approval": 2
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x15b2fb8f08e4ac1ce019eadae02ee92aedf06851.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x15b2fb8f08e4ac1ce019eadae02ee92aedf06851/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "chronos-finance"
+  },
+  {
+    "address": "0x000000000026839b3f4181f2cf69336af6153b99",
+    "shortName": "GG",
+    "decimals": 18,
+    "name": "Reboot",
+    "coingeckoId": "reboot",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "approval": 9,
+      "balance": 8
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x000000000026839b3f4181f2cf69336af6153b99.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x000000000026839b3f4181f2cf69336af6153b99/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "reboot"
+  },
+  {
+    "address": "0x20547341e58fb558637fa15379c92e11f7b7f710",
+    "shortName": "MOZ",
+    "decimals": 18,
+    "name": "Mozaic",
+    "coingeckoId": "mozaic",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 8,
+      "approval": 9
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x20547341e58fb558637fa15379c92e11f7b7f710.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x20547341e58fb558637fa15379c92e11f7b7f710/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "mozaic"
+  },
+  {
+    "address": "0x93d504070ab0eede5449c89c5ea0f5e34d8103f8",
+    "shortName": "ARCHI",
+    "decimals": 18,
+    "name": "Archi Token",
+    "coingeckoId": "archi-token",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x93d504070ab0eede5449c89c5ea0f5e34d8103f8.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x93d504070ab0eede5449c89c5ea0f5e34d8103f8/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "archi-token"
+  },
+  {
+    "address": "0x3404149e9ee6f17fb41db1ce593ee48fbdcd9506",
+    "shortName": "HDN",
+    "decimals": 18,
+    "name": "Hydranet",
+    "coingeckoId": "hydranet",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x3404149e9ee6f17fb41db1ce593ee48fbdcd9506.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x3404149e9ee6f17fb41db1ce593ee48fbdcd9506/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "hydranet"
+  },
+  {
+    "address": "0xe1d3495717f9534db67a6a8d4940dd17435b6a9e",
+    "shortName": "LOCUS",
+    "decimals": 18,
+    "name": "Locus Finance",
+    "coingeckoId": "locus-finance",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xe1d3495717f9534db67a6a8d4940dd17435b6a9e.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xe1d3495717f9534db67a6a8d4940dd17435b6a9e/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "locus-finance"
+  },
+  {
+    "address": "0xb0ecc6ac0073c063dcfc026ccdc9039cae2998e1",
+    "shortName": "AA",
+    "decimals": 18,
+    "name": "A3S",
+    "coingeckoId": "a3s",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xb0ecc6ac0073c063dcfc026ccdc9039cae2998e1.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xb0ecc6ac0073c063dcfc026ccdc9039cae2998e1/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "a3s"
+  },
+  {
+    "address": "0x27d8de4c30ffde34e982482ae504fc7f23061f61",
+    "shortName": "MMT",
+    "decimals": 18,
+    "name": "My MetaTrader",
+    "coingeckoId": "my-metatrader",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x27d8de4c30ffde34e982482ae504fc7f23061f61.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x27d8de4c30ffde34e982482ae504fc7f23061f61/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "my-metatrader"
+  },
+  {
+    "address": "0x65c936f008bc34fe819bce9fa5afd9dc2d49977f",
+    "shortName": "Y2K",
+    "decimals": 18,
+    "name": "Y2K",
+    "coingeckoId": "y2k",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x65c936f008bc34fe819bce9fa5afd9dc2d49977f.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x65c936f008bc34fe819bce9fa5afd9dc2d49977f/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "y2k"
+  },
+  {
+    "address": "0xef04804e1e474d3f9b73184d7ef5d786f3fce930",
+    "shortName": "WSG",
+    "decimals": 18,
+    "name": "Wall Street Games",
+    "coingeckoId": "wall-street-games-2",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "approval": 1,
+      "balance": 0
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xef04804e1e474d3f9b73184d7ef5d786f3fce930.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xef04804e1e474d3f9b73184d7ef5d786f3fce930/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "wall-street-games-2"
+  },
+  {
+    "address": "0x4d010dbe0c6cdc0571bba026d6dfabbf40c9af28",
+    "shortName": "GEM",
+    "decimals": 18,
+    "name": "GemDrop",
+    "coingeckoId": "gemdrop",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x4d010dbe0c6cdc0571bba026d6dfabbf40c9af28.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x4d010dbe0c6cdc0571bba026d6dfabbf40c9af28/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "gemdrop"
+  },
+  {
+    "address": "0x580e933d90091b9ce380740e3a4a39c67eb85b4c",
+    "shortName": "GSWIFT",
+    "decimals": 18,
+    "name": "GameSwift",
+    "coingeckoId": "gameswift",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x580e933d90091b9ce380740e3a4a39c67eb85b4c.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x580e933d90091b9ce380740e3a4a39c67eb85b4c/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "gameswift"
+  },
+  {
+    "address": "0x0b63c61bba4a876a6eb8b5e596800f7649a9b71e",
+    "shortName": "SECT",
+    "decimals": 18,
+    "name": "Sector",
+    "coingeckoId": "sector",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x0b63c61bba4a876a6eb8b5e596800f7649a9b71e.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x0b63c61bba4a876a6eb8b5e596800f7649a9b71e/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "sector"
+  },
+  {
+    "address": "0x1f2b426417663ac76eb92149a037753a45969f31",
+    "shortName": "RWAS",
+    "decimals": 18,
+    "name": "RWA Finance",
+    "coingeckoId": "rwa-finance",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "approval": 1,
+      "balance": 0
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x1f2b426417663ac76eb92149a037753a45969f31.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x1f2b426417663ac76eb92149a037753a45969f31/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "rwa-finance"
+  },
+  {
+    "address": "0x7c8a1a80fdd00c9cccd6ebd573e9ecb49bfa2a59",
+    "shortName": "AICODE",
+    "decimals": 18,
+    "name": "AI CODE",
+    "coingeckoId": "ai-code",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x7c8a1a80fdd00c9cccd6ebd573e9ecb49bfa2a59.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x7c8a1a80fdd00c9cccd6ebd573e9ecb49bfa2a59/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "ai-code"
+  },
+  {
+    "address": "0x577fd586c9e6ba7f2e85e025d5824dbe19896656",
+    "shortName": "SYNO",
+    "decimals": 18,
+    "name": "Synonym Finance",
+    "coingeckoId": "synonym-finance",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {},
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x577fd586c9e6ba7f2e85e025d5824dbe19896656.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x577fd586c9e6ba7f2e85e025d5824dbe19896656/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "synonym-finance"
+  },
+  {
+    "address": "0xeeac5e75216571773c0064b3b591a86253791db6",
+    "shortName": "ELM",
+    "decimals": 18,
+    "name": "ELLERIUM",
+    "coingeckoId": "ellerium",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 1,
+      "approval": 2
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xeeac5e75216571773c0064b3b591a86253791db6.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xeeac5e75216571773c0064b3b591a86253791db6/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "ellerium"
+  },
+  {
+    "address": "0x619c82392cb6e41778b7d088860fea8447941f4c",
+    "shortName": "AFG",
+    "decimals": 18,
+    "name": "Army of Fortune Gem",
+    "coingeckoId": "army-of-fortune-gem",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "approval": 1,
+      "balance": 0
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x619c82392cb6e41778b7d088860fea8447941f4c.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x619c82392cb6e41778b7d088860fea8447941f4c/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "army-of-fortune-gem"
+  },
+  {
+    "address": "0x5117f4ad0bc70dbb3b05bf39a1ec1ee40dd67654",
+    "shortName": "AVIVE",
+    "decimals": 18,
+    "name": "Avive",
+    "coingeckoId": "avive",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {},
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x5117f4ad0bc70dbb3b05bf39a1ec1ee40dd67654.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x5117f4ad0bc70dbb3b05bf39a1ec1ee40dd67654/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "avive"
+  },
+  {
+    "address": "0xdc8184ba488e949815d4aafb35b3c56ad03b4179",
+    "shortName": "ROSX",
+    "decimals": 18,
+    "name": "Roseon",
+    "coingeckoId": "roseon",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xdc8184ba488e949815d4aafb35b3c56ad03b4179.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xdc8184ba488e949815d4aafb35b3c56ad03b4179/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "roseon"
+  },
+  {
+    "address": "0x319e222de462ac959baf2aec848697aec2bbd770",
+    "shortName": "OREO",
+    "decimals": 18,
+    "name": "OreoSwap",
+    "coingeckoId": "oreoswap",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x319e222de462ac959baf2aec848697aec2bbd770.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x319e222de462ac959baf2aec848697aec2bbd770/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "oreoswap"
+  },
+  {
+    "address": "0xf50874f8246776ca4b89eef471e718f70f38458f",
+    "shortName": "ARBS",
+    "decimals": 18,
+    "name": "Arbswap",
+    "coingeckoId": "arbswap",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xf50874f8246776ca4b89eef471e718f70f38458f.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xf50874f8246776ca4b89eef471e718f70f38458f/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "arbswap"
+  },
+  {
+    "address": "0x87aaffdf26c6885f6010219208d5b161ec7609c0",
+    "shortName": "EQU",
+    "decimals": 18,
+    "name": "Equation",
+    "coingeckoId": "equation",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x87aaffdf26c6885f6010219208d5b161ec7609c0.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x87aaffdf26c6885f6010219208d5b161ec7609c0/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "equation"
+  },
+  {
+    "address": "0x299142a6370e1912156e53fbd4f25d7ba49ddcc5",
+    "shortName": "AMC",
+    "decimals": 18,
+    "name": "AI Meta Club",
+    "coingeckoId": "ai-meta-club",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x299142a6370e1912156e53fbd4f25d7ba49ddcc5.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x299142a6370e1912156e53fbd4f25d7ba49ddcc5/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "ai-meta-club"
+  },
+  {
+    "address": "0x872bad41cfc8ba731f811fea8b2d0b9fd6369585",
+    "shortName": "GFLY",
+    "decimals": 18,
+    "name": "BattleFly",
+    "coingeckoId": "battlefly",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 1,
+      "approval": 2
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x872bad41cfc8ba731f811fea8b2d0b9fd6369585.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x872bad41cfc8ba731f811fea8b2d0b9fd6369585/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "battlefly"
+  },
+  {
+    "address": "0xacc51ffdef63fb0c014c882267c3a17261a5ed50",
+    "shortName": "SYK",
+    "decimals": 18,
+    "name": "Stryke",
+    "coingeckoId": "stryke",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {},
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xacc51ffdef63fb0c014c882267c3a17261a5ed50.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xacc51ffdef63fb0c014c882267c3a17261a5ed50/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "stryke"
+  },
+  {
+    "address": "0x83d6c8c06ac276465e4c92e7ac8c23740f435140",
+    "shortName": "HMX",
+    "decimals": 18,
+    "name": "HMX",
+    "coingeckoId": "hmx",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 8,
+      "approval": 9
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x83d6c8c06ac276465e4c92e7ac8c23740f435140.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x83d6c8c06ac276465e4c92e7ac8c23740f435140/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "hmx"
+  },
+  {
+    "address": "0x092baadb7def4c3981454dd9c0a0d7ff07bcfc86",
+    "shortName": "MOR",
+    "decimals": 18,
+    "name": "MorpheusAI",
+    "coingeckoId": "morpheusai",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "approval": 6,
+      "balance": 5
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x092baadb7def4c3981454dd9c0a0d7ff07bcfc86.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x092baadb7def4c3981454dd9c0a0d7ff07bcfc86/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "morpheusai"
+  },
+  {
+    "address": "0x93ca0d85837ff83158cd14d65b169cdb223b1921",
+    "shortName": "ECLIP",
+    "decimals": 6,
+    "name": "Eclipse Fi",
+    "coingeckoId": "eclipse-fi",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {},
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x93ca0d85837ff83158cd14d65b169cdb223b1921.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x93ca0d85837ff83158cd14d65b169cdb223b1921/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "eclipse-fi"
+  },
+  {
+    "address": "0xf1264873436a0771e440e2b28072fafcc5eebd01",
+    "shortName": "KNS",
+    "decimals": 18,
+    "name": "Kenshi",
+    "coingeckoId": "kenshi-2",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xf1264873436a0771e440e2b28072fafcc5eebd01.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xf1264873436a0771e440e2b28072fafcc5eebd01/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "kenshi-2"
+  },
+  {
+    "address": "0x13a7dedb7169a17be92b0e3c7c2315b46f4772b3",
+    "shortName": "BOOP",
+    "decimals": 18,
+    "name": "Boop",
+    "coingeckoId": "boop-2",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {},
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x13a7dedb7169a17be92b0e3c7c2315b46f4772b3.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x13a7dedb7169a17be92b0e3c7c2315b46f4772b3/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "boop-2"
+  },
+  {
+    "address": "0x3096e7bfd0878cc65be71f8899bc4cfb57187ba3",
+    "shortName": "RWA",
+    "decimals": 18,
+    "name": "Xend Finance",
+    "coingeckoId": "xend-finance",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "approval": 1,
+      "balance": 0
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x3096e7bfd0878cc65be71f8899bc4cfb57187ba3.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x3096e7bfd0878cc65be71f8899bc4cfb57187ba3/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "xend-finance"
+  },
+  {
+    "address": "0x3269a3c00ab86c753856fd135d97b87facb0d848",
+    "shortName": "FFM",
+    "decimals": 18,
+    "name": "Florence Finance Medici",
+    "coingeckoId": "florence-finance-medici",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "approval": 52,
+      "balance": 51
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x3269a3c00ab86c753856fd135d97b87facb0d848.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x3269a3c00ab86c753856fd135d97b87facb0d848/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "florence-finance-medici"
+  },
+  {
+    "address": "0x34229b3f16fbcdfa8d8d9d17c0852f9496f4c7bb",
+    "shortName": "IPOR",
+    "decimals": 18,
+    "name": "IPOR",
+    "coingeckoId": "ipor",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 51
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x34229b3f16fbcdfa8d8d9d17c0852f9496f4c7bb.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x34229b3f16fbcdfa8d8d9d17c0852f9496f4c7bb/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "ipor"
+  },
+  {
+    "address": "0x2b41806cbf1ffb3d9e31a9ece6b738bf9d6f645f",
+    "shortName": "ENO",
+    "decimals": 18,
+    "name": "ENO",
+    "coingeckoId": "eno",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "approval": 1,
+      "balance": 0
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x2b41806cbf1ffb3d9e31a9ece6b738bf9d6f645f.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x2b41806cbf1ffb3d9e31a9ece6b738bf9d6f645f/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "eno"
+  },
+  {
+    "address": "0x47c337bd5b9344a6f3d6f58c474d9d8cd419d8ca",
+    "shortName": "DACKIE",
+    "decimals": 18,
+    "name": "DackieSwap",
+    "coingeckoId": "dackieswap",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x47c337bd5b9344a6f3d6f58c474d9d8cd419d8ca.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x47c337bd5b9344a6f3d6f58c474d9d8cd419d8ca/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "dackieswap"
+  },
+  {
+    "address": "0x27f485b62c4a7e635f561a87560adf5090239e93",
+    "shortName": "DFX",
+    "decimals": 18,
+    "name": "DFX Finance",
+    "coingeckoId": "dfx-finance",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x27f485b62c4a7e635f561a87560adf5090239e93.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x27f485b62c4a7e635f561a87560adf5090239e93/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "dfx-finance"
+  },
+  {
+    "address": "0xeb4d25db65dcef52380c99ba7e1344c820ecb1fc",
+    "shortName": "XWG",
+    "decimals": 18,
+    "name": "X World Games",
+    "coingeckoId": "x-world-games",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xeb4d25db65dcef52380c99ba7e1344c820ecb1fc.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xeb4d25db65dcef52380c99ba7e1344c820ecb1fc/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "x-world-games"
+  },
+  {
+    "address": "0x429fed88f10285e61b12bdf00848315fbdfcc341",
+    "shortName": "TGT",
+    "decimals": 18,
+    "name": "THORWallet DEX",
+    "coingeckoId": "thorwallet",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "approval": 52,
+      "balance": 51
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x429fed88f10285e61b12bdf00848315fbdfcc341.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x429fed88f10285e61b12bdf00848315fbdfcc341/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "thorwallet"
+  },
+  {
+    "address": "0xf18c263ec50cc211ef3f172228549b6618f10613",
+    "shortName": "COLLAB",
+    "decimals": 18,
+    "name": "Collab Land",
+    "coingeckoId": "collab-land",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 51
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xf18c263ec50cc211ef3f172228549b6618f10613.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xf18c263ec50cc211ef3f172228549b6618f10613/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "collab-land"
+  },
+  {
+    "address": "0xd1e094cabc5acb9d3b0599c3f76f2d01ff8d3563",
+    "shortName": "VRSW",
+    "decimals": 18,
+    "name": "VirtuSwap",
+    "coingeckoId": "virtuswap",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "approval": 52,
+      "balance": 51
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xd1e094cabc5acb9d3b0599c3f76f2d01ff8d3563.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xd1e094cabc5acb9d3b0599c3f76f2d01ff8d3563/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "virtuswap"
+  },
+  {
+    "address": "0xe0ee18eacafddaeb38f8907c74347c44385578ab",
+    "shortName": "AXGT",
+    "decimals": 18,
+    "name": "AxonDAO Governance Token",
+    "coingeckoId": "axondao-governance-token",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "approval": 52,
+      "balance": 51
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xe0ee18eacafddaeb38f8907c74347c44385578ab.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xe0ee18eacafddaeb38f8907c74347c44385578ab/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "axondao-governance-token"
+  },
+  {
+    "address": "0x24404dc041d74cd03cfe28855f555559390c931b",
+    "shortName": "MOON",
+    "decimals": 18,
+    "name": "r CryptoCurrency Moons",
+    "coingeckoId": "moon",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "approval": 52,
+      "balance": 51
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x24404dc041d74cd03cfe28855f555559390c931b.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x24404dc041d74cd03cfe28855f555559390c931b/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "moon"
+  },
+  {
+    "address": "0xbcd4d5ac29e06e4973a1ddcd782cd035d04bc0b7",
+    "shortName": "QKNTL",
+    "decimals": 18,
+    "name": "Quick Intel",
+    "coingeckoId": "quick-intel",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 7,
+      "approval": 8
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xbcd4d5ac29e06e4973a1ddcd782cd035d04bc0b7.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xbcd4d5ac29e06e4973a1ddcd782cd035d04bc0b7/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "quick-intel"
+  },
+  {
+    "address": "0x6c84a8f1c29108f47a79964b5fe888d4f4d0de40",
+    "shortName": "TBTC",
+    "decimals": 18,
+    "name": "tBTC",
+    "coingeckoId": "tbtc",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x6c84a8f1c29108f47a79964b5fe888d4f4d0de40.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x6c84a8f1c29108f47a79964b5fe888d4f4d0de40/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "tbtc"
+  },
+  {
+    "address": "0x2b1d36f5b61addaf7da7ebbd11b35fd8cfb0de31",
+    "shortName": "ITP",
+    "decimals": 18,
+    "name": "Interport Token",
+    "coingeckoId": "interport-token",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "approval": 9,
+      "balance": 8
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x2b1d36f5b61addaf7da7ebbd11b35fd8cfb0de31.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x2b1d36f5b61addaf7da7ebbd11b35fd8cfb0de31/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "interport-token"
+  },
+  {
+    "address": "0x42069d11a2cc72388a2e06210921e839cfbd3280",
+    "shortName": "GNOME",
+    "decimals": 18,
+    "name": "GnomeLand",
+    "coingeckoId": "gnomeland",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "approval": 7,
+      "balance": 6
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x42069d11a2cc72388a2e06210921e839cfbd3280.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x42069d11a2cc72388a2e06210921e839cfbd3280/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "gnomeland"
+  },
+  {
+    "address": "0xa586b3b80d7e3e8d439e25fbc16bc5bcee3e2c85",
+    "shortName": "CTOK",
+    "decimals": 18,
+    "name": "Codyfight",
+    "coingeckoId": "codyfight",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "approval": 1,
+      "balance": 0
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xa586b3b80d7e3e8d439e25fbc16bc5bcee3e2c85.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xa586b3b80d7e3e8d439e25fbc16bc5bcee3e2c85/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "codyfight"
+  },
+  {
+    "address": "0x965d00aa7abc62ca10132e641d08593435ac811d",
+    "shortName": "KAP",
+    "decimals": 18,
+    "name": "KAP Games",
+    "coingeckoId": "kapital-dao",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x965d00aa7abc62ca10132e641d08593435ac811d.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x965d00aa7abc62ca10132e641d08593435ac811d/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "kapital-dao"
+  },
+  {
+    "address": "0x66e535e8d2ebf13f49f3d49e5c50395a97c137b1",
+    "shortName": "MOLTEN",
+    "decimals": 18,
+    "name": "Molten",
+    "coingeckoId": "molten-2",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "approval": 10,
+      "balance": 9
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x66e535e8d2ebf13f49f3d49e5c50395a97c137b1.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x66e535e8d2ebf13f49f3d49e5c50395a97c137b1/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "molten-2"
+  },
+  {
+    "address": "0xe22c452bd2ade15dfc8ad98286bc6bdf0c9219b7",
+    "shortName": "TRADE",
+    "decimals": 18,
+    "name": "Polytrade",
+    "coingeckoId": "polytrade",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "approval": 52,
+      "balance": 51
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xe22c452bd2ade15dfc8ad98286bc6bdf0c9219b7.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xe22c452bd2ade15dfc8ad98286bc6bdf0c9219b7/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "polytrade"
+  },
+  {
+    "address": "0x11bf4f05eb28b802ed3ab672594decb20ffe2313",
+    "shortName": "AURY",
+    "decimals": 9,
+    "name": "Aurory",
+    "coingeckoId": "aurory",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x11bf4f05eb28b802ed3ab672594decb20ffe2313.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x11bf4f05eb28b802ed3ab672594decb20ffe2313/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "aurory"
+  },
+  {
+    "address": "0xad4b9c1fbf4923061814dd9d5732eb703faa53d4",
+    "shortName": "WNT",
+    "decimals": 18,
+    "name": "Wicrypt",
+    "coingeckoId": "wicrypt",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "approval": 1,
+      "balance": 0
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xad4b9c1fbf4923061814dd9d5732eb703faa53d4.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xad4b9c1fbf4923061814dd9d5732eb703faa53d4/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "wicrypt"
+  },
+  {
+    "address": "0x8ec1877698acf262fe8ad8a295ad94d6ea258988",
+    "shortName": "DUSD",
+    "decimals": 18,
+    "name": "Davos xyz USD",
+    "coingeckoId": "davos-protocol",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 4,
+      "approval": 5
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x8ec1877698acf262fe8ad8a295ad94d6ea258988.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x8ec1877698acf262fe8ad8a295ad94d6ea258988/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "davos-protocol"
+  },
+  {
+    "address": "0x7f4638a58c0615037decc86f1dae60e55fe92874",
+    "shortName": "GRG",
+    "decimals": 18,
+    "name": "RigoBlock",
+    "coingeckoId": "rigoblock",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x7f4638a58c0615037decc86f1dae60e55fe92874.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x7f4638a58c0615037decc86f1dae60e55fe92874/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "rigoblock"
+  },
+  {
+    "address": "0x30dcba0405004cf124045793e1933c798af9e66a",
+    "shortName": "YDF",
+    "decimals": 18,
+    "name": "Yieldification",
+    "coingeckoId": "yieldification",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x30dcba0405004cf124045793e1933c798af9e66a.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x30dcba0405004cf124045793e1933c798af9e66a/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "yieldification"
+  },
+  {
+    "address": "0xa58663faef461761e44066ea26c1fcddf2927b80",
+    "shortName": "KOM",
+    "decimals": 8,
+    "name": "Kommunitas",
+    "coingeckoId": "kommunitas",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 2,
+      "approval": 12
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xa58663faef461761e44066ea26c1fcddf2927b80.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xa58663faef461761e44066ea26c1fcddf2927b80/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "kommunitas"
+  },
+  {
+    "address": "0x7ce746b45eabd0c4321538dec1b849c79a9a8476",
+    "shortName": "DSLA",
+    "decimals": 18,
+    "name": "DSLA Protocol",
+    "coingeckoId": "stacktical",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x7ce746b45eabd0c4321538dec1b849c79a9a8476.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x7ce746b45eabd0c4321538dec1b849c79a9a8476/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "stacktical"
+  },
+  {
+    "address": "0xbad58ed9b5f26a002ea250d7a60dc6729a4a2403",
+    "shortName": "PBX",
+    "decimals": 18,
+    "name": "Paribus",
+    "coingeckoId": "paribus",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xbad58ed9b5f26a002ea250d7a60dc6729a4a2403.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xbad58ed9b5f26a002ea250d7a60dc6729a4a2403/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "paribus"
+  },
+  {
+    "address": "0x7be5dd337cc6ce3e474f64e2a92a566445290864",
+    "shortName": "OLE",
+    "decimals": 18,
+    "name": "OpenLeverage",
+    "coingeckoId": "openleverage",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 7,
+      "approval": 8
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x7be5dd337cc6ce3e474f64e2a92a566445290864.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x7be5dd337cc6ce3e474f64e2a92a566445290864/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "openleverage"
+  },
+  {
+    "address": "0xe10d4a4255d2d35c9e23e2c4790e073046fbaf5c",
+    "shortName": "LNDX",
+    "decimals": 6,
+    "name": "LandX Governance Token",
+    "coingeckoId": "landx-governance-token",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {},
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xe10d4a4255d2d35c9e23e2c4790e073046fbaf5c.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xe10d4a4255d2d35c9e23e2c4790e073046fbaf5c/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "landx-governance-token"
+  },
+  {
+    "address": "0x4f604735c1cf31399c6e711d5962b2b3e0225ad3",
+    "shortName": "USDGLO",
+    "decimals": 18,
+    "name": "Glo Dollar",
+    "coingeckoId": "glo-dollar",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x4f604735c1cf31399c6e711d5962b2b3e0225ad3.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x4f604735c1cf31399c6e711d5962b2b3e0225ad3/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "glo-dollar"
+  },
+  {
+    "address": "0x9e523234d36973f9e38642886197d023c88e307e",
+    "shortName": "RING",
+    "decimals": 18,
+    "name": "Darwinia Network",
+    "coingeckoId": "darwinia-network-native-token",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x9e523234d36973f9e38642886197d023c88e307e.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x9e523234d36973f9e38642886197d023c88e307e/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "darwinia-network-native-token"
+  },
+  {
+    "address": "0xb0b195aefa3650a6908f15cdac7d92f8a5791b0b",
+    "shortName": "BOB",
+    "decimals": 18,
+    "name": "BOB",
+    "coingeckoId": "bob",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 1,
+      "approval": 2
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xb0b195aefa3650a6908f15cdac7d92f8a5791b0b.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xb0b195aefa3650a6908f15cdac7d92f8a5791b0b/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "bob"
+  },
+  {
+    "address": "0x24ef78c7092d255ed14a0281ac1800c359af3afe",
+    "shortName": "RAB",
+    "decimals": 18,
+    "name": "Rabbit Wallet",
+    "coingeckoId": "rabbit-wallet",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x24ef78c7092d255ed14a0281ac1800c359af3afe.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x24ef78c7092d255ed14a0281ac1800c359af3afe/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "rabbit-wallet"
+  },
+  {
+    "address": "0xabd587f2607542723b17f14d00d99b987c29b074",
+    "shortName": "SDEX",
+    "decimals": 18,
+    "name": "SmarDex",
+    "coingeckoId": "smardex",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 5,
+      "approval": 6
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xabd587f2607542723b17f14d00d99b987c29b074.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xabd587f2607542723b17f14d00d99b987c29b074/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "smardex"
+  },
+  {
+    "address": "0x95ab45875cffdba1e5f451b950bc2e42c0053f39",
+    "shortName": "SFRXETH",
+    "decimals": 18,
+    "name": "Staked Frax Ether",
+    "coingeckoId": "staked-frax-ether",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x95ab45875cffdba1e5f451b950bc2e42c0053f39.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x95ab45875cffdba1e5f451b950bc2e42c0053f39/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "staked-frax-ether"
+  },
+  {
+    "address": "0x0cbd6fadcf8096cc9a43d90b45f65826102e3ece",
+    "shortName": "CDT",
+    "decimals": 18,
+    "name": "CheckDot",
+    "coingeckoId": "checkdot",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x0cbd6fadcf8096cc9a43d90b45f65826102e3ece.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x0cbd6fadcf8096cc9a43d90b45f65826102e3ece/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "checkdot"
+  },
+  {
+    "address": "0x80bb30d62a16e1f2084deae84dc293531c3ac3a1",
+    "shortName": "GRAIN",
+    "decimals": 18,
+    "name": "Granary",
+    "coingeckoId": "granary",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x80bb30d62a16e1f2084deae84dc293531c3ac3a1.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x80bb30d62a16e1f2084deae84dc293531c3ac3a1/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "granary"
+  },
+  {
+    "address": "0x3405e88af759992937b84e58f2fe691ef0eea320",
+    "shortName": "FPIS",
+    "decimals": 18,
+    "name": "Frax Price Index Share",
+    "coingeckoId": "frax-price-index-share",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x3405e88af759992937b84e58f2fe691ef0eea320.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x3405e88af759992937b84e58f2fe691ef0eea320/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "frax-price-index-share"
+  },
+  {
+    "address": "0x9483ab65847a447e36d21af1cab8c87e9712ff93",
+    "shortName": "WUSDR",
+    "decimals": 9,
+    "name": "Wrapped USDR",
+    "coingeckoId": "wrapped-usdr",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x9483ab65847a447e36d21af1cab8c87e9712ff93.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x9483ab65847a447e36d21af1cab8c87e9712ff93/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "wrapped-usdr"
+  },
+  {
+    "address": "0xcaa38bcc8fb3077975bbe217acfaa449e6596a84",
+    "shortName": "DAO",
+    "decimals": 18,
+    "name": "DAO Maker",
+    "coingeckoId": "dao-maker",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xcaa38bcc8fb3077975bbe217acfaa449e6596a84.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xcaa38bcc8fb3077975bbe217acfaa449e6596a84/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "dao-maker"
+  },
+  {
+    "address": "0x61a1ff55c5216b636a294a07d77c6f4df10d3b56",
+    "shortName": "APEX",
+    "decimals": 18,
+    "name": "ApeX",
+    "coingeckoId": "apex-token-2",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x61a1ff55c5216b636a294a07d77c6f4df10d3b56.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x61a1ff55c5216b636a294a07d77c6f4df10d3b56/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "apex-token-2"
+  },
+  {
+    "address": "0x88a269df8fe7f53e590c561954c52fccc8ec0cfb",
+    "shortName": "NST",
+    "decimals": 18,
+    "name": "Ninja Squad Token",
+    "coingeckoId": "ninja-squad",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "approval": 6,
+      "balance": 5
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x88a269df8fe7f53e590c561954c52fccc8ec0cfb.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x88a269df8fe7f53e590c561954c52fccc8ec0cfb/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "ninja-squad"
+  },
+  {
+    "address": "0x3124678d62d2aa1f615b54525310fbfda6dcf7ae",
+    "shortName": "SNSY",
+    "decimals": 18,
+    "name": "Sensay",
+    "coingeckoId": "sensay",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "approval": 6,
+      "balance": 5
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x3124678d62d2aa1f615b54525310fbfda6dcf7ae.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x3124678d62d2aa1f615b54525310fbfda6dcf7ae/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "sensay"
+  },
+  {
+    "address": "0xd8724322f44e5c58d7a815f542036fb17dbbf839",
+    "shortName": "WOETH",
+    "decimals": 18,
+    "name": "Wrapped OETH",
+    "coingeckoId": "wrapped-oeth",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "approval": 54
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xd8724322f44e5c58d7a815f542036fb17dbbf839.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xd8724322f44e5c58d7a815f542036fb17dbbf839/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "wrapped-oeth"
+  },
+  {
+    "address": "0x51a80238b5738725128d3a3e06ab41c1d4c05c74",
+    "shortName": "USH",
+    "decimals": 18,
+    "name": "unshETHing Token",
+    "coingeckoId": "unsheth",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 7,
+      "approval": 8
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x51a80238b5738725128d3a3e06ab41c1d4c05c74.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x51a80238b5738725128d3a3e06ab41c1d4c05c74/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "unsheth"
+  },
+  {
+    "address": "0x0ae38f7e10a43b5b2fb064b42a2f4514cba909ef",
+    "shortName": "UNSHETH",
+    "decimals": 18,
+    "name": "unshETH Ether",
+    "coingeckoId": "unsheth-unsheth",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 7,
+      "approval": 8
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x0ae38f7e10a43b5b2fb064b42a2f4514cba909ef.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x0ae38f7e10a43b5b2fb064b42a2f4514cba909ef/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "unsheth-unsheth"
+  },
+  {
+    "address": "0xffa188493c15dfaf2c206c97d8633377847b6a52",
+    "shortName": "WEFI",
+    "decimals": 18,
+    "name": "Wefi",
+    "coingeckoId": "wefi-finance",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 8,
+      "approval": 9
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xffa188493c15dfaf2c206c97d8633377847b6a52.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xffa188493c15dfaf2c206c97d8633377847b6a52/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "wefi-finance"
+  },
+  {
+    "address": "0xe05a08226c49b636acf99c40da8dc6af83ce5bb3",
+    "shortName": "ANKRETH",
+    "decimals": 18,
+    "name": "Ankr Staked ETH",
+    "coingeckoId": "ankreth",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 3,
+      "approval": 4
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xe05a08226c49b636acf99c40da8dc6af83ce5bb3.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xe05a08226c49b636acf99c40da8dc6af83ce5bb3/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "ankreth"
+  },
+  {
+    "address": "0x13278cd824d33a7adb9f0a9a84aca7c0d2deebf7",
+    "shortName": "TAROT",
+    "decimals": 18,
+    "name": "Tarot",
+    "coingeckoId": "tarot-2",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 7,
+      "approval": 8
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x13278cd824d33a7adb9f0a9a84aca7c0d2deebf7.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x13278cd824d33a7adb9f0a9a84aca7c0d2deebf7/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "tarot-2"
+  },
+  {
+    "address": "0x2ac2b254bc18cd4999f64773a966e4f4869c34ee",
+    "shortName": "PNP",
+    "decimals": 18,
+    "name": "Penpie",
+    "coingeckoId": "penpie",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 8,
+      "approval": 9
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x2ac2b254bc18cd4999f64773a966e4f4869c34ee.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x2ac2b254bc18cd4999f64773a966e4f4869c34ee/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "penpie"
+  },
+  {
+    "address": "0x560363bda52bc6a44ca6c8c9b4a5fadbda32fa60",
+    "shortName": "SFUND",
+    "decimals": 18,
+    "name": "Seedify fund",
+    "coingeckoId": "seedify-fund",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 7,
+      "approval": 8
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x560363bda52bc6a44ca6c8c9b4a5fadbda32fa60.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x560363bda52bc6a44ca6c8c9b4a5fadbda32fa60/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "seedify-fund"
+  },
+  {
+    "address": "0x59d9356e565ab3a36dd77763fc0d87feaf85508c",
+    "shortName": "USDM",
+    "decimals": 18,
+    "name": "Mountain Protocol USD",
+    "coingeckoId": "mountain-protocol-usdm",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x59d9356e565ab3a36dd77763fc0d87feaf85508c.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x59d9356e565ab3a36dd77763fc0d87feaf85508c/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "mountain-protocol-usdm"
+  },
+  {
+    "address": "0xb1bc21f748ae2be95674876710bc6d78235480e0",
+    "shortName": "HORD",
+    "decimals": 18,
+    "name": "Hord",
+    "coingeckoId": "hord",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xb1bc21f748ae2be95674876710bc6d78235480e0.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xb1bc21f748ae2be95674876710bc6d78235480e0/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "hord"
+  },
+  {
+    "address": "0xc72633f995e98ac3bb8a89e6a9c4af335c3d6e44",
+    "shortName": "OSEA",
+    "decimals": 18,
+    "name": "Omnisea",
+    "coingeckoId": "omnisea",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 3,
+      "approval": 4
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xc72633f995e98ac3bb8a89e6a9c4af335c3d6e44.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xc72633f995e98ac3bb8a89e6a9c4af335c3d6e44/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "omnisea"
+  },
+  {
+    "address": "0xf3c091ed43de9c270593445163a41a876a0bb3dd",
+    "shortName": "ORBS",
+    "decimals": 18,
+    "name": "Orbs",
+    "coingeckoId": "orbs",
+    "aggregators": ["coinGecko", "rubic", "squid"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xf3c091ed43de9c270593445163a41a876a0bb3dd.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xf3c091ed43de9c270593445163a41a876a0bb3dd/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "orbs"
+  },
+  {
+    "address": "0x8b5e4c9a188b1a187f2d1e80b1c2fb17fa2922e1",
+    "shortName": "GOLD",
+    "decimals": 18,
+    "name": "GoldenBoys",
+    "coingeckoId": "goldenboys",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 7,
+      "approval": 8
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x8b5e4c9a188b1a187f2d1e80b1c2fb17fa2922e1.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x8b5e4c9a188b1a187f2d1e80b1c2fb17fa2922e1/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "goldenboys"
+  },
+  {
+    "address": "0xaf20f5f19698f1d19351028cd7103b63d30de7d7",
+    "shortName": "WAGMI",
+    "decimals": 18,
+    "name": "Wagmi",
+    "coingeckoId": "wagmi-2",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 7,
+      "approval": 8
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xaf20f5f19698f1d19351028cd7103b63d30de7d7.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xaf20f5f19698f1d19351028cd7103b63d30de7d7/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "wagmi-2"
+  },
+  {
+    "address": "0x10aaed289a7b1b0155bf4b86c862f297e84465e0",
+    "shortName": "RBC",
+    "decimals": 18,
+    "name": "Rubic",
+    "coingeckoId": "rubic",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x10aaed289a7b1b0155bf4b86c862f297e84465e0.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x10aaed289a7b1b0155bf4b86c862f297e84465e0/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "rubic"
+  },
+  {
+    "address": "0x0a3bb08b3a15a19b4de82f8acfc862606fb69a2d",
+    "shortName": "IUSD",
+    "decimals": 18,
+    "name": "iZUMi Bond USD",
+    "coingeckoId": "izumi-bond-usd",
+    "aggregators": ["coinGecko", "socket", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x0a3bb08b3a15a19b4de82f8acfc862606fb69a2d.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x0a3bb08b3a15a19b4de82f8acfc862606fb69a2d/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "izumi-bond-usd"
+  },
+  {
+    "address": "0xf42e2b8bc2af8b110b65be98db1321b1ab8d44f5",
+    "shortName": "DONUT",
+    "decimals": 18,
+    "name": "Donut",
+    "coingeckoId": "donut",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "approval": 52,
+      "balance": 51
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xf42e2b8bc2af8b110b65be98db1321b1ab8d44f5.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xf42e2b8bc2af8b110b65be98db1321b1ab8d44f5/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "donut"
+  },
+  {
+    "address": "0xcf934e2402a5e072928a39a956964eb8f2b5b79c",
+    "shortName": "POOL",
+    "decimals": 18,
+    "name": "PoolTogether",
+    "coingeckoId": "pooltogether",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 51
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xcf934e2402a5e072928a39a956964eb8f2b5b79c.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xcf934e2402a5e072928a39a956964eb8f2b5b79c/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "pooltogether"
+  },
+  {
+    "address": "0xb52bd62ee0cf462fa9ccbda4bf27fe84d9ab6cf7",
+    "shortName": "SAIL",
+    "decimals": 18,
+    "name": "Clipper SAIL",
+    "coingeckoId": "sail-2",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "approval": 52,
+      "balance": 51
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xb52bd62ee0cf462fa9ccbda4bf27fe84d9ab6cf7.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xb52bd62ee0cf462fa9ccbda4bf27fe84d9ab6cf7/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "sail-2"
+  },
+  {
+    "address": "0xb0ffa8000886e57f86dd5264b9582b2ad87b2b91",
+    "shortName": "W",
+    "decimals": 18,
+    "name": "Wormhole",
+    "coingeckoId": "wormhole",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {},
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xb0ffa8000886e57f86dd5264b9582b2ad87b2b91.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xb0ffa8000886e57f86dd5264b9582b2ad87b2b91/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "wormhole"
+  },
+  {
+    "address": "0xba5ddd1f9d7f570dc94a51479a000e3bce967196",
+    "shortName": "AAVE",
+    "decimals": 18,
+    "name": "Aave",
+    "aggregators": ["uniswapLabs", "liFi", "rubic"],
+    "storage": {
+      "balance": 51,
+      "approval": 52
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xba5ddd1f9d7f570dc94a51479a000e3bce967196.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xba5ddd1f9d7f570dc94a51479a000e3bce967196/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "aave"
+  },
+  {
+    "address": "0x1b896893dfc86bb67cf57767298b9073d2c1ba2c",
+    "shortName": "CAKE",
+    "decimals": 18,
+    "name": "PancakeSwap Token",
+    "aggregators": ["oneInch", "liFi", "socket"],
+    "storage": {
+      "balance": 9,
+      "approval": 10
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x1b896893dfc86bb67cf57767298b9073d2c1ba2c.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x1b896893dfc86bb67cf57767298b9073d2c1ba2c/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "pancakeswap-token"
+  },
+  {
+    "address": "0x5d3a1ff2b6bab83b63cd9ad0787074081a52ef34",
+    "shortName": "USDE",
+    "decimals": 18,
+    "name": "USDe",
+    "aggregators": ["liFi", "xSwap", "rubic"],
+    "storage": {
+      "approval": 6,
+      "balance": 5
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x5d3a1ff2b6bab83b63cd9ad0787074081a52ef34.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x5d3a1ff2b6bab83b63cd9ad0787074081a52ef34/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "bridged-usde"
+  },
+  {
+    "address": "0x76ce14237110c865f431e18f91fc1b225fb6fe99",
+    "shortName": "POT",
+    "decimals": 18,
+    "name": "POT Token",
+    "coingeckoId": "traderdao-proof-of-trade",
+    "aggregators": ["liFi", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x76ce14237110c865f431e18f91fc1b225fb6fe99.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x76ce14237110c865f431e18f91fc1b225fb6fe99/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "traderdao-proof-of-trade"
+  },
+  {
+    "address": "0xb59c8912c83157a955f9d715e556257f432c35d7",
+    "shortName": "TRUF",
+    "decimals": 18,
+    "name": "Truflation",
+    "coingeckoId": "truflation",
+    "aggregators": ["liFi", "rubic"],
+    "storage": {
+      "approval": 1,
+      "balance": 0
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xb59c8912c83157a955f9d715e556257f432c35d7.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xb59c8912c83157a955f9d715e556257f432c35d7/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "truflation"
+  },
+  {
+    "address": "0xa0995d43901551601060447f9abf93ebc277cec2",
+    "shortName": "HIP",
+    "decimals": 18,
+    "name": "HIPPOP",
+    "coingeckoId": "hippop",
+    "aggregators": ["liFi", "rubic"],
+    "storage": {
+      "approval": 2,
+      "balance": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xa0995d43901551601060447f9abf93ebc277cec2.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xa0995d43901551601060447f9abf93ebc277cec2/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "hippop"
+  },
+  {
+    "address": "0xdfb8be6f8c87f74295a87de951974362cedcfa30",
+    "shortName": "EMC",
+    "decimals": 18,
+    "name": "EdgeMatrix Computing network",
+    "coingeckoId": "edge-matrix-computing",
+    "aggregators": ["liFi", "rubic"],
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xdfb8be6f8c87f74295a87de951974362cedcfa30.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xdfb8be6f8c87f74295a87de951974362cedcfa30/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "edge-matrix-computing"
+  },
+  {
+    "address": "0xeb99748e91afca94a6289db3b02e7ef4a8f0a22d",
+    "shortName": "MAHA",
+    "decimals": 18,
+    "name": "MahaDAO",
+    "aggregators": ["liFi", "rubic"],
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xeb99748e91afca94a6289db3b02e7ef4a8f0a22d.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xeb99748e91afca94a6289db3b02e7ef4a8f0a22d/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "mahadao"
+  },
+  {
+    "address": "0x3647c54c4c2c65bc7a2d63c0da2809b399dbbdc0",
+    "shortName": "SOLVBTC",
+    "decimals": 18,
+    "name": "Solv BTC",
+    "coingeckoId": "solv-btc",
+    "aggregators": ["liFi", "rubic"],
+    "storage": {},
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x3647c54c4c2c65bc7a2d63c0da2809b399dbbdc0.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x3647c54c4c2c65bc7a2d63c0da2809b399dbbdc0/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "solv-btc"
+  },
+  {
+    "address": "0x641441c631e2f909700d2f41fd87f0aa6a6b4edb",
+    "shortName": "USX",
+    "decimals": 18,
+    "name": "dForce USD",
+    "coingeckoId": "token-dforce-usd",
+    "aggregators": ["coinGecko", "sushiSwap", "liFi", "socket", "rubic"],
+    "storage": {
+      "balance": 52,
+      "approval": 53
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x641441c631e2f909700d2f41fd87f0aa6a6b4edb.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x641441c631e2f909700d2f41fd87f0aa6a6b4edb/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "token-dforce-usd"
+  },
+  {
+    "address": "0x86f65121804d2cdbef79f9f072d4e0c2eebabc08",
+    "shortName": "SEED",
+    "decimals": 18,
+    "name": "Garden",
+    "coingeckoId": "garden-2",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "approval": 52,
+      "balance": 51
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0x86f65121804d2cdbef79f9f072d4e0c2eebabc08.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0x86f65121804d2cdbef79f9f072d4e0c2eebabc08/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "garden-2"
+  },
+  {
+    "address": "0xf0cb2dc0db5e6c66b9a70ac27b06b878da017028",
+    "shortName": "OHM",
+    "decimals": 9,
+    "name": "Olympus",
+    "coingeckoId": "olympus",
+    "aggregators": ["coinGecko", "liFi", "rubic"],
+    "storage": {
+      "balance": 0,
+      "approval": 1
+    },
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/42161/0xf0cb2dc0db5e6c66b9a70ac27b06b878da017028.png",
+    "iconUrlThumbnail": "https://tokens.api.cx.metamask.io/icons/42161/0xf0cb2dc0db5e6c66b9a70ac27b06b878da017028/thumbnail.png",
+    "chainId": 42161,
+    "coinGeckoId": "olympus"
+  }
+]

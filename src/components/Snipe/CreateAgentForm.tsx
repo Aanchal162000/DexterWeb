@@ -243,7 +243,7 @@ const CreateAgentForm: React.FC<CreateAgentFormProps> = ({ onClose }) => {
             onClick={() =>
               setCurrentStep((prev) => (prev === "launch" ? "details" : "type"))
             }
-            className="px-4 py-2 border border-gray-600 rounded-lg text-sm text-black hover:bg-gray-700"
+            className="px-4 py-2 border border-primary-100/70 rounded-lg text-sm text-white hover:bg-gray-700"
           >
             Back
           </button>

@@ -36,7 +36,7 @@ function Swidget() {
   const [recipientAddress, setRecipientAddress] = useState<string>(
     toAddress || ""
   );
-  const [selectedTab, setSelectedTab] = useState<"convert" | "buy">("convert");
+  const [selectedTab, setSelectedTab] = useState<"swap" | "buy">("swap");
   const [buttonText, setButtonText] = useState<string>("Select Token");
   const [isConfirmPop, setIsConfirmPop] = useState<boolean>(false);
   const {

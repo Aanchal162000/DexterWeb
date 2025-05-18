@@ -261,10 +261,14 @@ export interface IVirtual {
   description: string;
   price: number;
   image: string;
+  subscribers?: number;
+  maxSubscribers?: number;
+  userBalance?: number;
 }
 
 export interface IBuyModalProps {
   isOpen: boolean;
   onClose: () => void;
   virtual: IVirtual | null;
+  type: "buy" | "sell";
 }

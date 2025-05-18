@@ -10,7 +10,7 @@ import { ICoin, INetworkCard } from "@/utils/interface";
 import { useFiatContext } from "../../context/FiatContext";
 import { toNumFixed } from "@/utils/helper";
 
-type TWidgetTabs = "convert" | "buy";
+type TWidgetTabs = "swap" | "buy";
 
 interface HeaderProps {
   selectedTab: TWidgetTabs;
@@ -99,7 +99,7 @@ const SwapHeader: React.FC<HeaderProps> = ({ selectedTab, setSelectedTab }) => {
   }
 
   useEffect(() => {
-    if (selectedTab == "convert") {
+    if (selectedTab == "swap") {
       setTradeFields();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -112,7 +112,7 @@ const SwapHeader: React.FC<HeaderProps> = ({ selectedTab, setSelectedTab }) => {
         let tempAmount = toAmount;
         console.log("toAmount", tempAmount);
         resetFiatStates();
-        setSelectedTab("convert");
+        setSelectedTab("swap");
         let arbitrumNetwork = networkCards?.find(
           (item) => item?.name == "Arbitrum"
         )!;
@@ -134,18 +134,18 @@ const SwapHeader: React.FC<HeaderProps> = ({ selectedTab, setSelectedTab }) => {
       Convert
     </button> */}
       <button
-        disabled={selectedTab === "convert"}
+        disabled={selectedTab === "swap"}
         className={`flex flex-row items-center justify-center font-semibold underline-offset-[0.625rem] text-sm sm:text-base ${
-          selectedTab === "convert"
+          selectedTab === "swap"
             ? "text-primary-100 underline"
             : "text-white/60"
         }`}
         onClick={() => {
-          setSelectedTab("convert");
+          setSelectedTab("swap");
           setTradeFields();
         }}
       >
-        Convert
+        Swap
       </button>
       {/* <div className="relative group"> */}
       <button
@@ -163,7 +163,7 @@ const SwapHeader: React.FC<HeaderProps> = ({ selectedTab, setSelectedTab }) => {
       <button
         className="text-white/60 text-xs ml-auto"
         onClick={() => {
-          if (selectedTab === "convert") {
+          if (selectedTab === "swap") {
             setTradeFields();
           } else {
             setBuyFields();

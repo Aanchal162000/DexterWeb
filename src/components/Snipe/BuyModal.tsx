@@ -28,7 +28,7 @@ const BuyModal: React.FC<IBuyModalProps> = ({
         <div className="space-y-4">
           <div className="flex items-center space-x-4">
             <img
-              src={virtual?.image}
+              src={virtual?.image?.url}
               alt={virtual?.name}
               className="w-12 h-12 md:w-16 md:h-16 rounded-lg object-cover"
             />

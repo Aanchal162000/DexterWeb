@@ -269,6 +269,10 @@ export interface IVirtual {
   holderCount: number;
   virtualTokenValue?: string;
   mcapInVirtual?: number;
+  price?: number;
+  userBalance?: number;
+  maxSubscribers?: number;
+  subscribers?: number;
   socials?: {
     VERIFIED_LINKS?: {
       TWITTER?: string;

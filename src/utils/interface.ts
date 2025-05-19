@@ -259,16 +259,110 @@ export interface IVirtual {
   id: string;
   name: string;
   description: string;
-  price: number;
-  image: string;
-  subscribers?: number;
-  maxSubscribers?: number;
-  userBalance?: number;
+  image: {
+    url: string;
+  };
+  symbol: string;
+  priceChangePercent24h: number;
+  volume24h: number;
+  totalValueLocked: string;
+  holderCount: number;
+  virtualTokenValue?: string;
+  mcapInVirtual?: number;
+  socials?: {
+    VERIFIED_LINKS?: {
+      TWITTER?: string;
+      WEBSITE?: string;
+    };
+  };
+  cores?: Array<{
+    name: string;
+    coreId: number;
+  }>;
+  creator?: {
+    username: string;
+    avatar: {
+      url: string;
+    };
+  };
+  genesis?: {
+    startsAt: string;
+    endsAt: string;
+  };
 }
 
 export interface IBuyModalProps {
   isOpen: boolean;
   onClose: () => void;
-  virtual: IVirtual | null;
+  virtual: IVirtual;
   type: "buy" | "sell";
+}
+
+export interface IGenesisRelease {
+  id: number;
+  type: string;
+  duration: number | null;
+  startsAt: string;
+  bips: number;
+  durationUnit: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface IGenesisTokenomics {
+  id: number;
+  bips: number;
+  isLocked: boolean;
+  releases: IGenesisRelease[];
+}
+
+export interface IGenesisTokenomicsStatus {
+  hasUnlocked: boolean;
+  daysFromFirstUnlock: number;
+}
+
+export interface IGenesisVirtual {
+  id: number;
+  chain: string;
+  name: string;
+  symbol: string;
+  tokenAddress: string | null;
+  preToken: string | null;
+  description: string;
+  lpCreatedAt: string | null;
+  image: {
+    url: string;
+  };
+  tokenomics: IGenesisTokenomics[];
+  tokenomicsStatus: IGenesisTokenomicsStatus;
+}
+
+export interface IGenesis {
+  status: string;
+  id: number;
+  startsAt: string;
+  endsAt: string;
+  genesisId: string;
+  genesisTx: string;
+  genesisAddress: string;
+  result: any;
+  processedParticipants: string;
+  createdAt: string;
+  updatedAt: string;
+  virtual: IGenesisVirtual;
+  totalPoints: number;
+  totalVirtuals: number;
+  totalParticipants: number;
+}
+
+export interface IGenesisResponse {
+  data: IGenesis[];
+  meta: {
+    pagination: {
+      page: number;
+      pageSize: number;
+      pageCount: number;
+      total: number;
+    };
+  };
 }

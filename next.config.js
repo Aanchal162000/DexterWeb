@@ -12,6 +12,7 @@ const nextConfig = {
       "raw.githubusercontent.com",
       "lcw.nyc3.cdn.digitaloceanspaces.com",
       "stellar.myfilebase.com",
+      "s3.ap-southeast-1.amazonaws.com",
     ],
   },
   devIndicators: {

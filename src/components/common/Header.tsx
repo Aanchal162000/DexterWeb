@@ -21,7 +21,7 @@ import { HiOutlineExternalLink, HiOutlineLogout } from "react-icons/hi";
 import { toast } from "react-toastify";
 
 const Header = () => {
-  const tabs = ["Trade", "Snipe", "Alerts", "DCA", "Support"];
+  const tabs = ["Home", "Virtuals", "Alerts", "DCA", "Support"];
   const { activeTab, address, setActiveTab, networkData, setAddress } =
     useLoginContext();
   const network = networkCards.filter(

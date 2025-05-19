@@ -34,10 +34,10 @@ const Footer = (props: any) => {
         </p>
       </div>
       <div className="relative sm:flex flex-row gap-3 hidden">
-        <Link key="Twitter" href="https://twitter.com/zkCrossNetwork">
+        <Link key="Twitter" href="">
           <RiTwitterXLine className="text-primary-100 size-7" />
         </Link>
-        <Link key="Telegram" href="https://t.me/zkCrossNetwork">
+        <Link key="Telegram" href="">
           <RiTelegram2Fill className="text-primary-100 size-7" />
         </Link>
       </div>

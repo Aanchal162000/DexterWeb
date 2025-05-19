@@ -43,7 +43,7 @@ const CreateAgentForm: React.FC<CreateAgentFormProps> = ({ onClose }) => {
       case "type":
         return (
           <div className="space-y-4">
-            <div className="space-y-2">
+            {/* <div className="space-y-2">
               <h3 className="text-lg font-semibold text-primary-100">Chain</h3>
               <div className="flex gap-2">
                 <button
@@ -71,7 +71,7 @@ const CreateAgentForm: React.FC<CreateAgentFormProps> = ({ onClose }) => {
                   Solana
                 </button>
               </div>
-            </div>
+            </div> */}
 
             <div className="space-y-2">
               <h3 className="text-lg font-semibold text-primary-100">

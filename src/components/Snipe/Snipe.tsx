@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { IVirtual, IBuyModalProps } from "@/utils/interface";
-import BuyModal from "./BuyModal";
+import { IVirtual } from "@/utils/interface";
 import VirtualCard from "./VirtualCard";
 import CreateAgentForm from "./CreateAgentForm";
 import { useMediaQuery } from "react-responsive";
@@ -19,39 +18,155 @@ import {
 import { useGenesis } from "@/hooks/useGenesis";
 import GenesisCard from "./GenesisCard";
 import { usePrototypeVirtuals } from "@/hooks/usePrototypeVirtuals";
+import { useAccount } from "wagmi";
+import { useBalance } from "wagmi";
+import { useLoginContext } from "@/context/LoginContext";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { useWalletBalance } from "@/hooks/useWalletBalance";
+import { toast } from "react-toastify";
+import VirtualTokenSelector from "../TokenSelector/VirtualTokenSelector";
+import DialogContainer from "../Swap/DialogContainer";
+import { LuArrowUpDown } from "react-icons/lu";
+import ImageNext from "../common/ImageNext";
+import { TiArrowSortedDown } from "react-icons/ti";
+
+const PercentageButton = ({
+  percentage,
+  onClick,
+  isActive,
+}: {
+  percentage: number;
+  onClick: () => void;
+  isActive: boolean;
+}) => (
+  <button
+    onClick={onClick}
+    className={`px-2 py-1 rounded text-sm font-medium transition-colors ${
+      isActive
+        ? "bg-primary-100 text-black"
+        : "bg-gray-700 text-white hover:bg-gray-600"
+    }`}
+  >
+    {percentage}%
+  </button>
+);
 
 const Snipe = () => {
   const [selectedVirtual, setSelectedVirtual] = useState<IVirtual | null>(null);
-  const [isBuyModalOpen, setIsBuyModalOpen] = useState(false);
-  const [isSellModalOpen, setIsSellModalOpen] = useState(false);
+  const [selectedToVirtual, setSelectedToVirtual] = useState<IVirtual | null>(
+    null
+  );
+  const [isFromCoinOpen, setIsFromCoinOpen] = useState(false);
+  const [isToCoinOpen, setIsToCoinOpen] = useState(false);
+  const [selectedTab, setSelectedTab] = useState<"swap" | "create">("swap");
+  const [fromAmount, setFromAmount] = useState<string>("");
+  const [toAmount, setToAmount] = useState<string>("");
+  const [buttonText, setButtonText] = useState<string>("Select Token");
+
   const [isCreatingAgent, setIsCreatingAgent] = useState(false);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+  const [activePercentage, setActivePercentage] = useState<number | null>(null);
+
+  const [showPercentages, setShowPercentages] = useState<{
+    id: string;
+    type: "buy" | "sell";
+  } | null>(null);
+
+  const [isAnimating, setIsAnimating] = useState(false);
+
   const isMobile = useMediaQuery({ maxWidth: 768 });
   const { virtuals, loading, error } = useSentientVirtuals();
+  const { address } = useLoginContext();
+  const [selectedToken] = useLocalStorage("default-token", {
+    name: "Virtuals",
+    symbol: "VIRT",
+    logo: "/Networks/Base.png",
+    balance: "0",
+  });
+  const { balances, isLoading: balanceLoading } = useWalletBalance();
+
   const {
     data: genesisData,
     loading: genesisLoading,
     error: genesisError,
   } = useGenesis();
+
   const {
     virtuals: prototypeVirtuals,
     loading: prototypeLoading,
     error: prototypeError,
   } = usePrototypeVirtuals();
 
-  const handleBuyClick = (virtual: IVirtual) => {
-    setSelectedVirtual(virtual);
-    setIsBuyModalOpen(true);
+  const handlePercentageSelect = async (
+    virtual: IVirtual,
+    percentage: number,
+    type: "buy" | "sell"
+  ) => {
+    try {
+      setActivePercentage(percentage);
+      if (type === "buy") {
+        await handleQuickBuy(virtual, percentage);
+        toast.success(
+          `Successfully bought ${calculateAmount(
+            percentage,
+            virtual
+          )} ${getTokenSymbol(virtual)} of ${virtual.name}`
+        );
+      } else {
+        await handleQuickSell(virtual, percentage);
+        toast.success(
+          `Successfully sold ${calculateAmount(
+            percentage,
+            virtual
+          )} ${getTokenSymbol(virtual)} of ${virtual.name}`
+        );
+      }
+      setShowPercentages(null);
+    } catch (error) {
+      toast.error(`Failed to ${type} ${virtual.name}`);
+      console.error(error);
+    }
   };
 
-  const handleSellClick = (virtual: IVirtual) => {
-    setSelectedVirtual(virtual);
-    setIsSellModalOpen(true);
+  const handleQuickBuy = async (virtual: IVirtual, percentage: number) => {
+    if (!address || balanceLoading || !selectedToken) {
+      toast.error("Please connect your wallet and select a token");
+      return;
+    }
+    const balance = balances[selectedToken.symbol] || "0";
+    const amount = (Number(balance) * percentage) / 100;
+    // Implement your buy logic here
+    console.log(`Buying ${amount} ${selectedToken.symbol} of ${virtual.name}`);
+  };
+
+  const handleQuickSell = async (virtual: IVirtual, percentage: number) => {
+    if (!address || balanceLoading || !selectedToken) {
+      toast.error("Please connect your wallet and select a token");
+      return;
+    }
+    // Implement your sell logic here
+    console.log(`Selling ${percentage}% of ${virtual.name}`);
+  };
+
+  const calculateAmount = (percentage: number, virtual?: IVirtual) => {
+    if (!selectedToken || balanceLoading) return "0";
+    if (showPercentages?.type === "sell" && virtual) {
+      // For sell, calculate based on the virtual token's balance
+      const balance = virtual.userBalance || 0;
+      return ((Number(balance) * percentage) / 100).toFixed(4);
+    }
+    // For buy, calculate based on selected token's balance
+    const balance = balances[selectedToken.symbol] || "0";
+    return ((Number(balance) * percentage) / 100).toFixed(4);
+  };
+
+  const getTokenSymbol = (virtual: IVirtual) => {
+    return showPercentages?.type === "sell"
+      ? virtual.symbol
+      : selectedToken?.symbol;
   };
 
   const handleCloseModal = () => {
-    setIsBuyModalOpen(false);
-    setIsSellModalOpen(false);
     setIsDetailsModalOpen(false);
     setSelectedVirtual(null);
   };
@@ -69,9 +184,44 @@ const Snipe = () => {
     setIsDetailsModalOpen(true);
   };
 
+  const percentages = [10, 25, 50, 75, 100];
+
+  function validationCheck() {
+    if (!selectedVirtual || !selectedToVirtual) {
+      setButtonText("Select Token");
+    } else if (!fromAmount || !toAmount) {
+      setButtonText("Enter Amount");
+    } else {
+      setButtonText("Trade");
+    }
+  }
+
+  function swapFields() {
+    const tempFrom = selectedVirtual;
+    const tempTo = selectedToVirtual;
+    setSelectedVirtual(tempTo);
+    setSelectedToVirtual(tempFrom);
+  }
+
+  React.useEffect(() => {
+    validationCheck();
+  }, [selectedVirtual, selectedToVirtual, fromAmount, toAmount]);
+
+  const handleShowPercentages = (virtual: IVirtual, type: "buy" | "sell") => {
+    setIsAnimating(true);
+    setShowPercentages({ id: virtual.id, type });
+  };
+
+  const handleClosePercentages = () => {
+    setIsAnimating(false);
+    setTimeout(() => {
+      setShowPercentages(null);
+    }, 300); // Match this with the animation duration
+  };
+
   return (
     <div className="w-full h-full overflow-y-auto lg:overflow-y-hidden lg:h-full flex-1 flex flex-row lg:px-14 sm:px-7 px-4 py-3 gap-4 justify-center">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 h-full">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-1 md:gap-3 h-full">
         {/* Genesis Launches Box */}
         <div className="bg-[#15181B]/80 backdrop-blur-sm text-white border border-primary-100 rounded-xl relative h-full w-full shadow-md overflow-hidden flex flex-col">
           <h2 className="text-lg md:text-xl font-semibold text-primary-100 text-center p-4 border-b border-primary-100/20">
@@ -103,7 +253,7 @@ const Snipe = () => {
         </div>
 
         {/* Quick Buy Box */}
-        <div className="bg-[#15181B]/80 backdrop-blur-sm text-white border border-primary-100 rounded-xl relativeh-full w-full shadow-md overflow-hidden flex flex-col">
+        <div className="bg-[#15181B]/80 backdrop-blur-sm text-white border border-primary-100 rounded-xl relative h-full w-full shadow-md overflow-hidden flex flex-col">
           <h2 className="text-lg md:text-xl font-semibold text-primary-100 text-center p-4 border-b border-primary-100/20">
             Sentient Agents
           </h2>
@@ -122,19 +272,85 @@ const Snipe = () => {
                       virtual={virtual}
                       onClick={() => handleCardClick(virtual)}
                     />
-                    <div className="mt-2 px-2 flex gap-2">
-                      <button
-                        onClick={() => handleBuyClick(virtual)}
-                        className="flex-1 bg-primary-100 text-black px-4 py-2 rounded-lg font-medium hover:bg-primary-200 transition-colors"
-                      >
-                        Quick Buy
-                      </button>
-                      <button
-                        onClick={() => handleSellClick(virtual)}
-                        className="flex-1 bg-red-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-600 transition-colors"
-                      >
-                        Quick Sell
-                      </button>
+                    <div className="mt-2 px-2 space-y-2">
+                      <div className="flex gap-2 relative h-[40px]">
+                        <div
+                          className={`flex gap-2 w-full transition-all duration-300 ease-in-out ${
+                            showPercentages?.id === virtual.id
+                              ? "translate-x-[-100%] opacity-0"
+                              : "translate-x-0 opacity-100"
+                          }`}
+                        >
+                          <button
+                            onClick={() =>
+                              handleShowPercentages(virtual, "buy")
+                            }
+                            className="flex-1 bg-primary-100 text-black px-4 py-2 rounded-lg font-medium hover:bg-primary-200 transition-colors"
+                          >
+                            Quick Buy
+                          </button>
+                          {Number(virtual.userBalance) > 0 && (
+                            <button
+                              onClick={() =>
+                                handleShowPercentages(virtual, "sell")
+                              }
+                              className="flex-1 bg-red-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-600 transition-colors"
+                            >
+                              Quick Sell
+                            </button>
+                          )}
+                        </div>
+                        {showPercentages?.id === virtual.id && (
+                          <div
+                            className={` absolute -top-7 left-0 w-full flex flex-col space-y-2 transform transition-all duration-300 ease-in-out z-10 ${
+                              isAnimating
+                                ? "translate-x-0 opacity-100"
+                                : "translate-x-[100%] opacity-0"
+                            }`}
+                          >
+                            <div className="flex justify-between items-center mb-[1px]">
+                              <span className="text-sm text-gray-400">
+                                {showPercentages.type === "buy"
+                                  ? "Buy Amount"
+                                  : "Sell Amount"}
+                              </span>
+                              <button
+                                onClick={handleClosePercentages}
+                                className="text-gray-400 hover:text-white transition-colors"
+                              >
+                                ✕
+                              </button>
+                            </div>
+                            <div className="flex justify-between gap-1 bg-[#15181B]  rounded-lg  ">
+                              {percentages.map((percentage) => (
+                                <button
+                                  key={percentage}
+                                  onClick={() => {
+                                    handlePercentageSelect(
+                                      virtual,
+                                      percentage,
+                                      showPercentages.type
+                                    );
+                                    handleClosePercentages();
+                                  }}
+                                  className={`px-2 py-1 rounded text-sm font-medium transition-colors ${
+                                    activePercentage === percentage
+                                      ? "bg-primary-100 text-black"
+                                      : "bg-gray-700 text-primary-100 hover:bg-gray-600"
+                                  }`}
+                                >
+                                  <div className="flex flex-col items-center">
+                                    <span className="text-[10px] opacity-80">
+                                      {calculateAmount(percentage, virtual)}{" "}
+                                      {getTokenSymbol(virtual)}
+                                    </span>
+                                  </div>
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -172,14 +388,166 @@ const Snipe = () => {
           </div>
         </div>
 
-        {/* Create Virtual Box - Only show in desktop */}
+        {/* Create/Swap Box - Only show in desktop */}
         {!isMobile && (
           <div className="bg-[#15181B]/80 backdrop-blur-sm text-white border border-primary-100 rounded-xl relative h-full w-full shadow-md overflow-hidden flex flex-col">
-            <h2 className="text-lg md:text-xl font-semibold text-primary-100 text-center p-4 border-b border-primary-100/20">
-              Create Virtual
-            </h2>
-            <div className="flex-1 overflow-y-auto p-4">
-              <CreateAgentForm onClose={handleCloseCreateAgent} />
+            <div className="flex items-center justify-between px-4 py-3 border-b border-primary-100/20">
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setSelectedTab("create")}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    selectedTab === "create"
+                      ? "bg-primary-100 text-black"
+                      : "bg-gray-800 text-gray-400 hover:bg-gray-700"
+                  }`}
+                >
+                  Create
+                </button>
+                <button
+                  onClick={() => setSelectedTab("swap")}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    selectedTab === "swap"
+                      ? "bg-primary-100 text-black"
+                      : "bg-gray-800 text-gray-400 hover:bg-gray-700"
+                  }`}
+                >
+                  Swap
+                </button>
+              </div>
+            </div>
+
+            <div className="flex-1 overflow-y-auto">
+              {/* Token Selection Modals */}
+              {isFromCoinOpen && (
+                <DialogContainer
+                  setClose={() => setIsFromCoinOpen(false)}
+                  title="Select Token"
+                >
+                  <VirtualTokenSelector
+                    setIsCoinOpen={setIsFromCoinOpen}
+                    fromOrTo="FromSelection"
+                    setSelectedCoin={setSelectedVirtual}
+                    title="Send From"
+                  />
+                </DialogContainer>
+              )}
+
+              {isToCoinOpen && (
+                <DialogContainer
+                  setClose={() => setIsToCoinOpen(false)}
+                  title="Select Token"
+                >
+                  <VirtualTokenSelector
+                    setIsCoinOpen={setIsToCoinOpen}
+                    fromOrTo="ToSelection"
+                    setSelectedCoin={setSelectedToVirtual}
+                    title="Receive As"
+                  />
+                </DialogContainer>
+              )}
+
+              {selectedTab === "create" ? (
+                <div className="p-4">
+                  <CreateAgentForm onClose={handleCloseCreateAgent} />
+                </div>
+              ) : (
+                <div className="px-8">
+                  {/* From Section */}
+                  <div className="mt-4 border border-primary-100 rounded-lg p-4">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-sm text-gray-400">From</span>
+                      <span className="text-sm text-gray-400">
+                        Balance: {balanceLoading ? "Loading..." : "0.00"}
+                      </span>
+                    </div>
+                    <div className="w-full flex justify-between items-center">
+                      <button
+                        className="flex flex-row w-full py-1 justify-start items-center cursor-pointer"
+                        onClick={() => setIsFromCoinOpen(true)}
+                      >
+                        {selectedVirtual?.image?.url && (
+                          <ImageNext
+                            src={selectedVirtual.image.url}
+                            className="size-9 rounded-full bg-white overflow-hidden"
+                            alt="virtual-logo"
+                            fullRadius
+                          />
+                        )}
+                        <div
+                          className={`flex flex-col ${
+                            selectedVirtual ? "ml-2" : ""
+                          } mr-1`}
+                        >
+                          <span className="text-base text-nowrap text-white font-bold !leading-tight">
+                            {selectedVirtual?.symbol || "Select Token"}
+                          </span>
+                        </div>
+                        <TiArrowSortedDown className="text-prime-token-200 size-5" />
+                      </button>
+                      <input
+                        className="!outline-none text-white text-lg w-full placeholder:text-base text-right sm:font-bold [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-transparent placeholder:text-prime-zinc-100"
+                        type="text"
+                        placeholder="Enter an amount"
+                        value={fromAmount}
+                        onChange={(e) => setFromAmount(e.target.value)}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Swap Button */}
+                  <div className="flex justify-center mx-auto translate-y-[-10px] z-10">
+                    <button
+                      className="bg-primary-100 rounded-full p-2.5 filter hover:brightness-125 transition-all origin-center"
+                      onClick={swapFields}
+                    >
+                      <LuArrowUpDown className="text-lg text-black text-prime-text-100 size-5" />
+                    </button>
+                  </div>
+
+                  {/* To Section */}
+                  <div className=" border border-primary-100 rounded-lg p-4 -translate-y-4">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-sm text-gray-400">To</span>
+                    </div>
+                    <div className="w-full flex justify-between items-center">
+                      <button
+                        className="flex flex-row w-full py-1 justify-start items-center cursor-pointer"
+                        onClick={() => setIsToCoinOpen(true)}
+                      >
+                        {selectedToVirtual?.image?.url && (
+                          <ImageNext
+                            src={selectedToVirtual.image.url}
+                            className="size-9 rounded-full bg-white overflow-hidden"
+                            alt="virtual-logo"
+                            fullRadius
+                          />
+                        )}
+                        <div
+                          className={`flex flex-col ${
+                            selectedToVirtual ? "ml-2" : ""
+                          } mr-1`}
+                        >
+                          <span className="text-base text-nowrap text-white font-bold !leading-tight">
+                            {selectedToVirtual?.symbol || "Select Token"}
+                          </span>
+                        </div>
+                        <TiArrowSortedDown className="text-prime-token-200 size-5" />
+                      </button>
+                      <span className="text-base sm:font-bold text-white sm:text-lg">
+                        {toAmount}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Trade Button */}
+                  <button
+                    className="w-full mt-6 py-3 px-4 bg-primary-100 text-black font-bold rounded-lg hover:bg-primary-100/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={buttonText !== "Trade"}
+                  >
+                    {buttonText}
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -215,25 +583,6 @@ const Snipe = () => {
             </div>
           </div>
         </div>
-      )}
-
-      {/* Buy/Sell Modal */}
-      {isBuyModalOpen && selectedVirtual && (
-        <BuyModal
-          isOpen={isBuyModalOpen}
-          onClose={handleCloseModal}
-          virtual={selectedVirtual}
-          type="buy"
-        />
-      )}
-
-      {isSellModalOpen && selectedVirtual && (
-        <BuyModal
-          isOpen={isSellModalOpen}
-          onClose={handleCloseModal}
-          virtual={selectedVirtual}
-          type="sell"
-        />
       )}
 
       {/* Details Modal */}

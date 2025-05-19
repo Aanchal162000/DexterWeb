@@ -497,13 +497,13 @@ export const chainNetworkParams: { [key: number]: any } = {
 
 export const headerRoutes: IRouter[] = [
   {
-    id: "trade",
-    name: "Trade",
+    id: "home",
+    name: "Home",
     isActive: true,
   },
   {
-    id: "snipe",
-    name: "Snipe",
+    id: "virtuals",
+    name: "Virtuals",
     isActive: true,
   },
   {

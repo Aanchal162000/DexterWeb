@@ -9,20 +9,21 @@ import {
 import Image from "next/image";
 import { HiChevronUpDown } from "react-icons/hi2";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { useWalletBalance } from "@/hooks/useWalletBalance";
 import { HiCheck } from "react-icons/hi";
 
 interface TokenOption {
   name: string;
   symbol: string;
   logo: string;
-  balance: number;
+  balance: string;
 }
 
 const defaultToken: TokenOption = {
-  name: "Dexter",
-  symbol: "DEXTER",
-  logo: "/Trade/dexterLogo.png",
-  balance: 1412912,
+  name: "Virtuals",
+  symbol: "VIRT",
+  logo: "/Networks/Base.png",
+  balance: "0",
 };
 
 const TokenSelector = () => {
@@ -30,20 +31,24 @@ const TokenSelector = () => {
     "default-token",
     defaultToken
   );
+  const { balances, isLoading, error } = useWalletBalance();
 
   const tokenOptions: TokenOption[] = [
-    defaultToken,
     {
-      name: "Virtuals",
-      symbol: "VIRT",
-      logo: "/Networks/Base.png",
-      balance: 500000,
+      ...defaultToken,
+      balance: balances.VIRT || "0",
     },
     {
       name: "Ethereum",
       symbol: "ETH",
       logo: "/Networks/ETH.png",
-      balance: 2.5,
+      balance: balances.ETH || "0",
+    },
+    {
+      name: "Dexter",
+      symbol: "DEXTER",
+      logo: "/Trade/dexterLogo.png",
+      balance: "0", // This will be updated when we have the DEXTER token contract
     },
   ];
 
@@ -62,7 +67,9 @@ const TokenSelector = () => {
           />
           <div className="flex flex-row space-x-1 justify-center items-center">
             <p className="text-white font-semibold text-sm">
-              {currentToken.balance.toLocaleString()}
+              {isLoading
+                ? "Loading..."
+                : Number(currentToken.balance).toFixed(4).toLocaleString()}
             </p>
             <p className="text-primary-100 font-medium text-[10px]">
               {currentToken.symbol}
@@ -90,9 +97,10 @@ const TokenSelector = () => {
                 {({ active }) => (
                   <button
                     onClick={() => setSelectedToken(token)}
+                    disabled={token.symbol == "DEXTER"}
                     className={`${
                       active ? "bg-primary-100/10" : ""
-                    } flex w-full items-center justify-between px-4 py-2.5 text-sm text-white hover:bg-primary-100/5 transition-colors duration-200`}
+                    } flex w-full disabled:opacity-50 items-center justify-between px-4 py-2.5 text-sm text-white hover:bg-primary-100/5 transition-colors duration-200`}
                   >
                     <div className="flex items-center">
                       <Image
@@ -105,7 +113,10 @@ const TokenSelector = () => {
                       <div className="flex flex-col items-start">
                         <span className="font-medium">{token.name}</span>
                         <span className="text-xs text-primary-100">
-                          {token.balance.toLocaleString()} {token.symbol}
+                          {isLoading
+                            ? "Loading..."
+                            : Number(token.balance).toFixed(4)}{" "}
+                          {token.symbol}
                         </span>
                       </div>
                     </div>

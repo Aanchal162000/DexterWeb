@@ -13,8 +13,8 @@ import Snipe from "./Snipe/Snipe";
 export type IRouterKey = (typeof headerRoutes)[number]["id"];
 
 export const Router: { [key: IRouterKey]: ReactNode } = {
-  Trade: <Swap />,
-  Snipe: <Snipe />,
+  Home: <Swap />,
+  Virtuals: <Snipe />,
 };
 
 const Dashboard = () => {
@@ -22,7 +22,7 @@ const Dashboard = () => {
 
   return (
     <div className="relative h-full w-full">
-      <div className="absolute h-full w-full !bg-[url('/Trade/background.png')] bg-[position:30%] bg-[size:cover] bg-[repeat:no-repeat] z-10 p-5 after:content-[''] after:absolute after:top-0 after:left-0 after:w-full after:h-full after:shadow-[0px_0px_0px_9999px_rgba(0,0,0,0.68)]"></div>
+      <div className="absolute h-full w-full !bg-[url('/Trade/background.jpg')] bg-[position:30%] bg-[size:cover] bg-[repeat:no-repeat] z-10 p-5 after:content-[''] after:absolute after:top-0 after:left-0 after:w-full after:h-full after:shadow-[0px_0px_0px_9999px_rgba(0,0,0,0.68)]"></div>
 
       <div className="relative flex flex-col z-20 w-full h-[calc(100vh-6.8vh)]">
         <Header />

@@ -3,9 +3,12 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useWalletBalance } from "@/hooks/useWalletBalance";
-import { agentService } from "@/services/agentService";
+import { agentService } from "@/services/contract/agentService";
 import { toast } from "react-toastify";
 import { useSwapContext } from "@/context/SwapContext";
+import approvalService from "@/services/contract/approvalService";
+import { VIRTUALS_TOKEN_ADDRESS } from "@/constants/config";
+import { useLoginContext } from "@/context/LoginContext";
 
 interface SnipeModalProps {
   isOpen: boolean;
@@ -34,7 +37,7 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
   const [amount, setAmount] = useState("");
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-
+  const { networkData } = useLoginContext();
   const percentageButtons = [25, 50, 75, 100];
 
   useEffect(() => {
@@ -51,7 +54,23 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
 
   const handleSnipe = async () => {
     if (!selectedVitualtoken) return;
+    const isEth = selectedVitualtoken.symbol === "ETH" ? true : false;
+    if (!isEth) {
+      try {
+        const allowance = await approvalService.checkAllowance({
+          tokenAddress: VIRTUALS_TOKEN_ADDRESS,
+          provider: networkData?.provider!,
+        });
 
+        // If allowance is less than amount, approve first
+        if (Number(allowance) < Number(amount)) {
+          await approvalService.approveVirtualToken(
+            amount.toString(),
+            networkData?.provider!
+          );
+        }
+      } catch (error: any) {}
+    }
     try {
       setIsLoading(true);
       const response = await agentService.createAgent({

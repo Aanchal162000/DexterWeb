@@ -11,6 +11,7 @@ import { HiChevronUpDown } from "react-icons/hi2";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useWalletBalance } from "@/hooks/useWalletBalance";
 import { HiCheck } from "react-icons/hi";
+import { useSwapContext } from "@/context/SwapContext";
 
 export interface TokenOption {
   name: string;
@@ -27,10 +28,7 @@ const defaultToken: TokenOption = {
 };
 
 const TokenSelector = () => {
-  const [selectedToken, setSelectedToken] = useLocalStorage<TokenOption>(
-    "default-token",
-    defaultToken
-  );
+  const { selectedVitualtoken, setSelctedVirtualToken } = useSwapContext();
   const { balances, isLoading, error } = useWalletBalance();
 
   const tokenOptions: TokenOption[] = [
@@ -52,7 +50,7 @@ const TokenSelector = () => {
     },
   ];
 
-  const currentToken = selectedToken || defaultToken;
+  const currentToken = selectedVitualtoken || defaultToken;
 
   return (
     <Menu as="div" className="relative inline-block text-left w-fit">
@@ -96,7 +94,7 @@ const TokenSelector = () => {
               <MenuItem key={token.symbol}>
                 {({ active }) => (
                   <button
-                    onClick={() => setSelectedToken(token)}
+                    onClick={() => setSelctedVirtualToken(token)}
                     disabled={token.symbol == "DEXTER"}
                     className={`${
                       active ? "bg-primary-100/10" : ""

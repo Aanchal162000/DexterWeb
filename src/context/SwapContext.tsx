@@ -61,6 +61,13 @@ export const defaultTokenB = baseList?.find(
 )!;
 export const baseNetwork = networkCards?.find((item) => item?.name == "Base")!;
 
+interface TokenOption {
+  name: string;
+  symbol: string;
+  logo: string;
+  balance: string;
+}
+
 interface ISwapState {
   selectedCoin: ICoin | null;
   fromAmount: number | string;
@@ -99,6 +106,8 @@ interface ISwapState {
   setToAmount: Dispatch<SetStateAction<number>>;
   errored: string | null;
   isBalanceLoading: boolean;
+  selectedVitualtoken: TokenOption;
+  setSelctedVirtualToken: Dispatch<SetStateAction<TokenOption>>;
 }
 
 const SwapContext = createContext<ISwapState>({} as ISwapState);
@@ -147,6 +156,13 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
   const [usdPriceS1, setUsdPriceS1] = useState<number>(0.0);
   const [usdPriceS2, setUsdPriceS2] = useState<number>(0.0);
   const [transFee, setTransFee] = useState<number>(0.0);
+
+  const [selectedVitualtoken, setSelctedVirtualToken] = useState<TokenOption>({
+    name: "Virtuals",
+    symbol: "VIRT",
+    logo: "/Networks/Base.png",
+    balance: "0",
+  });
 
   const [debouncedFromAmount] = useDebounce(fromAmount, 1000);
   const isSameChain = selectedNetwork?.id === selectedToNetwork?.id;
@@ -1011,6 +1027,8 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
         setToAmount,
         errored,
         isBalanceLoading,
+        selectedVitualtoken,
+        setSelctedVirtualToken,
       }}
     >
       {children}

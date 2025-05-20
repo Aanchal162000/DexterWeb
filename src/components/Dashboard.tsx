@@ -9,12 +9,14 @@ import Swap from "./Swap/Swap";
 import { IRouter, TRoute } from "@/utils/interface";
 import { headerRoutes } from "@/constants/config";
 import Snipe from "./Snipe/Snipe";
+import HelpCenter from "./HelpCenter/HelpCenter";
 
 export type IRouterKey = (typeof headerRoutes)[number]["id"];
 
 export const Router: { [key: IRouterKey]: ReactNode } = {
   Home: <Swap />,
   Virtuals: <Snipe />,
+  Support: <HelpCenter />,
 };
 
 const Dashboard = () => {

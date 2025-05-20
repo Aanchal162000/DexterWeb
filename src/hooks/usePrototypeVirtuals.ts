@@ -6,6 +6,8 @@ interface PrototypeVirtualResponse {
     id: number;
     name: string;
     description: string;
+    role: string;
+    preToken: string;
     image: {
       url: string;
     };
@@ -70,6 +72,8 @@ export const usePrototypeVirtuals = () => {
           id: item.id.toString(),
           name: item.name,
           description: item.description,
+          contractAddress: item.preToken,
+          role: item.role,
           image: item.image,
           symbol: item.symbol,
           priceChangePercent24h: item.priceChangePercent24h,

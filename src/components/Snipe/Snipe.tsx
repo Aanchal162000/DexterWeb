@@ -10,46 +10,21 @@ import Image from "next/image";
 import {
   formatCurrency,
   formatPercentage,
-  formatTokenAmount,
-  calculateTokenPrice,
   calculatePrice24hAgo,
   weiToEther,
 } from "@/utils/tokenCalculations";
 import { useGenesis } from "@/hooks/useGenesis";
 import GenesisCard from "./GenesisCard";
 import { usePrototypeVirtuals } from "@/hooks/usePrototypeVirtuals";
-import { useAccount } from "wagmi";
-import { useBalance } from "wagmi";
 import { useLoginContext } from "@/context/LoginContext";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useWalletBalance } from "@/hooks/useWalletBalance";
 import { toast } from "react-toastify";
-import VirtualTokenSelector from "../TokenSelector/VirtualTokenSelector";
+import VirtualTokenSelector from "./VirtualTokenSelector";
 import DialogContainer from "../Swap/DialogContainer";
 import { LuArrowUpDown } from "react-icons/lu";
 import ImageNext from "../common/ImageNext";
 import { TiArrowSortedDown } from "react-icons/ti";
-
-const PercentageButton = ({
-  percentage,
-  onClick,
-  isActive,
-}: {
-  percentage: number;
-  onClick: () => void;
-  isActive: boolean;
-}) => (
-  <button
-    onClick={onClick}
-    className={`px-2 py-1 rounded text-sm font-medium transition-colors ${
-      isActive
-        ? "bg-primary-100 text-black"
-        : "bg-gray-700 text-white hover:bg-gray-600"
-    }`}
-  >
-    {percentage}%
-  </button>
-);
 
 const Snipe = () => {
   const [selectedVirtual, setSelectedVirtual] = useState<IVirtual | null>(null);
@@ -135,8 +110,36 @@ const Snipe = () => {
     }
     const balance = balances[selectedToken.symbol] || "0";
     const amount = (Number(balance) * percentage) / 100;
-    // Implement your buy logic here
-    console.log(`Buying ${amount} ${selectedToken.symbol} of ${virtual.name}`);
+
+    try {
+      // Check if it's a prototype or sentient agent
+      const isPrototype = prototypeVirtuals.some((pv) => pv.id === virtual.id);
+      const contractAddress = isPrototype
+        ? virtual.contractAddress
+        : virtual.sentientContractAddress;
+
+      if (!contractAddress) {
+        toast.error("Contract address not found");
+        return;
+      }
+
+      // Implement your buy logic here using the appropriate contract address
+      console.log(
+        `Buying ${amount} ${selectedToken.symbol} of ${virtual.name} using contract ${contractAddress}`
+      );
+
+      // After successful buy, refresh the virtuals data
+      if (isPrototype) {
+        // Refresh prototype virtuals
+        // Add your refresh logic here
+      } else {
+        // Refresh sentient virtuals
+        // Add your refresh logic here
+      }
+    } catch (error) {
+      console.error("Error in quick buy:", error);
+      toast.error("Failed to execute quick buy");
+    }
   };
 
   const handleQuickSell = async (virtual: IVirtual, percentage: number) => {
@@ -144,8 +147,39 @@ const Snipe = () => {
       toast.error("Please connect your wallet and select a token");
       return;
     }
-    // Implement your sell logic here
-    console.log(`Selling ${percentage}% of ${virtual.name}`);
+
+    try {
+      // Check if it's a prototype or sentient agent
+      const isPrototype = prototypeVirtuals.some((pv) => pv.id === virtual.id);
+      const contractAddress = isPrototype
+        ? virtual.contractAddress
+        : virtual.sentientContractAddress;
+
+      if (!contractAddress) {
+        toast.error("Contract address not found");
+        return;
+      }
+
+      const balance = virtual.userBalance || "0";
+      const amount = (Number(balance) * percentage) / 100;
+
+      // Implement your sell logic here using the appropriate contract address
+      console.log(
+        `Selling ${amount} ${virtual.symbol} of ${virtual.name} using contract ${contractAddress}`
+      );
+
+      // After successful sell, refresh the virtuals data
+      if (isPrototype) {
+        // Refresh prototype virtuals
+        // Add your refresh logic here
+      } else {
+        // Refresh sentient virtuals
+        // Add your refresh logic here
+      }
+    } catch (error) {
+      console.error("Error in quick sell:", error);
+      toast.error("Failed to execute quick sell");
+    }
   };
 
   const calculateAmount = (percentage: number, virtual?: IVirtual) => {
@@ -308,7 +342,7 @@ const Snipe = () => {
                                 : "translate-x-[100%] opacity-0"
                             }`}
                           >
-                            <div className="flex justify-between items-center mb-[1px]">
+                            <div className="flex justify-between items-center mb-1 translate-y-3">
                               <span className="text-sm text-gray-400">
                                 {showPercentages.type === "buy"
                                   ? "Buy Amount"
@@ -381,6 +415,86 @@ const Snipe = () => {
                       virtual={virtual}
                       onClick={() => handleCardClick(virtual)}
                     />
+                    <div className="mt-2 px-2 space-y-2">
+                      <div className="flex gap-2 relative h-[40px]">
+                        <div
+                          className={`flex gap-2 w-full transition-all duration-300 ease-in-out ${
+                            showPercentages?.id === virtual.id
+                              ? "translate-x-[-100%] opacity-0"
+                              : "translate-x-0 opacity-100"
+                          }`}
+                        >
+                          <button
+                            onClick={() =>
+                              handleShowPercentages(virtual, "buy")
+                            }
+                            className="flex-1 bg-primary-100 text-black px-4 py-2 rounded-lg font-medium hover:bg-primary-200 transition-colors"
+                          >
+                            Quick Buy
+                          </button>
+                          {Number(virtual.userBalance) > 0 && (
+                            <button
+                              onClick={() =>
+                                handleShowPercentages(virtual, "sell")
+                              }
+                              className="flex-1 bg-red-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-600 transition-colors"
+                            >
+                              Quick Sell
+                            </button>
+                          )}
+                        </div>
+                        {showPercentages?.id === virtual.id && (
+                          <div
+                            className={`  absolute -top-7 left-0 w-full flex  flex-col space-y-2 transform transition-all duration-300 ease-in-out z-10 ${
+                              isAnimating
+                                ? "translate-x-0 opacity-100"
+                                : "translate-x-[100%] opacity-0"
+                            }`}
+                          >
+                            <div className="flex justify-between items-center mb-1 translate-y-3">
+                              <span className="text-sm text-gray-400">
+                                {showPercentages.type === "buy"
+                                  ? "Buy Amount"
+                                  : "Sell Amount"}
+                              </span>
+                              <button
+                                onClick={handleClosePercentages}
+                                className="text-gray-400 hover:text-white transition-colors"
+                              >
+                                ✕
+                              </button>
+                            </div>
+                            <div className="flex justify-between gap-1 bg-[#15181B]  rounded-lg  ">
+                              {percentages.map((percentage) => (
+                                <button
+                                  key={percentage}
+                                  onClick={() => {
+                                    handlePercentageSelect(
+                                      virtual,
+                                      percentage,
+                                      showPercentages.type
+                                    );
+                                    handleClosePercentages();
+                                  }}
+                                  className={`px-2 py-1 border border-primary-100/60 rounded text-sm font-medium transition-colors ${
+                                    activePercentage === percentage
+                                      ? "bg-primary-100 text-black"
+                                      : "bg-gray-700 text-primary-100 hover:bg-gray-600"
+                                  }`}
+                                >
+                                  <div className="flex flex-col items-center">
+                                    <span className="text-[10px] opacity-80">
+                                      {calculateAmount(percentage, virtual)}{" "}
+                                      {getTokenSymbol(virtual)}
+                                    </span>
+                                  </div>
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -391,24 +505,24 @@ const Snipe = () => {
         {/* Create/Swap Box - Only show in desktop */}
         {!isMobile && (
           <div className="bg-[#15181B]/80 backdrop-blur-sm text-white border border-primary-100 rounded-xl relative h-full w-full shadow-md overflow-hidden flex flex-col">
-            <div className="flex items-center justify-between px-4 py-3 border-b border-primary-100/20">
-              <div className="flex gap-2">
+            <div className="flex items-center justify-between pt-4 px-8 ">
+              <div className="flex gap-3">
                 <button
                   onClick={() => setSelectedTab("create")}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  className={`rounded-lg text-base font-semibold transition-colors ${
                     selectedTab === "create"
-                      ? "bg-primary-100 text-black"
-                      : "bg-gray-800 text-gray-400 hover:bg-gray-700"
+                      ? "undeline underline-offset-[0.625rem] text-primary-100"
+                      : " text-white hover:bg-gray-700"
                   }`}
                 >
                   Create
                 </button>
                 <button
                   onClick={() => setSelectedTab("swap")}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  className={`rounded-lg text-base font-semibold transition-colors ${
                     selectedTab === "swap"
-                      ? "bg-primary-100 text-black"
-                      : "bg-gray-800 text-gray-400 hover:bg-gray-700"
+                      ? "underline underline-offset-[0.625rem] text-primary-100"
+                      : " text-white hover:bg-gray-700"
                   }`}
                 >
                   Swap
@@ -451,9 +565,9 @@ const Snipe = () => {
                   <CreateAgentForm onClose={handleCloseCreateAgent} />
                 </div>
               ) : (
-                <div className="px-8">
+                <div className="px-8 py-2">
                   {/* From Section */}
-                  <div className="mt-4 border border-primary-100 rounded-lg p-4">
+                  <div className="mt-4 border h-[90px] border-primary-100 rounded-lg p-4">
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-sm text-gray-400">From</span>
                       <span className="text-sm text-gray-400">
@@ -505,7 +619,7 @@ const Snipe = () => {
                   </div>
 
                   {/* To Section */}
-                  <div className=" border border-primary-100 rounded-lg p-4 -translate-y-4">
+                  <div className=" h-[90px]  border border-primary-100 rounded-lg p-4 -translate-y-4">
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-sm text-gray-400">To</span>
                     </div>

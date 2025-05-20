@@ -5,6 +5,8 @@ interface SentientVirtualResponse {
   data: {
     id: number;
     name: string;
+    role: string;
+    tokenAddress: string;
     description: string;
     image: {
       url: string;
@@ -69,6 +71,7 @@ export const useSentientVirtuals = () => {
         const transformedVirtuals: IVirtual[] = data.data.map((item) => ({
           id: item.id.toString(),
           name: item.name,
+          role: item.role,
           description: item.description,
           image: item.image,
           symbol: item.symbol,
@@ -82,6 +85,8 @@ export const useSentientVirtuals = () => {
           cores: item.cores,
           creator: item.creator,
           genesis: item.genesis,
+          contractAddress: item.tokenAddress,
+          sentientContractAddress: item.tokenAddress,
         }));
 
         setVirtuals(transformedVirtuals);

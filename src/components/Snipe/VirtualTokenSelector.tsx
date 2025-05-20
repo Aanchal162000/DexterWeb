@@ -49,6 +49,8 @@ const VirtualTokenSelector: React.FC<VirtualTokenSelectorProps> = ({
               name: genesis.virtual.name,
               symbol: genesis.virtual.symbol,
               description: genesis.virtual.description,
+              role: "",
+              contractAddress: genesis.genesisAddress,
               image: genesis.virtual.image,
               priceChangePercent24h: 0,
               volume24h: 0,

@@ -259,6 +259,7 @@ export interface IVirtual {
   id: string;
   name: string;
   description: string;
+  role: string;
   image: {
     url: string;
   };
@@ -273,6 +274,8 @@ export interface IVirtual {
   userBalance?: number;
   maxSubscribers?: number;
   subscribers?: number;
+  contractAddress?: string;
+  sentientContractAddress?: string;
   socials?: {
     VERIFIED_LINKS?: {
       TWITTER?: string;
@@ -339,6 +342,7 @@ export interface IGenesisVirtual {
   };
   tokenomics: IGenesisTokenomics[];
   tokenomicsStatus: IGenesisTokenomicsStatus;
+  contractAddress?: string;
 }
 
 export interface IGenesis {
@@ -357,6 +361,9 @@ export interface IGenesis {
   totalPoints: number;
   totalVirtuals: number;
   totalParticipants: number;
+  fdv?: number;
+  priceChange24h?: number;
+  price?: number;
 }
 
 export interface IGenesisResponse {

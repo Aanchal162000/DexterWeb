@@ -16,8 +16,9 @@ export const baseList: IArbCoin[] = require("./jsons/baseList.json");
 export const avalancheList = require("./jsons/avalanche.json");
 export const optimismList = require("./jsons/optimism.json");
 export const BuyContract = "0xa74e5595bd0a29a0E437ACF6461F624CE6218E9f";
-export const SnipeContract = "";
-export const VIRTUALS_TOKEN_ADDRESS = "0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b";
+export const SnipeContract = "0x3266c8E64C92E87437D556E3dc7480e0DB6660cE";
+export const VIRTUALS_TOKEN_ADDRESS =
+  "0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b";
 export const WRAPPED_ETH_ADDRESS = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2";
 
 export const socialData = [

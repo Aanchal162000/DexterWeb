@@ -7,7 +7,11 @@ import { agentService } from "@/services/contract/agentService";
 import { toast } from "react-toastify";
 import { useSwapContext } from "@/context/SwapContext";
 import approvalService from "@/services/contract/approvalService";
-import { VIRTUALS_TOKEN_ADDRESS } from "@/constants/config";
+import {
+  SnipeContract,
+  VIRTUALS_TOKEN_ADDRESS,
+  WRAPPED_ETH_ADDRESS,
+} from "@/constants/config";
 import { useLoginContext } from "@/context/LoginContext";
 
 interface SnipeModalProps {
@@ -60,17 +64,25 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
         const allowance = await approvalService.checkAllowance({
           tokenAddress: VIRTUALS_TOKEN_ADDRESS,
           provider: networkData?.provider!,
+          spenderAddress: SnipeContract,
         });
 
         // If allowance is less than amount, approve first
         if (Number(allowance) < Number(amount)) {
           await approvalService.approveVirtualToken(
             amount.toString(),
-            networkData?.provider!
+            networkData?.provider!,
+            SnipeContract
           );
         }
       } catch (error: any) {}
     }
+    const receipt = await agentService.deposit({
+      tokenAddress: isEth ? WRAPPED_ETH_ADDRESS : VIRTUALS_TOKEN_ADDRESS,
+      amount: amount,
+      provider: networkData?.provider!,
+    });
+    console.log("Transaction successful:", receipt);
     try {
       setIsLoading(true);
       const response = await agentService.createAgent({
@@ -147,7 +159,7 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
                         Balance:{" "}
                         {selectedVitualtoken?.symbol === "ETH"
                           ? Number(balances.ETH).toFixed(6)
-                          : balances.VIRT}
+                          : Number(balances.VIRT).toFixed(6)}
                       </span>
                     </div>
                   </div>

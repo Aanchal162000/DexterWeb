@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { IVirtual } from "@/utils/interface";
+import { IAssetsData, IVirtual } from "@/utils/interface";
+import { useLocalStorage } from "./useLocalStorage";
 
 interface SentientVirtualResponse {
   data: {
@@ -53,6 +54,7 @@ export const useSentientVirtuals = () => {
   const [virtuals, setVirtuals] = useState<IVirtual[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [dataList, setDataList] = useLocalStorage<IAssetsData[]>("arbt-assets");
 
   useEffect(() => {
     const fetchVirtuals = async () => {
@@ -88,6 +90,14 @@ export const useSentientVirtuals = () => {
           contractAddress: item.tokenAddress,
           sentientContractAddress: item.tokenAddress,
         }));
+        transformedVirtuals.map((virtual) => {
+          const filter = dataList?.filter(
+            (data) => data.token == virtual.symbol
+          );
+          if (filter?.length) {
+            virtual.userBalance = filter[0]?.tokenAmount;
+          }
+        });
 
         setVirtuals(transformedVirtuals);
         setLoading(false);

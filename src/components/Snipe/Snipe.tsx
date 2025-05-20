@@ -32,6 +32,7 @@ import {
   WRAPPED_ETH_ADDRESS,
 } from "@/constants/config";
 import approvalService from "@/services/contract/approvalService";
+import { useSwapContext } from "@/context/SwapContext";
 
 const Snipe = () => {
   const [selectedVirtual, setSelectedVirtual] = useState<IVirtual | null>(null);
@@ -60,12 +61,7 @@ const Snipe = () => {
   const isMobile = useMediaQuery({ maxWidth: 768 });
   const { virtuals, loading, error } = useSentientVirtuals();
   const { address } = useLoginContext();
-  const [selectedToken] = useLocalStorage("default-token", {
-    name: "Virtuals",
-    symbol: "VIRT",
-    logo: "/Networks/Base.png",
-    balance: "0",
-  });
+  const { selectedVitualtoken } = useSwapContext();
   const { balances, isLoading: balanceLoading } = useWalletBalance();
 
   const {
@@ -112,11 +108,11 @@ const Snipe = () => {
   };
 
   const handleQuickBuy = async (virtual: IVirtual, percentage: number) => {
-    if (!address || balanceLoading || !selectedToken) {
+    if (!address || balanceLoading || !selectedVitualtoken) {
       toast.error("Please connect your wallet and select a token");
       return;
     }
-    const balance = balances[selectedToken.symbol] || "0";
+    const balance = balances[selectedVitualtoken.symbol] || "0";
     const amount = (Number(balance) * percentage) / 100;
 
     try {
@@ -133,7 +129,7 @@ const Snipe = () => {
         );
       }
 
-      const isETH = selectedToken.symbol === "ETH";
+      const isETH = selectedVitualtoken.symbol === "ETH";
       const receipt = await buyService.buyToken({
         amountIn: amount.toString(),
         amountOutMin: "0", // Set minimum amount or calculate slippage
@@ -144,7 +140,7 @@ const Snipe = () => {
         to: address,
         timestamp: Math.floor(Date.now() / 1000) + 86400, // 1 day from now
         provider: networkData?.provider!,
-        selectedToken: selectedToken,
+        selectedToken: selectedVitualtoken,
       });
       console.log("Transaction successful:", receipt);
     } catch (error) {
@@ -154,7 +150,7 @@ const Snipe = () => {
   };
 
   const handleQuickSell = async (virtual: IVirtual, percentage: number) => {
-    if (!address || balanceLoading || !selectedToken) {
+    if (!address || balanceLoading || !selectedVitualtoken) {
       toast.error("Please connect your wallet and select a token");
       return;
     }
@@ -194,21 +190,21 @@ const Snipe = () => {
   };
 
   const calculateAmount = (percentage: number, virtual?: IVirtual) => {
-    if (!selectedToken || balanceLoading) return "0";
+    if (!selectedVitualtoken || balanceLoading) return "0";
     if (showPercentages?.type === "sell" && virtual) {
       // For sell, calculate based on the virtual token's balance
       const balance = virtual.userBalance || 0;
       return ((Number(balance) * percentage) / 100).toFixed(4);
     }
     // For buy, calculate based on selected token's balance
-    const balance = balances[selectedToken.symbol] || "0";
+    const balance = balances[selectedVitualtoken.symbol] || "0";
     return ((Number(balance) * percentage) / 100).toFixed(4);
   };
 
   const getTokenSymbol = (virtual: IVirtual) => {
     return showPercentages?.type === "sell"
       ? virtual.symbol
-      : selectedToken?.symbol;
+      : selectedVitualtoken?.symbol;
   };
 
   const handleCloseModal = () => {

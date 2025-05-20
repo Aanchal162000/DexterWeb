@@ -12,7 +12,7 @@ import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useWalletBalance } from "@/hooks/useWalletBalance";
 import { HiCheck } from "react-icons/hi";
 
-interface TokenOption {
+export interface TokenOption {
   name: string;
   symbol: string;
   logo: string;

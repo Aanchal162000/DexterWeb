@@ -25,12 +25,16 @@ import DialogContainer from "../Swap/DialogContainer";
 import { LuArrowUpDown } from "react-icons/lu";
 import ImageNext from "../common/ImageNext";
 import { TiArrowSortedDown } from "react-icons/ti";
+import buyService from "@/services/contract/buyService";
+import { BuyContract, VIRTUALS_TOKEN_ADDRESS, WRAPPED_ETH_ADDRESS } from "@/constants/config";
+import approvalService from "@/services/contract/approvalService";
 
 const Snipe = () => {
   const [selectedVirtual, setSelectedVirtual] = useState<IVirtual | null>(null);
   const [selectedToVirtual, setSelectedToVirtual] = useState<IVirtual | null>(
     null
   );
+  const { networkData } = useLoginContext();
   const [isFromCoinOpen, setIsFromCoinOpen] = useState(false);
   const [isToCoinOpen, setIsToCoinOpen] = useState(false);
   const [selectedTab, setSelectedTab] = useState<"swap" | "create">("swap");
@@ -113,32 +117,55 @@ const Snipe = () => {
 
     try {
       // Check if it's a prototype or sentient agent
-      const isPrototype = prototypeVirtuals.some((pv) => pv.id === virtual.id);
-      const contractAddress = isPrototype
-        ? virtual.contractAddress
-        : virtual.sentientContractAddress;
+      // const isPrototype = prototypeVirtuals.some((pv) => pv.id === virtual.id);
+      // const contractAddress = isPrototype
+      //   ? virtual.contractAddress
+      //   : virtual.sentientContractAddress;
 
-      if (!contractAddress) {
-        toast.error("Contract address not found");
-        return;
+      // if (!contractAddress) {
+      //   toast.error("Contract address not found");
+      //   return;
+      // }
+
+      // Check if approval is needed
+      const allowance = await approvalService.checkAllowance({
+        tokenAddress: VIRTUALS_TOKEN_ADDRESS,
+        provider: networkData?.provider!
+      });
+
+      // If allowance is less than amount, approve first
+      if (Number(allowance) < amount) {
+        await approvalService.approveVirtualToken(
+          amount.toString(),
+          networkData?.provider!
+        );
       }
 
-      // Implement your buy logic here using the appropriate contract address
-      console.log(
-        `Buying ${amount} ${selectedToken.symbol} of ${virtual.name} using contract ${contractAddress}`
+      const isETH = selectedToken.symbol === "ETH";
+      const receipt = await buyService.buyToken(
+        {
+          amountIn: amount.toString(),
+          amountOutMin: "0", // Set minimum amount or calculate slippage
+          path: [isETH ? WRAPPED_ETH_ADDRESS : VIRTUALS_TOKEN_ADDRESS, virtual.contractAddress!],
+          to: address,
+          timestamp: Math.floor(Date.now() / 1000) + 86400, // 1 day from now
+          provider: networkData?.provider!,
+          selectedToken: selectedToken
+        }
       );
+      console.log("Transaction successful:", receipt);
 
       // After successful buy, refresh the virtuals data
-      if (isPrototype) {
-        // Refresh prototype virtuals
-        // Add your refresh logic here
-      } else {
-        // Refresh sentient virtuals
-        // Add your refresh logic here
-      }
+      // if (isPrototype) {
+      //   // Refresh prototype virtuals
+      //   // Add your refresh logic here
+      // } else {
+      //   // Refresh sentient virtuals
+      //   // Add your refresh logic here
+      // }
     } catch (error) {
       console.error("Error in quick buy:", error);
-      toast.error("Failed to execute quick buy");
+      toast.error("Failed to Quick Buy");
     }
   };
 

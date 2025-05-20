@@ -13,7 +13,7 @@ import { useWalletBalance } from "@/hooks/useWalletBalance";
 import { HiCheck } from "react-icons/hi";
 import { useSwapContext } from "@/context/SwapContext";
 
-interface TokenOption {
+export interface TokenOption {
   name: string;
   symbol: string;
   logo: string;

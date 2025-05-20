@@ -112,10 +112,11 @@ class ApprovalService {
   async approveVirtualToken(
     amount: string,
     provider: ethers.providers.Web3Provider,
-    spenderAddress?: string
+    tokenAddress: string,
+    spenderAddress: string
   ): Promise<ethers.providers.TransactionReceipt> {
     return this.approveToken({
-      tokenAddress: VIRTUALS_TOKEN_ADDRESS,
+      tokenAddress: tokenAddress,
       amount,
       provider,
       decimals: 18, // Virtual Token decimals

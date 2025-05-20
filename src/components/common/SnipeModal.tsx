@@ -41,15 +41,18 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
   const [amount, setAmount] = useState("");
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
   const { networkData } = useLoginContext();
   const percentageButtons = [25, 50, 75, 100];
 
   useEffect(() => {
-    setIsButtonDisabled(!amount || parseFloat(amount) <= 0);
-  }, [amount]);
+    setIsButtonDisabled(
+      !amount || parseFloat(amount) <= 0 || isLoading || isProcessing
+    );
+  }, [amount, isLoading, isProcessing]);
 
   const handlePercentageClick = (percentage: number) => {
-    if (!selectedVitualtoken) return;
+    if (!selectedVitualtoken || isLoading || isProcessing) return;
     const balance =
       selectedVitualtoken.symbol === "ETH" ? balances.ETH : balances.VIRT;
     const calculatedAmount = (parseFloat(balance || "0") * percentage) / 100;
@@ -57,40 +60,58 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
   };
 
   const handleSnipe = async () => {
-    if (!selectedVitualtoken) return;
-    const isEth = selectedVitualtoken.symbol === "ETH" ? true : false;
-    if (!isEth) {
-      try {
-        const allowance = await approvalService.checkAllowance({
-          tokenAddress: VIRTUALS_TOKEN_ADDRESS,
-          provider: networkData?.provider!,
-          spenderAddress: SnipeContract,
-        });
+    if (!selectedVitualtoken || isLoading || isProcessing) return;
 
-        // If allowance is less than amount, approve first
-        if (Number(allowance) < Number(amount)) {
-          await approvalService.approveVirtualToken(
-            amount.toString(),
-            networkData?.provider!,
-            SnipeContract
-          );
-        }
-      } catch (error: any) {}
-    }
-    const receipt = await agentService.deposit({
-      tokenAddress: isEth ? WRAPPED_ETH_ADDRESS : VIRTUALS_TOKEN_ADDRESS,
-      amount: amount,
-      provider: networkData?.provider!,
-    });
-    console.log("Transaction successful:", receipt);
     try {
       setIsLoading(true);
+      setIsProcessing(true);
+      toast.info("Starting snipe process...", { autoClose: false });
+
+      const isEth = selectedVitualtoken.symbol === "ETH" ? true : false;
+
+      if (!isEth) {
+        try {
+          toast.info("Checking token allowance...");
+          const allowance = await approvalService.checkAllowance({
+            tokenAddress: VIRTUALS_TOKEN_ADDRESS,
+            provider: networkData?.provider!,
+            spenderAddress: SnipeContract,
+          });
+
+          // If allowance is less than amount, approve first
+          if (Number(allowance) < Number(amount)) {
+            toast.info("Approving token spend...");
+            await approvalService.approveVirtualToken(
+              amount.toString(),
+              networkData?.provider!,
+              VIRTUALS_TOKEN_ADDRESS,
+              SnipeContract
+            );
+            toast.success("Token approved successfully!");
+          }
+        } catch (error: any) {
+          toast.error(
+            "Failed to approve token: " + (error.message || "Unknown error")
+          );
+          throw error;
+        }
+      }
+
+      toast.info("Processing deposit...");
+      const receipt = await agentService.deposit({
+        tokenAddress: isEth ? WRAPPED_ETH_ADDRESS : VIRTUALS_TOKEN_ADDRESS,
+        amount: amount,
+        provider: networkData?.provider!,
+      });
+      const amountConverted = (Number(amount) * 10 ** 18).toString();
+
+      toast.info("Creating agent...");
       const response = await agentService.createAgent({
         genesisId,
         name,
         walletAddress,
         token: selectedVitualtoken.symbol === "ETH" ? "eth" : "virtual",
-        amount,
+        amount: (Number(amount) * 10 ** 18).toString(),
         launchTime: new Date(),
       });
 
@@ -98,19 +119,24 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
         throw new Error(response.message);
       }
 
-      toast.success("Snipe successful!");
+      toast.success("Snipe successful! 🎉");
       onClose();
     } catch (error) {
       console.error("Error in snipe:", error);
       toast.error(error instanceof Error ? error.message : "Failed to snipe");
     } finally {
       setIsLoading(false);
+      setIsProcessing(false);
     }
   };
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
-      <Dialog as="div" className="relative z-50" onClose={onClose}>
+      <Dialog
+        as="div"
+        className="relative z-50"
+        onClose={isProcessing ? () => {} : onClose}
+      >
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -148,7 +174,8 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
                       type="number"
                       value={amount}
                       onChange={(e) => setAmount(e.target.value)}
-                      className="w-full px-4 py-3 bg-[#1E2226] border border-primary-100/20 rounded-lg text-white focus:outline-none focus:border-primary-100"
+                      disabled={isLoading || isProcessing}
+                      className="w-full px-4 py-3 bg-[#1E2226] border border-primary-100/20 rounded-lg text-white focus:outline-none focus:border-primary-100 disabled:opacity-50 disabled:cursor-not-allowed"
                       placeholder="Enter amount"
                     />
                     <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center space-x-2">
@@ -169,7 +196,8 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
                       <button
                         key={percentage}
                         onClick={() => handlePercentageClick(percentage)}
-                        className="px-4 py-2 bg-primary-100/10 hover:bg-primary-100/20 text-white rounded-lg transition-colors duration-200"
+                        disabled={isLoading || isProcessing}
+                        className="px-4 py-2 bg-primary-100/10 hover:bg-primary-100/20 text-white rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         {percentage}%
                       </button>
@@ -180,14 +208,26 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
                 <div className="mt-6">
                   <button
                     onClick={handleSnipe}
-                    disabled={isButtonDisabled || isLoading}
+                    disabled={isButtonDisabled}
                     className={`w-full px-4 py-3 rounded-lg font-medium transition-colors duration-200 ${
-                      isButtonDisabled || isLoading
+                      isButtonDisabled
                         ? "bg-gray-600 text-white cursor-not-allowed"
-                        : "bg-primary-100 text-black  hover:bg-primary-100/90"
+                        : "bg-primary-100 text-black hover:bg-primary-100/90"
                     }`}
                   >
-                    {isLoading ? "Snipping..." : "Snipe"}
+                    {isLoading ? (
+                      <div className="flex items-center justify-center">
+                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-black mr-2"></div>
+                        Processing...
+                      </div>
+                    ) : isProcessing ? (
+                      <div className="flex items-center justify-center">
+                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-black mr-2"></div>
+                        Transaction in Progress...
+                      </div>
+                    ) : (
+                      "Snipe"
+                    )}
                   </button>
                 </div>
               </Dialog.Panel>

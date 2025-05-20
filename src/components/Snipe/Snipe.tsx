@@ -76,13 +76,30 @@ const Snipe = () => {
     error: prototypeError,
   } = usePrototypeVirtuals();
 
+  const [processingVirtuals, setProcessingVirtuals] = useState<{
+    [key: string]: {
+      buy: boolean;
+      sell: boolean;
+    };
+  }>({});
+
   const handlePercentageSelect = async (
     virtual: IVirtual,
     percentage: number,
     type: "buy" | "sell"
   ) => {
+    if (processingVirtuals[virtual.id]?.[type]) return;
+
     try {
       setActivePercentage(percentage);
+      setProcessingVirtuals((prev) => ({
+        ...prev,
+        [virtual.id]: {
+          ...prev[virtual.id],
+          [type]: true,
+        },
+      }));
+
       if (type === "buy") {
         await handleQuickBuy(virtual, percentage);
         toast.success(
@@ -104,6 +121,14 @@ const Snipe = () => {
     } catch (error) {
       toast.error(`Failed to ${type} ${virtual.name}`);
       console.error(error);
+    } finally {
+      setProcessingVirtuals((prev) => ({
+        ...prev,
+        [virtual.id]: {
+          ...prev[virtual.id],
+          [type]: false,
+        },
+      }));
     }
   };
 
@@ -112,10 +137,12 @@ const Snipe = () => {
       toast.error("Please connect your wallet and select a token");
       return;
     }
-    const balance = balances[selectedVitualtoken.symbol] || "0";
-    const amount = (Number(balance) * percentage) / 100;
 
     try {
+      toast.info("Starting quick buy process...", { autoClose: false });
+      const balance = balances[selectedVitualtoken.symbol] || "0";
+      const amount = (Number(balance) * percentage) / 100;
+
       const allowance = await approvalService.checkAllowance({
         tokenAddress: VIRTUALS_TOKEN_ADDRESS,
         provider: networkData?.provider!,
@@ -123,12 +150,17 @@ const Snipe = () => {
 
       // If allowance is less than amount, approve first
       if (Number(allowance) < amount) {
+        toast.info("Approving token spend...");
         await approvalService.approveVirtualToken(
           amount.toString(),
-          networkData?.provider!
+          networkData?.provider!,
+          VIRTUALS_TOKEN_ADDRESS,
+          BuyContract
         );
+        toast.success("Token approved successfully!");
       }
 
+      toast.info("Processing buy transaction...");
       const isETH = selectedVitualtoken.symbol === "ETH";
       const receipt = await buyService.buyToken({
         amountIn: amount.toString(),
@@ -142,10 +174,16 @@ const Snipe = () => {
         provider: networkData?.provider!,
         selectedToken: selectedVitualtoken,
       });
+
+      toast.success("Buy transaction successful! 🎉");
       console.log("Transaction successful:", receipt);
     } catch (error) {
       console.error("Error in quick buy:", error);
-      toast.error("Failed to Quick Buy");
+      toast.error(
+        "Failed to Quick Buy: " +
+          (error instanceof Error ? error.message : "Unknown error")
+      );
+      throw error;
     }
   };
 
@@ -156,36 +194,50 @@ const Snipe = () => {
     }
 
     try {
-      // Check if it's a prototype or sentient agent
-      const isPrototype = prototypeVirtuals.some((pv) => pv.id === virtual.id);
-      const contractAddress = isPrototype
-        ? virtual.contractAddress
-        : virtual.sentientContractAddress;
+      toast.info("Starting quick Sell process...", { autoClose: false });
 
-      if (!contractAddress) {
-        toast.error("Contract address not found");
-        return;
+      const amount = (Number(virtual?.userBalance) * percentage) / 100;
+      const allowance = await approvalService.checkAllowance({
+        tokenAddress: virtual.contractAddress!,
+        provider: networkData?.provider!,
+      });
+
+      // If allowance is less than amount, approve first
+      if (Number(allowance) < amount) {
+        toast.info("Approving token spend...");
+        await approvalService.approveVirtualToken(
+          amount.toString(),
+          networkData?.provider!,
+          virtual.contractAddress!,
+          BuyContract
+        );
+        toast.success("Token approved successfully!");
       }
 
-      const balance = virtual.userBalance || "0";
-      const amount = (Number(balance) * percentage) / 100;
+      toast.info("Processing Sell transaction...");
+      const isETH = selectedVitualtoken.symbol === "ETH";
+      const receipt = await buyService.buyToken({
+        amountIn: amount.toString(),
+        amountOutMin: "0", // Set minimum amount or calculate slippage
+        path: [
+          virtual.contractAddress!,
+          isETH ? WRAPPED_ETH_ADDRESS : VIRTUALS_TOKEN_ADDRESS,
+        ],
+        to: address,
+        timestamp: Math.floor(Date.now() / 1000) + 86400, // 1 day from now
+        provider: networkData?.provider!,
+        selectedToken: selectedVitualtoken,
+      });
 
-      // Implement your sell logic here using the appropriate contract address
-      console.log(
-        `Selling ${amount} ${virtual.symbol} of ${virtual.name} using contract ${contractAddress}`
-      );
-
-      // After successful sell, refresh the virtuals data
-      if (isPrototype) {
-        // Refresh prototype virtuals
-        // Add your refresh logic here
-      } else {
-        // Refresh sentient virtuals
-        // Add your refresh logic here
-      }
+      toast.success("Sell transaction successful! 🎉");
+      console.log("Transaction successful:", receipt);
     } catch (error) {
-      console.error("Error in quick sell:", error);
-      toast.error("Failed to execute quick sell");
+      console.error("Error in quick buy:", error);
+      toast.error(
+        "Failed to Quick Buy: " +
+          (error instanceof Error ? error.message : "Unknown error")
+      );
+      throw error;
     }
   };
 
@@ -326,18 +378,42 @@ const Snipe = () => {
                             onClick={() =>
                               handleShowPercentages(virtual, "buy")
                             }
-                            className="flex-1 bg-primary-100 text-black px-4 py-2 rounded-lg font-medium hover:bg-primary-200 transition-colors"
+                            disabled={processingVirtuals[virtual.id]?.buy}
+                            className={`flex-1 bg-primary-100 text-black px-4 py-2 rounded-lg font-medium hover:bg-primary-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
+                              processingVirtuals[virtual.id]?.buy
+                                ? "flex items-center justify-center"
+                                : ""
+                            }`}
                           >
-                            Quick Buy
+                            {processingVirtuals[virtual.id]?.buy ? (
+                              <>
+                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-black mr-2"></div>
+                                Processing...
+                              </>
+                            ) : (
+                              "Quick Buy"
+                            )}
                           </button>
                           {Number(virtual.userBalance) > 0 && (
                             <button
                               onClick={() =>
                                 handleShowPercentages(virtual, "sell")
                               }
-                              className="flex-1 bg-red-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-600 transition-colors"
+                              disabled={processingVirtuals[virtual.id]?.sell}
+                              className={`flex-1 bg-red-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
+                                processingVirtuals[virtual.id]?.sell
+                                  ? "flex items-center justify-center"
+                                  : ""
+                              }`}
                             >
-                              Quick Sell
+                              {processingVirtuals[virtual.id]?.sell ? (
+                                <>
+                                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                                  Processing...
+                                </>
+                              ) : (
+                                "Quick Sell"
+                              )}
                             </button>
                           )}
                         </div>
@@ -435,18 +511,42 @@ const Snipe = () => {
                             onClick={() =>
                               handleShowPercentages(virtual, "buy")
                             }
-                            className="flex-1 bg-primary-100 text-black px-4 py-2 rounded-lg font-medium hover:bg-primary-200 transition-colors"
+                            disabled={processingVirtuals[virtual.id]?.buy}
+                            className={`flex-1 bg-primary-100 text-black px-4 py-2 rounded-lg font-medium hover:bg-primary-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
+                              processingVirtuals[virtual.id]?.buy
+                                ? "flex items-center justify-center"
+                                : ""
+                            }`}
                           >
-                            Quick Buy
+                            {processingVirtuals[virtual.id]?.buy ? (
+                              <>
+                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-black mr-2"></div>
+                                Processing...
+                              </>
+                            ) : (
+                              "Quick Buy"
+                            )}
                           </button>
                           {Number(virtual.userBalance) > 0 && (
                             <button
                               onClick={() =>
                                 handleShowPercentages(virtual, "sell")
                               }
-                              className="flex-1 bg-red-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-600 transition-colors"
+                              disabled={processingVirtuals[virtual.id]?.sell}
+                              className={`flex-1 bg-red-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
+                                processingVirtuals[virtual.id]?.sell
+                                  ? "flex items-center justify-center"
+                                  : ""
+                              }`}
                             >
-                              Quick Sell
+                              {processingVirtuals[virtual.id]?.sell ? (
+                                <>
+                                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                                  Processing...
+                                </>
+                              ) : (
+                                "Quick Sell"
+                              )}
                             </button>
                           )}
                         </div>

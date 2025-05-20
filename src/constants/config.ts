@@ -17,6 +17,7 @@ export const avalancheList = require("./jsons/avalanche.json");
 export const optimismList = require("./jsons/optimism.json");
 export const BuyContract = "0xa74e5595bd0a29a0E437ACF6461F624CE6218E9f";
 export const SnipeContract = "";
+export const VirtualsAddress = "0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b";
 
 export const socialData = [
   {

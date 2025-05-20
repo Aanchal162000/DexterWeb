@@ -20,16 +20,16 @@ export interface TokenOption {
   balance: string;
 }
 
-const defaultToken: TokenOption = {
-  name: "Virtuals",
-  symbol: "VIRT",
-  logo: "/Networks/Base.png",
-  balance: "0",
-};
-
 const TokenSelector = () => {
   const { selectedVitualtoken, setSelctedVirtualToken } = useSwapContext();
   const { balances, isLoading, error } = useWalletBalance();
+
+  const defaultToken: TokenOption = {
+    name: "Virtuals",
+    symbol: "VIRT",
+    logo: "/Networks/Base.png",
+    balance: "0",
+  };
 
   const tokenOptions: TokenOption[] = [
     {
@@ -50,7 +50,21 @@ const TokenSelector = () => {
     },
   ];
 
-  const currentToken = selectedVitualtoken || defaultToken;
+  // Update the current token with latest balance
+  const currentToken = selectedVitualtoken
+    ? {
+        ...selectedVitualtoken,
+        balance:
+          selectedVitualtoken.symbol === "VIRT"
+            ? balances.VIRT || "0"
+            : selectedVitualtoken.symbol === "ETH"
+            ? balances.ETH || "0"
+            : selectedVitualtoken.balance,
+      }
+    : {
+        ...defaultToken,
+        balance: balances.VIRT || "0",
+      };
 
   return (
     <Menu as="div" className="relative inline-block text-left w-fit">

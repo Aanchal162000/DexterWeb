@@ -106,20 +106,24 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
       const amountConverted = (Number(amount) * 10 ** 18).toString();
 
       toast.info("Creating agent...");
-      const response = await agentService.createAgent({
-        genesisId,
-        name,
-        walletAddress,
-        token: selectedVitualtoken.symbol === "ETH" ? "eth" : "virtual",
-        amount: (Number(amount) * 10 ** 18).toString(),
-        launchTime: new Date(),
-      });
+      if (receipt.transactionHash) {
+        const response = await agentService.createAgent({
+          genesisId,
+          name,
+          walletAddress,
+          token: selectedVitualtoken.symbol === "ETH" ? "eth" : "virtual",
+          amount: (Number(amount) * 10 ** 18).toString(),
+          launchTime: new Date(),
+        });
 
-      if (!response.success) {
-        throw new Error(response.message);
+        if (!response.success) {
+          throw new Error(response.message);
+        }
+        toast.success("Snipe successful! 🎉");
+      } else {
+        toast.error("Snipe Failed!");
       }
 
-      toast.success("Snipe successful! 🎉");
       onClose();
     } catch (error) {
       console.error("Error in snipe:", error);

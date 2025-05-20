@@ -226,7 +226,12 @@ const Snipe = () => {
         to: address,
         timestamp: Math.floor(Date.now() / 1000) + 86400, // 1 day from now
         provider: networkData?.provider!,
-        selectedToken: selectedVitualtoken,
+        selectedToken: {
+          logo: "",
+          symbol: virtual.symbol,
+          name: virtual.name,
+          balance: virtual.userBalance?.toString()!,
+        },
       });
 
       toast.success("Sell transaction successful! 🎉");

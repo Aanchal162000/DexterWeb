@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { IVirtual } from "@/utils/interface";
+import { ethers } from "ethers";
+import approvalService from "@/services/contract/approvalService";
 
 interface PrototypeVirtualResponse {
   data: {

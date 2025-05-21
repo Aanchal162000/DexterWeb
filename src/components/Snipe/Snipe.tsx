@@ -615,7 +615,7 @@ const Snipe = () => {
 
         {/* Create/Swap Box - Only show in desktop */}
         {!isMobile && (
-          <div className="bg-[#15181B]/80 backdrop-blur-sm text-white border border-primary-100 rounded-xl relative h-full w-full shadow-md overflow-hidden flex flex-col">
+          <div className="bg-[#15181B]/80 backdrop-blur-sm text-white border border-primary-100 rounded-xl relative h-full w-[26%] ml-2 shadow-md overflow-hidden flex flex-col">
             <div className="flex items-center justify-between pt-6 px-8 ">
               <div className="flex gap-4">
                 <button

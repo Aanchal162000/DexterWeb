@@ -617,14 +617,14 @@ const Snipe = () => {
         {/* Create/Swap Box - Only show in desktop */}
         {!isMobile && (
           <div className="bg-[#15181B]/80 backdrop-blur-sm text-white border border-primary-100 rounded-xl relative h-full w-full shadow-md overflow-hidden flex flex-col">
-            <div className="flex items-center justify-between pt-4 px-8 ">
-              <div className="flex gap-3">
+            <div className="flex items-center justify-between pt-6 px-8 ">
+              <div className="flex gap-4">
                 <button
                   onClick={() => setSelectedTab("create")}
                   className={`rounded-lg text-base font-semibold transition-colors ${
                     selectedTab === "create"
-                      ? "undeline underline-offset-[0.625rem] text-primary-100"
-                      : " text-white hover:bg-gray-700"
+                      ? "underline underline-offset-[0.625rem] text-primary-100"
+                      : " text-white"
                   }`}
                 >
                   Create
@@ -634,7 +634,7 @@ const Snipe = () => {
                   className={`rounded-lg text-base font-semibold transition-colors ${
                     selectedTab === "swap"
                       ? "underline underline-offset-[0.625rem] text-primary-100"
-                      : " text-white hover:bg-gray-700"
+                      : " text-white"
                   }`}
                 >
                   Swap
@@ -647,7 +647,7 @@ const Snipe = () => {
               {isFromCoinOpen && (
                 <DialogContainer
                   setClose={() => setIsFromCoinOpen(false)}
-                  title="Select Token"
+                  title="Send From"
                 >
                   <VirtualTokenSelector
                     setIsCoinOpen={setIsFromCoinOpen}
@@ -661,7 +661,7 @@ const Snipe = () => {
               {isToCoinOpen && (
                 <DialogContainer
                   setClose={() => setIsToCoinOpen(false)}
-                  title="Select Token"
+                  title="Receive As"
                 >
                   <VirtualTokenSelector
                     setIsCoinOpen={setIsToCoinOpen}
@@ -673,11 +673,11 @@ const Snipe = () => {
               )}
 
               {selectedTab === "create" ? (
-                <div className="p-4">
+                <div className="px-8 py-6">
                   <CreateAgentForm onClose={handleCloseCreateAgent} />
                 </div>
               ) : (
-                <div className="px-8 py-2">
+                <div className="px-8 py-3">
                   {/* From Section */}
                   <div className="mt-4 border h-[90px] border-primary-100 rounded-lg p-4">
                     <div className="flex justify-between items-center mb-2">

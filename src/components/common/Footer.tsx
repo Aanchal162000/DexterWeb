@@ -16,7 +16,7 @@ const Footer = (props: any) => {
 
   return (
     <div
-      className={`relative flex items-center sm:justify-between justify-center w-screen bg-[#15181B]/80  h-[6.8vh] px-14 py-4 z-30 ${
+      className={`relative flex items-center sm:justify-between justify-center w-screen bg-black/60  h-[6.8vh] px-14 py-4 z-30 ${
         address && "border-t-[1px] border-primary-100/60"
       }`}
     >

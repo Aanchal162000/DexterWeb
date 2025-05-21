@@ -87,7 +87,7 @@ const VirtualTokenSelector: React.FC<VirtualTokenSelectorProps> = ({
   return (
     <div className="relative w-full flex flex-col h-full">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-primary-100/20">
+      {/* <div className="flex items-center justify-between px-4 py-3 border-b border-primary-100/20">
         <h2 className="text-lg font-semibold text-primary-100">{title}</h2>
         <button
           onClick={() => setIsCoinOpen(false)}
@@ -95,17 +95,17 @@ const VirtualTokenSelector: React.FC<VirtualTokenSelectorProps> = ({
         >
           ✕
         </button>
-      </div>
+      </div> */}
 
       {/* Search Bar */}
-      <div className="p-4 border-b border-primary-100/20">
+      <div className="p-4 pt-0 border-b border-primary-100/20">
         <div className="relative">
           <input
             type="text"
             placeholder="Search by name or symbol"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-gray-800 text-white px-4 py-2 pl-10 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-100"
+            className="w-full bg-zinc-700 text-white px-4 py-2 pl-10 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-100"
           />
           <LuSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
         </div>
@@ -118,7 +118,7 @@ const VirtualTokenSelector: React.FC<VirtualTokenSelectorProps> = ({
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
             selectedTab === "genesis"
               ? "bg-primary-100 text-black"
-              : "bg-gray-800 text-gray-400 hover:bg-gray-700"
+              : "bg-zinc-700 text-gray-400 hover:bg-zinc-600"
           }`}
         >
           Genesis
@@ -128,7 +128,7 @@ const VirtualTokenSelector: React.FC<VirtualTokenSelectorProps> = ({
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
             selectedTab === "sentient"
               ? "bg-primary-100 text-black"
-              : "bg-gray-800 text-gray-400 hover:bg-gray-700"
+              : "bg-zinc-700 text-gray-400 hover:bg-zinc-600"
           }`}
         >
           Sentient
@@ -138,7 +138,7 @@ const VirtualTokenSelector: React.FC<VirtualTokenSelectorProps> = ({
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
             selectedTab === "prototype"
               ? "bg-primary-100 text-black"
-              : "bg-gray-800 text-gray-400 hover:bg-gray-700"
+              : "bg-zinc-700 text-gray-400 hover:bg-zinc-600"
           }`}
         >
           Prototype

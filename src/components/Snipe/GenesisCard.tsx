@@ -53,50 +53,46 @@ const GenesisCard: React.FC<GenesisCardProps> = ({ genesis, onClick }) => {
       const startDate = new Date(genesis.startsAt);
       const endDate = new Date(genesis.endsAt);
 
-      if (now < startDate) {
-        const seconds = differenceInSeconds(startDate, now);
-        const hours = Math.floor(seconds / 3600);
-        const minutes = Math.floor((seconds % 3600) / 60);
-        const days = Math.floor(seconds / 86400);
-        const remainingSeconds = seconds % 60;
-        setTimeLeft(
-          <>
-            Starts in{" "}
-            <span className="text-white">
-              {String(days).padStart(2, "0")}d {String(hours).padStart(2, "0")}h{" "}
-              {String(minutes).padStart(2, "0")}m{" "}
-              {String(remainingSeconds).padStart(2, "0")}s
-            </span>
-          </>
-        );
-        setStatus("upcoming");
-      } else if (now >= startDate && now <= endDate) {
-        const remainingSeconds = differenceInSeconds(endDate, now);
-        if (remainingSeconds <= 0) {
-          setTimeLeft("Ended");
-          setStatus("ended");
-          return;
-        }
-        const hours = Math.floor(remainingSeconds / 3600);
-        const minutes = Math.floor((remainingSeconds % 3600) / 60);
-        const seconds = remainingSeconds % 60;
-        setTimeLeft(
-          <>
-            Live -{" "}
-            <span className="text-white">
-              {String(hours).padStart(2, "0")}:
-              {String(minutes).padStart(2, "0")}:
-              {String(seconds).padStart(2, "0")} left
-            </span>
-          </>
-        );
-        setStatus("live");
-      } else {
-        const endedTime = formatDistanceToNow(endDate, { addSuffix: true });
-        setTimeLeft(`Ended ${endedTime}`);
-        setStatus("ended");
-      }
-    };
+            if (now < startDate) {
+                const seconds = differenceInSeconds(startDate, now);
+                const hours = Math.floor(seconds / 3600);
+                const minutes = Math.floor((seconds % 3600) / 60);
+                const days = Math.floor(seconds / 86400);
+                const remainingSeconds = seconds % 60;
+                setTimeLeft(
+                    <>
+                        Starts in{" "}
+                        <span className="text-white">
+                            {String(hours).padStart(2, "0")}h {String(minutes).padStart(2, "0")}m {String(remainingSeconds).padStart(2, "0")}s
+                        </span>
+                    </>
+                );
+                setStatus("upcoming");
+            } else if (now >= startDate && now <= endDate) {
+                const remainingSeconds = differenceInSeconds(endDate, now);
+                if (remainingSeconds <= 0) {
+                    setTimeLeft("Ended");
+                    setStatus("ended");
+                    return;
+                }
+                const hours = Math.floor(remainingSeconds / 3600);
+                const minutes = Math.floor((remainingSeconds % 3600) / 60);
+                const seconds = remainingSeconds % 60;
+                setTimeLeft(
+                    <>
+                        Live -{" "}
+                        <span className="text-white">
+                            {String(hours).padStart(2, "0")}h {String(minutes).padStart(2, "0")}m {String(seconds).padStart(2, "0")}s left
+                        </span>
+                    </>
+                );
+                setStatus("live");
+            } else {
+                const endedTime = formatDistanceToNow(endDate, { addSuffix: true });
+                setTimeLeft(`Ended ${endedTime}`);
+                setStatus("ended");
+            }
+        };
 
     updateTimer();
     const interval = setInterval(updateTimer, 1000);

@@ -73,31 +73,31 @@ const CreateAgentForm: React.FC<CreateAgentFormProps> = ({ onClose }) => {
               </div>
             </div> */}
 
-            <div className="space-y-2">
+            <div className="space-y-4">
               <h3 className="text-lg font-semibold text-primary-100">
                 Launch Type
               </h3>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 gap-2">
                 <div
                   className={`p-3 rounded-lg border cursor-pointer ${
                     formData.launchType === "genesis"
-                      ? "border-primary-100 bg-primary-100/10"
-                      : "border-gray-600"
+                      ? "border-primary-100 bg-black/50"
+                      : "border-gray-600 bg-black/20"
                   }`}
                   onClick={() =>
                     setFormData((prev) => ({ ...prev, launchType: "genesis" }))
                   }
                 >
-                  <h4 className="font-semibold text-primary-100 text-sm">
+                  <h4 className="font-medium text-primary-100 text-lg">
                     Genesis Launch
                   </h4>
-                  <p className="text-xs text-gray-400 mt-1">
+                  <p className="text-sm text-gray-400 mt-1 leading-5">
                     Set a launch date. Virgens have 24 hours to pledge their
                     points for token allocation.
                   </p>
                   <div className="mt-2 space-y-1">
-                    <p className="text-xs text-gray-400">Tokenomics:</p>
-                    <ul className="text-xs text-gray-400 list-disc list-inside">
+                    <p className="text-sm text-gray-400">Tokenomics:</p>
+                    <ul className="text-sm text-gray-400 list-disc list-inside leading-5">
                       <li>37.5% (Public Sale)</li>
                       <li>12.5% (Liquidity Pool)</li>
                       <li>50.0% (Developer's Allocation)</li>
@@ -108,22 +108,22 @@ const CreateAgentForm: React.FC<CreateAgentFormProps> = ({ onClose }) => {
                 <div
                   className={`p-3 rounded-lg border cursor-pointer ${
                     formData.launchType === "standard"
-                      ? "border-primary-100 bg-primary-100/10"
-                      : "border-gray-600"
+                      ? "border-primary-100 bg-black/50"
+                      : "border-gray-600 bg-black/20"
                   }`}
                   onClick={() =>
                     setFormData((prev) => ({ ...prev, launchType: "standard" }))
                   }
                 >
-                  <h4 className="font-semibold text-primary-100 text-sm">
+                  <h4 className="font-medium text-primary-100 text-lg">
                     Standard Launch
                   </h4>
-                  <p className="text-xs text-gray-400 mt-1">
+                  <p className="text-sm text-gray-400 mt-1">
                     Launch a brand new token directly.
                   </p>
                   <div className="mt-2 space-y-1">
-                    <p className="text-xs text-gray-400">Tokenomics:</p>
-                    <ul className="text-xs text-gray-400 list-disc list-inside">
+                    <p className="text-sm text-gray-400">Tokenomics:</p>
+                    <ul className="text-sm text-gray-400 list-disc list-inside">
                       <li>87.5% (Public Sale)</li>
                       <li>12.5% (Liquidity Pool)</li>
                     </ul>
@@ -137,7 +137,7 @@ const CreateAgentForm: React.FC<CreateAgentFormProps> = ({ onClose }) => {
       case "details":
         return (
           <div className="space-y-4">
-            <div className="space-y-2">
+            <div className="space-y-4">
               <h3 className="text-lg font-semibold text-primary-100">
                 Agent Details
               </h3>
@@ -148,28 +148,28 @@ const CreateAgentForm: React.FC<CreateAgentFormProps> = ({ onClose }) => {
                   placeholder="Agent Name"
                   value={formData.name}
                   onChange={handleInputChange}
-                  className="w-full bg-[#2A2A2A] rounded-lg p-2 text-sm text-white placeholder-gray-400"
+                  className="w-full bg-black/60 outline-none rounded-lg px-3 py-4 text-base text-white placeholder-gray-400"
                 />
                 <textarea
                   name="description"
                   placeholder="Description"
                   value={formData.description}
                   onChange={handleInputChange}
-                  className="w-full bg-[#2A2A2A] rounded-lg p-2 text-sm text-white placeholder-gray-400 h-20"
+                  className="w-full bg-black/60 outline-none rounded-lg px-3 py-4  text-base text-white placeholder-gray-400 h-20"
                 />
                 <textarea
                   name="project"
                   placeholder="Project Details"
                   value={formData.project}
                   onChange={handleInputChange}
-                  className="w-full bg-[#2A2A2A] rounded-lg p-2 text-sm text-white placeholder-gray-400 h-20"
+                  className="w-full bg-black/60 outline-none rounded-lg px-3 py-4  text-base text-white placeholder-gray-400 h-20"
                 />
                 <textarea
                   name="pitch"
                   placeholder="Project Pitch"
                   value={formData.pitch}
                   onChange={handleInputChange}
-                  className="w-full bg-[#2A2A2A] rounded-lg p-2 text-sm text-white placeholder-gray-400 h-20"
+                  className="w-full bg-black/60 outline-none rounded-lg px-3 py-4  text-base text-white placeholder-gray-400 h-20"
                 />
               </div>
             </div>
@@ -179,20 +179,36 @@ const CreateAgentForm: React.FC<CreateAgentFormProps> = ({ onClose }) => {
       case "launch":
         return (
           <div className="space-y-4">
-            <div className="space-y-2">
+            <div className="space-y-4">
               <h3 className="text-lg font-semibold text-primary-100">
                 Launch Summary
               </h3>
-              <div className="bg-[#2A2A2A] rounded-lg p-3 space-y-2">
-                <div className="flex justify-between text-sm">
+              <div className="bg-black/60 rounded-lg p-3 space-y-2">
+              <div className="flex flex-wrap justify-between text-base">
+                  <span className="text-gray-400">Agent Name:</span>
+                  <span className="text-white">{formData.name}</span>
+                </div>
+                <div className="flex flex-wrap justify-between text-base">
+                  <span className="text-gray-400">Description:</span>
+                  <span className="text-white">{formData.description}</span>
+                </div>
+                <div className="flex flex-wrap justify-between text-base">
+                  <span className="text-gray-400">Project Details:</span>
+                  <span className="text-white">{formData.project}</span>
+                </div>
+                <div className="flex flex-wrap justify-between text-base">
+                  <span className="text-gray-400">Project Pitch:</span>
+                  <span className="text-white">{formData.pitch}</span>
+                </div>
+                <div className="flex flex-wrap justify-between text-base">
                   <span className="text-gray-400">Chain:</span>
                   <span className="text-white">{formData.chain}</span>
                 </div>
-                <div className="flex justify-between text-sm">
+                <div className="flex flex-wrap justify-between text-base">
                   <span className="text-gray-400">Launch Type:</span>
                   <span className="text-white">{formData.launchType}</span>
                 </div>
-                <div className="flex justify-between text-sm">
+                <div className="flex flex-wrap justify-between text-base">
                   <span className="text-gray-400">Creation Fee:</span>
                   <span className="text-white">100 $VIRTUAL</span>
                 </div>

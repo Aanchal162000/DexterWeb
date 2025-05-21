@@ -134,6 +134,7 @@ const config: Config = {
       fontFamily: {
         sans: ["Inter", "sans-serif"],
         mono: ["JetBrains Mono", "monospace"],
+        grotesk: ["Space Grotesk", "sans-serif"],
       },
       fontSize: {
         xs: ["0.75rem", { lineHeight: "1rem" }],

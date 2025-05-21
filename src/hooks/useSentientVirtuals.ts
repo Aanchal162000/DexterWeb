@@ -19,6 +19,13 @@ interface SentientVirtualResponse {
     holderCount: number;
     virtualTokenValue: string;
     mcapInVirtual: number;
+    tokenomics:
+      | [
+          {
+            startsAt: string;
+          }
+        ]
+      | [];
     socials: {
       VERIFIED_LINKS: {
         TWITTER: string;
@@ -89,6 +96,7 @@ export const useSentientVirtuals = () => {
           genesis: item.genesis,
           contractAddress: item.tokenAddress,
           sentientContractAddress: item.tokenAddress,
+          nextLaunchstartsAt: item?.tokenomics?.length ? item?.tokenomics : [],
         }));
         transformedVirtuals.map((virtual) => {
           const filter = dataList?.filter(

@@ -88,6 +88,7 @@ export const usePrototypeVirtuals = () => {
           cores: item.cores,
           creator: item.creator,
           genesis: item.genesis,
+          nextLaunchstartsAt: [],
         }));
 
         setVirtuals(transformedVirtuals);

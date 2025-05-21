@@ -64,6 +64,7 @@ const VirtualTokenSelector: React.FC<VirtualTokenSelectorProps> = ({
                 startsAt: genesis.startsAt,
                 endsAt: genesis.endsAt,
               },
+              nextLaunchstartsAt: [],
             }))
           : [];
         break;

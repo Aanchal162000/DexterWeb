@@ -20,6 +20,7 @@ interface SnipeModalProps {
   genesisId: string;
   name: string;
   walletAddress: string;
+  endsAt: string;
 }
 
 interface TokenOption {
@@ -35,6 +36,7 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
   genesisId,
   name,
   walletAddress,
+  endsAt,
 }) => {
   const { selectedVitualtoken } = useSwapContext();
   const { balances } = useWalletBalance();
@@ -103,7 +105,6 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
         amount: amount,
         provider: networkData?.provider!,
       });
-      const amountConverted = (Number(amount) * 10 ** 18).toString();
 
       toast.info("Creating agent...");
       if (receipt.transactionHash) {
@@ -112,8 +113,11 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
           name,
           walletAddress,
           token: selectedVitualtoken.symbol === "ETH" ? "eth" : "virtual",
-          amount: (Number(amount) * 10 ** 18).toString(),
-          launchTime: new Date(),
+          amount: (
+            (Number(amount) - 0.003 * Number(amount)) *
+            10 ** 18
+          ).toString(),
+          launchTime: new Date(endsAt),
         });
 
         if (!response.success) {

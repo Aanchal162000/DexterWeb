@@ -3,25 +3,23 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useWalletBalance } from "@/hooks/useWalletBalance";
-import { agentService } from "@/services/contract/agentService";
 import { toast } from "react-toastify";
 import { useSwapContext } from "@/context/SwapContext";
 import approvalService from "@/services/contract/approvalService";
 import {
-  SnipeContract,
+  BuyContract,
   VIRTUALS_TOKEN_ADDRESS,
   WRAPPED_ETH_ADDRESS,
 } from "@/constants/config";
 import { useLoginContext } from "@/context/LoginContext";
+import buyService from "@/services/contract/buyService";
+import { IVirtual } from "@/utils/interface";
 import { TiArrowSortedDown } from "react-icons/ti";
 
-interface SnipeModalProps {
+interface SmartBuyModalProps {
   isOpen: boolean;
   onClose: () => void;
-  genesisId: string;
-  name: string;
-  walletAddress: string;
-  endsAt: string;
+  virtual: IVirtual;
 }
 
 interface TokenOption {
@@ -31,13 +29,10 @@ interface TokenOption {
   balance: string;
 }
 
-const SnipeModal: React.FC<SnipeModalProps> = ({
+const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
   isOpen,
   onClose,
-  genesisId,
-  name,
-  walletAddress,
-  endsAt,
+  virtual,
 }) => {
   const { selectedVitualtoken, setSelctedVirtualToken } = useSwapContext();
   const { balances } = useWalletBalance();
@@ -47,6 +42,7 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
   const [isProcessing, setIsProcessing] = useState(false);
   const { networkData } = useLoginContext();
   const percentageButtons = [25, 50, 75, 100];
+  const { address } = useLoginContext();
   const [isFromCoinOpen, setIsFromCoinOpen] = useState(false);
 
   const tokenOptions: TokenOption[] = [
@@ -64,13 +60,6 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
     },
   ];
 
-  const handleTokenSelect = (token: TokenOption) => {
-    setSelctedVirtualToken(token);
-    setIsFromCoinOpen(false);
-    // Reset amount when token changes
-    setAmount("");
-  };
-
   useEffect(() => {
     setIsButtonDisabled(
       !amount || parseFloat(amount) <= 0 || isLoading || isProcessing
@@ -85,13 +74,13 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
     setAmount(calculatedAmount.toString());
   };
 
-  const handleSnipe = async () => {
+  const handleSmartBuy = async () => {
     if (!selectedVitualtoken || isLoading || isProcessing) return;
 
     try {
       setIsLoading(true);
       setIsProcessing(true);
-      toast.info("Starting snipe process...", { autoClose: false });
+      toast.info("Starting smart buy process...", { autoClose: false });
 
       const isEth = selectedVitualtoken.symbol === "ETH" ? true : false;
 
@@ -101,7 +90,7 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
           const allowance = await approvalService.checkAllowance({
             tokenAddress: VIRTUALS_TOKEN_ADDRESS,
             provider: networkData?.provider!,
-            spenderAddress: SnipeContract,
+            spenderAddress: BuyContract,
           });
 
           // If allowance is less than amount, approve first
@@ -111,7 +100,7 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
               amount.toString(),
               networkData?.provider!,
               VIRTUALS_TOKEN_ADDRESS,
-              SnipeContract
+              BuyContract
             );
             toast.success("Token approved successfully!");
           }
@@ -123,39 +112,32 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
         }
       }
 
-      toast.info("Processing deposit...");
-      const receipt = await agentService.deposit({
-        tokenAddress: isEth ? WRAPPED_ETH_ADDRESS : VIRTUALS_TOKEN_ADDRESS,
-        amount: amount,
+      toast.info("Processing buy transaction...");
+      const receipt = await buyService.buyToken({
+        amountIn: amount,
+        amountOutMin: "0", // Set minimum amount or calculate slippage
+        path: [
+          isEth ? WRAPPED_ETH_ADDRESS : VIRTUALS_TOKEN_ADDRESS,
+          virtual.contractAddress!,
+        ],
+        to: address!,
+        timestamp: Math.floor(Date.now() / 1000) + 86400, // 1 day from now
         provider: networkData?.provider!,
+        selectedToken: selectedVitualtoken,
       });
 
-      toast.info("Creating agent...");
       if (receipt.transactionHash) {
-        const response = await agentService.createAgent({
-          genesisId,
-          name,
-          walletAddress,
-          token: selectedVitualtoken.symbol === "ETH" ? "eth" : "virtual",
-          amount: (
-            (Number(amount) - 0.003 * Number(amount)) *
-            10 ** 18
-          ).toString(),
-          launchTime: new Date(endsAt),
-        });
-
-        if (!response.success) {
-          throw new Error(response.message);
-        }
-        toast.success("Snipe successful! 🎉");
+        toast.success("Smart Buy successful! 🎉");
       } else {
-        toast.error("Snipe Failed!");
+        toast.error("Smart Buy Failed!");
       }
 
       onClose();
     } catch (error) {
-      console.error("Error in snipe:", error);
-      toast.error(error instanceof Error ? error.message : "Failed to snipe");
+      console.error("Error in smart buy:", error);
+      toast.error(
+        error instanceof Error ? error.message : "Failed to smart buy"
+      );
     } finally {
       setIsLoading(false);
       setIsProcessing(false);
@@ -171,7 +153,6 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
       <div className="rounded-b-xl bg-primary-100/10 py-2 px-4">
         <div className="flex flex-col gap-4">
           <div className="flex justify-end items-start">
-            {/* <h3 className="text-lg font-semibold text-white">Snipe {name}</h3> */}
             <button
               onClick={onClose}
               className="text-gray-400 hover:text-white"
@@ -185,7 +166,7 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
               htmlFor="amount"
               className="block text-sm font-medium text-gray-300 mb-2"
             >
-              Max Snipe
+              Max Buy
             </label>
             <div className="relative">
               <input
@@ -216,35 +197,6 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
               </div>
             </div>
 
-            {/* Token Selector Dropdown */}
-            {isFromCoinOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-[#1A1A1A] border border-primary-100/20 rounded-lg shadow-lg z-10">
-                <div className="py-1">
-                  {tokenOptions.map((token) => (
-                    <button
-                      key={token.symbol}
-                      onClick={() => handleTokenSelect(token)}
-                      className="w-full px-4 py-2 text-left text-white hover:bg-primary-100/10 flex items-center gap-2"
-                    >
-                      <img
-                        src={token.logo}
-                        alt={token.symbol}
-                        className="w-6 h-6 rounded-full"
-                      />
-                      <div className="flex flex-col">
-                        <span className="text-sm font-medium">
-                          {token.symbol}
-                        </span>
-                        <span className="text-xs text-gray-400">
-                          Balance: {Number(token.balance).toFixed(6)}
-                        </span>
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
             <div className="flex justify-between items-center mt-2">
               <span className="text-gray-400 text-xs">
                 Available Balance:{" "}
@@ -268,7 +220,7 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
           </div>
           <div className="my-4 flex justify-center items-center relative w-full">
             <button
-              onClick={handleSnipe}
+              onClick={handleSmartBuy}
               disabled={isButtonDisabled}
               className={`w-[80%] px-4 py-3 rounded-lg font-medium transition-colors duration-200 ${
                 isButtonDisabled
@@ -287,7 +239,7 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
                   Transaction in Progress...
                 </div>
               ) : (
-                "Snipe"
+                "Smart Buy"
               )}
             </button>
           </div>
@@ -297,4 +249,4 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
   );
 };
 
-export default SnipeModal;
+export default SmartBuyModal;

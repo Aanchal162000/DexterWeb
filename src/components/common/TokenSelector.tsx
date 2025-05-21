@@ -27,7 +27,7 @@ const TokenSelector = () => {
   const defaultToken: TokenOption = {
     name: "Virtuals",
     symbol: "VIRT",
-    logo: "/Networks/Base.png",
+    logo: "https://static.cx.metamask.io/api/v1/tokenIcons/8453/0x0b3e328455c4059eeb9e3f84b5543f74e24e7e1b.png",
     balance: "0",
   };
 

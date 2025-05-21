@@ -50,14 +50,14 @@ const VirtualCard: React.FC<VirtualCardProps> = ({ virtual, onClick }) => {
   const diffDays = virtual?.nextLaunchstartsAt?.length
     ? Math.floor(
         (new Date(virtual?.nextLaunchstartsAt[0].startsAt).getTime() -
-          new Date().getTime()) /
+          Date.now()) /
           (1000 * 60 * 60 * 24)
       )
     : -1;
 
   return (
     <div
-      className=" h-[8.2rem] rounded-xl cursor-pointer border border-primary-100/60 hover:border-cyan-500/40 transition-all duration-300 w-full backdrop-blur-sm"
+      className=" h-[8.2rem] rounded-xl cursor-pointer border-[0.5px] border-primary-100/60 hover:border-cyan-500/40 transition-all duration-300 w-full "
       onClick={onClick}
     >
       {/* Top Row */}
@@ -92,7 +92,7 @@ const VirtualCard: React.FC<VirtualCardProps> = ({ virtual, onClick }) => {
                 {diffDays != -1 ? (
                   <>
                     <IoIosLock />
-                    <p>{diffDays}d</p>
+                    <p>{Math.abs(diffDays)}d</p>
                   </>
                 ) : (
                   <p>DYOR</p>
@@ -103,11 +103,11 @@ const VirtualCard: React.FC<VirtualCardProps> = ({ virtual, onClick }) => {
               )}
             </div>
             <div className="flex items-center gap-2">
-              <span className="px-2 py-1 rounded-md text-xs bg-gray-800/50 border border-cyan-400/50 text-gray-300">
+              <span className="px-2 py-1 rounded-md text-xs  border border-cyan-400/50 text-gray-300">
                 {virtual.role}
               </span>
               {virtual.contractAddress && (
-                <div className="flex items-center gap-2 px-2 py-1 rounded-md text-xs border border-cyan-400/50 bg-gray-800/50 text-gray-300">
+                <div className="flex items-center gap-2 px-2 py-1 rounded-md text-xs border border-cyan-400/50  text-gray-300">
                   <span>
                     {virtual.contractAddress.slice(0, 4)}...
                     {virtual.contractAddress.slice(-4)}
@@ -136,7 +136,7 @@ const VirtualCard: React.FC<VirtualCardProps> = ({ virtual, onClick }) => {
         </button>
       </div>
       {/* Bottom Row */}
-      <div className="flex  flex-row   px-14 py-2 items-center justify-between border-t border-primary-100/60 w-full">
+      <div className="flex  flex-row   px-14 py-2 items-center justify-between border-t-[0.5px] border-primary-100/60 w-full">
         <div className="text-sm flex flex-row space-x-2">
           <span className="text-gray-400">Price: </span>
           <span className="text-white ">{formatCurrency(tokenPrice)}</span>

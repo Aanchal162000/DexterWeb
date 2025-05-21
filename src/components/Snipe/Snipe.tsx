@@ -321,91 +321,93 @@ const Snipe = () => {
     <div
       className={`w-full h-full overflow-y-auto lg:overflow-y-hidden lg:h-full flex-1 flex flex-row lg:px-14 sm:px-7 px-4 py-3 gap-3 justify-center`}
     >
-      <div className="w-[72rem] md:flex  hidden overflow-hidden">
-        <div className="relative h-full w-full backdrop-blur-sm bg-[#15181B]/80 border border-primary-100 rounded-xl text-white flex flex-col ">
-          {/* Genesis Launches Box */}
+      <div className={`w-full md:flex hidden overflow-hidden gap-3`}>
+        <div className="sm:!w-[clamp(42%,34rem,47%)] min-w-[29.75rem] md:flex hidden  overflow-hidden">
+          <div className="relative h-full w-full backdrop-blur-sm bg-[#15181B]/80 border border-primary-100 rounded-xl text-white flex flex-col ">
+            {/* Genesis Launches Box */}
 
-          <h2 className="text-lg md:text-xl font-semibold text-primary-100 text-center p-4 border-b border-primary-100/20">
-            Genesis Launches
-          </h2>
-          <div className="flex-1 overflow-y-auto overflow-x-hidden p-4">
-            <div className="space-y-4 max-w-full">
-              {genesisLoading ? (
+            <h2 className="text-lg md:text-xl font-semibold text-primary-100 text-center p-4 border-b border-primary-100/20">
+              Genesis Launches
+            </h2>
+            <div className="flex-1 overflow-y-auto overflow-x-hidden p-4">
+              <div className="space-y-4 max-w-full">
+                {genesisLoading ? (
+                  <div className="flex justify-center items-center h-32">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-100"></div>
+                  </div>
+                ) : genesisError ? (
+                  <div className="text-red-500 text-center p-4">
+                    {genesisError}
+                  </div>
+                ) : (
+                  genesisData?.data.map((genesis) => (
+                    <GenesisCard
+                      key={genesis.id}
+                      genesis={genesis}
+                      onClick={() => {}}
+                    />
+                  ))
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="w-full md:flex hidden overflow-hidden">
+          <div className="relative  h-full w-full backdrop-blur-sm bg-[#15181B]/80 border border-primary-100 rounded-xl text-white flex flex-col">
+            <div className="relative flex flex-row space-x-4 w-full border-b border-primary-100/20 text-base md:text-lg font-semibold text-white  text-center p-4">
+              <button
+                className={`${
+                  selectedAgent == "Sentient Agents" &&
+                  "underline underline-offset-8 text-primary-100"
+                }`}
+                onClick={() => setSelectedAgent("Sentient Agents")}
+              >
+                Sentient Agents
+              </button>
+              <button
+                className={`${
+                  selectedAgent == "Prototype Agents" &&
+                  "underline underline-offset-8 text-primary-100"
+                }`}
+                onClick={() => setSelectedAgent("Prototype Agents")}
+              >
+                Prototype Agents
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto p-4">
+              {loading ? (
                 <div className="flex justify-center items-center h-32">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-100"></div>
                 </div>
-              ) : genesisError ? (
-                <div className="text-red-500 text-center p-4">
-                  {genesisError}
-                </div>
+              ) : error ? (
+                <div className="text-red-500 text-center p-4">{error}</div>
               ) : (
-                genesisData?.data.map((genesis) => (
-                  <GenesisCard
-                    key={genesis.id}
-                    genesis={genesis}
-                    onClick={() => {}}
-                  />
-                ))
+                <div className="space-y-4">
+                  {selectedAgent == "Prototype Agents"
+                    ? prototypeVirtuals.map((virtual) => (
+                        <div key={virtual.id} className="relative">
+                          <VirtualCard
+                            virtual={virtual}
+                            onClick={() => handleCardClick(virtual)}
+                          />
+                        </div>
+                      ))
+                    : virtuals.map((virtual) => (
+                        <div key={virtual.id} className="relative">
+                          <VirtualCard
+                            virtual={virtual}
+                            onClick={() => handleCardClick(virtual)}
+                          />
+                        </div>
+                      ))}
+                </div>
               )}
             </div>
           </div>
         </div>
       </div>
-
-      <div className="w-full md:flex hidden overflow-hidden">
-        <div className="relative  h-full w-full backdrop-blur-sm bg-[#15181B]/80 border border-primary-100 rounded-xl text-white flex flex-col">
-          <div className="relative flex flex-row space-x-4 w-full border-b border-primary-100/20 text-base md:text-lg font-semibold text-white  text-center p-4">
-            <button
-              className={`${
-                selectedAgent == "Sentient Agents" &&
-                "underline underline-offset-8 text-primary-100"
-              }`}
-              onClick={() => setSelectedAgent("Sentient Agents")}
-            >
-              Sentient Agents
-            </button>
-            <button
-              className={`${
-                selectedAgent == "Prototype Agents" &&
-                "underline underline-offset-8 text-primary-100"
-              }`}
-              onClick={() => setSelectedAgent("Prototype Agents")}
-            >
-              Prototype Agents
-            </button>
-          </div>
-          <div className="flex-1 overflow-y-auto p-4">
-            {loading ? (
-              <div className="flex justify-center items-center h-32">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-100"></div>
-              </div>
-            ) : error ? (
-              <div className="text-red-500 text-center p-4">{error}</div>
-            ) : (
-              <div className="space-y-4">
-                {selectedAgent == "Prototype Agents"
-                  ? prototypeVirtuals.map((virtual) => (
-                      <div key={virtual.id} className="relative">
-                        <VirtualCard
-                          virtual={virtual}
-                          onClick={() => handleCardClick(virtual)}
-                        />
-                      </div>
-                    ))
-                  : virtuals.map((virtual) => (
-                      <div key={virtual.id} className="relative">
-                        <VirtualCard
-                          virtual={virtual}
-                          onClick={() => handleCardClick(virtual)}
-                        />
-                      </div>
-                    ))}
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-      <div className="sm:!w-[clamp(40%,32rem,45%)] min-w-[25.75rem] w-full flex justify-center items-center h-full ml-2">
+      <div className="sm:!w-[clamp(38%,30rem,43%)] min-w-[23.75rem] w-full flex justify-center items-center h-full ml-2">
         <div className="bg-[#15181B]/80 backdrop-blur-sm text-white border border-primary-100 rounded-xl relative h-full w-full shadow-md overflow-y-hidden">
           <div className="flex items-center justify-between pt-6 px-8 ">
             <div className="flex gap-4">

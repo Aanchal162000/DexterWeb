@@ -7,11 +7,11 @@ import {
   MenuItems,
 } from "@headlessui/react";
 import Image from "next/image";
-import { HiChevronUpDown } from "react-icons/hi2";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
+
 import { useWalletBalance } from "@/hooks/useWalletBalance";
 import { HiCheck } from "react-icons/hi";
 import { useSwapContext } from "@/context/SwapContext";
+import { TiArrowSortedDown } from "react-icons/ti";
 
 export interface TokenOption {
   name: string;
@@ -86,9 +86,9 @@ const TokenSelector = () => {
             <p className="text-primary-100 font-medium text-[10px]">
               {currentToken.symbol}
             </p>
-            <HiChevronUpDown
+            <TiArrowSortedDown
               size="1.2rem"
-              className="text-primary-100 transition-all duration-300 rotate-0 group-aria-expanded:rotate-180"
+              className="text-white transition-all  duration-300 rotate-0 group-aria-expanded:rotate-180"
             />
           </div>
         </MenuButton>

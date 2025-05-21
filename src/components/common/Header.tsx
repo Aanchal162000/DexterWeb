@@ -18,6 +18,7 @@ import {
 import { HiChevronUpDown } from "react-icons/hi2";
 import { MdContentCopy } from "react-icons/md";
 import { HiOutlineExternalLink, HiOutlineLogout } from "react-icons/hi";
+import { TiArrowSortedDown } from "react-icons/ti";
 import { toast } from "react-toastify";
 
 const Header = () => {
@@ -89,9 +90,9 @@ const Header = () => {
                         {address?.slice(0, 4)}....{address?.slice(-4)}
                       </p>
                     </div>
-                    <HiChevronUpDown
+                    <TiArrowSortedDown
                       size="1.2rem"
-                      className=" text-primary-100 transition-all duration-300 rotate-0 group-aria-expanded:rotate-180!"
+                      className=" text-white transition-all duration-300 rotate-0 group-aria-expanded:rotate-180!"
                     />
                   </MenuButton>
                 </div>

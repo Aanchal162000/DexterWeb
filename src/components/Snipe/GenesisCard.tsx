@@ -53,46 +53,50 @@ const GenesisCard: React.FC<GenesisCardProps> = ({ genesis, onClick }) => {
       const startDate = new Date(genesis.startsAt);
       const endDate = new Date(genesis.endsAt);
 
-            if (now < startDate) {
-                const seconds = differenceInSeconds(startDate, now);
-                const hours = Math.floor(seconds / 3600);
-                const minutes = Math.floor((seconds % 3600) / 60);
-                const days = Math.floor(seconds / 86400);
-                const remainingSeconds = seconds % 60;
-                setTimeLeft(
-                    <>
-                        Starts in{" "}
-                        <span className="text-white">
-                            {String(hours).padStart(2, "0")}h {String(minutes).padStart(2, "0")}m {String(remainingSeconds).padStart(2, "0")}s
-                        </span>
-                    </>
-                );
-                setStatus("upcoming");
-            } else if (now >= startDate && now <= endDate) {
-                const remainingSeconds = differenceInSeconds(endDate, now);
-                if (remainingSeconds <= 0) {
-                    setTimeLeft("Ended");
-                    setStatus("ended");
-                    return;
-                }
-                const hours = Math.floor(remainingSeconds / 3600);
-                const minutes = Math.floor((remainingSeconds % 3600) / 60);
-                const seconds = remainingSeconds % 60;
-                setTimeLeft(
-                    <>
-                        Live -{" "}
-                        <span className="text-white">
-                            {String(hours).padStart(2, "0")}h {String(minutes).padStart(2, "0")}m {String(seconds).padStart(2, "0")}s left
-                        </span>
-                    </>
-                );
-                setStatus("live");
-            } else {
-                const endedTime = formatDistanceToNow(endDate, { addSuffix: true });
-                setTimeLeft(`Ended ${endedTime}`);
-                setStatus("ended");
-            }
-        };
+      if (now < startDate) {
+        const seconds = differenceInSeconds(startDate, now);
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        const days = Math.floor(seconds / 86400);
+        const remainingSeconds = seconds % 60;
+        setTimeLeft(
+          <>
+            Starts in{" "}
+            <span className="text-white">
+              {String(hours).padStart(2, "0")}h{" "}
+              {String(minutes).padStart(2, "0")}m{" "}
+              {String(remainingSeconds).padStart(2, "0")}s
+            </span>
+          </>
+        );
+        setStatus("upcoming");
+      } else if (now >= startDate && now <= endDate) {
+        const remainingSeconds = differenceInSeconds(endDate, now);
+        if (remainingSeconds <= 0) {
+          setTimeLeft("Ended");
+          setStatus("ended");
+          return;
+        }
+        const hours = Math.floor(remainingSeconds / 3600);
+        const minutes = Math.floor((remainingSeconds % 3600) / 60);
+        const seconds = remainingSeconds % 60;
+        setTimeLeft(
+          <>
+            Live -{" "}
+            <span className="text-white">
+              {String(hours).padStart(2, "0")}h{" "}
+              {String(minutes).padStart(2, "0")}m{" "}
+              {String(seconds).padStart(2, "0")}s left
+            </span>
+          </>
+        );
+        setStatus("live");
+      } else {
+        const endedTime = formatDistanceToNow(endDate, { addSuffix: true });
+        setTimeLeft(`Ended ${endedTime}`);
+        setStatus("ended");
+      }
+    };
 
     updateTimer();
     const interval = setInterval(updateTimer, 1000);
@@ -133,7 +137,7 @@ const GenesisCard: React.FC<GenesisCardProps> = ({ genesis, onClick }) => {
   return (
     <>
       <div
-        className=" flex flex-col flex-1 rounded-xl cursor-pointer border border-cyan-500/50 transition-all duration-300 w-full h-[8.2rem] backdrop-blur-sm"
+        className=" flex flex-col flex-1 rounded-xl cursor-pointer border-[0.5px] border-cyan-500/50 transition-all duration-300 w-full h-[8.2rem] "
         onClick={onClick}
       >
         {/* Top Row */}
@@ -159,10 +163,10 @@ const GenesisCard: React.FC<GenesisCardProps> = ({ genesis, onClick }) => {
                 <FaExternalLinkAlt className="w-3 h-3 mb-[1px] ml-2 text-gray-400 cursor-pointer hover:text-cyan-500" />
               </div>
               <div className="flex items-center gap-2">
-                <span className="px-2 py-1 rounded-md text-xs bg-gray-800/50 border border-cyan-400/50 text-gray-300">
+                <span className="px-2 py-1 rounded-md text-xs  border border-cyan-400/50 text-gray-300">
                   Entertainment
                 </span>
-                <div className="flex items-center gap-2 px-2 py-1 rounded-md text-xs border border-cyan-400/50 bg-gray-800/50 text-gray-300">
+                <div className="flex items-center gap-2 px-2 py-1 rounded-md text-xs border border-cyan-400/50  text-gray-300">
                   <span>
                     {genesis.genesisAddress?.slice(0, 4)}...
                     {genesis.genesisAddress?.slice(-4)}
@@ -190,7 +194,7 @@ const GenesisCard: React.FC<GenesisCardProps> = ({ genesis, onClick }) => {
         </div>
         {/* Bottom Row */}
         <div className="flex flex-col gap-2 mt-2">
-          <div className="border-t border-cyan-500/50 flex justify-center items-center p-2">
+          <div className="border-t-[0.5px] border-cyan-500/50 flex justify-center items-center p-2">
             <StatusBadge status={status} timeLeft={timeLeft} />
           </div>
         </div>

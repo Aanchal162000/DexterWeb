@@ -37,10 +37,10 @@ export default function Dropdown({
         {label}
       </p>
       <div
-        className={`px-0 outline-none border-none py-2 text-white bg-transparent w-full flex flex-row items-center justify-between ${
-          isDisabled ? "cursor-not-allowed" : "cursor-pointer"
-        } relative`}
-        onClick={() => !isDisabled && setIsDropdownOpen(!isDropdownOpen)}
+        className={`px-0 outline-none border-none py-2 text-white bg-transparent w-full flex flex-row items-center justify-between 
+         
+         relative  cursor-pointer`}
+        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
       >
         <p className={`m-0 ${value ? "text-white" : "text-white/45"}`}>
           {value ? value : placeholder}

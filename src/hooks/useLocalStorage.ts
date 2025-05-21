@@ -1,4 +1,10 @@
-import { useState, useEffect, Dispatch, SetStateAction, DependencyList } from "react";
+import {
+  useState,
+  useEffect,
+  Dispatch,
+  SetStateAction,
+  DependencyList,
+} from "react";
 import { useDebouncedCallback } from "use-debounce";
 
 export function useLocalStorage<T>(
@@ -7,12 +13,16 @@ export function useLocalStorage<T>(
   callbackOnInit?: CallableFunction,
   dependencies: DependencyList = []
 ): [T | null, Dispatch<SetStateAction<T | null>>] {
-  const debounceCb = useDebouncedCallback(() => callbackOnInit instanceof Function && callbackOnInit(), 600);
+  const debounceCb = useDebouncedCallback(
+    () => callbackOnInit instanceof Function && callbackOnInit(),
+    600
+  );
 
   const [value, setValue] = useState<T | null>(() => {
     try {
       console.log(key);
-      const item = typeof window !== "undefined" && window.localStorage.getItem(key);
+      const item =
+        typeof window !== "undefined" && window.localStorage.getItem(key);
       if (item == "null") return initialValue;
       item && debounceCb();
       return item ? JSON.parse(item) : initialValue;
@@ -24,7 +34,8 @@ export function useLocalStorage<T>(
 
   useEffect(() => {
     console.log("LocalKey ", key);
-    const item = typeof window !== "undefined" && window.localStorage.getItem(key);
+    const item =
+      typeof window !== "undefined" && window.localStorage.getItem(key);
     if (item == "null") return;
     setValue(item ? JSON.parse(item) : initialValue);
     item && debounceCb();
@@ -34,7 +45,8 @@ export function useLocalStorage<T>(
   useEffect(() => {
     try {
       const valueToStore = value instanceof Function ? value() : value;
-      typeof window !== "undefined" && window.localStorage.setItem(key, JSON.stringify(valueToStore));
+      typeof window !== "undefined" &&
+        window.localStorage.setItem(key, JSON.stringify(valueToStore));
     } catch (error) {
       console.error("localStorage err ", error);
     }

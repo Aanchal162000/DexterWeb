@@ -42,7 +42,7 @@ const CreateAgentForm: React.FC<CreateAgentFormProps> = ({ onClose }) => {
     switch (currentStep) {
       case "type":
         return (
-          <div className="space-y-4">
+          <div>
             {/* <div className="space-y-2">
               <h3 className="text-lg font-semibold text-primary-100">Chain</h3>
               <div className="flex gap-2">
@@ -73,7 +73,7 @@ const CreateAgentForm: React.FC<CreateAgentFormProps> = ({ onClose }) => {
               </div>
             </div> */}
 
-            <div className="space-y-4">
+            <div className="space-y-2">
               <h3 className="text-lg font-semibold text-primary-100">
                 Launch Type
               </h3>
@@ -136,8 +136,8 @@ const CreateAgentForm: React.FC<CreateAgentFormProps> = ({ onClose }) => {
 
       case "details":
         return (
-          <div className="space-y-4">
-            <div className="space-y-4">
+          <div className="space-y-2">
+            <div className="space-y-2">
               <h3 className="text-lg font-semibold text-primary-100">
                 Agent Details
               </h3>
@@ -178,13 +178,13 @@ const CreateAgentForm: React.FC<CreateAgentFormProps> = ({ onClose }) => {
 
       case "launch":
         return (
-          <div className="space-y-4">
-            <div className="space-y-4">
+          <div className="space-y-2">
+            <div className="space-y-2">
               <h3 className="text-lg font-semibold text-primary-100">
                 Launch Summary
               </h3>
               <div className="bg-black/60 rounded-lg p-3 space-y-2">
-              <div className="flex flex-wrap justify-between text-base">
+                <div className="flex flex-wrap justify-between text-base">
                   <span className="text-gray-400">Agent Name:</span>
                   <span className="text-white">{formData.name}</span>
                 </div>
@@ -221,8 +221,8 @@ const CreateAgentForm: React.FC<CreateAgentFormProps> = ({ onClose }) => {
 
   return (
     <div className="relative h-[90%] flex flex-col ">
-      <div className="mb-2">
-        <div className="flex justify-between mb-2">
+      <div className="mb-4">
+        <div className="flex justify-between mb-4">
           <span className="text-sm text-primary-100">
             Step{" "}
             {currentStep === "type" ? 1 : currentStep === "details" ? 2 : 3} of
@@ -251,9 +251,9 @@ const CreateAgentForm: React.FC<CreateAgentFormProps> = ({ onClose }) => {
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto">{renderStep()}</div>
+      <div className="flex-1 overflow-y-auto ">{renderStep()}</div>
 
-      <div className="flex justify-between mt-4 pt-4 border-t border-gray-700">
+      <div className="flex justify-between mt-40 pt-4 border-t border-gray-700">
         {currentStep !== "type" && (
           <button
             onClick={() =>

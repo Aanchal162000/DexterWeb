@@ -9,12 +9,13 @@ import {
   differenceInSeconds,
 } from "date-fns";
 import { formatLargeNumber } from "@/utils/tokenCalculations";
-import { FaCopy, FaExternalLinkAlt, FaCrosshairs } from "react-icons/fa";
+import { FaExternalLinkAlt, FaCrosshairs } from "react-icons/fa";
 import { toast } from "react-toastify";
 
 import { useLoginContext } from "@/context/LoginContext";
 import SnipeModal from "@/components/common/SnipeModal";
 import { useSwapContext } from "@/context/SwapContext";
+import { BsCopy } from "react-icons/bs";
 
 interface GenesisCardProps {
   genesis: IGenesis;
@@ -171,7 +172,7 @@ const GenesisCard: React.FC<GenesisCardProps> = ({ genesis, onClick }) => {
                     {genesis.genesisAddress?.slice(0, 4)}...
                     {genesis.genesisAddress?.slice(-4)}
                   </span>
-                  <FaCopy
+                  <BsCopy
                     className="w-3 h-3 cursor-pointer hover:text-cyan-500"
                     onClick={(e) => {
                       e.stopPropagation();

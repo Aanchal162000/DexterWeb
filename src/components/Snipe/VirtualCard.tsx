@@ -11,10 +11,11 @@ import {
   weiToEther,
   formatLargeNumber,
 } from "@/utils/tokenCalculations";
-import { FaCopy, FaExternalLinkAlt } from "react-icons/fa";
+import { FaExternalLinkAlt } from "react-icons/fa";
 import { IoIosLock } from "react-icons/io";
 import { toast } from "react-toastify";
-import { MdElectricBolt } from "react-icons/md";
+import { BsCopy } from "react-icons/bs";
+
 import SmartBuyModal from "../common/SmartBuyModal";
 
 interface VirtualCardProps {
@@ -31,10 +32,9 @@ const VirtualCard: React.FC<VirtualCardProps> = ({ virtual, onClick }) => {
     return formatDistanceToNow(startDate, { addSuffix: true });
   };
 
-  // Calculate token price in USD
   const tokenPrice =
     virtual.virtualTokenValue && virtual.mcapInVirtual
-      ? weiToEther(virtual.virtualTokenValue) * virtual.mcapInVirtual
+      ? virtual.mcapInVirtual / weiToEther(virtual.virtualTokenValue)
       : 0;
 
   const copyToClipboard = (text: string) => {
@@ -121,7 +121,7 @@ const VirtualCard: React.FC<VirtualCardProps> = ({ virtual, onClick }) => {
                       {virtual.contractAddress.slice(0, 4)}...
                       {virtual.contractAddress.slice(-4)}
                     </span>
-                    <FaCopy
+                    <BsCopy
                       className="w-3 h-3 cursor-pointer hover:text-cyan-500"
                       onClick={(e) => {
                         e.stopPropagation();

@@ -32,12 +32,9 @@ import {
 } from "@/constants/config";
 import approvalService from "@/services/contract/approvalService";
 import { useSwapContext } from "@/context/SwapContext";
+import SwapSection from "./SwapSection";
 
 const Snipe = () => {
-  const [selectedVirtual, setSelectedVirtual] = useState<IVirtual | null>(null);
-  const [selectedToVirtual, setSelectedToVirtual] = useState<IVirtual | null>(
-    null
-  );
   const { networkData } = useLoginContext();
   const [isFromCoinOpen, setIsFromCoinOpen] = useState(false);
   const [isToCoinOpen, setIsToCoinOpen] = useState(false);
@@ -45,6 +42,7 @@ const Snipe = () => {
   const [fromAmount, setFromAmount] = useState<string>("");
   const [toAmount, setToAmount] = useState<string>("");
   const [buttonText, setButtonText] = useState<string>("Select Token");
+  const [isConfirmPop, setIsConfirmPop] = useState<boolean>(false);
 
   const [isCreatingAgent, setIsCreatingAgent] = useState(false);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
@@ -82,6 +80,20 @@ const Snipe = () => {
       sell: boolean;
     };
   }>({});
+  const [selectedVirtual, setSelectedVirtual] = useState<IVirtual | null>(
+    virtuals[0]
+  );
+  const [selectedToVirtual, setSelectedToVirtual] = useState<IVirtual | null>(
+    virtuals[1]
+  );
+
+  // Add useEffect to set selected tokens when sentient agents are loaded
+  useEffect(() => {
+    if (virtuals.length >= 2 && !loading) {
+      setSelectedVirtual(virtuals[0]);
+      setSelectedToVirtual(virtuals[1]);
+    }
+  }, [virtuals, loading]);
 
   const handlePercentageSelect = async (
     virtual: IVirtual,
@@ -285,7 +297,9 @@ const Snipe = () => {
   const percentages = [10, 25, 50, 75, 100];
 
   function validationCheck() {
-    if (!selectedVirtual || !selectedToVirtual) {
+    if (loading) {
+      setButtonText("Loading...");
+    } else if (!selectedVirtual || !selectedToVirtual) {
       setButtonText("Select Token");
     } else if (!fromAmount || !toAmount) {
       setButtonText("Enter Amount");
@@ -301,9 +315,9 @@ const Snipe = () => {
     setSelectedToVirtual(tempFrom);
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     validationCheck();
-  }, [selectedVirtual, selectedToVirtual, fromAmount, toAmount]);
+  }, [selectedVirtual, selectedToVirtual, fromAmount, toAmount, loading]);
 
   const handleShowPercentages = (virtual: IVirtual, type: "buy" | "sell") => {
     setIsAnimating(true);
@@ -409,163 +423,119 @@ const Snipe = () => {
       </div>
       <div className="sm:!w-[clamp(38%,30rem,43%)] min-w-[23.75rem] w-full flex justify-center items-center h-full ml-2">
         <div className="bg-[#15181B]/80 backdrop-blur-sm text-white border border-primary-100 rounded-xl relative h-full w-full shadow-md overflow-y-hidden">
-          <div className="flex items-center justify-between pt-6 px-8 ">
-            <div className="flex gap-4">
-              <button
-                onClick={() => setSelectedTab("create")}
-                className={`rounded-lg text-base font-semibold transition-colors ${
-                  selectedTab === "create"
-                    ? "underline underline-offset-[0.625rem] text-primary-100"
-                    : " text-white"
-                }`}
-              >
-                Create
-              </button>
-              <button
-                onClick={() => setSelectedTab("swap")}
-                className={`rounded-lg text-base font-semibold transition-colors ${
-                  selectedTab === "swap"
-                    ? "underline underline-offset-[0.625rem] text-primary-100"
-                    : " text-white"
-                }`}
-              >
-                Swap
-              </button>
-            </div>
+          <div className="gap-x-5 flex flex-row items-center sm:justify-start justify-around border-[#818284] w-full px-8 py-6">
+            <button
+              className={`flex flex-row items-center justify-center font-semibold underline-offset-[0.625rem] text-sm sm:text-base ${
+                selectedTab === "swap"
+                  ? "text-primary-100 underline"
+                  : "text-white/60"
+              }`}
+              onClick={() => setSelectedTab("swap")}
+            >
+              Swap
+            </button>
+            <button
+              className={`flex flex-row items-center justify-center font-semibold underline-offset-[0.625rem] text-sm sm:text-base ${
+                selectedTab === "create"
+                  ? "text-primary-100 underline"
+                  : "text-white/60"
+              }`}
+              onClick={() => setSelectedTab("create")}
+            >
+              Create
+            </button>
+
+            <button
+              className="text-white/60 text-xs ml-auto"
+              onClick={() => {}}
+            >
+              Reset
+            </button>
           </div>
-          <div className="flex-1 overflow-y-auto">
-            {/* Token Selection Modals */}
-            {isFromCoinOpen && (
-              <DialogContainer
-                setClose={() => setIsFromCoinOpen(false)}
+
+          {selectedTab === "swap" && (
+            <SwapSection
+              selectedVirtual={selectedVirtual}
+              selectedToVirtual={selectedToVirtual}
+              fromAmount={fromAmount}
+              toAmount={toAmount}
+              setIsFromCoinOpen={setIsFromCoinOpen}
+              setIsToCoinOpen={setIsToCoinOpen}
+              setFromAmount={setFromAmount}
+              setToAmount={setToAmount}
+              swapFields={swapFields}
+              buttonText={buttonText}
+              setIsConfirmPop={setIsConfirmPop}
+            />
+          )}
+
+          {isFromCoinOpen && (
+            <DialogContainer
+              setClose={() => setIsFromCoinOpen(false)}
+              title="Select Token"
+            >
+              <VirtualTokenSelector
+                setIsCoinOpen={setIsFromCoinOpen}
+                fromOrTo="FromSelection"
+                setSelectedCoin={setSelectedVirtual}
                 title="Send From"
-              >
-                <VirtualTokenSelector
-                  setIsCoinOpen={setIsFromCoinOpen}
-                  fromOrTo="FromSelection"
-                  setSelectedCoin={setSelectedVirtual}
-                  title="Send From"
-                />
-              </DialogContainer>
-            )}
+              />
+            </DialogContainer>
+          )}
 
-            {isToCoinOpen && (
-              <DialogContainer
-                setClose={() => setIsToCoinOpen(false)}
+          {isToCoinOpen && (
+            <DialogContainer
+              setClose={() => setIsToCoinOpen(false)}
+              title="Select Token"
+            >
+              <VirtualTokenSelector
+                setIsCoinOpen={setIsToCoinOpen}
+                fromOrTo="ToSelection"
+                setSelectedCoin={setSelectedToVirtual}
                 title="Receive As"
-              >
-                <VirtualTokenSelector
-                  setIsCoinOpen={setIsToCoinOpen}
-                  fromOrTo="ToSelection"
-                  setSelectedCoin={setSelectedToVirtual}
-                  title="Receive As"
-                />
-              </DialogContainer>
-            )}
+              />
+            </DialogContainer>
+          )}
 
-            {selectedTab === "create" ? (
-              <div className="px-8 py-6">
-                <CreateAgentForm onClose={handleCloseCreateAgent} />
-              </div>
-            ) : (
-              <div className="px-8 py-3">
-                {/* From Section */}
-                <div className="mt-4 border h-[90px] border-primary-100 rounded-lg p-4">
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-sm text-gray-400">From</span>
-                    <span className="text-sm text-gray-400">
-                      Balance: {balanceLoading ? "Loading..." : "0.00"}
-                    </span>
-                  </div>
-                  <div className="w-full flex justify-between items-center">
-                    <button
-                      className="flex flex-row w-full py-1 justify-start items-center cursor-pointer"
-                      onClick={() => setIsFromCoinOpen(true)}
-                    >
-                      {selectedVirtual?.image?.url && (
-                        <ImageNext
-                          src={selectedVirtual.image.url}
-                          className="size-9 rounded-full bg-white overflow-hidden"
-                          alt="virtual-logo"
-                          fullRadius
-                        />
-                      )}
-                      <div
-                        className={`flex flex-col ${
-                          selectedVirtual ? "ml-2" : ""
-                        } mr-1`}
-                      >
-                        <span className="text-base text-nowrap text-white font-bold !leading-tight">
-                          {selectedVirtual?.symbol || "Select Token"}
-                        </span>
-                      </div>
-                      <TiArrowSortedDown className="text-prime-token-200 size-5" />
-                    </button>
-                    <input
-                      className="!outline-none text-white text-lg w-full placeholder:text-base text-right sm:font-bold [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-transparent placeholder:text-prime-zinc-100"
-                      type="text"
-                      placeholder="Enter an amount"
-                      value={fromAmount}
-                      onChange={(e) => setFromAmount(e.target.value)}
-                    />
-                  </div>
+          {isConfirmPop && (
+            <DialogContainer
+              setClose={() => setIsConfirmPop(false)}
+              title="Transaction Confirmation"
+            >
+              <div className="p-4">
+                <div className="text-center mb-4">
+                  <h3 className="text-lg font-medium">Confirm Swap</h3>
+                  <p className="text-sm text-gray-400 mt-1">
+                    You are about to swap {fromAmount} {selectedVirtual?.name}{" "}
+                    for {toAmount} {selectedToVirtual?.name}
+                  </p>
                 </div>
-
-                {/* Swap Button */}
-                <div className="flex justify-center mx-auto translate-y-[-10px] z-10">
+                <div className="flex gap-4">
                   <button
-                    className="bg-primary-100 rounded-full p-2.5 filter hover:brightness-125 transition-all origin-center"
-                    onClick={swapFields}
+                    className="flex-1 py-2 px-4 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors"
+                    onClick={() => setIsConfirmPop(false)}
                   >
-                    <LuArrowUpDown className="text-lg text-black text-prime-text-100 size-5" />
+                    Cancel
+                  </button>
+                  <button
+                    className="flex-1 py-2 px-4 bg-primary-100 text-black rounded-lg hover:brightness-125 transition-all"
+                    onClick={() => {
+                      // Handle swap logic here
+                      setIsConfirmPop(false);
+                    }}
+                  >
+                    Confirm
                   </button>
                 </div>
-
-                {/* To Section */}
-                <div className=" h-[90px]  border border-primary-100 rounded-lg p-4 -translate-y-4">
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-sm text-gray-400">To</span>
-                  </div>
-                  <div className="w-full flex justify-between items-center">
-                    <button
-                      className="flex flex-row w-full py-1 justify-start items-center cursor-pointer"
-                      onClick={() => setIsToCoinOpen(true)}
-                    >
-                      {selectedToVirtual?.image?.url && (
-                        <ImageNext
-                          src={selectedToVirtual.image.url}
-                          className="size-9 rounded-full bg-white overflow-hidden"
-                          alt="virtual-logo"
-                          fullRadius
-                        />
-                      )}
-                      <div
-                        className={`flex flex-col ${
-                          selectedToVirtual ? "ml-2" : ""
-                        } mr-1`}
-                      >
-                        <span className="text-base text-nowrap text-white font-bold !leading-tight">
-                          {selectedToVirtual?.symbol || "Select Token"}
-                        </span>
-                      </div>
-                      <TiArrowSortedDown className="text-prime-token-200 size-5" />
-                    </button>
-                    <span className="text-base sm:font-bold text-white sm:text-lg">
-                      {toAmount}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Trade Button */}
-                <button
-                  className="w-full mt-6 py-3 px-4 bg-primary-100 text-black font-bold rounded-lg hover:bg-primary-100/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                  disabled={buttonText !== "Trade"}
-                >
-                  {buttonText}
-                </button>
               </div>
-            )}
-          </div>
+            </DialogContainer>
+          )}
+
+          {selectedTab === "create" && (
+            <div className="px-8">
+              <CreateAgentForm onClose={handleCloseCreateAgent} />
+            </div>
+          )}
         </div>
       </div>
     </div>

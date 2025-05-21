@@ -57,13 +57,13 @@ const VirtualCard: React.FC<VirtualCardProps> = ({ virtual, onClick }) => {
 
   return (
     <div
-      className="bg-[#1A1E23] h-[100px] rounded-xl cursor-pointer border border-primary-100/60 hover:border-cyan-500/40 transition-all duration-300 w-full backdrop-blur-sm"
+      className=" h-[8.2rem] rounded-xl cursor-pointer border border-primary-100/60 hover:border-cyan-500/40 transition-all duration-300 w-full backdrop-blur-sm"
       onClick={onClick}
     >
       {/* Top Row */}
-      <div className="flex items-center justify-between p-2">
-        <div className="flex gap-2">
-          <div className="relative w-10 h-10 rounded-full overflow-hidden flex-shrink-0 border-2 border-cyan-500/30">
+      <div className="flex items-center justify-between p-4">
+        <div className="flex items-center gap-2">
+          <div className="relative w-14 h-14 rounded-full overflow-hidden flex-shrink-0 border-2 border-cyan-500/30">
             <Image
               src={virtual.image?.url || "/placeholder.png"}
               alt={virtual.name}
@@ -72,14 +72,14 @@ const VirtualCard: React.FC<VirtualCardProps> = ({ virtual, onClick }) => {
               unoptimized
             />
           </div>
-          <div className="flex flex-col space-y-1">
-            <div className="flex flex-row space-x-1 justify-start items-center">
-              <div className="text-base font-bold text-white font-['Lato'] whitespace-nowrap">
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center justify-start gap-2">
+              <h3 className="text-lg font-semibold leading-none text-white font-['Outrun']">
                 {virtual.name}
-              </div>
-              <div className="text-xs text-gray-400 font-semibold whitespace-nowrap text-center">
+              </h3>
+              <span className="text-xs text-gray-400 font-light">
                 ${virtual.symbol}
-              </div>
+              </span>
               <div
                 className={` flex flex-row  justify-center items-center text-xs gap-1 rounded p-[2px] ${
                   diffDays == -1
@@ -92,22 +92,22 @@ const VirtualCard: React.FC<VirtualCardProps> = ({ virtual, onClick }) => {
                 {diffDays != -1 ? (
                   <>
                     <IoIosLock />
-                    <p>{diffDays}</p>
+                    <p>{diffDays}d</p>
                   </>
                 ) : (
                   <p>DYOR</p>
                 )}
               </div>
-              {/* {virtual.socials?.VERIFIED_LINKS?.WEBSITE && (
+              {virtual.socials?.VERIFIED_LINKS?.WEBSITE && (
                 <FaExternalLinkAlt className="w-3 h-3 text-gray-400 cursor-pointer hover:text-cyan-500" />
-              )} */}
+              )}
             </div>
-            <div className="flex flex-row space-x-1 items-start justify-start">
-              <span className="p-1  rounded-lg text-[8px] border border-primary-100  text-gray-100">
+            <div className="flex items-center gap-2">
+              <span className="px-2 py-1 rounded-md text-xs bg-gray-800/50 border border-cyan-400/50 text-gray-300">
                 {virtual.role}
               </span>
               {virtual.contractAddress && (
-                <div className="flex items-center gap-2 p-1  border border-primary-100 rounded-lg text-[8px] text-gray-100">
+                <div className="flex items-center gap-2 px-2 py-1 rounded-md text-xs border border-cyan-400/50 bg-gray-800/50 text-gray-300">
                   <span>
                     {virtual.contractAddress.slice(0, 4)}...
                     {virtual.contractAddress.slice(-4)}
@@ -124,32 +124,27 @@ const VirtualCard: React.FC<VirtualCardProps> = ({ virtual, onClick }) => {
             </div>
           </div>
         </div>
-        <button className="border border-primary-100 rounded-lg p-2 item-center justify-center flex flex-row gap-2 text-black">
-          <div className="flex justify-center item-center">
-            <Image
-              src="/Trade/smartBuy.png"
-              width={8}
-              height={6}
-              alt="smart Buy"
-            />
-          </div>
-          <div className="text-xs text-primary-100 font-bold  whitespace-nowrap">
-            Smart Buy
-          </div>
+        <button className="px-4 py-1 rounded-lg  text-primary-100 border border-primary-100/80 font-semibold hover:bg-cyan-500/20 transition-all duration-300 flex items-center justify-center gap-3">
+          <Image
+            src="/Trade/smartBuy.png"
+            width={10}
+            height={8}
+            alt="smart Buy"
+          />
+
+          <span>Smart Buy</span>
         </button>
       </div>
       {/* Bottom Row */}
-      <div className="flex  flex-row space-x-2  px-2 py-2 items-center justify-center border-t border-primary-100/60 w-full">
-        <div className="text-xs flex flex-row space-x-1">
+      <div className="flex  flex-row   px-14 py-2 items-center justify-between border-t border-primary-100/60 w-full">
+        <div className="text-sm flex flex-row space-x-2">
           <span className="text-gray-400">Price: </span>
-          <span className="text-white text-[10px]">
-            {formatCurrency(tokenPrice)}
-          </span>
+          <span className="text-white ">{formatCurrency(tokenPrice)}</span>
         </div>
-        <div className="text-xs flex flex-row space-x-1">
+        <div className="text-sm flex flex-row space-x-1">
           <span className="text-gray-400">24h: </span>
           <span
-            className={`text-[10px] ${
+            className={` ${
               (virtual.priceChangePercent24h || 0) >= 0
                 ? "text-green-500"
                 : "text-red-500"
@@ -158,15 +153,15 @@ const VirtualCard: React.FC<VirtualCardProps> = ({ virtual, onClick }) => {
             {formatPercentage(virtual.priceChangePercent24h || 0)}
           </span>
         </div>
-        <div className="text-xs flex flex-row space-x-1">
+        <div className="text-sm flex flex-row space-x-1">
           <span className="text-gray-400">Vol: </span>
-          <span className="text-white text-[10px]">
+          <span className="text-white ">
             {formatCurrency(virtual.volume24h || 0)}
           </span>
         </div>
-        <div className="text-xs flex flex-row space-x-1">
+        <div className="text-sm flex flex-row space-x-1">
           <span className="text-gray-400">Holders: </span>
-          <span className="text-white text-[10px]">
+          <span className="text-white ">
             {formatLargeNumber(virtual.holderCount || 0)}
           </span>
         </div>

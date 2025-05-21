@@ -103,7 +103,6 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
         amount: amount,
         provider: networkData?.provider!,
       });
-      const amountConverted = (Number(amount) * 10 ** 18).toString();
 
       toast.info("Creating agent...");
       if (receipt.transactionHash) {
@@ -112,7 +111,10 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
           name,
           walletAddress,
           token: selectedVitualtoken.symbol === "ETH" ? "eth" : "virtual",
-          amount: (Number(amount) * 10 ** 18).toString(),
+          amount: (
+            (Number(amount) - 0.003 * Number(amount)) *
+            10 ** 18
+          ).toString(),
           launchTime: new Date(),
         });
 

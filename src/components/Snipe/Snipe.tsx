@@ -17,7 +17,6 @@ import { useGenesis } from "@/hooks/useGenesis";
 import GenesisCard from "./GenesisCard";
 import { usePrototypeVirtuals } from "@/hooks/usePrototypeVirtuals";
 import { useLoginContext } from "@/context/LoginContext";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useWalletBalance } from "@/hooks/useWalletBalance";
 import { toast } from "react-toastify";
 import VirtualTokenSelector from "./VirtualTokenSelector";
@@ -228,7 +227,7 @@ const Snipe = () => {
         provider: networkData?.provider!,
         selectedToken: {
           logo: "",
-          symbol: virtual.symbol,
+          symbol: `GET${selectedVitualtoken.symbol}`,
           name: virtual.name,
           balance: virtual.userBalance?.toString()!,
         },
@@ -318,10 +317,10 @@ const Snipe = () => {
   };
 
   return (
-    <div className="w-full h-full overflow-y-auto lg:overflow-y-hidden lg:h-full flex-1 flex flex-row lg:px-14 sm:px-7 px-4 py-3 gap-4 justify-center">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-1 md:gap-3 h-full">
+    <div className="w-full h-full overflow-y-auto lg:overflow-y-hidden lg:h-full flex-1 flex flex-row lg:px-14 sm:px-7 px-4 py-3 gap-4 justify-center`">
+      <div className="relative h-full w-full flex flex-col gap-2 flex-wrap ">
         {/* Genesis Launches Box */}
-        <div className="bg-[#15181B]/80 backdrop-blur-sm text-white border border-primary-100 rounded-xl relative h-full w-full shadow-md overflow-hidden flex flex-col">
+        <div className="w-[24%] bg-[#15181B]/80 backdrop-blur-sm text-white border border-primary-100 rounded-xl relative h-full  shadow-md overflow-hidden flex flex-col">
           <h2 className="text-lg md:text-xl font-semibold text-primary-100 text-center p-4 border-b border-primary-100/20">
             Genesis Launches
           </h2>
@@ -351,7 +350,7 @@ const Snipe = () => {
         </div>
 
         {/* Quick Buy Box */}
-        <div className="bg-[#15181B]/80 backdrop-blur-sm text-white border border-primary-100 rounded-xl relative h-full w-full shadow-md overflow-hidden flex flex-col">
+        <div className="w-[24%] bg-[#15181B]/80 backdrop-blur-sm text-white border border-primary-100 rounded-xl relative h-full  shadow-md overflow-hidden flex flex-col">
           <h2 className="text-lg md:text-xl font-semibold text-primary-100 text-center p-4 border-b border-primary-100/20">
             Sentient Agents
           </h2>
@@ -370,7 +369,7 @@ const Snipe = () => {
                       virtual={virtual}
                       onClick={() => handleCardClick(virtual)}
                     />
-                    <div className="mt-2 px-2 space-y-2">
+                    {/* <div className="mt-2 px-2 space-y-2">
                       <div className="flex gap-2 relative h-[40px]">
                         <div
                           className={`flex gap-2 w-full transition-all duration-300 ease-in-out ${
@@ -473,7 +472,7 @@ const Snipe = () => {
                           </div>
                         )}
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                 ))}
               </div>
@@ -482,7 +481,7 @@ const Snipe = () => {
         </div>
 
         {/* Prototype Agents Box */}
-        <div className="bg-[#15181B]/80 backdrop-blur-sm text-white border border-primary-100 rounded-xl relative h-full w-full shadow-md overflow-hidden flex flex-col">
+        <div className="w-[24%] bg-[#15181B]/80 backdrop-blur-sm text-white border border-primary-100 rounded-xl relative h-full  shadow-md overflow-hidden flex flex-col">
           <h2 className="text-lg md:text-xl font-semibold text-primary-100 text-center p-4 border-b border-primary-100/20">
             Prototype Agents
           </h2>
@@ -503,7 +502,7 @@ const Snipe = () => {
                       virtual={virtual}
                       onClick={() => handleCardClick(virtual)}
                     />
-                    <div className="mt-2 px-2 space-y-2">
+                    {/* <div className="mt-2 px-2 space-y-2">
                       <div className="flex gap-2 relative h-[40px]">
                         <div
                           className={`flex gap-2 w-full transition-all duration-300 ease-in-out ${
@@ -606,7 +605,7 @@ const Snipe = () => {
                           </div>
                         )}
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                 ))}
               </div>
@@ -616,7 +615,7 @@ const Snipe = () => {
 
         {/* Create/Swap Box - Only show in desktop */}
         {!isMobile && (
-          <div className="bg-[#15181B]/80 backdrop-blur-sm text-white border border-primary-100 rounded-xl relative h-full w-full shadow-md overflow-hidden flex flex-col">
+          <div className="w-[26%] ml-2 bg-[#15181B]/80 backdrop-blur-sm text-white border border-primary-100 rounded-xl relative h-full  shadow-md overflow-hidden flex flex-col">
             <div className="flex items-center justify-between pt-4 px-8 ">
               <div className="flex gap-3">
                 <button

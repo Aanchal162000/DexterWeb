@@ -276,6 +276,14 @@ export interface IVirtual {
   subscribers?: number;
   contractAddress?: string;
   sentientContractAddress?: string;
+  nextLaunchstartsAt:
+    | [
+        {
+          startsAt: string;
+        }
+      ]
+    | [];
+
   socials?: {
     VERIFIED_LINKS?: {
       TWITTER?: string;

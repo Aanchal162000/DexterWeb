@@ -20,6 +20,7 @@ interface SnipeModalProps {
   genesisId: string;
   name: string;
   walletAddress: string;
+  endsAt: string;
 }
 
 interface TokenOption {
@@ -35,6 +36,7 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
   genesisId,
   name,
   walletAddress,
+  endsAt,
 }) => {
   const { selectedVitualtoken } = useSwapContext();
   const { balances } = useWalletBalance();
@@ -115,7 +117,7 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
             (Number(amount) - 0.003 * Number(amount)) *
             10 ** 18
           ).toString(),
-          launchTime: new Date(),
+          launchTime: new Date(endsAt),
         });
 
         if (!response.success) {

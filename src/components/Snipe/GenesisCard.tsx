@@ -30,7 +30,7 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({ status, timeLeft }) => {
             case "live":
                 return "text-red-500";
             case "ended":
-                return " text-gray-500";
+                return "text-gray-500";
         }
     };
 
@@ -66,7 +66,7 @@ const GenesisCard: React.FC<GenesisCardProps> = ({ genesis, onClick }) => {
                     <>
                         Starts in{" "}
                         <span className="text-white">
-                            {String(days).padStart(2, "0")}d {String(hours).padStart(2, "0")}h {String(minutes).padStart(2, "0")}m {String(remainingSeconds).padStart(2, "0")}s
+                            {String(hours).padStart(2, "0")}h {String(minutes).padStart(2, "0")}m {String(remainingSeconds).padStart(2, "0")}s
                         </span>
                     </>
                 );
@@ -85,7 +85,7 @@ const GenesisCard: React.FC<GenesisCardProps> = ({ genesis, onClick }) => {
                     <>
                         Live -{" "}
                         <span className="text-white">
-                            {String(hours).padStart(2, "0")}:{String(minutes).padStart(2, "0")}:{String(seconds).padStart(2, "0")} left
+                            {String(hours).padStart(2, "0")}h {String(minutes).padStart(2, "0")}m {String(seconds).padStart(2, "0")}s left
                         </span>
                     </>
                 );

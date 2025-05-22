@@ -9,11 +9,11 @@ const supportList = [
     para: "Reach us at ",
     link: "partnerships@zkcross.network",
   },
-  {
-    label: "Human Resource Queries",
-    para: "Reach us at ",
-    link: "hr@zkcross.network",
-  },
+  // {
+  //   label: "Human Resource Queries",
+  //   para: "Reach us at ",
+  //   link: "hr@zkcross.network",
+  // },
 ];
 
 const SupportContacts = () => {

@@ -10,6 +10,9 @@ import SwapProvider from "@/context/SwapContext";
 export const metadata: Metadata = {
   title: "Dexter",
   description: "Dexter",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({

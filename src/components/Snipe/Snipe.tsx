@@ -332,15 +332,13 @@ const Snipe = () => {
   };
 
   return (
-    <div
-      className={`w-full h-full overflow-y-auto lg:overflow-y-hidden lg:h-full flex-1 flex flex-row lg:px-14 sm:px-7 px-4 py-3 gap-3 justify-center`}
-    >
-      <div className={`w-full md:flex hidden overflow-hidden gap-3`}>
-        <div className="sm:!w-[clamp(42%,34rem,47%)] min-w-[29.75rem] md:flex hidden  overflow-hidden">
-          <div className="relative h-full w-full backdrop-blur-sm bg-[#15181B]/80 border border-primary-100 rounded-xl text-white flex flex-col ">
-            {/* Genesis Launches Box */}
-
-            <h2 className="text-lg md:text-xl font-semibold text-primary-100 text-center p-4 border-b border-primary-100/20">
+    <div className="w-full h-full overflow-y-auto lg:overflow-y-hidden lg:h-full flex-1 flex flex-col lg:flex-row lg:px-14 sm:px-7 px-4 py-3 gap-3 justify-center">
+      {/* Main content area - now flex-col on mobile, flex-row on larger screens */}
+      <div className="w-full flex flex-col lg:flex-row gap-3">
+        {/* Genesis Launches Box - full width on mobile, specific width on larger screens */}
+        <div className="w-full lg:!w-[clamp(58%,34rem,47%)] lg:min-w-[29.75rem] lg:flex hidden overflow-hidden">
+          <div className="relative h-full w-full backdrop-blur-sm bg-[#15181B]/80 border border-primary-100 rounded-xl text-white flex flex-col">
+            <h2 className="text-lg md:text-xl font-semibold text-primary-100 text-center p-4">
               Genesis Launches
             </h2>
             <div className="flex-1 overflow-y-auto overflow-x-hidden p-4">
@@ -367,9 +365,10 @@ const Snipe = () => {
           </div>
         </div>
 
-        <div className="w-full md:flex hidden overflow-hidden">
-          <div className="relative  h-full w-full backdrop-blur-sm bg-[#15181B]/80 border border-primary-100 rounded-xl text-white flex flex-col">
-            <div className="relative flex flex-row space-x-4 w-full border-b border-primary-100/20 text-base md:text-lg font-semibold text-white  text-center p-4">
+        {/* Agents List - full width on mobile, specific width on larger screens */}
+        <div className="w-full lg:flex hidden overflow-hidden">
+          <div className="relative h-full w-full backdrop-blur-sm bg-[#15181B]/80 border border-primary-100 rounded-xl text-white flex flex-col">
+            <div className="relative flex flex-row space-x-4 w-full text-base md:text-lg font-semibold text-white text-center p-4">
               <button
                 className={`${
                   selectedAgent == "Sentient Agents" &&
@@ -421,9 +420,11 @@ const Snipe = () => {
           </div>
         </div>
       </div>
-      <div className="sm:!w-[clamp(38%,30rem,43%)] min-w-[23.75rem] w-full flex justify-center items-center h-full ml-2">
+
+      {/* Swap/Create Section - full width on mobile, specific width on larger screens */}
+      <div className="w-full lg:!w-[clamp(38%,30rem,43%)] lg:min-w-[23.75rem] flex justify-center items-center h-full lg:ml-2">
         <div className="bg-[#15181B]/80 backdrop-blur-sm text-white border border-primary-100 rounded-xl relative h-full w-full shadow-md overflow-y-hidden">
-          <div className="gap-x-5 flex flex-row items-center sm:justify-start justify-around border-[#818284] w-full px-8 py-6">
+          <div className="gap-x-5 flex flex-row items-center justify-around lg:justify-start border-[#818284] w-full px-4 lg:px-8 py-4 lg:py-6">
             <button
               className={`flex flex-row items-center justify-center font-semibold underline-offset-[0.625rem] text-sm sm:text-base ${
                 selectedTab === "swap"
@@ -520,7 +521,6 @@ const Snipe = () => {
                   <button
                     className="flex-1 py-2 px-4 bg-primary-100 text-black rounded-lg hover:brightness-125 transition-all"
                     onClick={() => {
-                      // Handle swap logic here
                       setIsConfirmPop(false);
                     }}
                   >
@@ -532,7 +532,7 @@ const Snipe = () => {
           )}
 
           {selectedTab === "create" && (
-            <div className="px-8">
+            <div className="px-4 lg:px-8">
               <CreateAgentForm onClose={handleCloseCreateAgent} />
             </div>
           )}

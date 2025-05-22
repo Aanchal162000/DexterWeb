@@ -88,16 +88,27 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
   const handleSnipe = async () => {
     if (!selectedVitualtoken || isLoading || isProcessing) return;
 
+    let approveToastId: string | number | null = null;
+    let processToastId: string | number | null = null;
+
     try {
       setIsLoading(true);
       setIsProcessing(true);
-      toast.info("Starting snipe process...", { autoClose: false });
+      processToastId = toast.info("Starting snipe process...", {
+        autoClose: false,
+        closeOnClick: false,
+        closeButton: false,
+      });
 
       const isEth = selectedVitualtoken.symbol === "ETH" ? true : false;
 
       if (!isEth) {
         try {
-          toast.info("Checking token allowance...");
+          approveToastId = toast.info("Checking token allowance...", {
+            autoClose: false,
+            closeOnClick: false,
+            closeButton: false,
+          });
           const allowance = await approvalService.checkAllowance({
             tokenAddress: VIRTUALS_TOKEN_ADDRESS,
             provider: networkData?.provider!,
@@ -106,16 +117,25 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
 
           // If allowance is less than amount, approve first
           if (Number(allowance) < Number(amount)) {
-            toast.info("Approving token spend...");
+            if (approveToastId) toast.dismiss(approveToastId);
+            approveToastId = toast.info("Approving token spend...", {
+              autoClose: false,
+              closeOnClick: false,
+              closeButton: false,
+            });
             await approvalService.approveVirtualToken(
               amount.toString(),
               networkData?.provider!,
               VIRTUALS_TOKEN_ADDRESS,
               SnipeContract
             );
+            if (approveToastId) toast.dismiss(approveToastId);
             toast.success("Token approved successfully!");
+          } else {
+            if (approveToastId) toast.dismiss(approveToastId);
           }
         } catch (error: any) {
+          if (approveToastId) toast.dismiss(approveToastId);
           toast.error(
             "Failed to approve token: " + (error.message || "Unknown error")
           );
@@ -123,14 +143,24 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
         }
       }
 
-      toast.info("Processing deposit...");
+      if (processToastId) toast.dismiss(processToastId);
+      processToastId = toast.info("Processing deposit...", {
+        autoClose: false,
+        closeOnClick: false,
+        closeButton: false,
+      });
       const receipt = await agentService.deposit({
         tokenAddress: isEth ? WRAPPED_ETH_ADDRESS : VIRTUALS_TOKEN_ADDRESS,
         amount: amount,
         provider: networkData?.provider!,
       });
 
-      toast.info("Creating agent...");
+      if (processToastId) toast.dismiss(processToastId);
+      processToastId = toast.info("Creating agent...", {
+        autoClose: false,
+        closeOnClick: false,
+        closeButton: false,
+      });
       if (receipt.transactionHash) {
         const response = await agentService.createAgent({
           genesisId,
@@ -147,13 +177,16 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
         if (!response.success) {
           throw new Error(response.message);
         }
+        if (processToastId) toast.dismiss(processToastId);
         toast.success("Snipe successful! 🎉");
+        onClose();
       } else {
+        if (processToastId) toast.dismiss(processToastId);
         toast.error("Snipe Failed!");
       }
-
-      onClose();
     } catch (error) {
+      if (approveToastId) toast.dismiss(approveToastId);
+      if (processToastId) toast.dismiss(processToastId);
       console.error("Error in snipe:", error);
       toast.error(error instanceof Error ? error.message : "Failed to snipe");
     } finally {

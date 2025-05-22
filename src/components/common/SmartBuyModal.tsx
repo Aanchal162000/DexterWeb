@@ -77,16 +77,27 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
   const handleSmartBuy = async () => {
     if (!selectedVitualtoken || isLoading || isProcessing) return;
 
+    let approveToastId: string | number | null = null;
+    let processToastId: string | number | null = null;
+
     try {
       setIsLoading(true);
       setIsProcessing(true);
-      toast.info("Starting smart buy process...", { autoClose: false });
+      processToastId = toast.info("Starting smart buy process...", {
+        autoClose: false,
+        closeOnClick: false,
+        closeButton: false,
+      });
 
       const isEth = selectedVitualtoken.symbol === "ETH" ? true : false;
 
       if (!isEth) {
         try {
-          toast.info("Checking token allowance...");
+          approveToastId = toast.info("Checking token allowance...", {
+            autoClose: false,
+            closeOnClick: false,
+            closeButton: false,
+          });
           const allowance = await approvalService.checkAllowance({
             tokenAddress: VIRTUALS_TOKEN_ADDRESS,
             provider: networkData?.provider!,
@@ -95,16 +106,25 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
 
           // If allowance is less than amount, approve first
           if (Number(allowance) < Number(amount)) {
-            toast.info("Approving token spend...");
+            if (approveToastId) toast.dismiss(approveToastId);
+            approveToastId = toast.info("Approving token spend...", {
+              autoClose: false,
+              closeOnClick: false,
+              closeButton: false,
+            });
             await approvalService.approveVirtualToken(
               amount.toString(),
               networkData?.provider!,
               VIRTUALS_TOKEN_ADDRESS,
               BuyContract
             );
+            if (approveToastId) toast.dismiss(approveToastId);
             toast.success("Token approved successfully!");
+          } else {
+            if (approveToastId) toast.dismiss(approveToastId);
           }
         } catch (error: any) {
+          if (approveToastId) toast.dismiss(approveToastId);
           toast.error(
             "Failed to approve token: " + (error.message || "Unknown error")
           );
@@ -112,7 +132,12 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
         }
       }
 
-      toast.info("Processing buy transaction...");
+      if (processToastId) toast.dismiss(processToastId);
+      processToastId = toast.info("Processing buy transaction...", {
+        autoClose: false,
+        closeOnClick: false,
+        closeButton: false,
+      });
       const receipt = await buyService.buyToken({
         amountIn: amount,
         amountOutMin: "0", // Set minimum amount or calculate slippage
@@ -127,13 +152,16 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
       });
 
       if (receipt.transactionHash) {
+        if (processToastId) toast.dismiss(processToastId);
         toast.success("Smart Buy successful! 🎉");
+        onClose();
       } else {
+        if (processToastId) toast.dismiss(processToastId);
         toast.error("Smart Buy Failed!");
       }
-
-      onClose();
     } catch (error) {
+      if (approveToastId) toast.dismiss(approveToastId);
+      if (processToastId) toast.dismiss(processToastId);
       console.error("Error in smart buy:", error);
       toast.error(
         error instanceof Error ? error.message : "Failed to smart buy"

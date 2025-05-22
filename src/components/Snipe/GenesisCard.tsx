@@ -136,7 +136,7 @@ const GenesisCard: React.FC<GenesisCardProps> = ({ genesis, onClick }) => {
   };
 
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex flex-col w-full font-grotesk">
       <div
         className="flex flex-col flex-1 rounded-xl cursor-pointer border-[0.5px] border-cyan-500/50  transition-all duration-300 w-full h-[8.2rem]"
         onClick={onClick}

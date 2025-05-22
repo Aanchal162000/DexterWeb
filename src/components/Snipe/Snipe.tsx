@@ -335,207 +335,213 @@ const Snipe = () => {
     <div className="w-full h-full overflow-y-auto lg:overflow-y-hidden lg:h-full flex-1 flex flex-col lg:flex-row lg:px-14 sm:px-7 px-4 py-3 gap-3 justify-center">
       {/* Main content area - now flex-col on mobile, flex-row on larger screens */}
       <div className="w-full flex flex-col lg:flex-row gap-3">
-        {/* Genesis Launches Box - full width on mobile, specific width on larger screens */}
-        <div className="w-full lg:!w-[clamp(58%,34rem,47%)] lg:min-w-[29.75rem] lg:flex hidden overflow-hidden">
-          <div className="relative h-full w-full backdrop-blur-sm bg-[#15181B]/80 border border-primary-100 rounded-xl text-white flex flex-col">
-            <h2 className="text-lg md:text-xl font-semibold text-primary-100 text-center p-4">
-              Genesis Launches
-            </h2>
-            <div className="flex-1 overflow-y-auto overflow-x-hidden p-4">
-              <div className="space-y-4 max-w-full">
-                {genesisLoading ? (
-                  <div className="flex justify-center items-center h-32">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-100"></div>
-                  </div>
-                ) : genesisError ? (
-                  <div className="text-red-500 text-center p-4">
-                    {genesisError}
-                  </div>
-                ) : (
-                  genesisData?.data.map((genesis) => (
-                    <GenesisCard
-                      key={genesis.id}
-                      genesis={genesis}
-                      onClick={() => {}}
-                    />
-                  ))
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Agents List - full width on mobile, specific width on larger screens */}
-        <div className="w-full lg:flex hidden overflow-hidden">
-          <div className="relative h-full w-full backdrop-blur-sm bg-[#15181B]/80 border border-primary-100 rounded-xl text-white flex flex-col">
-            <div className="relative flex flex-row space-x-4 w-full text-base md:text-lg font-semibold text-white text-center p-4">
-              <button
-                className={`${
-                  selectedAgent == "Sentient Agents" &&
-                  "underline underline-offset-8 text-primary-100"
-                }`}
-                onClick={() => setSelectedAgent("Sentient Agents")}
-              >
-                Sentient Agents
-              </button>
-              <button
-                className={`${
-                  selectedAgent == "Prototype Agents" &&
-                  "underline underline-offset-8 text-primary-100"
-                }`}
-                onClick={() => setSelectedAgent("Prototype Agents")}
-              >
-                Prototype Agents
-              </button>
-            </div>
-            <div className="flex-1 overflow-y-auto p-4">
-              {loading ? (
-                <div className="flex justify-center items-center h-32">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-100"></div>
-                </div>
-              ) : error ? (
-                <div className="text-red-500 text-center p-4">{error}</div>
-              ) : (
+        {/* Left section containing all three boxes */}
+        <div className="w-full grid grid-cols-3 gap-3">
+          {/* Genesis Launches Box */}
+          <div className="h-[calc(100vh-10.5rem)]">
+            <div className="h-full w-full backdrop-blur-sm bg-[#15181B]/80 border border-primary-100 rounded-xl text-white flex flex-col">
+              <h2 className="text-lg md:text-xl font-semibold text-primary-100 text-center p-4">
+                Genesis Launches
+              </h2>
+              <div className="flex-1 overflow-y-auto overflow-x-hidden p-4">
                 <div className="space-y-4">
-                  {selectedAgent == "Prototype Agents"
-                    ? prototypeVirtuals.map((virtual) => (
-                        <div key={virtual.id} className="relative">
-                          <VirtualCard
-                            virtual={virtual}
-                            onClick={() => handleCardClick(virtual)}
-                          />
-                        </div>
-                      ))
-                    : virtuals.map((virtual) => (
-                        <div key={virtual.id} className="relative">
-                          <VirtualCard
-                            virtual={virtual}
-                            onClick={() => handleCardClick(virtual)}
-                          />
-                        </div>
-                      ))}
+                  {genesisLoading ? (
+                    <div className="flex justify-center items-center h-32">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-100"></div>
+                    </div>
+                  ) : genesisError ? (
+                    <div className="text-red-500 text-center p-4">
+                      {genesisError}
+                    </div>
+                  ) : (
+                    genesisData?.data.map((genesis) => (
+                      <GenesisCard
+                        key={genesis.id}
+                        genesis={genesis}
+                        onClick={() => {}}
+                      />
+                    ))
+                  )}
                 </div>
-              )}
+              </div>
+            </div>
+          </div>
+          {/* Sentient Agents Box */}
+          <div className="h-[calc(100vh-10.5rem)]">
+            <div className="h-full w-full backdrop-blur-sm bg-[#15181B]/80 border border-primary-100 rounded-xl text-white flex flex-col">
+              <h2 className="text-lg md:text-xl font-semibold text-primary-100 text-center p-4">
+                Sentient Agents
+              </h2>
+              <div className="flex-1 overflow-y-auto overflow-x-hidden p-4">
+                <div className="space-y-4">
+                  {genesisLoading ? (
+                    <div className="flex justify-center items-center h-32">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-100"></div>
+                    </div>
+                  ) : genesisError ? (
+                    <div className="text-red-500 text-center p-4">
+                      {genesisError}
+                    </div>
+                  ) : (
+                    virtuals.map((virtual) => (
+                      <VirtualCard
+                        key={virtual.id}
+                        virtual={virtual}
+                        onClick={() => handleCardClick(virtual)}
+                      />
+                    ))
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* Prototype Agents Box */}
+          <div className="h-[calc(100vh-10.5rem)]">
+            <div className="h-full w-full backdrop-blur-sm bg-[#15181B]/80 border border-primary-100 rounded-xl text-white flex flex-col">
+              <h2 className="text-lg md:text-xl font-semibold text-primary-100 text-center p-4">
+                Prototype Agents
+              </h2>
+              <div className="flex-1 overflow-y-auto overflow-x-hidden p-4">
+                <div className="space-y-4">
+                  {genesisLoading ? (
+                    <div className="flex justify-center items-center h-32">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-100"></div>
+                    </div>
+                  ) : genesisError ? (
+                    <div className="text-red-500 text-center p-4">
+                      {genesisError}
+                    </div>
+                  ) : (
+                    prototypeVirtuals.map((virtual) => (
+                      <VirtualCard
+                        key={virtual.id}
+                        virtual={virtual}
+                        onClick={() => handleCardClick(virtual)}
+                      />
+                    ))
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Swap/Create Section - full width on mobile, specific width on larger screens */}
-      <div className="w-full lg:!w-[clamp(38%,30rem,43%)] lg:min-w-[23.75rem] flex justify-center items-center h-full lg:ml-2">
-        <div className="bg-[#15181B]/80 backdrop-blur-sm text-white border border-primary-100 rounded-xl relative h-full w-full shadow-md overflow-y-hidden">
-          <div className="gap-x-5 flex flex-row items-center justify-around lg:justify-start border-[#818284] w-full px-4 lg:px-8 py-4 lg:py-6">
-            <button
-              className={`flex flex-row items-center justify-center font-semibold underline-offset-[0.625rem] text-sm sm:text-base ${
-                selectedTab === "swap"
-                  ? "text-primary-100 underline"
-                  : "text-white/60"
-              }`}
-              onClick={() => setSelectedTab("swap")}
-            >
-              Swap
-            </button>
-            <button
-              className={`flex flex-row items-center justify-center font-semibold underline-offset-[0.625rem] text-sm sm:text-base ${
-                selectedTab === "create"
-                  ? "text-primary-100 underline"
-                  : "text-white/60"
-              }`}
-              onClick={() => setSelectedTab("create")}
-            >
-              Create
-            </button>
+        {/* Swap/Create Section */}
+        <div className="w-full sm:!w-[clamp(24%,26.8rem,39%)] min-w-[23.75rem] flex-shrink-0 flex justify-center items-center h-full lg:ml-2">
+          <div className="bg-[#15181B]/80 backdrop-blur-sm text-white border border-primary-100 rounded-xl relative h-full w-full shadow-md overflow-y-hidden">
+            <div className="gap-x-5 flex flex-row items-center justify-around lg:justify-start border-[#818284] w-full px-4 lg:px-8 py-4 lg:py-6">
+              <button
+                className={`flex flex-row items-center justify-center font-semibold underline-offset-[0.625rem] text-sm sm:text-base ${
+                  selectedTab === "swap"
+                    ? "text-primary-100 underline"
+                    : "text-white/60"
+                }`}
+                onClick={() => setSelectedTab("swap")}
+              >
+                Swap
+              </button>
+              <button
+                className={`flex flex-row items-center justify-center font-semibold underline-offset-[0.625rem] text-sm sm:text-base ${
+                  selectedTab === "create"
+                    ? "text-primary-100 underline"
+                    : "text-white/60"
+                }`}
+                onClick={() => setSelectedTab("create")}
+              >
+                Create
+              </button>
 
-            <button
-              className="text-white/60 text-xs ml-auto"
-              onClick={() => {}}
-            >
-              Reset
-            </button>
-          </div>
-
-          {selectedTab === "swap" && (
-            <SwapSection
-              selectedVirtual={selectedVirtual}
-              selectedToVirtual={selectedToVirtual}
-              fromAmount={fromAmount}
-              toAmount={toAmount}
-              setIsFromCoinOpen={setIsFromCoinOpen}
-              setIsToCoinOpen={setIsToCoinOpen}
-              setFromAmount={setFromAmount}
-              setToAmount={setToAmount}
-              swapFields={swapFields}
-              buttonText={buttonText}
-              setIsConfirmPop={setIsConfirmPop}
-            />
-          )}
-
-          {isFromCoinOpen && (
-            <DialogContainer
-              setClose={() => setIsFromCoinOpen(false)}
-              title="Select Token"
-            >
-              <VirtualTokenSelector
-                setIsCoinOpen={setIsFromCoinOpen}
-                fromOrTo="FromSelection"
-                setSelectedCoin={setSelectedVirtual}
-                title="Send From"
-              />
-            </DialogContainer>
-          )}
-
-          {isToCoinOpen && (
-            <DialogContainer
-              setClose={() => setIsToCoinOpen(false)}
-              title="Select Token"
-            >
-              <VirtualTokenSelector
-                setIsCoinOpen={setIsToCoinOpen}
-                fromOrTo="ToSelection"
-                setSelectedCoin={setSelectedToVirtual}
-                title="Receive As"
-              />
-            </DialogContainer>
-          )}
-
-          {isConfirmPop && (
-            <DialogContainer
-              setClose={() => setIsConfirmPop(false)}
-              title="Transaction Confirmation"
-            >
-              <div className="p-4">
-                <div className="text-center mb-4">
-                  <h3 className="text-lg font-medium">Confirm Swap</h3>
-                  <p className="text-sm text-gray-400 mt-1">
-                    You are about to swap {fromAmount} {selectedVirtual?.name}{" "}
-                    for {toAmount} {selectedToVirtual?.name}
-                  </p>
-                </div>
-                <div className="flex gap-4">
-                  <button
-                    className="flex-1 py-2 px-4 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors"
-                    onClick={() => setIsConfirmPop(false)}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    className="flex-1 py-2 px-4 bg-primary-100 text-black rounded-lg hover:brightness-125 transition-all"
-                    onClick={() => {
-                      setIsConfirmPop(false);
-                    }}
-                  >
-                    Confirm
-                  </button>
-                </div>
-              </div>
-            </DialogContainer>
-          )}
-
-          {selectedTab === "create" && (
-            <div className="px-4 lg:px-8">
-              <CreateAgentForm onClose={handleCloseCreateAgent} />
+              <button
+                className="text-white/60 text-xs ml-auto"
+                onClick={() => {}}
+              >
+                Reset
+              </button>
             </div>
-          )}
+
+            {selectedTab === "swap" && (
+              <SwapSection
+                selectedVirtual={selectedVirtual}
+                selectedToVirtual={selectedToVirtual}
+                fromAmount={fromAmount}
+                toAmount={toAmount}
+                setIsFromCoinOpen={setIsFromCoinOpen}
+                setIsToCoinOpen={setIsToCoinOpen}
+                setFromAmount={setFromAmount}
+                setToAmount={setToAmount}
+                swapFields={swapFields}
+                buttonText={buttonText}
+                setIsConfirmPop={setIsConfirmPop}
+              />
+            )}
+
+            {isFromCoinOpen && (
+              <DialogContainer
+                setClose={() => setIsFromCoinOpen(false)}
+                title="Select Token"
+              >
+                <VirtualTokenSelector
+                  setIsCoinOpen={setIsFromCoinOpen}
+                  fromOrTo="FromSelection"
+                  setSelectedCoin={setSelectedVirtual}
+                  title="Send From"
+                />
+              </DialogContainer>
+            )}
+
+            {isToCoinOpen && (
+              <DialogContainer
+                setClose={() => setIsToCoinOpen(false)}
+                title="Select Token"
+              >
+                <VirtualTokenSelector
+                  setIsCoinOpen={setIsToCoinOpen}
+                  fromOrTo="ToSelection"
+                  setSelectedCoin={setSelectedToVirtual}
+                  title="Receive As"
+                />
+              </DialogContainer>
+            )}
+
+            {isConfirmPop && (
+              <DialogContainer
+                setClose={() => setIsConfirmPop(false)}
+                title="Transaction Confirmation"
+              >
+                <div className="p-4">
+                  <div className="text-center mb-4">
+                    <h3 className="text-lg font-medium">Confirm Swap</h3>
+                    <p className="text-sm text-gray-400 mt-1">
+                      You are about to swap {fromAmount} {selectedVirtual?.name}{" "}
+                      for {toAmount} {selectedToVirtual?.name}
+                    </p>
+                  </div>
+                  <div className="flex gap-4">
+                    <button
+                      className="flex-1 py-2 px-4 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors"
+                      onClick={() => setIsConfirmPop(false)}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      className="flex-1 py-2 px-4 bg-primary-100 text-black rounded-lg hover:brightness-125 transition-all"
+                      onClick={() => {
+                        setIsConfirmPop(false);
+                      }}
+                    >
+                      Confirm
+                    </button>
+                  </div>
+                </div>
+              </DialogContainer>
+            )}
+
+            {selectedTab === "create" && (
+              <div className="px-4 lg:px-8">
+                <CreateAgentForm onClose={handleCloseCreateAgent} />
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

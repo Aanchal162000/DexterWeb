@@ -89,7 +89,7 @@ class AgentService {
       this.loading = true;
 
       const response = await fetch(
-        "https://bb10-2401-4900-8840-2429-4a92-8e54-c6e7-a6e4.ngrok-free.app/api/agent/subscribe",
+        "https://11d5-2401-4900-8840-2429-5b8e-2f54-4687-2ec9.ngrok-free.app/api/agent/subscribe",
         {
           method: "POST",
           headers: {

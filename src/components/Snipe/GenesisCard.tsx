@@ -16,6 +16,7 @@ import { useLoginContext } from "@/context/LoginContext";
 import SnipeModal from "@/components/common/SnipeModal";
 import { useSwapContext } from "@/context/SwapContext";
 import { BsCopy } from "react-icons/bs";
+import DetailModal from "@/components/common/DetailModal";
 
 interface GenesisCardProps {
   genesis: IGenesis;
@@ -46,6 +47,7 @@ const GenesisCard: React.FC<GenesisCardProps> = ({ genesis, onClick }) => {
     "upcoming"
   );
   const [isSnipeModalOpen, setIsSnipeModalOpen] = useState(false);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const { address } = useLoginContext();
 
   useEffect(() => {
@@ -135,16 +137,21 @@ const GenesisCard: React.FC<GenesisCardProps> = ({ genesis, onClick }) => {
     setIsSnipeModalOpen(!isSnipeModalOpen);
   };
 
+  const handleCardClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsDetailModalOpen(true);
+  };
+
   return (
-    <div className="flex flex-col w-full font-grotesk">
+    <div className="relative">
       <div
-        className="flex flex-col flex-1 rounded-xl cursor-pointer border-[0.5px] border-cyan-500/50  transition-all duration-300 w-full h-[8.2rem]"
-        onClick={onClick}
+        className="ralative flex flex-col rounded-xl cursor-pointer border-[0.5px] border-cyan-500/50  transition-all duration-300  h-[8.2rem]"
+        onClick={handleCardClick}
       >
         {/* Top Row */}
-        <div className="flex items-center justify-between p-4">
+        <div className="flex items-center justify-between p-3">
           <div className="flex items-center gap-2">
-            <div className="relative w-14 h-14 rounded-full overflow-hidden flex-shrink-0 border-2 border-cyan-500/30">
+            <div className="relative w-12 h-12 rounded-full overflow-hidden flex-shrink-0 border-2 border-cyan-500/30">
               <Image
                 src={genesis.virtual.image?.url || "/placeholder.png"}
                 alt={genesis.virtual.name}
@@ -154,19 +161,19 @@ const GenesisCard: React.FC<GenesisCardProps> = ({ genesis, onClick }) => {
               />
             </div>
             <div className="flex flex-col gap-2">
-              <div className="flex items-end gap-2">
-                <h3 className="text-lg font-semibold leading-none text-white font-['Outrun']">
+              <div className="flex items-end justify-center  text-center gap-1">
+                <h3 className="text-sm font-semibold leading-none text-white font-['Outrun']">
                   {genesis.virtual.name}
                 </h3>
-                <span className="text-xs text-gray-400 font-light">
+                <span className="text-[10px] text-center leading-none text-gray-400 font-light">
                   ${genesis.virtual.symbol}
                 </span>
-                <FaExternalLinkAlt className="w-3 h-3 mb-[1px] ml-2 text-gray-400 cursor-pointer hover:text-cyan-500" />
+                <FaExternalLinkAlt className="w-3 h-3 mb-[1px]  text-gray-400 cursor-pointer hover:text-cyan-500" />
               </div>
               <div className="flex items-center gap-2">
-                <span className="px-2 py-1 rounded-md text-xs  border border-cyan-400/50 text-gray-300">
+                {/* <span className="px-2 py-1 rounded-md text-xs  border border-cyan-400/50 text-gray-300">
                   Entertainment
-                </span>
+                </span> */}
                 <div className="flex items-center gap-2 px-2 py-1 rounded-md text-xs border border-cyan-400/50  text-gray-300">
                   <span>
                     {genesis.genesisAddress?.slice(0, 4)}...
@@ -186,7 +193,7 @@ const GenesisCard: React.FC<GenesisCardProps> = ({ genesis, onClick }) => {
           {status === "live" && (
             <button
               onClick={handleSnipe}
-              className="px-4 py-1 rounded-lg  text-primary-100 border border-primary-100/80 font-semibold hover:bg-cyan-500/20 transition-all duration-300 flex items-center justify-center gap-3"
+              className="px-2 py-1 rounded-lg  text-primary-100 border border-primary-100/80 font-semibold hover:bg-cyan-500/20 transition-all duration-300 flex items-center justify-center gap-3"
             >
               <FaCrosshairs className="w-4 h-4" />
               <span>Snipe</span>
@@ -208,6 +215,13 @@ const GenesisCard: React.FC<GenesisCardProps> = ({ genesis, onClick }) => {
         name={genesis.virtual.name}
         endsAt={genesis.endsAt}
         walletAddress={address || ""}
+      />
+
+      <DetailModal
+        isOpen={isDetailModalOpen}
+        onClose={() => setIsDetailModalOpen(false)}
+        data={genesis}
+        type="genesis"
       />
     </div>
   );

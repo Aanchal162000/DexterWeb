@@ -22,6 +22,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" href="/Trade/dexterLogo.png" />
+      </head>
       <body className={` w-screen h-screen  antialiased`}>
         <LoginProvider>
           <SwapProvider>

@@ -36,12 +36,16 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
 }) => {
   const { selectedVitualtoken, setSelctedVirtualToken } = useSwapContext();
   const { balances } = useWalletBalance();
-  const [amount, setAmount] = useState("");
+  const balance =
+    selectedVitualtoken.symbol === "ETH" ? balances.ETH : balances.VIRT;
+  const calculatedAmount = (parseFloat(balance || "0") * 10) / 100;
+
+  const [amount, setAmount] = useState(calculatedAmount.toFixed(4).toString());
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const { networkData } = useLoginContext();
-  const percentageButtons = [25, 50, 75, 100];
+  const percentageButtons = [10, 25, 50, 75, 100];
   const { address } = useLoginContext();
   const [isFromCoinOpen, setIsFromCoinOpen] = useState(false);
 
@@ -65,13 +69,23 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
       !amount || parseFloat(amount) <= 0 || isLoading || isProcessing
     );
   }, [amount, isLoading, isProcessing]);
+  useEffect(() => {
+    handlePercentageClick(10);
+  }, [balances]);
+
+  const handleTokenSelect = (token: TokenOption) => {
+    setSelctedVirtualToken(token);
+    setIsFromCoinOpen(false);
+    // Reset amount when token changes
+    setAmount("");
+  };
 
   const handlePercentageClick = (percentage: number) => {
     if (!selectedVitualtoken || isLoading || isProcessing) return;
     const balance =
       selectedVitualtoken.symbol === "ETH" ? balances.ETH : balances.VIRT;
     const calculatedAmount = (parseFloat(balance || "0") * percentage) / 100;
-    setAmount(calculatedAmount.toString());
+    setAmount(calculatedAmount.toFixed(4).toString());
   };
 
   const handleSmartBuy = async () => {
@@ -179,7 +193,7 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
       }`}
     >
       <div className="rounded-b-xl bg-primary-100/10 py-2 px-4">
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col ">
           <div className="flex justify-end items-start">
             <button
               onClick={onClose}
@@ -194,51 +208,84 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
               htmlFor="amount"
               className="block text-sm font-medium text-gray-300 mb-2"
             >
-              Max Buy
+              Max Amount
             </label>
-            <div className="relative">
-              <input
-                id="amount"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                disabled={isLoading || isProcessing}
-                className="w-full px-4 py-3 bg-transparent border border-primary-100/70 rounded-lg text-white focus:outline-none focus:border-primary-100 disabled:opacity-50 disabled:cursor-not-allowed"
-                placeholder="Enter amount"
-              />
-              <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2">
-                {selectedVitualtoken?.logo && (
-                  <img
-                    src={selectedVitualtoken.logo}
-                    alt={selectedVitualtoken.symbol}
-                    className="w-6 h-6 rounded-full"
+            <div className="relative items-center justify-center">
+              <div className="relative w-full border border-primary-100/70 rounded-xl flex flex-col items-start justify-center px-4">
+                <div className="relative w-[200px] flex flex-row items-center justify-between">
+                  <input
+                    id="amount"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                    disabled={isLoading || isProcessing}
+                    className="w-full  py-3 bg-transparent rounded-lg text-white focus:outline-none focus:border-primary-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                    placeholder="Enter amount"
                   />
-                )}
-                <span className="text-primary-100 text-sm">
-                  {selectedVitualtoken?.symbol || "VIRT"}
+                  <div className="flex items-center gap-2">
+                    {selectedVitualtoken?.logo && (
+                      <img
+                        src={selectedVitualtoken.logo}
+                        alt={selectedVitualtoken.symbol}
+                        className="w-6 h-6 rounded-full"
+                      />
+                    )}
+                    <span className="text-primary-100 text-sm">
+                      {selectedVitualtoken?.symbol || "VIRT"}
+                    </span>
+                    <button
+                      onClick={() => setIsFromCoinOpen(true)}
+                      className="text-primary-100 hover:text-primary-100/80 transition-colors"
+                    >
+                      <TiArrowSortedDown className="size-5" />
+                    </button>
+                  </div>
+                </div>
+                <span className="text-gray-400 text-xs py-2 text-start">
+                  Available Balance:{" "}
+                  {selectedVitualtoken?.symbol === "ETH"
+                    ? Number(balances.ETH).toFixed(6)
+                    : Number(balances.VIRT).toFixed(6)}
                 </span>
-                <button
-                  onClick={() => setIsFromCoinOpen(true)}
-                  className="text-primary-100 hover:text-primary-100/80 transition-colors"
-                >
-                  <TiArrowSortedDown className="size-5" />
-                </button>
               </div>
             </div>
 
-            <div className="flex justify-between items-center mt-2">
-              <span className="text-gray-400 text-xs">
-                Available Balance:{" "}
-                {selectedVitualtoken?.symbol === "ETH"
-                  ? Number(balances.ETH).toFixed(6)
-                  : Number(balances.VIRT).toFixed(6)}
-              </span>
+            {/* Token Selector Dropdown */}
+            {isFromCoinOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-[#1A1A1A] border border-primary-100/20 rounded-lg shadow-lg z-10">
+                <div className="py-1">
+                  {tokenOptions.map((token) => (
+                    <button
+                      key={token.symbol}
+                      onClick={() => handleTokenSelect(token)}
+                      className="w-full px-4 py-2 text-left text-white hover:bg-primary-100/10 flex items-center gap-2"
+                    >
+                      <img
+                        src={token.logo}
+                        alt={token.symbol}
+                        className="w-6 h-6 rounded-full"
+                      />
+                      <div className="flex flex-col">
+                        <span className="text-sm font-medium">
+                          {token.symbol}
+                        </span>
+                        <span className="text-xs text-gray-400">
+                          Balance: {Number(token.balance).toFixed(6)}
+                        </span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="flex justify-end items-center mt-2">
               <div className="flex gap-1">
                 {percentageButtons.map((percentage) => (
                   <button
                     key={percentage}
                     onClick={() => handlePercentageClick(percentage)}
                     disabled={isLoading || isProcessing}
-                    className="px-2 py-1 text-xs border border-gray-400/80 hover:bg-primary-100/20 text-white rounded transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-2 py-1 text-xs border border-gray-400/80 hover:bg-primary-100/20 text-white rounded-xl transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {percentage}%
                   </button>

@@ -67,7 +67,7 @@ const VirtualCard: React.FC<VirtualCardProps> = ({ virtual, onClick }) => {
           Date.now()) /
           (1000 * 60 * 60 * 24)
       )
-    : -1;
+    : null;
 
   return (
     <div className="relative">
@@ -98,9 +98,9 @@ const VirtualCard: React.FC<VirtualCardProps> = ({ virtual, onClick }) => {
                 {is2Xl && (
                   <div
                     className={`flex flex-row justify-center items-center text-[11px] gap-1 rounded p-[2px] ${
-                      diffDays > 7
+                      diffDays! > 7
                         ? "bg-[#4ade80]/10 text-[#4ade80]"
-                        : diffDays > 0
+                        : diffDays! != null
                         ? "bg-[#eab308]/10 text-[#eab308]"
                         : ""
                     }`}

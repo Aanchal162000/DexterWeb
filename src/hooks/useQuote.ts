@@ -1,19 +1,16 @@
 import { useState } from "react";
 import { agentService } from "@/services/contract/agentService";
-import {
-  QuoteRequestParams,
-  QuoteResponse,
-} from "@/services/contract/interfaces";
+import { QuoteRequestParams } from "@/services/contract/interfaces";
 
 interface UseQuoteReturn {
-  quote: QuoteResponse | null;
+  quote: any | null;
   loading: boolean;
   error: string | null;
   getQuote: (params: QuoteRequestParams) => Promise<void>;
 }
 
 export const useQuote = (): UseQuoteReturn => {
-  const [quote, setQuote] = useState<QuoteResponse | null>(null);
+  const [quote, setQuote] = useState<any | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 

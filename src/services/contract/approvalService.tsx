@@ -82,9 +82,6 @@ class ApprovalService {
       // Add 3% buffer to approval amount (same as in SwapContext)
       const bufferedAmount = Number((Number(amount) * 103) / 100).toFixed(6);
 
-      // Show processing toast
-      toast.loading("Approving transaction...");
-
       // Call approve on the token contract
       const tx = await tokenContract.approve(
         spenderAddress,

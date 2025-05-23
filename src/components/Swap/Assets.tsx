@@ -33,6 +33,7 @@ import {
 } from "@/utils/interface";
 import LoaderLine from "../common/LoaderLine";
 import { formatPrecision } from "@/utils/helper";
+import { useWalletBalance } from "@/hooks/useWalletBalance";
 
 const Assets = ({
   setBalance,
@@ -43,6 +44,12 @@ const Assets = ({
 }) => {
   const [dataList, setDataList] = useLocalStorage<IAssetsData[]>("arbt-assets");
   const { address, trigger: triggerMain } = useLoginContext();
+  const {
+    balances,
+    isLoading: isBalanceLoading,
+    error: balanceError,
+    refetch: refetchBalances,
+  } = useWalletBalance();
   const [loading, setLoading] = useState<boolean>(false);
   const [backgroundSync, setBackgroundSync] = useState<boolean>(false);
   const totalPages = Math.ceil(dataList?.length! / 8);
@@ -58,17 +65,18 @@ const Assets = ({
       0
     ) as number;
     setBalance(balance);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dataList]);
+  }, [dataList, setBalance]);
 
   useEffectAsync(async () => {
     try {
       !dataList ? setLoading(true) : setBackgroundSync(true);
-      // const commonTokenList = [...tokenList, ...arbitrumList, ...extraCoins];
-      // const coinChange: IResponseCoinDiff[] = await getCoinChange();
       const assets: IResponseAssets[] = await getAssets({
         address: address as string,
       });
+
+      // Update balances from useWalletBalance
+      await refetchBalances();
+
       setDataList(
         assets.map((data: IResponseAssets) => {
           let chain = tokenSymbolList?.find(
@@ -95,6 +103,7 @@ const Assets = ({
       );
     } catch (error) {
       toastError("Something Went Wrong");
+      console.error("Error fetching assets:", error);
     } finally {
       setLoading(false);
       setBackgroundSync(false);
@@ -106,8 +115,7 @@ const Assets = ({
   const handleManualSync = async () => {
     try {
       setLoading(true);
-      const res = await runSyncWorker(address as string);
-      console.log("dd", res);
+      await refetchBalances();
       setTrigger((prev) => prev + 1);
     } catch (error) {
       toastError("Sync Error");

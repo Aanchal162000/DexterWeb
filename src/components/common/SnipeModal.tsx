@@ -232,7 +232,7 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
             </label>
             <div className="relative items-center justify-center">
               <div className="relative w-full border border-primary-100/70 rounded-xl flex flex-col items-start justify-center px-4">
-                <div className="relative w-[200px] flex flex-row items-center justify-between">
+                <div className="relative w-full flex flex-row items-center justify-between px-2">
                   <input
                     id="amount"
                     value={amount}

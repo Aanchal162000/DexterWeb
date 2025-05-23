@@ -108,7 +108,7 @@ const VirtualCard: React.FC<VirtualCardProps> = ({ virtual, onClick }) => {
                     {diffDays != -1 && (
                       <>
                         <IoIosLock />
-                        <p>{Math.abs(diffDays)}d</p>
+                        <p>{Math.abs(diffDays!)}d</p>
                       </>
                     )}
                   </div>

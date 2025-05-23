@@ -165,7 +165,7 @@ const VirtualCard: React.FC<VirtualCardProps> = ({ virtual, onClick }) => {
 
         {/* Bottom Row */}
         <div className="relative px-4 py-2 items-center justify-center border-t-[0.5px] border-primary-100/60 w-full">
-          <div className="grid grid-cols-2 gap-24 relative w-full items-center justify-between">
+          <div className="grid desktop:grid-cols-4 grid-cols-2 desktop:gap-4 relative w-full items-center justify-between">
             <div className="text-sm flex flex-row space-x-1 relative text-left">
               <span className="text-gray-400">Price: </span>
               <span className="text-white">
@@ -184,8 +184,6 @@ const VirtualCard: React.FC<VirtualCardProps> = ({ virtual, onClick }) => {
                 {formatPercentage(metrics.priceChange24h)}
               </span>
             </div>
-          </div>
-          <div className="grid grid-cols-2 gap-24 relative w-full items-center justify-between">
             <div className="text-sm flex flex-row space-x-1 relative text-left">
               <span className="text-gray-400">Vol: </span>
               <span className="text-white">

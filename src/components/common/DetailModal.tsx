@@ -175,7 +175,7 @@ const DetailModal: React.FC<DetailModalProps> = ({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden rounded-2xl bg-[#15181B] p-6 text-left align-middle shadow-xl transition-all">
+              <Dialog.Panel className="w-full max-w-2xl sm:h-[80vh] h-[90vh] transform overflow-hidden rounded-2xl bg-[#15181B] p-6 text-left align-middle shadow-xl transition-all overflow-y-auto">
                 <Dialog.Title
                   as="h3"
                   className="text-lg font-medium leading-6 text-white mb-4"

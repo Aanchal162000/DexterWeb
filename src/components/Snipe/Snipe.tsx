@@ -420,10 +420,9 @@ const Snipe = () => {
       {/* Main content area - now flex-col on mobile, flex-row on larger screens */}
       <div className="w-full flex flex-col lg:flex-row gap-3">
         {/* Left section containing all three boxes */}
-        <div className="w-full grid grid-cols-3 gap-3">
+        <div className="w-full h-full grid grid-cols-3 gap-3">
           {/* Genesis Launches Box */}
-          <div className="h-[calc(100vh-10.5rem)] 2xl:h-[calc(100vh-14.3rem)] ">
-            <div className="h-full w-full backdrop-blur-sm bg-[#15181B]/80 border border-primary-100 rounded-xl text-white flex flex-col">
+            <div className="h-full w-full backdrop-blur-sm bg-[#15181B]/80 border border-primary-100 rounded-xl text-white flex flex-col overflow-hidden">
               <h2 className="text-lg md:text-xl font-semibold text-primary-100 text-center p-4">
                 Genesis Launches
               </h2>
@@ -449,10 +448,8 @@ const Snipe = () => {
                 </div>
               </div>
             </div>
-          </div>
           {/* Sentient Agents Box */}
-          <div className="h-[calc(100vh-10.5rem)] 2xl:h-[calc(100vh-14.3rem)]">
-            <div className="h-full w-full backdrop-blur-sm bg-[#15181B]/80 border border-primary-100 rounded-xl text-white flex flex-col">
+            <div className="h-full w-full backdrop-blur-sm bg-[#15181B]/80 border border-primary-100 rounded-xl text-white flex flex-col overflow-hidden">
               <h2 className="text-lg md:text-xl font-semibold text-primary-100 text-center p-4">
                 Sentient Agents
               </h2>
@@ -478,10 +475,8 @@ const Snipe = () => {
                 </div>
               </div>
             </div>
-          </div>
           {/* Prototype Agents Box */}
-          <div className="h-[calc(100vh-10.5rem)] 2xl:h-[calc(100vh-14.3rem)]">
-            <div className="h-full w-full backdrop-blur-sm bg-[#15181B]/80 border border-primary-100 rounded-xl text-white flex flex-col">
+            <div className="h-full w-full backdrop-blur-sm bg-[#15181B]/80 border border-primary-100 rounded-xl text-white flex flex-col overflow-hidden">
               <h2 className="text-lg md:text-xl font-semibold text-primary-100 text-center p-4">
                 Prototype Agents
               </h2>
@@ -507,7 +502,6 @@ const Snipe = () => {
                 </div>
               </div>
             </div>
-          </div>
         </div>
 
         {/* Swap/Create Section */}

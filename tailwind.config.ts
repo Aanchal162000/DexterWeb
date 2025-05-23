@@ -130,6 +130,7 @@ const config: Config = {
         lg: "1024px",
         xl: "1280px",
         "2xl": "1536px",
+        'desktop': '2100px',
       },
       fontFamily: {
         sans: ["Inter", "sans-serif"],

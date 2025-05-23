@@ -34,13 +34,13 @@ const TokenSelector = () => {
   const tokenOptions: TokenOption[] = [
     {
       ...defaultToken,
-      balance: balances.VIRT || "0",
+      balance: isLoading ? "..." : balances.VIRT || "0",
     },
     {
       name: "Ethereum",
       symbol: "ETH",
       logo: "/Networks/ETH.png",
-      balance: balances.ETH || "0",
+      balance: isLoading ? "..." : balances.ETH || "0",
     },
     {
       name: "Dexter",
@@ -54,16 +54,17 @@ const TokenSelector = () => {
   const currentToken = selectedVitualtoken
     ? {
         ...selectedVitualtoken,
-        balance:
-          selectedVitualtoken.symbol === "VIRT"
-            ? balances.VIRT || "0"
-            : selectedVitualtoken.symbol === "ETH"
-            ? balances.ETH || "0"
-            : selectedVitualtoken.balance,
+        balance: isLoading
+          ? "..."
+          : selectedVitualtoken.symbol === "VIRT"
+          ? balances.VIRT || "0"
+          : selectedVitualtoken.symbol === "ETH"
+          ? balances.ETH || "0"
+          : selectedVitualtoken.balance,
       }
     : {
         ...defaultToken,
-        balance: balances.VIRT || "0",
+        balance: isLoading ? "..." : balances.VIRT || "0",
       };
 
   return (

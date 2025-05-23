@@ -11,6 +11,7 @@ import { useLoginContext } from "@/context/LoginContext";
 import { ethers } from "ethers";
 import { BuyContract } from "@/constants/config";
 import buyAbi from "@/constants/abis/buy.json";
+import { useAlchemyProvider } from "@/hooks/useAlchemyProvider";
 
 interface SwapSectionProps {
   selectedVirtual: IVirtual | null;
@@ -46,6 +47,7 @@ const SwapSection: React.FC<SwapSectionProps> = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const [debouncedFromAmount] = useDebounce(fromAmount, 1000);
   const { networkData } = useLoginContext();
+  const { getSigner } = useAlchemyProvider();
 
   const handleFocus = (ref: React.RefObject<HTMLInputElement>) => {
     const input = ref.current;
@@ -62,12 +64,8 @@ const SwapSection: React.FC<SwapSectionProps> = ({
     ) {
       setIsEstimating(true);
       try {
-        const contract = new ethers.Contract(
-          BuyContract,
-          buyAbi,
-          networkData?.provider?.getSigner()
-        );
-        console.log("neee", contract, networkData);
+        const signer = await getSigner();
+        const contract = new ethers.Contract(BuyContract, buyAbi, signer);
 
         // Validate input amount
         if (
@@ -93,35 +91,52 @@ const SwapSection: React.FC<SwapSectionProps> = ({
           return;
         }
 
-        const amountsOut = await contract.getAmountsOut(amountInBN, [
+        // Add validation for token path
+        const path = [
           selectedVirtual.contractAddress,
           selectedToVirtual.contractAddress,
-        ]);
+        ];
 
-        if (!amountsOut || amountsOut.length < 2) {
-          console.error("Invalid amounts out from contract");
+        // Check if path is valid (tokens are different)
+        if (path[0].toLowerCase() === path[1].toLowerCase()) {
+          console.error("Cannot swap same token");
           setToAmount("0");
           setIsEstimating(false);
           return;
         }
 
-        // Calculate minimum amount out with slippage
-        const slippage = 0.5;
-        const minAmountOut = amountsOut[1]
-          .mul(1000 - Math.floor(slippage * 10))
-          .div(1000);
+        try {
+          const amountsOut = await contract.getAmountsOut(amountInBN, path);
 
-        setToAmount(ethers.utils.formatUnits(minAmountOut, 18));
+          if (!amountsOut || amountsOut.length < 2) {
+            console.error("Invalid amounts out from contract");
+            setToAmount("0");
+            setIsEstimating(false);
+            return;
+          }
+
+          // Calculate minimum amount out with slippage
+          const slippage = 0.5; // 0.5% slippage
+          const minAmountOut = amountsOut[1]
+            .mul(1000 - Math.floor(slippage * 10))
+            .div(1000);
+
+          setToAmount(ethers.utils.formatUnits(minAmountOut, 18));
+        } catch (error: any) {
+          console.error("Contract call failed:", error);
+          // Check for specific error cases
+          if (error?.code === -32603) {
+            console.error(
+              "Contract execution reverted - likely insufficient liquidity or invalid path"
+            );
+          } else if (error?.code === -32000) {
+            console.error("Internal JSON-RPC error - check network connection");
+          }
+          setToAmount("0");
+        }
       } catch (error: any) {
         console.error("Estimation failed:", error);
         setToAmount("0");
-
-        // Handle specific error cases
-        if (error?.code === -32603) {
-          console.error("Contract execution reverted");
-        } else if (error?.code === -32000) {
-          console.error("Internal JSON-RPC error");
-        }
       } finally {
         setIsEstimating(false);
       }

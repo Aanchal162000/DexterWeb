@@ -1,10 +1,17 @@
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import { useLoginContext } from "@/context/LoginContext";
+import { toast } from "react-toastify";
+import { useAlchemyProvider } from "./useAlchemyProvider";
 
 interface TokenBalance {
   symbol: string;
   balance: string;
+  decimals?: number;
+}
+
+interface WalletBalances {
+  [key: string]: string;
 }
 
 let ethereum: any = null;
@@ -13,49 +20,100 @@ if (typeof window !== "undefined") {
 }
 
 export const useWalletBalance = () => {
-  const [balances, setBalances] = useState<{ [key: string]: string }>({});
+  const [balances, setBalances] = useState<WalletBalances>({});
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { address } = useLoginContext();
+  const { address, networkData } = useLoginContext();
+  const { getProvider } = useAlchemyProvider();
 
-  const fetchBalances = async () => {
+  const fetchTokenBalance = async (
+    provider: ethers.providers.Provider,
+    tokenAddress: string,
+    symbol: string,
+    decimals: number = 18
+  ): Promise<{ symbol: string; balance: string }> => {
     try {
-      if (!window.ethereum) {
-        throw new Error("MetaMask is not installed");
+      if (
+        tokenAddress.toLowerCase() ===
+        "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+      ) {
+        // Handle native token (ETH)
+        const balance = await provider.getBalance(address!);
+        return {
+          symbol,
+          balance: ethers.utils.formatEther(balance),
+        };
       }
 
-      const provider = new ethers.providers.Web3Provider(
-        window.ethereum as any
-      );
-
-      // Fetch ETH balance
-      const ethBalance = await provider.getBalance(address!);
-      const formattedEthBalance = ethers.utils.formatEther(ethBalance);
-
-      // Fetch Virtuals balance (assuming it's an ERC20 token)
-      // Replace with actual Virtuals token contract address on Base
-      const virtualsAddress = "0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b";
-      const virtualsABI = [
-        "function balanceOf(address) view returns (uint256)",
-      ];
-      const virtualsContract = new ethers.Contract(
-        virtualsAddress,
-        virtualsABI,
+      // Handle ERC20 tokens
+      const tokenContract = new ethers.Contract(
+        tokenAddress,
+        ["function balanceOf(address) view returns (uint256)"],
         provider
       );
-      const virtualsBalance = await virtualsContract.balanceOf(address);
-      const formattedVirtualsBalance = ethers.utils.formatUnits(
-        virtualsBalance,
-        18
-      ); // Adjust decimals if needed
-
-      setBalances({
-        ETH: formattedEthBalance,
-        VIRT: formattedVirtualsBalance,
-      });
-      setError(null);
+      const balance = await tokenContract.balanceOf(address);
+      return {
+        symbol,
+        balance: ethers.utils.formatUnits(balance, decimals),
+      };
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to fetch balances");
+      console.error(`Error fetching ${symbol} balance:`, err);
+      return {
+        symbol,
+        balance: "0",
+      };
+    }
+  };
+
+  const fetchBalances = async () => {
+    if (!address || !networkData?.provider) {
+      setError("Wallet not connected");
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      setError(null);
+
+      const provider = await getProvider();
+      const tokens: TokenBalance[] = [
+        {
+          symbol: "ETH",
+          balance: "0",
+          decimals: 18,
+        },
+        {
+          symbol: "VIRT",
+          balance: "0",
+          decimals: 18,
+        },
+        // Add more tokens as needed
+      ];
+
+      const balancePromises = tokens.map((token) =>
+        fetchTokenBalance(
+          provider,
+          token.symbol === "ETH"
+            ? "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+            : "0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b", // Virtuals token address
+          token.symbol,
+          token.decimals
+        )
+      );
+
+      const results = await Promise.all(balancePromises);
+      const newBalances: WalletBalances = {};
+      results.forEach((result) => {
+        newBalances[result.symbol] = result.balance;
+      });
+
+      setBalances(newBalances);
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to fetch balances";
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -76,7 +134,7 @@ export const useWalletBalance = () => {
         window.ethereum.removeListener("chainChanged", fetchBalances);
       }
     };
-  }, []);
+  }, [address, networkData?.provider]);
 
   return { balances, isLoading, error, refetch: fetchBalances };
 };

@@ -360,15 +360,6 @@ const Snipe = () => {
       : selectedVitualtoken?.symbol;
   };
 
-  const handleCloseModal = () => {
-    setIsDetailsModalOpen(false);
-    setSelectedVirtual(null);
-  };
-
-  const handleCreateAgentClick = () => {
-    setIsCreatingAgent(true);
-  };
-
   const handleCloseCreateAgent = () => {
     setIsCreatingAgent(false);
   };
@@ -377,8 +368,6 @@ const Snipe = () => {
     setSelectedVirtual(virtual);
     setIsDetailsModalOpen(true);
   };
-
-  const percentages = [10, 25, 50, 75, 100];
 
   function validationCheck() {
     if (loading) {
@@ -403,18 +392,6 @@ const Snipe = () => {
     validationCheck();
   }, [selectedVirtual, selectedToVirtual, fromAmount, toAmount, loading]);
 
-  const handleShowPercentages = (virtual: IVirtual, type: "buy" | "sell") => {
-    setIsAnimating(true);
-    setShowPercentages({ id: virtual.id, type });
-  };
-
-  const handleClosePercentages = () => {
-    setIsAnimating(false);
-    setTimeout(() => {
-      setShowPercentages(null);
-    }, 300); // Match this with the animation duration
-  };
-
   return (
     <div className="w-full h-full overflow-y-auto lg:overflow-y-hidden lg:h-full flex-1 flex flex-col lg:flex-row lg:px-14 sm:px-7 px-4 py-3 gap-3 justify-center">
       {/* Main content area - now flex-col on mobile, flex-row on larger screens */}
@@ -422,86 +399,86 @@ const Snipe = () => {
         {/* Left section containing all three boxes */}
         <div className="w-full h-full grid grid-cols-3 gap-3">
           {/* Genesis Launches Box */}
-            <div className="h-full w-full backdrop-blur-sm bg-[#15181B]/80 border border-primary-100 rounded-xl text-white flex flex-col overflow-hidden">
-              <h2 className="text-lg md:text-xl font-semibold text-primary-100 text-center p-4">
-                Genesis Launches
-              </h2>
-              <div className="flex-1 overflow-y-auto overflow-x-hidden p-4">
-                <div className="space-y-4">
-                  {genesisLoading ? (
-                    <div className="flex justify-center items-center h-32">
-                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-100"></div>
-                    </div>
-                  ) : genesisError ? (
-                    <div className="text-red-500 text-center p-4">
-                      {genesisError}
-                    </div>
-                  ) : (
-                    genesisData?.data.map((genesis) => (
-                      <GenesisCard
-                        key={genesis.id}
-                        genesis={genesis}
-                        onClick={() => {}}
-                      />
-                    ))
-                  )}
-                </div>
+          <div className="h-full w-full backdrop-blur-sm bg-[#15181B]/80 border border-primary-100 rounded-xl text-white flex flex-col overflow-hidden">
+            <h2 className="text-lg md:text-xl font-semibold text-primary-100 text-center p-4">
+              Genesis Launches
+            </h2>
+            <div className="flex-1 overflow-y-auto overflow-x-hidden p-4">
+              <div className="space-y-4">
+                {genesisLoading ? (
+                  <div className="flex justify-center items-center h-32">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-100"></div>
+                  </div>
+                ) : genesisError ? (
+                  <div className="text-red-500 text-center p-4">
+                    {genesisError}
+                  </div>
+                ) : (
+                  genesisData?.data.map((genesis) => (
+                    <GenesisCard
+                      key={genesis.id}
+                      genesis={genesis}
+                      onClick={() => {}}
+                    />
+                  ))
+                )}
               </div>
             </div>
+          </div>
           {/* Sentient Agents Box */}
-            <div className="h-full w-full backdrop-blur-sm bg-[#15181B]/80 border border-primary-100 rounded-xl text-white flex flex-col overflow-hidden">
-              <h2 className="text-lg md:text-xl font-semibold text-primary-100 text-center p-4">
-                Sentient Agents
-              </h2>
-              <div className="flex-1 overflow-y-auto overflow-x-hidden p-4">
-                <div className="space-y-4">
-                  {genesisLoading ? (
-                    <div className="flex justify-center items-center h-32">
-                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-100"></div>
-                    </div>
-                  ) : genesisError ? (
-                    <div className="text-red-500 text-center p-4">
-                      {genesisError}
-                    </div>
-                  ) : (
-                    virtuals.map((virtual) => (
-                      <VirtualCard
-                        key={virtual.id}
-                        virtual={virtual}
-                        onClick={() => handleCardClick(virtual)}
-                      />
-                    ))
-                  )}
-                </div>
+          <div className="h-full w-full backdrop-blur-sm bg-[#15181B]/80 border border-primary-100 rounded-xl text-white flex flex-col overflow-hidden">
+            <h2 className="text-lg md:text-xl font-semibold text-primary-100 text-center p-4">
+              Sentient Agents
+            </h2>
+            <div className="flex-1 overflow-y-auto overflow-x-hidden p-4">
+              <div className="space-y-4">
+                {genesisLoading ? (
+                  <div className="flex justify-center items-center h-32">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-100"></div>
+                  </div>
+                ) : genesisError ? (
+                  <div className="text-red-500 text-center p-4">
+                    {genesisError}
+                  </div>
+                ) : (
+                  virtuals.map((virtual) => (
+                    <VirtualCard
+                      key={virtual.id}
+                      virtual={virtual}
+                      onClick={() => handleCardClick(virtual)}
+                    />
+                  ))
+                )}
               </div>
             </div>
+          </div>
           {/* Prototype Agents Box */}
-            <div className="h-full w-full backdrop-blur-sm bg-[#15181B]/80 border border-primary-100 rounded-xl text-white flex flex-col overflow-hidden">
-              <h2 className="text-lg md:text-xl font-semibold text-primary-100 text-center p-4">
-                Prototype Agents
-              </h2>
-              <div className="flex-1 overflow-y-auto overflow-x-hidden p-4">
-                <div className="space-y-4">
-                  {genesisLoading ? (
-                    <div className="flex justify-center items-center h-32">
-                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-100"></div>
-                    </div>
-                  ) : genesisError ? (
-                    <div className="text-red-500 text-center p-4">
-                      {genesisError}
-                    </div>
-                  ) : (
-                    prototypeVirtuals.map((virtual) => (
-                      <VirtualCard
-                        key={virtual.id}
-                        virtual={virtual}
-                        onClick={() => handleCardClick(virtual)}
-                      />
-                    ))
-                  )}
-                </div>
+          <div className="h-full w-full backdrop-blur-sm bg-[#15181B]/80 border border-primary-100 rounded-xl text-white flex flex-col overflow-hidden">
+            <h2 className="text-lg md:text-xl font-semibold text-primary-100 text-center p-4">
+              Prototype Agents
+            </h2>
+            <div className="flex-1 overflow-y-auto overflow-x-hidden p-4">
+              <div className="space-y-4">
+                {genesisLoading ? (
+                  <div className="flex justify-center items-center h-32">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-100"></div>
+                  </div>
+                ) : genesisError ? (
+                  <div className="text-red-500 text-center p-4">
+                    {genesisError}
+                  </div>
+                ) : (
+                  prototypeVirtuals.map((virtual) => (
+                    <VirtualCard
+                      key={virtual.id}
+                      virtual={virtual}
+                      onClick={() => handleCardClick(virtual)}
+                    />
+                  ))
+                )}
               </div>
             </div>
+          </div>
         </div>
 
         {/* Swap/Create Section */}

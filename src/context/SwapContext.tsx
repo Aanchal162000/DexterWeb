@@ -837,15 +837,16 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
       setUsdPriceS2(usdBalance);
       return;
     } else setUsdPriceS1(usdBalance);
+    const minLimit = 3;
 
     const oneUSDBalance = Number(Number(1 / usdRate) || 0);
     console.log("curent balance", oneUSDBalance, usdRate, usdBalance);
     let minAmount = Number(oneUSDBalance)
-      ? Number(Number(oneUSDBalance * 10) + 0.000001).toFixed(6)
+      ? Number(Number(oneUSDBalance * minLimit) + 0.000001).toFixed(6)
       : "0";
 
     // let isEth = selectedNetwork?.name == "Ethereum";
-    if (usdBalance < 10) {
+    if (usdBalance < minLimit) {
       setFromAmount(Number(minAmount).toFixed(6));
       toastInfo(`Min transaction amount capped at 10 USD.`);
       throw new Error("transaction amount not in range");

@@ -1,16 +1,25 @@
 import React from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
-import { IGenesis, IVirtual } from "@/utils/interface";
+import { IVirtual, IGenesis } from "@/utils/interface";
 import Image from "next/image";
+import { formatDistanceToNow } from "date-fns";
 import {
   FaExternalLinkAlt,
   FaTwitter,
   FaTelegram,
   FaGlobe,
 } from "react-icons/fa";
+
+import {
+  formatCurrency,
+  formatPercentage,
+  formatLargeNumber,
+} from "@/utils/tokenCalculations";
 import { BsCopy } from "react-icons/bs";
 import { toast } from "react-toastify";
+import { useTokenMetrics } from "@/hooks/useTokenMetrics";
+import Link from "next/link";
 
 interface DetailModalProps {
   isOpen: boolean;
@@ -34,28 +43,35 @@ interface DisplayData {
   subscribers?: number;
 }
 
+const isGenesis = (data: IVirtual | IGenesis): data is IGenesis => {
+  return "virtual" in data;
+};
+
 const DetailModal: React.FC<DetailModalProps> = ({
   isOpen,
   onClose,
   data,
   type,
 }) => {
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text);
-    toast.success("Copied to clipboard!", {
-      position: "top-right",
-      autoClose: 2000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "dark",
-    });
-  };
+  const genesisData = isGenesis(data) ? data : undefined;
+  const virtualData = isGenesis(data) ? data.virtual : data;
+  const metrics = useTokenMetrics(virtualData, genesisData);
 
   const renderLinks = () => {
     const links = [];
+    links.push(
+      <Link
+        key="Link"
+        href={`https://app.virtuals.io/${
+          type == "virtual" ? "virtuals" : "geneses"
+        }/${type == "virtual" ? genesisData?.id : virtualData.id}`}
+        rel="noopener noreferrer"
+        target="_blank"
+        className="flex items-center ml-2 gap-2 text-gray-300 hover:text-cyan-500 transition-colors"
+      >
+        <FaExternalLinkAlt />
+      </Link>
+    );
     if (type === "virtual" && "socials" in data) {
       const socials = data.socials?.VERIFIED_LINKS;
       if (socials?.WEBSITE) {
@@ -119,6 +135,20 @@ const DetailModal: React.FC<DetailModalProps> = ({
 
   const displayData = getDisplayData();
 
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    toast.success("Copied to clipboard!", {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+  };
+
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={onClose}>
@@ -131,11 +161,11 @@ const DetailModal: React.FC<DetailModalProps> = ({
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-black/70 backdrop-blur-sm" />
+          <div className="fixed inset-0 bg-black/25 backdrop-blur-sm" />
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-y-auto">
-          <div className="flex min-h-full items-center justify-center p-4">
+          <div className="flex min-h-full items-center justify-center p-4 text-center">
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"
@@ -145,122 +175,205 @@ const DetailModal: React.FC<DetailModalProps> = ({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden rounded-2xl bg-primary-100/10 border border-cyan-500/30 p-6 text-left align-middle shadow-xl transition-all">
-                <div className="flex justify-between items-start mb-6">
-                  <Dialog.Title
-                    as="h3"
-                    className="text-xl font-semibold text-white"
-                  >
-                    {type === "genesis" ? "Genesis Details" : "Virtual Details"}
-                  </Dialog.Title>
-                  <button
-                    onClick={onClose}
-                    className="text-gray-400 hover:text-white transition-colors"
-                  >
-                    ✕
-                  </button>
-                </div>
+              <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden rounded-2xl bg-[#15181B] p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Title
+                  as="h3"
+                  className="text-lg font-medium leading-6 text-white mb-4"
+                >
+                  {virtualData.name} Details
+                </Dialog.Title>
 
-                <div className="space-y-6">
-                  {/* Header Section */}
-                  <div className="flex items-start gap-4">
+                <div className="mt-2 space-y-6">
+                  {/* Token Image and Basic Info */}
+                  <div className="flex items-center gap-4">
                     <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-cyan-500/30">
                       <Image
-                        src={displayData.image?.url || "/placeholder.png"}
-                        alt={displayData.name}
+                        src={virtualData.image?.url || "/placeholder.png"}
+                        alt={virtualData.name}
                         fill
                         className="object-cover"
                         unoptimized
                       />
                     </div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2">
-                        <h4 className="text-lg font-semibold text-white">
-                          {displayData.name}
-                        </h4>
-                        <span className="text-sm text-gray-400">
-                          ${displayData.symbol}
-                        </span>
-                        <FaExternalLinkAlt className="w-4 h-4 text-gray-400 cursor-pointer hover:text-cyan-500" />
-                      </div>
-                      <p className="text-sm text-gray-400 mt-1">
-                        {displayData.description}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Contract Address */}
-                  <div className="bg-[#2A2A2A] rounded-lg p-4">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-400">
-                        Contract Address
-                      </span>
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm text-white">
-                          {displayData.contractAddress?.slice(0, 6)}...
-                          {displayData.contractAddress?.slice(-4)}
-                        </span>
-                        <BsCopy
-                          className="w-4 h-4 text-gray-400 cursor-pointer hover:text-cyan-500"
-                          onClick={() =>
-                            copyToClipboard(displayData.contractAddress || "")
-                          }
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Additional Details */}
-                  <div className="grid grid-cols-2 gap-4">
-                    {type === "genesis" &&
-                      displayData.startsAt &&
-                      displayData.endsAt && (
-                        <>
-                          <div className="bg-[#2A2A2A] rounded-lg p-4">
-                            <span className="text-sm text-gray-400">
-                              Start Date
-                            </span>
-                            <p className="text-sm text-white mt-1">
-                              {new Date(displayData.startsAt).toLocaleString()}
-                            </p>
-                          </div>
-                          <div className="bg-[#2A2A2A] rounded-lg p-4">
-                            <span className="text-sm text-gray-400">
-                              End Date
-                            </span>
-                            <p className="text-sm text-white mt-1">
-                              {new Date(displayData.endsAt).toLocaleString()}
-                            </p>
-                          </div>
-                        </>
+                    <div>
+                      <h4 className="text-xl font-semibold text-white">
+                        {virtualData.name}
+                      </h4>
+                      <p className="text-gray-400">{virtualData.symbol}</p>
+                      {virtualData.contractAddress && (
+                        <div className="flex items-center gap-2 mt-2">
+                          <span className="text-sm text-gray-400">
+                            {virtualData.contractAddress}
+                          </span>
+                          <BsCopy
+                            className="w-4 h-4 cursor-pointer text-white hover:text-cyan-500"
+                            onClick={() =>
+                              copyToClipboard(virtualData.contractAddress || "")
+                            }
+                          />
+                        </div>
                       )}
-                    {type === "virtual" && displayData.price !== undefined && (
-                      <>
-                        <div className="bg-[#2A2A2A] rounded-lg p-4">
-                          <span className="text-sm text-gray-400">Price</span>
-                          <p className="text-sm text-white mt-1">
-                            {displayData.price} DEX
+                    </div>
+                  </div>
+
+                  {/* Token Information */}
+                  <div className="bg-[#1A1E23] rounded-lg p-4">
+                    <h3 className="text-lg font-semibold text-primary-100 mb-4">
+                      Token Information
+                    </h3>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <p className="text-gray-400 text-sm">Token Price</p>
+                        <p className="text-white">
+                          {formatCurrency(metrics.priceUSD)}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-gray-400 text-sm">Market Cap</p>
+                        <p className="text-white">
+                          {formatCurrency(metrics.fdvUSD)}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-gray-400 text-sm">FDV</p>
+                        <p className="text-white">
+                          {formatCurrency(metrics.fdvUSD)}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-gray-400 text-sm">TVL</p>
+                        <p className="text-white">
+                          {formatCurrency(metrics.tvlUSD)}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-gray-400 text-sm">24h Change</p>
+                        <p
+                          className={`${
+                            metrics.priceChange24h >= 0
+                              ? "text-green-500"
+                              : "text-red-500"
+                          }`}
+                        >
+                          {formatPercentage(metrics.priceChange24h)}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-gray-400 text-sm">24h Volume</p>
+                        <p className="text-white">
+                          {formatCurrency(metrics.volume24hUSD)}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-gray-400 text-sm">Holders</p>
+                        <p className="text-white">
+                          {formatLargeNumber(metrics.holders)}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Description */}
+                  {virtualData.description && (
+                    <div className="bg-[#1A1E23] rounded-lg p-4">
+                      <h3 className="text-lg font-semibold text-primary-100 mb-2">
+                        Description
+                      </h3>
+                      <p className="text-gray-300">{virtualData.description}</p>
+                    </div>
+                  )}
+
+                  {/* Genesis Info */}
+                  {genesisData && (
+                    <div className="bg-[#1A1E23] rounded-lg p-4">
+                      <h3 className="text-lg font-semibold text-primary-100 mb-4">
+                        Genesis Information
+                      </h3>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <p className="text-gray-400 text-sm">Start Date</p>
+                          <p className="text-white">
+                            {new Date(
+                              genesisData.startsAt
+                            ).toLocaleDateString()}
+                          </p>
+                          <p className="text-gray-500 text-xs">
+                            {formatDistanceToNow(
+                              new Date(genesisData.startsAt),
+                              { addSuffix: true }
+                            )}
                           </p>
                         </div>
-                        {displayData.maxSubscribers !== undefined &&
-                          displayData.subscribers !== undefined && (
-                            <div className="bg-[#2A2A2A] rounded-lg p-4">
-                              <span className="text-sm text-gray-400">
-                                Available Slots
-                              </span>
-                              <p className="text-sm text-white mt-1">
-                                {displayData.maxSubscribers -
-                                  displayData.subscribers}{" "}
-                                remaining
-                              </p>
-                            </div>
-                          )}
-                      </>
-                    )}
-                  </div>
+                        <div>
+                          <p className="text-gray-400 text-sm">End Date</p>
+                          <p className="text-white">
+                            {new Date(genesisData.endsAt).toLocaleDateString()}
+                          </p>
+                          <p className="text-gray-500 text-xs">
+                            {formatDistanceToNow(new Date(genesisData.endsAt), {
+                              addSuffix: true,
+                            })}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-gray-400 text-sm">
+                            Total Participants
+                          </p>
+                          <p className="text-white">
+                            {formatLargeNumber(genesisData.totalParticipants)}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-gray-400 text-sm">Status</p>
+                          <p
+                            className={`text-white ${
+                              genesisData.status === "ACTIVE"
+                                ? "text-green-500"
+                                : genesisData.status === "ENDED"
+                                ? "text-red-500"
+                                : "text-yellow-500"
+                            }`}
+                          >
+                            {genesisData.status}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-gray-400 text-sm">
+                            Genesis Address
+                          </p>
+                          <div className="flex items-center gap-2">
+                            <p className="text-white text-sm truncate">
+                              {genesisData.genesisAddress}
+                            </p>
+                            <BsCopy
+                              className="w-4 h-4 cursor-pointer hover:text-cyan-500"
+                              onClick={() =>
+                                copyToClipboard(genesisData.genesisAddress)
+                              }
+                            />
+                          </div>
+                        </div>
+                        <div>
+                          <p className="text-gray-400 text-sm">Total Points</p>
+                          <p className="text-white">
+                            {formatLargeNumber(genesisData.totalPoints)}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                {/* Social Links */}
+                <div className="flex flex-wrap gap-4 mt-2">{renderLinks()}</div>
 
-                  {/* Social Links */}
-                  <div className="flex flex-wrap gap-4">{renderLinks()}</div>
+                <div className="mt-6">
+                  <button
+                    type="button"
+                    className="inline-flex justify-center rounded-md border border-transparent bg-primary-100 px-4 py-2 text-sm font-medium text-black hover:bg-primary-100/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-100 focus-visible:ring-offset-2"
+                    onClick={onClose}
+                  >
+                    Close
+                  </button>
                 </div>
               </Dialog.Panel>
             </Transition.Child>

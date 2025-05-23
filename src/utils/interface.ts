@@ -255,6 +255,26 @@ export interface ISymbiosisSwapResponse {
   amountOutMin: string;
 }
 
+interface Tokenomics {
+  id: number;
+  amount: string;
+  name: string;
+  description: string;
+  isLocked: boolean;
+  bips: number;
+  startsAt: string;
+  releases: {
+    id: number;
+    type: string;
+    duration: number | null;
+    startsAt: string;
+    bips: number;
+    durationUnit: string | null;
+    createdAt: string;
+    updatedAt: string;
+  }[];
+}
+
 export interface IVirtual {
   id: string;
   name: string;
@@ -304,6 +324,7 @@ export interface IVirtual {
     startsAt: string;
     endsAt: string;
   };
+  tokenomics?: Tokenomics[];
 }
 
 export interface IBuyModalProps {

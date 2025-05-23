@@ -8,16 +8,18 @@ import {
   formatCurrency,
   formatPercentage,
   formatTokenAmount,
-  weiToEther,
   formatLargeNumber,
 } from "@/utils/tokenCalculations";
 import { FaExternalLinkAlt } from "react-icons/fa";
 import { IoIosLock } from "react-icons/io";
 import { toast } from "react-toastify";
 import { BsCopy } from "react-icons/bs";
+import { useTokenMetrics } from "@/hooks/useTokenMetrics";
 
 import SmartBuyModal from "../common/SmartBuyModal";
 import DetailModal from "@/components/common/DetailModal";
+import { useMediaQuery } from "react-responsive";
+import Link from "next/link";
 
 interface VirtualCardProps {
   virtual: IVirtual;
@@ -27,17 +29,14 @@ interface VirtualCardProps {
 const VirtualCard: React.FC<VirtualCardProps> = ({ virtual, onClick }) => {
   const [isSmartBuyModalOpen, setIsSmartBuyModalOpen] = useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const metrics = useTokenMetrics(virtual);
+  const is2Xl = useMediaQuery({ minWidth: 1536 });
 
   const getTimeUntilLaunch = () => {
     if (!virtual.genesis?.startsAt) return null;
     const startDate = new Date(virtual.genesis.startsAt);
     return formatDistanceToNow(startDate, { addSuffix: true });
   };
-
-  const tokenPrice =
-    virtual.virtualTokenValue && virtual.mcapInVirtual
-      ? virtual.mcapInVirtual / weiToEther(virtual.virtualTokenValue)
-      : 0;
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -52,13 +51,6 @@ const VirtualCard: React.FC<VirtualCardProps> = ({ virtual, onClick }) => {
       theme: "dark",
     });
   };
-  const diffDays = virtual?.nextLaunchstartsAt?.length
-    ? Math.floor(
-        (new Date(virtual?.nextLaunchstartsAt[0].startsAt).getTime() -
-          Date.now()) /
-          (1000 * 60 * 60 * 24)
-      )
-    : -1;
 
   const handleCardClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -69,6 +61,13 @@ const VirtualCard: React.FC<VirtualCardProps> = ({ virtual, onClick }) => {
     e.stopPropagation();
     setIsSmartBuyModalOpen(true);
   };
+  const diffDays = virtual?.nextLaunchstartsAt?.length
+    ? Math.floor(
+        (new Date(virtual?.nextLaunchstartsAt[0].startsAt).getTime() -
+          Date.now()) /
+          (1000 * 60 * 60 * 24)
+      )
+    : -1;
 
   return (
     <div className="relative">
@@ -90,38 +89,48 @@ const VirtualCard: React.FC<VirtualCardProps> = ({ virtual, onClick }) => {
             </div>
             <div className="flex flex-col gap-1">
               <div className="flex items-center justify-start gap-1">
-                <h3 className=" text-sm text-nowrap font-semibold leading-none text-white font-['Outrun']">
+                <h3 className="text-sm text-nowrap font-semibold leading-none text-white">
                   {virtual.name}
                 </h3>
                 <span className="text-[10px] text-gray-400 font-light">
                   ${virtual.symbol}
                 </span>
-                {/* <div
-                  className={`flex flex-row justify-center items-center text-xs gap-1 rounded p-[2px] ${
-                    diffDays == -1
-                      ? "bg-primary-100/70 text-black"
-                      : diffDays > 7
-                      ? "bg-[#4ade80]/10 text-[#4ade80]"
-                      : "bg-[#eab308]/10 text-[#eab308]"
-                  }`}
-                >
-                  {diffDays != -1 ? (
-                    <>
-                      <IoIosLock />
-                      <p>{Math.abs(diffDays)}d</p>
-                    </>
-                  ) : (
-                    <p>DYOR</p>
-                  )}
-                </div> */}
-                {/* {virtual.socials?.VERIFIED_LINKS?.WEBSITE && (
-                  <FaExternalLinkAlt className="w-2 h-2 text-gray-400 cursor-pointer hover:text-cyan-500" />
-                )} */}
+                {is2Xl && (
+                  <div
+                    className={`flex flex-row justify-center items-center text-[11px] gap-1 rounded p-[2px] ${
+                      diffDays > 7
+                        ? "bg-[#4ade80]/10 text-[#4ade80]"
+                        : diffDays > 0
+                        ? "bg-[#eab308]/10 text-[#eab308]"
+                        : ""
+                    }`}
+                  >
+                    {diffDays != -1 && (
+                      <>
+                        <IoIosLock />
+                        <p>{Math.abs(diffDays)}d</p>
+                      </>
+                    )}
+                  </div>
+                )}
+                {virtual.socials?.VERIFIED_LINKS?.WEBSITE && is2Xl && (
+                  <Link
+                    key={virtual.name}
+                    href={`https://app.virtuals.io/virtuals/${virtual.id}`}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    <FaExternalLinkAlt className="w-2 h-2 text-gray-400 cursor-pointer hover:text-cyan-500" />
+                  </Link>
+                )}
               </div>
               <div className="flex items-center gap-2">
-                {/* <span className="px-2 py-1 rounded-md text-xs border border-cyan-400/50 text-gray-300">
-                  {virtual.role}
-                </span> */}
+                {is2Xl && (
+                  <span className="px-2 py-1 rounded-md text-xs border border-cyan-400/50 text-gray-300">
+                    {virtual.role}
+                  </span>
+                )}
+
                 {virtual.contractAddress && (
                   <div className="flex items-center gap-2 px-2 py-1 rounded-md text-xs border border-cyan-400/50 text-gray-300">
                     <span>
@@ -142,7 +151,7 @@ const VirtualCard: React.FC<VirtualCardProps> = ({ virtual, onClick }) => {
           </div>
           <button
             onClick={handleSmartBuyClick}
-            className=" w-[100px] px-2 py-1 text-nowrap tex-xs rounded-lg text-primary-100 border border-primary-100/80 font-semibold hover:bg-cyan-500/20 transition-all duration-300 flex items-center justify-center gap-2"
+            className="w-[100px] px-2 py-1 text-nowrap tex-xs rounded-lg text-primary-100 border border-primary-100/80 font-semibold hover:bg-cyan-500/20 transition-all duration-300 flex items-center justify-center gap-2"
           >
             <Image
               src="/Trade/smartBuy.png"
@@ -153,35 +162,42 @@ const VirtualCard: React.FC<VirtualCardProps> = ({ virtual, onClick }) => {
             <span>Smart Buy</span>
           </button>
         </div>
+
         {/* Bottom Row */}
-        <div className="flex flex-row px-2 py-4  items-center justify-between border-t-[0.5px] border-primary-100/60 w-full">
-          <div className="text-[9px] flex flex-row space-x-2">
-            <span className="text-gray-400">Price: </span>
-            <span className="text-white">{formatCurrency(tokenPrice)}</span>
+        <div className="relative px-4 py-2 items-center justify-center border-t-[0.5px] border-primary-100/60 w-full">
+          <div className="grid grid-cols-2 gap-24 relative w-full items-center justify-between">
+            <div className="text-sm flex flex-row space-x-1 relative text-left">
+              <span className="text-gray-400">Price: </span>
+              <span className="text-white">
+                {formatCurrency(metrics.priceUSD)}
+              </span>
+            </div>
+            <div className="text-sm flex flex-row space-x-1 relative text-left">
+              <span className="text-gray-400">24h: </span>
+              <span
+                className={`${
+                  metrics.priceChange24h >= 0
+                    ? "text-green-500"
+                    : "text-red-500"
+                }`}
+              >
+                {formatPercentage(metrics.priceChange24h)}
+              </span>
+            </div>
           </div>
-          <div className="text-[9px] flex flex-row space-x-1">
-            <span className="text-gray-400">24h: </span>
-            <span
-              className={`${
-                (virtual.priceChangePercent24h || 0) >= 0
-                  ? "text-green-500"
-                  : "text-red-500"
-              }`}
-            >
-              {formatPercentage(virtual.priceChangePercent24h || 0)}
-            </span>
-          </div>
-          <div className="text-[9px] flex flex-row space-x-1">
-            <span className="text-gray-400">Vol: </span>
-            <span className="text-white">
-              {formatCurrency(virtual.volume24h || 0)}
-            </span>
-          </div>
-          <div className="text-[9px] flex flex-row space-x-1">
-            <span className="text-gray-400">Holders: </span>
-            <span className="text-white">
-              {formatLargeNumber(virtual.holderCount || 0)}
-            </span>
+          <div className="grid grid-cols-2 gap-24 relative w-full items-center justify-between">
+            <div className="text-sm flex flex-row space-x-1 relative text-left">
+              <span className="text-gray-400">Vol: </span>
+              <span className="text-white">
+                {formatCurrency(metrics.volume24hUSD)}
+              </span>
+            </div>
+            <div className="text-sm flex flex-row space-x-1 relative text-left">
+              <span className="text-gray-400">Holders: </span>
+              <span className="text-white">
+                {formatLargeNumber(metrics.holders)}
+              </span>
+            </div>
           </div>
         </div>
       </div>

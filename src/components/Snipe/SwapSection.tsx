@@ -1,10 +1,16 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { IVirtual } from "@/utils/interface";
 import { LuArrowUpDown } from "react-icons/lu";
 import { TiArrowSortedDown } from "react-icons/ti";
 import ImageNext from "../common/ImageNext";
 import { IoInformationCircle } from "react-icons/io5";
 import clsx from "clsx";
+import useEffectAsync from "@/hooks/useEffectAsync";
+import { useDebounce } from "use-debounce";
+import { useLoginContext } from "@/context/LoginContext";
+import { ethers } from "ethers";
+import { BuyContract } from "@/constants/config";
+import buyAbi from "@/constants/abis/buy.json";
 
 interface SwapSectionProps {
   selectedVirtual: IVirtual | null;
@@ -18,6 +24,7 @@ interface SwapSectionProps {
   swapFields: () => void;
   buttonText: string;
   setIsConfirmPop: (isOpen: boolean) => void;
+  isBalanceLoading: boolean;
 }
 
 const SwapSection: React.FC<SwapSectionProps> = ({
@@ -32,9 +39,13 @@ const SwapSection: React.FC<SwapSectionProps> = ({
   swapFields,
   buttonText,
   setIsConfirmPop,
+  isBalanceLoading,
 }) => {
   const [isFocused, setIsFocused] = useState<boolean>(false);
+  const [isEstimating, setIsEstimating] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [debouncedFromAmount] = useDebounce(fromAmount, 1000);
+  const { networkData } = useLoginContext();
 
   const handleFocus = (ref: React.RefObject<HTMLInputElement>) => {
     const input = ref.current;
@@ -43,6 +54,86 @@ const SwapSection: React.FC<SwapSectionProps> = ({
       input.setSelectionRange(length, length);
     }
   };
+  useEffectAsync(async () => {
+    if (
+      debouncedFromAmount &&
+      selectedVirtual?.contractAddress &&
+      selectedToVirtual?.contractAddress
+    ) {
+      setIsEstimating(true);
+      try {
+        const contract = new ethers.Contract(
+          BuyContract,
+          buyAbi,
+          networkData?.provider?.getSigner()
+        );
+        console.log("neee", contract, networkData);
+
+        // Validate input amount
+        if (
+          isNaN(Number(debouncedFromAmount)) ||
+          Number(debouncedFromAmount) <= 0
+        ) {
+          setToAmount("0");
+          setIsEstimating(false);
+          return;
+        }
+
+        // First get amountsOut to know what we'll receive
+        const amountInBN = ethers.utils.parseUnits(debouncedFromAmount, 18);
+
+        // Validate contract addresses
+        if (
+          !ethers.utils.isAddress(selectedVirtual.contractAddress) ||
+          !ethers.utils.isAddress(selectedToVirtual.contractAddress)
+        ) {
+          console.error("Invalid contract addresses");
+          setToAmount("0");
+          setIsEstimating(false);
+          return;
+        }
+
+        const amountsOut = await contract.getAmountsOut(amountInBN, [
+          selectedVirtual.contractAddress,
+          selectedToVirtual.contractAddress,
+        ]);
+
+        if (!amountsOut || amountsOut.length < 2) {
+          console.error("Invalid amounts out from contract");
+          setToAmount("0");
+          setIsEstimating(false);
+          return;
+        }
+
+        // Calculate minimum amount out with slippage
+        const slippage = 0.5;
+        const minAmountOut = amountsOut[1]
+          .mul(1000 - Math.floor(slippage * 10))
+          .div(1000);
+
+        setToAmount(ethers.utils.formatUnits(minAmountOut, 18));
+      } catch (error: any) {
+        console.error("Estimation failed:", error);
+        setToAmount("0");
+
+        // Handle specific error cases
+        if (error?.code === -32603) {
+          console.error("Contract execution reverted");
+        } else if (error?.code === -32000) {
+          console.error("Internal JSON-RPC error");
+        }
+      } finally {
+        setIsEstimating(false);
+      }
+    } else {
+      setToAmount("0");
+      setIsEstimating(false);
+    }
+  }, [
+    debouncedFromAmount,
+    selectedVirtual?.contractAddress,
+    selectedToVirtual?.contractAddress,
+  ]);
 
   const handlePercentCost = (value: number) => {
     if (value === 1) {
@@ -149,9 +240,13 @@ const SwapSection: React.FC<SwapSectionProps> = ({
           {selectedVirtual ? (
             <div className="flex flex-row gap-x-1 w-full text-xs text-zinc-300">
               Available
-              <span className="">
-                {Number(selectedVirtual.userBalance || 0).toFixed(6)}
-              </span>
+              {isBalanceLoading ? (
+                <div className="animate-pulse bg-gray-700 h-4 w-20 rounded"></div>
+              ) : (
+                <span className="">
+                  {Number(selectedVirtual.userBalance || 0).toFixed(6)}
+                </span>
+              )}
               {selectedVirtual.name}
             </div>
           ) : (
@@ -211,17 +306,31 @@ const SwapSection: React.FC<SwapSectionProps> = ({
             </div>
             <TiArrowSortedDown className="text-prime-token-200 size-5" />
           </button>
-          <span className="text-base sm:font-bold text-white sm:text-lg">
-            {toAmount || "0.0"}
-          </span>
+          <div className="text-base sm:font-bold text-white sm:text-lg">
+            {isEstimating ? (
+              <div className="flex items-center gap-2">
+                <div className="flex gap-1">
+                  <div className="w-1.5 h-1.5 bg-white rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                  <div className="w-1.5 h-1.5 bg-white rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                  <div className="w-1.5 h-1.5 bg-white rounded-full animate-bounce"></div>
+                </div>
+              </div>
+            ) : (
+              toAmount || "0.0"
+            )}
+          </div>
         </div>
         <div className="w-full flex flex-row flex-nowrap justify-between items-center text-white">
           {selectedToVirtual ? (
             <div className="flex flex-row gap-x-1 w-full text-xs text-zinc-300">
               Available
-              <span className="">
-                {Number(selectedToVirtual.userBalance || 0).toFixed(6)}
-              </span>
+              {isBalanceLoading ? (
+                <div className="animate-pulse bg-gray-700 h-4 w-20 rounded"></div>
+              ) : (
+                <span className="">
+                  {Number(selectedToVirtual.userBalance || 0).toFixed(6)}
+                </span>
+              )}
               {selectedToVirtual.name}
             </div>
           ) : (

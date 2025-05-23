@@ -21,9 +21,9 @@ const VirtualTokenSelector: React.FC<VirtualTokenSelectorProps> = ({
   title,
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedTab, setSelectedTab] = useState<
-    "genesis" | "sentient" | "prototype"
-  >("genesis");
+  const [selectedTab, setSelectedTab] = useState<"sentient" | "prototype">(
+    "sentient"
+  );
   const [showAllTokens, setShowAllTokens] = useState(false);
 
   const { virtuals: sentientVirtuals, loading: sentientLoading } =
@@ -42,32 +42,6 @@ const VirtualTokenSelector: React.FC<VirtualTokenSelectorProps> = ({
     let tokens: IVirtual[] = [];
 
     switch (selectedTab) {
-      case "genesis":
-        tokens = Array.isArray(genesisData?.data)
-          ? genesisData.data.map((genesis) => ({
-              id: genesis.virtual.id.toString(),
-              name: genesis.virtual.name,
-              symbol: genesis.virtual.symbol,
-              description: genesis.virtual.description,
-              role: "",
-              contractAddress: genesis.genesisAddress,
-              image: genesis.virtual.image,
-              priceChangePercent24h: 0,
-              volume24h: 0,
-              totalValueLocked: "0",
-              holderCount: 0,
-              virtualTokenValue: "0",
-              mcapInVirtual: 0,
-              cores: [],
-              socials: {},
-              genesis: {
-                startsAt: genesis.startsAt,
-                endsAt: genesis.endsAt,
-              },
-              nextLaunchstartsAt: [],
-            }))
-          : [];
-        break;
       case "sentient":
         tokens = sentientVirtuals;
         break;
@@ -115,16 +89,6 @@ const VirtualTokenSelector: React.FC<VirtualTokenSelectorProps> = ({
       {/* Token Type Tabs */}
       <div className="flex gap-2 p-4 border-b border-primary-100/20">
         <button
-          onClick={() => setSelectedTab("genesis")}
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-            selectedTab === "genesis"
-              ? "bg-primary-100 text-black"
-              : "bg-zinc-700 text-gray-400 hover:bg-zinc-600"
-          }`}
-        >
-          Genesis
-        </button>
-        <button
           onClick={() => setSelectedTab("sentient")}
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
             selectedTab === "sentient"
@@ -148,11 +112,7 @@ const VirtualTokenSelector: React.FC<VirtualTokenSelectorProps> = ({
 
       {/* Token List */}
       <div className="flex-1 overflow-y-auto max-h-[300px] min-h-[200px]">
-        {selectedTab === "genesis" && genesisLoading ? (
-          <div className="flex justify-center items-center h-32">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-100"></div>
-          </div>
-        ) : selectedTab === "sentient" && sentientLoading ? (
+        {selectedTab === "sentient" && sentientLoading ? (
           <div className="flex justify-center items-center h-32">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-100"></div>
           </div>

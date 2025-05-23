@@ -33,6 +33,7 @@ import {
 import approvalService from "@/services/contract/approvalService";
 import { useSwapContext } from "@/context/SwapContext";
 import SwapSection from "./SwapSection";
+import useEffectAsync from "@/hooks/useEffectAsync";
 
 const Snipe = () => {
   const { networkData } = useLoginContext();
@@ -86,6 +87,8 @@ const Snipe = () => {
   const [selectedToVirtual, setSelectedToVirtual] = useState<IVirtual | null>(
     virtuals[1]
   );
+
+  const [isBalanceLoading, setIsBalanceLoading] = useState(false);
 
   // Add useEffect to set selected tokens when sentient agents are loaded
   useEffect(() => {
@@ -198,6 +201,87 @@ const Snipe = () => {
       throw error;
     }
   };
+  const handleSwap = async () => {
+    if (!address || balanceLoading || !selectedVirtual || !selectedToVirtual) {
+      toast.error("Please connect your wallet and select a token");
+      return;
+    }
+
+    try {
+      toast.info("Starting swap process...", { autoClose: false });
+      const allowance = await approvalService.checkAllowance({
+        tokenAddress: selectedVirtual.contractAddress!,
+        provider: networkData?.provider!,
+      });
+
+      // If allowance is less than amount, approve first
+      if (Number(allowance) < Number(fromAmount)) {
+        toast.info("Approving token spend...");
+        await approvalService.approveVirtualToken(
+          fromAmount.toString(),
+          networkData?.provider!,
+          selectedVirtual.contractAddress!,
+          BuyContract
+        );
+        toast.success("Token approved successfully!");
+      }
+      toast.info("Processing Swap transaction...");
+
+      const receipt = await buyService.buyToken({
+        amountIn: fromAmount.toString(),
+        amountOutMin: "0", // Set minimum amount or calculate slippage
+        path: [
+          selectedVirtual.contractAddress!,
+          selectedToVirtual.contractAddress!,
+        ],
+        to: address,
+        timestamp: Math.floor(Date.now() / 1000) + 86400, // 1 day from now
+        provider: networkData?.provider!,
+        selectedToken: {
+          logo: "",
+          name: "VIRT",
+          symbol: "",
+          balance: "0",
+        },
+      });
+
+      toast.success("Swap transaction successful! 🎉");
+      console.log("Transaction successful:", receipt);
+    } catch (error) {
+      console.error("Error in quick buy:", error);
+      toast.error(
+        "Failed to Swap: " +
+          (error instanceof Error ? error.message : "Unknown error")
+      );
+      throw error;
+    }
+  };
+  useEffectAsync(async () => {
+    if (selectedVirtual || selectedToVirtual) {
+      setIsBalanceLoading(true);
+      try {
+        if (selectedVirtual) {
+          const value = await approvalService.balanceOf({
+            tokenAddress: selectedVirtual.contractAddress!,
+            provider: networkData?.provider!,
+          });
+          selectedVirtual.userBalance = Number(value);
+        }
+        if (selectedToVirtual) {
+          const value = await approvalService.balanceOf({
+            tokenAddress: selectedToVirtual.contractAddress!,
+            provider: networkData?.provider!,
+          });
+          selectedToVirtual.userBalance = Number(value);
+        }
+      } catch (error) {
+        console.error("Error fetching balance:", error);
+        toast.error("Failed to fetch balance");
+      } finally {
+        setIsBalanceLoading(false);
+      }
+    }
+  }, [selectedVirtual, selectedToVirtual]);
 
   const handleQuickSell = async (virtual: IVirtual, percentage: number) => {
     if (!address || balanceLoading || !selectedVitualtoken) {
@@ -338,7 +422,7 @@ const Snipe = () => {
         {/* Left section containing all three boxes */}
         <div className="w-full grid grid-cols-3 gap-3">
           {/* Genesis Launches Box */}
-          <div className="h-[calc(100vh-10.5rem)]">
+          <div className="h-[calc(100vh-10.5rem)] 2xl:h-[calc(100vh-14.3rem)] ">
             <div className="h-full w-full backdrop-blur-sm bg-[#15181B]/80 border border-primary-100 rounded-xl text-white flex flex-col">
               <h2 className="text-lg md:text-xl font-semibold text-primary-100 text-center p-4">
                 Genesis Launches
@@ -367,7 +451,7 @@ const Snipe = () => {
             </div>
           </div>
           {/* Sentient Agents Box */}
-          <div className="h-[calc(100vh-10.5rem)]">
+          <div className="h-[calc(100vh-10.5rem)] 2xl:h-[calc(100vh-14.3rem)]">
             <div className="h-full w-full backdrop-blur-sm bg-[#15181B]/80 border border-primary-100 rounded-xl text-white flex flex-col">
               <h2 className="text-lg md:text-xl font-semibold text-primary-100 text-center p-4">
                 Sentient Agents
@@ -396,7 +480,7 @@ const Snipe = () => {
             </div>
           </div>
           {/* Prototype Agents Box */}
-          <div className="h-[calc(100vh-10.5rem)]">
+          <div className="h-[calc(100vh-10.5rem)] 2xl:h-[calc(100vh-14.3rem)]">
             <div className="h-full w-full backdrop-blur-sm bg-[#15181B]/80 border border-primary-100 rounded-xl text-white flex flex-col">
               <h2 className="text-lg md:text-xl font-semibold text-primary-100 text-center p-4">
                 Prototype Agents
@@ -472,6 +556,7 @@ const Snipe = () => {
                 swapFields={swapFields}
                 buttonText={buttonText}
                 setIsConfirmPop={setIsConfirmPop}
+                isBalanceLoading={isBalanceLoading}
               />
             )}
 
@@ -525,8 +610,9 @@ const Snipe = () => {
                     </button>
                     <button
                       className="flex-1 py-2 px-4 bg-primary-100 text-black rounded-lg hover:brightness-125 transition-all"
-                      onClick={() => {
+                      onClick={async () => {
                         setIsConfirmPop(false);
+                        await handleSwap();
                       }}
                     >
                       Confirm

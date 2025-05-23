@@ -17,6 +17,7 @@ import SnipeModal from "@/components/common/SnipeModal";
 import { useSwapContext } from "@/context/SwapContext";
 import { BsCopy } from "react-icons/bs";
 import DetailModal from "@/components/common/DetailModal";
+import Link from "next/link";
 
 interface GenesisCardProps {
   genesis: IGenesis;
@@ -162,13 +163,20 @@ const GenesisCard: React.FC<GenesisCardProps> = ({ genesis, onClick }) => {
             </div>
             <div className="flex flex-col gap-2">
               <div className="flex items-end justify-center  text-center gap-1">
-                <h3 className="text-sm font-semibold leading-none text-white font-['Outrun']">
+                <h3 className="text-sm font-semibold leading-none text-white ">
                   {genesis.virtual.name}
                 </h3>
                 <span className="text-[10px] text-center leading-none text-gray-400 font-light">
                   ${genesis.virtual.symbol}
                 </span>
-                <FaExternalLinkAlt className="w-3 h-3 mb-[1px]  text-gray-400 cursor-pointer hover:text-cyan-500" />
+                <Link
+                  key={genesis.virtual.name}
+                  href={`https://app.virtuals.io/geneses/${genesis.id}`}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  <FaExternalLinkAlt className="w-3 h-3 mb-[1px]  text-gray-400 cursor-pointer hover:text-cyan-500" />
+                </Link>
               </div>
               <div className="flex items-center gap-2">
                 {/* <span className="px-2 py-1 rounded-md text-xs  border border-cyan-400/50 text-gray-300">

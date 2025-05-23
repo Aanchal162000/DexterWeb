@@ -23,7 +23,6 @@ export const useTokenMetrics = (
 
     // For IVirtual type
     if (isVirtual(virtual)) {
-      console.log("virtual", virtual);
       // 1. Price
       const price = virtual.mcapInVirtual
         ? virtual.mcapInVirtual /

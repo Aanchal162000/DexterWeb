@@ -23,6 +23,18 @@ interface DepositParams {
   provider: ethers.providers.Web3Provider;
 }
 
+interface AgentStatusResponse {
+  success: boolean;
+  message: string;
+  data?: {
+    status: string;
+    genesisId: string;
+    walletAddress: string;
+    createdAt: string;
+    updatedAt: string;
+  };
+}
+
 class AgentService {
   private static instance: AgentService;
   private loading: boolean = false;
@@ -110,6 +122,43 @@ class AgentService {
         err instanceof Error
           ? err.message
           : "An error occurred while creating agent";
+      return {
+        success: false,
+        message: errorMessage,
+      };
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  public async checkAgentStatus(
+    genesisId: string,
+    walletAddress: string
+  ): Promise<AgentStatusResponse> {
+    try {
+      this.loading = true;
+
+      const response = await fetch(
+        `https://dexter-backend-ucdt5.ondigitalocean.app/api/agent/${genesisId}/status/${walletAddress}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to check agent status");
+      }
+
+      const result = await response.json();
+      return result;
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error
+          ? err.message
+          : "An error occurred while checking agent status";
       return {
         success: false,
         message: errorMessage,

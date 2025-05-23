@@ -22,6 +22,8 @@ import Link from "next/link";
 interface GenesisCardProps {
   genesis: IGenesis;
   onClick?: () => void;
+  subscriptionData?: any;
+  fetchSubscriptionData: () => Promise<void>;
 }
 
 interface StatusBadgeProps {
@@ -42,7 +44,12 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({ status, timeLeft }) => {
   );
 };
 
-const GenesisCard: React.FC<GenesisCardProps> = ({ genesis, onClick }) => {
+const GenesisCard: React.FC<GenesisCardProps> = ({
+  genesis,
+  onClick,
+  subscriptionData,
+  fetchSubscriptionData,
+}) => {
   const [timeLeft, setTimeLeft] = useState<string | React.ReactNode>("");
   const [status, setStatus] = useState<"upcoming" | "live" | "ended">(
     "upcoming"
@@ -50,6 +57,11 @@ const GenesisCard: React.FC<GenesisCardProps> = ({ genesis, onClick }) => {
   const [isSnipeModalOpen, setIsSnipeModalOpen] = useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const { address } = useLoginContext();
+
+  const isSubscribed = subscriptionData?.filter(
+    (sub: any) => sub.genesisId === genesis.genesisId
+  ).length;
+  console.log("genesisi:", isSubscribed);
 
   useEffect(() => {
     const updateTimer = () => {
@@ -179,9 +191,6 @@ const GenesisCard: React.FC<GenesisCardProps> = ({ genesis, onClick }) => {
                 </Link>
               </div>
               <div className="flex items-center gap-2">
-                {/* <span className="px-2 py-1 rounded-md text-xs  border border-cyan-400/50 text-gray-300">
-                  Entertainment
-                </span> */}
                 <div className="flex items-center gap-2 px-2 py-1 rounded-md text-xs border border-cyan-400/50  text-gray-300">
                   <span>
                     {genesis.genesisAddress?.slice(0, 4)}...
@@ -208,8 +217,17 @@ const GenesisCard: React.FC<GenesisCardProps> = ({ genesis, onClick }) => {
             </button>
           )}
         </div>
+        {isSubscribed ? (
+          <div className="flex flex-col gap-2 mt-2">
+            <div className="border-t-[0.5px] border-cyan-500/50 flex justify-center items-center p-2 text-sm font-medium">
+              Snipe active! Dexter will auto-buy at launch
+            </div>
+          </div>
+        ) : (
+          <></>
+        )}
         {/* Bottom Row */}
-        <div className="flex flex-col gap-2 mt-2">
+        <div className="flex flex-col gap-2 ">
           <div className="border-t-[0.5px] border-cyan-500/50 flex justify-center items-center p-2">
             <StatusBadge status={status} timeLeft={timeLeft} />
           </div>
@@ -223,6 +241,7 @@ const GenesisCard: React.FC<GenesisCardProps> = ({ genesis, onClick }) => {
         name={genesis.virtual.name}
         endsAt={genesis.endsAt}
         walletAddress={address || ""}
+        fetchSubscriptionData={fetchSubscriptionData}
       />
 
       <DetailModal

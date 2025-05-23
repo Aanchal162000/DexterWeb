@@ -1,8 +1,5 @@
 import React, { useState } from "react";
 import { IVirtual } from "@/utils/interface";
-import { useSentientVirtuals } from "@/hooks/useSentientVirtuals";
-import { useGenesis } from "@/hooks/useGenesis";
-import { usePrototypeVirtuals } from "@/hooks/usePrototypeVirtuals";
 import { formatCurrency, formatPercentage } from "@/utils/tokenCalculations";
 import Image from "next/image";
 import { LuSearch } from "react-icons/lu";
@@ -12,6 +9,10 @@ interface VirtualTokenSelectorProps {
   fromOrTo: "FromSelection" | "ToSelection";
   setSelectedCoin: (coin: IVirtual | null) => void;
   title: string;
+  sentientVirtuals: IVirtual[];
+  prototypeVirtuals: IVirtual[];
+  sentientLoading: boolean;
+  prototypeLoading: boolean;
 }
 
 const VirtualTokenSelector: React.FC<VirtualTokenSelectorProps> = ({
@@ -19,18 +20,16 @@ const VirtualTokenSelector: React.FC<VirtualTokenSelectorProps> = ({
   fromOrTo,
   setSelectedCoin,
   title,
+  sentientVirtuals,
+  prototypeVirtuals,
+  sentientLoading,
+  prototypeLoading,
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTab, setSelectedTab] = useState<"sentient" | "prototype">(
     "sentient"
   );
   const [showAllTokens, setShowAllTokens] = useState(false);
-
-  const { virtuals: sentientVirtuals, loading: sentientLoading } =
-    useSentientVirtuals();
-  const { data: genesisData, loading: genesisLoading } = useGenesis();
-  const { virtuals: prototypeVirtuals, loading: prototypeLoading } =
-    usePrototypeVirtuals();
 
   const handleTokenSelect = (virtual: IVirtual) => {
     setSelectedCoin(virtual);

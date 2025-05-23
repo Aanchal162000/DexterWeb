@@ -22,6 +22,7 @@ interface SnipeModalProps {
   name: string;
   walletAddress: string;
   endsAt: string;
+  fetchSubscriptionData: () => Promise<void>;
 }
 
 interface TokenOption {
@@ -38,6 +39,7 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
   name,
   walletAddress,
   endsAt,
+  fetchSubscriptionData,
 }) => {
   const { selectedVitualtoken, setSelctedVirtualToken } = useSwapContext();
   const { balances } = useWalletBalance();
@@ -180,6 +182,7 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
           ).toString(),
           launchTime: new Date(endsAt),
         });
+        fetchSubscriptionData();
 
         if (!response.success) {
           throw new Error(response.message);

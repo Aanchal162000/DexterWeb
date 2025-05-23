@@ -40,10 +40,11 @@ const Snipe = () => {
   const [isFromCoinOpen, setIsFromCoinOpen] = useState(false);
   const [isToCoinOpen, setIsToCoinOpen] = useState(false);
   const [selectedTab, setSelectedTab] = useState<"swap" | "create">("swap");
-  const [fromAmount, setFromAmount] = useState<string>("");
-  const [toAmount, setToAmount] = useState<string>("");
+  const [fromAmount, setFromAmount] = useState<number>(0.0);
+  const [toAmount, setToAmount] = useState<number>(0.0);
   const [buttonText, setButtonText] = useState<string>("Select Token");
   const [isConfirmPop, setIsConfirmPop] = useState<boolean>(false);
+  const [subscriptionData, setSubscriptionData] = useState<any>(null);
 
   const [isCreatingAgent, setIsCreatingAgent] = useState(false);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
@@ -98,109 +99,28 @@ const Snipe = () => {
     }
   }, [virtuals, loading]);
 
-  const handlePercentageSelect = async (
-    virtual: IVirtual,
-    percentage: number,
-    type: "buy" | "sell"
-  ) => {
-    if (processingVirtuals[virtual.id]?.[type]) return;
-
-    try {
-      setActivePercentage(percentage);
-      setProcessingVirtuals((prev) => ({
-        ...prev,
-        [virtual.id]: {
-          ...prev[virtual.id],
-          [type]: true,
-        },
-      }));
-
-      if (type === "buy") {
-        await handleQuickBuy(virtual, percentage);
-        toast.success(
-          `Successfully bought ${calculateAmount(
-            percentage,
-            virtual
-          )} ${getTokenSymbol(virtual)} of ${virtual.name}`
+  // Add useEffect to fetch subscription data
+  const fetchSubscriptionData = async () => {
+    if (address) {
+      try {
+        const response = await fetch(
+          `https://dexter-backend-ucdt5.ondigitalocean.app/api/agent/subscriptions/${address}`
         );
-      } else {
-        await handleQuickSell(virtual, percentage);
-        toast.success(
-          `Successfully sold ${calculateAmount(
-            percentage,
-            virtual
-          )} ${getTokenSymbol(virtual)} of ${virtual.name}`
-        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch subscription data");
+        }
+        const data = await response.json();
+        setSubscriptionData(data?.data);
+      } catch (error) {
+        console.error("Error fetching subscription data:", error);
+        toast.error("Failed to fetch subscription data");
       }
-      setShowPercentages(null);
-    } catch (error) {
-      toast.error(`Failed to ${type} ${virtual.name}`);
-      console.error(error);
-    } finally {
-      setProcessingVirtuals((prev) => ({
-        ...prev,
-        [virtual.id]: {
-          ...prev[virtual.id],
-          [type]: false,
-        },
-      }));
     }
   };
+  useEffect(() => {
+    fetchSubscriptionData();
+  }, [address]);
 
-  const handleQuickBuy = async (virtual: IVirtual, percentage: number) => {
-    if (!address || balanceLoading || !selectedVitualtoken) {
-      toast.error("Please connect your wallet and select a token");
-      return;
-    }
-
-    try {
-      toast.info("Starting quick buy process...", { autoClose: false });
-      const balance = balances[selectedVitualtoken.symbol] || "0";
-      const amount = (Number(balance) * percentage) / 100;
-
-      const allowance = await approvalService.checkAllowance({
-        tokenAddress: VIRTUALS_TOKEN_ADDRESS,
-        provider: networkData?.provider!,
-      });
-
-      // If allowance is less than amount, approve first
-      if (Number(allowance) < amount) {
-        toast.info("Approving token spend...");
-        await approvalService.approveVirtualToken(
-          amount.toString(),
-          networkData?.provider!,
-          VIRTUALS_TOKEN_ADDRESS,
-          BuyContract
-        );
-        toast.success("Token approved successfully!");
-      }
-
-      toast.info("Processing buy transaction...");
-      const isETH = selectedVitualtoken.symbol === "ETH";
-      const receipt = await buyService.buyToken({
-        amountIn: amount.toString(),
-        amountOutMin: "0", // Set minimum amount or calculate slippage
-        path: [
-          isETH ? WRAPPED_ETH_ADDRESS : VIRTUALS_TOKEN_ADDRESS,
-          virtual.contractAddress!,
-        ],
-        to: address,
-        timestamp: Math.floor(Date.now() / 1000) + 86400, // 1 day from now
-        provider: networkData?.provider!,
-        selectedToken: selectedVitualtoken,
-      });
-
-      toast.success("Buy transaction successful! 🎉");
-      console.log("Transaction successful:", receipt);
-    } catch (error) {
-      console.error("Error in quick buy:", error);
-      toast.error(
-        "Failed to Quick Buy: " +
-          (error instanceof Error ? error.message : "Unknown error")
-      );
-      throw error;
-    }
-  };
   const handleSwap = async () => {
     if (!address || balanceLoading || !selectedVirtual || !selectedToVirtual) {
       toast.error("Please connect your wallet and select a token");
@@ -276,89 +196,11 @@ const Snipe = () => {
         }
       } catch (error) {
         console.error("Error fetching balance:", error);
-        toast.error("Failed to fetch balance");
       } finally {
         setIsBalanceLoading(false);
       }
     }
   }, [selectedVirtual, selectedToVirtual]);
-
-  const handleQuickSell = async (virtual: IVirtual, percentage: number) => {
-    if (!address || balanceLoading || !selectedVitualtoken) {
-      toast.error("Please connect your wallet and select a token");
-      return;
-    }
-
-    try {
-      toast.info("Starting quick Sell process...", { autoClose: false });
-
-      const amount = (Number(virtual?.userBalance) * percentage) / 100;
-      const allowance = await approvalService.checkAllowance({
-        tokenAddress: virtual.contractAddress!,
-        provider: networkData?.provider!,
-      });
-
-      // If allowance is less than amount, approve first
-      if (Number(allowance) < amount) {
-        toast.info("Approving token spend...");
-        await approvalService.approveVirtualToken(
-          amount.toString(),
-          networkData?.provider!,
-          virtual.contractAddress!,
-          BuyContract
-        );
-        toast.success("Token approved successfully!");
-      }
-
-      toast.info("Processing Sell transaction...");
-      const isETH = selectedVitualtoken.symbol === "ETH";
-      const receipt = await buyService.buyToken({
-        amountIn: amount.toString(),
-        amountOutMin: "0", // Set minimum amount or calculate slippage
-        path: [
-          virtual.contractAddress!,
-          isETH ? WRAPPED_ETH_ADDRESS : VIRTUALS_TOKEN_ADDRESS,
-        ],
-        to: address,
-        timestamp: Math.floor(Date.now() / 1000) + 86400, // 1 day from now
-        provider: networkData?.provider!,
-        selectedToken: {
-          logo: "",
-          symbol: `GET${selectedVitualtoken.symbol}`,
-          name: virtual.name,
-          balance: virtual.userBalance?.toString()!,
-        },
-      });
-
-      toast.success("Sell transaction successful! 🎉");
-      console.log("Transaction successful:", receipt);
-    } catch (error) {
-      console.error("Error in quick buy:", error);
-      toast.error(
-        "Failed to Quick Buy: " +
-          (error instanceof Error ? error.message : "Unknown error")
-      );
-      throw error;
-    }
-  };
-
-  const calculateAmount = (percentage: number, virtual?: IVirtual) => {
-    if (!selectedVitualtoken || balanceLoading) return "0";
-    if (showPercentages?.type === "sell" && virtual) {
-      // For sell, calculate based on the virtual token's balance
-      const balance = virtual.userBalance || 0;
-      return ((Number(balance) * percentage) / 100).toFixed(4);
-    }
-    // For buy, calculate based on selected token's balance
-    const balance = balances[selectedVitualtoken.symbol] || "0";
-    return ((Number(balance) * percentage) / 100).toFixed(4);
-  };
-
-  const getTokenSymbol = (virtual: IVirtual) => {
-    return showPercentages?.type === "sell"
-      ? virtual.symbol
-      : selectedVitualtoken?.symbol;
-  };
 
   const handleCloseCreateAgent = () => {
     setIsCreatingAgent(false);
@@ -374,7 +216,7 @@ const Snipe = () => {
       setButtonText("Loading...");
     } else if (!selectedVirtual || !selectedToVirtual) {
       setButtonText("Select Token");
-    } else if (!fromAmount || !toAmount) {
+    } else if (fromAmount == 0 || toAmount == 0) {
       setButtonText("Enter Amount");
     } else {
       setButtonText("Trade");
@@ -419,6 +261,8 @@ const Snipe = () => {
                       key={genesis.id}
                       genesis={genesis}
                       onClick={() => {}}
+                      subscriptionData={subscriptionData}
+                      fetchSubscriptionData={fetchSubscriptionData}
                     />
                   ))
                 )}
@@ -541,6 +385,10 @@ const Snipe = () => {
                   fromOrTo="FromSelection"
                   setSelectedCoin={setSelectedVirtual}
                   title="Send From"
+                  sentientVirtuals={virtuals}
+                  prototypeVirtuals={prototypeVirtuals}
+                  sentientLoading={loading}
+                  prototypeLoading={prototypeLoading}
                 />
               </DialogContainer>
             )}
@@ -555,6 +403,10 @@ const Snipe = () => {
                   fromOrTo="ToSelection"
                   setSelectedCoin={setSelectedToVirtual}
                   title="Receive As"
+                  sentientVirtuals={virtuals}
+                  prototypeVirtuals={prototypeVirtuals}
+                  sentientLoading={loading}
+                  prototypeLoading={prototypeLoading}
                 />
               </DialogContainer>
             )}

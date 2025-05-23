@@ -1,6 +1,7 @@
 import { ethers } from "ethers";
 import { SnipeContract, VIRTUALS_TOKEN_ADDRESS } from "@/constants/config";
 import snipeAbi from "@/constants/abis/snipe.json";
+import { QuoteRequestParams } from "./interfaces";
 
 interface AgentRequest {
   genesisId: string;
@@ -40,6 +41,13 @@ class AgentService {
   private loading: boolean = false;
   private contract: string = SnipeContract;
   private abi: ethers.ContractInterface = snipeAbi;
+  private readonly BASE_URL =
+    "https://web3.okx.com/priapi/v1/dx/trade/multi/outer/v3/quote/snap-mode";
+  private readonly DEFAULT_SLIPPAGE = 0.1;
+  private readonly DEFAULT_SLIPPAGE_TYPE = 1;
+  private readonly DEFAULT_PMM = 1;
+  private readonly DEFAULT_GAS_DROP_TYPE = 0;
+  private readonly DEFAULT_FORBIDDEN_BRIDGE_TYPES = 0;
 
   private constructor() {}
 
@@ -165,6 +173,83 @@ class AgentService {
       };
     } finally {
       this.loading = false;
+    }
+  }
+
+  private buildQueryString(params: QuoteRequestParams): string {
+    const queryParams = new URLSearchParams({
+      chainId: params.chainId.toString(),
+      toChainId: params.toChainId.toString(),
+      fromTokenAddress: params.fromTokenAddress,
+      toTokenAddress: params.toTokenAddress,
+      amount: params.amount,
+      userWalletAddress: params.userWalletAddress,
+      slippage: (params.slippage || this.DEFAULT_SLIPPAGE).toString(),
+      slippageType: (
+        params.slippageType || this.DEFAULT_SLIPPAGE_TYPE
+      ).toString(),
+      pmm: (params.pmm || this.DEFAULT_PMM).toString(),
+      gasDropType: (
+        params.gasDropType || this.DEFAULT_GAS_DROP_TYPE
+      ).toString(),
+      forbiddenBridgeTypes: (
+        params.forbiddenBridgeTypes || this.DEFAULT_FORBIDDEN_BRIDGE_TYPES
+      ).toString(),
+      dexIds: params.dexIds,
+      t: (params.timestamp || Date.now()).toString(),
+    });
+
+    return queryParams.toString();
+  }
+
+  async getQuote(params: QuoteRequestParams): Promise<any> {
+    try {
+      const queryString = this.buildQueryString(params);
+      const response = await fetch(`${this.BASE_URL}?${queryString}`, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data: any = await response.json();
+
+      if (data.code !== 0) {
+        throw new Error(`API error: ${data.message}`);
+      }
+
+      return data.data?.singleChainSwapInfo?.youSaveDTO?.topTenDexInfoList[0]
+        .amountOut;
+    } catch (error) {
+      console.error("Error fetching quote:", error);
+      throw error;
+    }
+  }
+
+  // Helper method to validate token addresses
+  validateTokenAddresses(fromToken: string, toToken: string): boolean {
+    return (
+      /^0x[a-fA-F0-9]{40}$/.test(fromToken) &&
+      /^0x[a-fA-F0-9]{40}$/.test(toToken)
+    );
+  }
+
+  // Helper method to format amount based on token decimals
+  formatAmount(amount: string, decimals: number): string {
+    try {
+      const parsedAmount = parseFloat(amount);
+      if (isNaN(parsedAmount)) {
+        throw new Error("Invalid amount");
+      }
+      return parsedAmount.toFixed(decimals);
+    } catch (error) {
+      console.error("Error formatting amount:", error);
+      throw error;
     }
   }
 }

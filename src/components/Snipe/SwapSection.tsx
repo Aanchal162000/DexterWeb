@@ -9,19 +9,21 @@ import useEffectAsync from "@/hooks/useEffectAsync";
 import { useDebounce } from "use-debounce";
 import { useLoginContext } from "@/context/LoginContext";
 import { ethers } from "ethers";
-import { BuyContract } from "@/constants/config";
-import buyAbi from "@/constants/abis/buy.json";
+import { BuyContract, SnipeContract } from "@/constants/config";
+import snipeAbi from "@/constants/abis/snipe.json";
 import { useAlchemyProvider } from "@/hooks/useAlchemyProvider";
+import { QuoteRequestParams } from "@/services/contract/interfaces";
+import { agentService } from "@/services/contract/agentService";
 
 interface SwapSectionProps {
   selectedVirtual: IVirtual | null;
   selectedToVirtual: IVirtual | null;
-  fromAmount: string;
-  toAmount: string;
+  fromAmount: number;
+  toAmount: number;
   setIsFromCoinOpen: (isOpen: boolean) => void;
   setIsToCoinOpen: (isOpen: boolean) => void;
-  setFromAmount: (amount: string) => void;
-  setToAmount: (amount: string) => void;
+  setFromAmount: (amount: number) => void;
+  setToAmount: (amount: number) => void;
   swapFields: () => void;
   buttonText: string;
   setIsConfirmPop: (isOpen: boolean) => void;
@@ -46,7 +48,7 @@ const SwapSection: React.FC<SwapSectionProps> = ({
   const [isEstimating, setIsEstimating] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const [debouncedFromAmount] = useDebounce(fromAmount, 1000);
-  const { networkData } = useLoginContext();
+  const { address } = useLoginContext();
   const { getSigner } = useAlchemyProvider();
 
   const handleFocus = (ref: React.RefObject<HTMLInputElement>) => {
@@ -64,84 +66,46 @@ const SwapSection: React.FC<SwapSectionProps> = ({
     ) {
       setIsEstimating(true);
       try {
-        const signer = await getSigner();
-        const contract = new ethers.Contract(BuyContract, buyAbi, signer);
-
-        // Validate input amount
         if (
-          isNaN(Number(debouncedFromAmount)) ||
-          Number(debouncedFromAmount) <= 0
+          !address ||
+          !debouncedFromAmount ||
+          !selectedVirtual.contractAddress ||
+          !selectedToVirtual.contractAddress
         ) {
-          setToAmount("0");
-          setIsEstimating(false);
+          setToAmount(0);
           return;
         }
 
-        // First get amountsOut to know what we'll receive
-        const amountInBN = ethers.utils.parseUnits(debouncedFromAmount, 18);
+        const fetchQuote = async () => {
+          const params: QuoteRequestParams = {
+            chainId: 8453, // Base chain
+            toChainId: 8453,
+            fromTokenAddress: selectedVirtual.contractAddress!,
+            toTokenAddress: selectedToVirtual.contractAddress!,
+            amount: debouncedFromAmount.toString(),
+            userWalletAddress: address,
+            slippage: 0.1,
+            slippageType: 1,
+            pmm: 1,
+            gasDropType: 0,
+            forbiddenBridgeTypes: 0,
+            dexIds: "34,29", // Example DEX IDs
+          };
 
-        // Validate contract addresses
-        if (
-          !ethers.utils.isAddress(selectedVirtual.contractAddress) ||
-          !ethers.utils.isAddress(selectedToVirtual.contractAddress)
-        ) {
-          console.error("Invalid contract addresses");
-          setToAmount("0");
-          setIsEstimating(false);
-          return;
-        }
+          const estimate = await agentService.getQuote(params);
+          console.log("estimate final", estimate);
+          setToAmount(Number((estimate - 0.03).toFixed(4)));
+        };
 
-        // Add validation for token path
-        const path = [
-          selectedVirtual.contractAddress,
-          selectedToVirtual.contractAddress,
-        ];
-
-        // Check if path is valid (tokens are different)
-        if (path[0].toLowerCase() === path[1].toLowerCase()) {
-          console.error("Cannot swap same token");
-          setToAmount("0");
-          setIsEstimating(false);
-          return;
-        }
-
-        try {
-          const amountsOut = await contract.getAmountsOut(amountInBN, path);
-
-          if (!amountsOut || amountsOut.length < 2) {
-            console.error("Invalid amounts out from contract");
-            setToAmount("0");
-            setIsEstimating(false);
-            return;
-          }
-
-          // Calculate minimum amount out with slippage
-          const slippage = 0.5; // 0.5% slippage
-          const minAmountOut = amountsOut[1]
-            .mul(1000 - Math.floor(slippage * 10))
-            .div(1000);
-
-          setToAmount(ethers.utils.formatUnits(minAmountOut, 18));
-        } catch (error: any) {
-          console.error("Contract call failed:", error);
-          // Check for specific error cases
-          if (error?.code === -32603) {
-            console.error(
-              "Contract execution reverted - likely insufficient liquidity or invalid path"
-            );
-          } else if (error?.code === -32000) {
-            console.error("Internal JSON-RPC error - check network connection");
-          }
-          setToAmount("0");
-        }
+        fetchQuote();
       } catch (error: any) {
         console.error("Estimation failed:", error);
-        setToAmount("0");
+        setToAmount(0);
       } finally {
         setIsEstimating(false);
       }
     } else {
-      setToAmount("0");
+      setToAmount(0);
       setIsEstimating(false);
     }
   }, [
@@ -154,16 +118,16 @@ const SwapSection: React.FC<SwapSectionProps> = ({
     if (value === 1) {
       let newValue = (value * (100 - 0.5)) / 100;
       setFromAmount(
-        String(
+        Number(
           Number(newValue * Number(selectedVirtual?.userBalance || 0)).toFixed(
-            6
+            5
           )
         )
       );
     } else {
       setFromAmount(
-        String(
-          Number(value * Number(selectedVirtual?.userBalance || 0)).toFixed(6)
+        Number(
+          Number(value * Number(selectedVirtual?.userBalance || 0)).toFixed(5)
         )
       );
     }
@@ -248,7 +212,7 @@ const SwapSection: React.FC<SwapSectionProps> = ({
               setIsFocused(true);
             }}
             onBlur={() => setIsFocused(false)}
-            onChange={(e) => setFromAmount(e.target.value)}
+            onChange={(e) => setFromAmount(Number(e.target.value))}
           />
         </div>
         <div className="w-full flex flex-row flex-nowrap justify-between items-center text-white">

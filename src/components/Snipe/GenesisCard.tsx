@@ -146,7 +146,7 @@ const GenesisCard: React.FC<GenesisCardProps> = ({ genesis, onClick }) => {
   return (
     <div className="relative">
       <div
-        className="ralative flex flex-col rounded-xl cursor-pointer border-[0.5px] border-cyan-500/50  transition-all duration-300  min-h-[7.2rem]"
+        className="ralative flex flex-col rounded-xl cursor-pointer border-[0.5px] border-cyan-500/50  transition-all duration-300 h-fit  min-h-[7.2rem]"
         onClick={handleCardClick}
       >
         {/* Top Row */}

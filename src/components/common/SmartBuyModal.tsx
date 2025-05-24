@@ -264,16 +264,18 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
                   ? Number(balances.ETH).toFixed(6)
                   : Number(balances.VIRT).toFixed(6)}
               </div>
-              {percentageButtons.map((percentage) => (
-                <button
-                  key={percentage}
-                  onClick={() => handlePercentageClick(percentage)}
-                  disabled={isLoading || isProcessing}
-                  className="text-white/80 text-[11px] rounded font-bold border border-[#818284] px-[0.1875rem]  disabled:bg-white/5 disabled:text-white/20"
-                >
-                  {percentage}%
-                </button>
-              ))}
+              <div className="flex flex-row gap-1">
+                {percentageButtons.map((percentage) => (
+                  <button
+                    key={percentage}
+                    onClick={() => handlePercentageClick(percentage)}
+                    disabled={isLoading || isProcessing}
+                    className="text-white/80 text-[11px] rounded font-bold border border-[#818284] px-[0.1875rem]  disabled:bg-white/5 disabled:text-white/20"
+                  >
+                    {percentage}%
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
           <div className="my-4 flex justify-center items-center relative w-full">

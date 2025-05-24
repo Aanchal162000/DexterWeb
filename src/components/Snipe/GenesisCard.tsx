@@ -162,7 +162,7 @@ const GenesisCard: React.FC<GenesisCardProps> = ({
         onClick={handleCardClick}
       >
         {/* Top Row */}
-        <div className="flex items-center justify-between p-3">
+        <div className="flex items-center justify-between px-3 py-4">
           <div className="flex items-center gap-2">
             <div className="relative w-12 h-12 rounded-full overflow-hidden flex-shrink-0 border-2 border-cyan-500/30">
               <Image
@@ -190,27 +190,33 @@ const GenesisCard: React.FC<GenesisCardProps> = ({
                   <FaExternalLinkAlt className="w-3 h-3 mb-[1px]  text-gray-400 cursor-pointer hover:text-cyan-500" />
                 </Link>
               </div>
-              <div className="flex items-center gap-2">
-                <div className="flex items-center gap-2 px-2 py-1 rounded-md text-xs border border-cyan-400/50  text-gray-300">
-                  <span>
-                    {genesis.genesisAddress?.slice(0, 4)}...
-                    {genesis.genesisAddress?.slice(-4)}
-                  </span>
-                  <BsCopy
-                    className="w-3 h-3 cursor-pointer hover:text-cyan-500"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      copyToClipboard(genesis.virtual.contractAddress || "");
-                    }}
-                  />
-                </div>
+              <div className="flex items-center gap-1">
+                {/* <span className="px-1 rounded-md text-[10px] border border-cyan-400/50 text-gray-300  capitalize">
+                  {genesis.totalParticipants}
+                </span> */}
+
+                {genesis.genesisAddress && (
+                  <div className="flex items-center space-x-1 px-1 rounded-md text-[10px] border border-cyan-400/50 text-gray-300">
+                    <span>
+                      {genesis.genesisAddress.slice(0, 4)}...
+                      {genesis.genesisAddress.slice(-4)}
+                    </span>
+                    <BsCopy
+                      className="w-2 h-2 cursor-pointer hover:text-cyan-500"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        copyToClipboard(genesis.genesisAddress || "");
+                      }}
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </div>
           {status === "live" && (
             <button
               onClick={handleSnipe}
-              className="px-2 py-1 rounded-lg  text-primary-100 border border-primary-100/80 font-semibold hover:bg-cyan-500/20 transition-all duration-300 flex items-center justify-center gap-3"
+              className="px-2 py-1 rounded-lg  text-sm text-primary-100 border border-primary-100/80 font-semibold hover:bg-cyan-500/20 transition-all duration-300 flex items-center justify-center gap-2"
             >
               <FaCrosshairs className="w-4 h-4" />
               <span>Snipe</span>

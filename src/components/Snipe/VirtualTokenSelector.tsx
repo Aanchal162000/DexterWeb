@@ -3,6 +3,7 @@ import { IVirtual } from "@/utils/interface";
 import { formatCurrency, formatPercentage } from "@/utils/tokenCalculations";
 import Image from "next/image";
 import { LuSearch } from "react-icons/lu";
+import { useWalletBalance } from "@/hooks/useWalletBalance";
 
 interface VirtualTokenSelectorProps {
   setIsCoinOpen: (isOpen: boolean) => void;
@@ -26,10 +27,71 @@ const VirtualTokenSelector: React.FC<VirtualTokenSelectorProps> = ({
   prototypeLoading,
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedTab, setSelectedTab] = useState<"sentient" | "prototype">(
-    "sentient"
-  );
+  const [selectedTab, setSelectedTab] = useState<
+    "sentient" | "prototype" | "base"
+  >("sentient");
   const [showAllTokens, setShowAllTokens] = useState(false);
+  const { balances } = useWalletBalance();
+
+  const baseTokens: IVirtual[] = [
+    {
+      id: "eth",
+      name: "Ethereum",
+      description:
+        "Ethereum (ETH) is a decentralized, open-source blockchain with smart contract functionality.",
+      role: "base",
+      image: { url: "/Networks/ETH.png" },
+      symbol: "ETH",
+      priceChangePercent24h: 0,
+      volume24h: 0,
+      totalValueLocked: "0",
+      holderCount: 0,
+      contractAddress: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      mcapInVirtual: 0,
+      userBalance: parseFloat(balances?.ETH || "0"),
+      nextLaunchstartsAt: [],
+      cores: [],
+      creator: {
+        username: "Ethereum",
+        avatar: {
+          url: "/Networks/ETH.png",
+        },
+      },
+      genesis: {
+        startsAt: "",
+        endsAt: "",
+      },
+    },
+    {
+      id: "virtual",
+      name: "Virtuals",
+      description: "Virtual Protocol",
+      role: "base",
+      image: {
+        url: "https://static.cx.metamask.io/api/v1/tokenIcons/8453/0x0b3e328455c4059eeb9e3f84b5543f74e24e7e1b.png",
+      },
+      symbol: "VIRT",
+      priceChangePercent24h: 0,
+      volume24h: 0,
+      totalValueLocked: "0",
+      holderCount: 0,
+      contractAddress: "0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b",
+      mcapInVirtual: 0,
+      userBalance: parseFloat(balances?.VIRT || "0"),
+      nextLaunchstartsAt: [],
+      cores: [],
+      creator: {
+        username: "Dexter",
+        avatar: {
+          url: "/Trade/dexterLogo.png",
+        },
+      },
+      genesis: {
+        startsAt: "",
+        endsAt: "",
+      },
+    },
+  ];
 
   const handleTokenSelect = (virtual: IVirtual) => {
     setSelectedCoin(virtual);
@@ -46,6 +108,9 @@ const VirtualTokenSelector: React.FC<VirtualTokenSelectorProps> = ({
         break;
       case "prototype":
         tokens = prototypeVirtuals;
+        break;
+      case "base":
+        tokens = baseTokens;
         break;
     }
 
@@ -107,6 +172,16 @@ const VirtualTokenSelector: React.FC<VirtualTokenSelectorProps> = ({
         >
           Prototype
         </button>
+        <button
+          onClick={() => setSelectedTab("base")}
+          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+            selectedTab === "base"
+              ? "bg-primary-100 text-black"
+              : "bg-zinc-700 text-gray-400 hover:bg-zinc-600"
+          }`}
+        >
+          Base
+        </button>
       </div>
 
       {/* Token List */}
@@ -130,7 +205,7 @@ const VirtualTokenSelector: React.FC<VirtualTokenSelectorProps> = ({
                 className="w-full px-4 py-3 hover:bg-gray-800/50 transition-colors flex items-center justify-between"
               >
                 <div className="flex items-center gap-3">
-                  <div className="relative w-10 h-10 rounded-full overflow-hidden">
+                  <div className="relative w-10 h-10 overflow-hidden">
                     <Image
                       src={virtual.image?.url || "/placeholder.png"}
                       alt={virtual.name}

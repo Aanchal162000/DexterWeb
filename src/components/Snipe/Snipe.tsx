@@ -149,7 +149,7 @@ const Snipe = () => {
 
       const receipt = await buyService.buyToken({
         amountIn: fromAmount.toString(),
-        amountOutMin: "0", // Set minimum amount or calculate slippage
+        amountOutMin: toAmount.toString(), // Set minimum amount or calculate slippage
         path: [
           selectedVirtual.contractAddress!,
           selectedToVirtual.contractAddress!,

@@ -32,7 +32,9 @@ class BuyService {
 
       // First get amountsOut to know what we'll receive
       const amountInBN = ethers.utils.parseUnits(params.amountIn, 18);
-      const amountsOut = await contract.getAmountsOut(amountInBN, params.path);
+      const amountsOut = params.amountOutMin
+        ? params.amountOutMin
+        : await contract.getAmountsOut(amountInBN, params.path);
 
       if (!amountsOut || amountsOut.length < 2) {
         throw new Error("Invalid amounts out from contract");
@@ -45,7 +47,8 @@ class BuyService {
 
       // Calculate minimum amount out with slippage
       const slippage = params.slippageTolerance || this.DEFAULT_SLIPPAGE;
-      const minAmountOut = amountsOut[1]
+      const ammount = params.amountOutMin ? params.amountOutMin : amountsOut[1];
+      const minAmountOut = ammount
         .mul(1000 - Math.floor(slippage * 10))
         .div(1000);
 

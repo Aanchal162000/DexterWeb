@@ -52,7 +52,7 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const { networkData } = useLoginContext();
-  const percentageButtons = [10, 25, 50, 75, 100];
+  const percentageButtons = [10, 25, 50, 100];
   const [isFromCoinOpen, setIsFromCoinOpen] = useState(false);
 
   const tokenOptions: TokenOption[] = [
@@ -260,12 +260,6 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
                     </button>
                   </div>
                 </div>
-                <span className="text-gray-400 text-xs py-2 text-start">
-                  Available Balance:{" "}
-                  {selectedVitualtoken?.symbol === "ETH"
-                    ? Number(balances.ETH).toFixed(6)
-                    : Number(balances.VIRT).toFixed(6)}
-                </span>
               </div>
             </div>
 
@@ -298,19 +292,23 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
               </div>
             )}
 
-            <div className="flex justify-end items-center mt-2">
-              <div className="flex gap-1">
-                {percentageButtons.map((percentage) => (
-                  <button
-                    key={percentage}
-                    onClick={() => handlePercentageClick(percentage)}
-                    disabled={isLoading || isProcessing}
-                    className="px-2 py-1 text-xs border border-gray-400/80 hover:bg-primary-100/20 text-white rounded-xl transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {percentage}%
-                  </button>
-                ))}
+            <div className="flex justify-between items-center my-2">
+              <div className="text-gray-400 text-[11px] text-nowrap">
+                Available:{" "}
+                {selectedVitualtoken?.symbol === "ETH"
+                  ? Number(balances.ETH).toFixed(6)
+                  : Number(balances.VIRT).toFixed(6)}
               </div>
+              {percentageButtons.map((percentage) => (
+                <button
+                  key={percentage}
+                  onClick={() => handlePercentageClick(percentage)}
+                  disabled={isLoading || isProcessing}
+                  className="text-white/80 text-[11px] rounded font-bold border border-[#818284] px-[0.1875rem]  disabled:bg-white/5 disabled:text-white/20"
+                >
+                  {percentage}%
+                </button>
+              ))}
             </div>
           </div>
           <div className="my-4 flex justify-center items-center relative w-full">

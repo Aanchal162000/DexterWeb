@@ -106,9 +106,7 @@ const Snipe = () => {
         const response = await fetch(
           `https://dexter-backend-ucdt5.ondigitalocean.app/api/agent/subscriptions/${address}`
         );
-        if (!response.ok) {
-          throw new Error("Failed to fetch subscription data");
-        }
+
         const data = await response.json();
         setSubscriptionData(data?.data);
       } catch (error) {

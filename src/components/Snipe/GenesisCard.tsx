@@ -187,7 +187,13 @@ const GenesisCard: React.FC<GenesisCardProps> = ({
                   rel="noopener noreferrer"
                   target="_blank"
                 >
-                  <FaExternalLinkAlt className="w-3 h-3 mb-[1px]  text-gray-400 cursor-pointer hover:text-cyan-500" />
+                  <Image
+                    src="/Trade/Link.png"
+                    alt="Link"
+                    width={4}
+                    height={4}
+                    className="w-3 h-3 mb-[1px]  text-gray-400 cursor-pointer hover:text-cyan-500"
+                  />
                 </Link>
               </div>
               <div className="flex items-center gap-1">
@@ -201,7 +207,11 @@ const GenesisCard: React.FC<GenesisCardProps> = ({
                       {genesis.genesisAddress.slice(0, 4)}...
                       {genesis.genesisAddress.slice(-4)}
                     </span>
-                    <BsCopy
+                    <Image
+                      src="/Trade/Copy.png"
+                      alt="Copy"
+                      width={4}
+                      height={4}
                       className="w-2 h-2 cursor-pointer hover:text-cyan-500"
                       onClick={(e) => {
                         e.stopPropagation();
@@ -218,7 +228,13 @@ const GenesisCard: React.FC<GenesisCardProps> = ({
               onClick={handleSnipe}
               className="px-2 py-1 rounded-lg  text-sm text-primary-100 border border-primary-100/80 font-semibold hover:bg-cyan-500/20 transition-all duration-300 flex items-center justify-center gap-2"
             >
-              <FaCrosshairs className="w-4 h-4" />
+              <Image
+                src="/Trade/Snipe.png"
+                alt="Link"
+                width={4}
+                height={4}
+                className="w-4 h-4 fill-primary-100"
+              />
               <span>Snipe</span>
             </button>
           )}

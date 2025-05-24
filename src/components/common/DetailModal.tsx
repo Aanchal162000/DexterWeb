@@ -67,9 +67,9 @@ const DetailModal: React.FC<DetailModalProps> = ({
         }/${type == "virtual" ? genesisData?.id : virtualData.id}`}
         rel="noopener noreferrer"
         target="_blank"
-        className="flex items-center ml-2 gap-2 text-gray-300 hover:text-cyan-500 transition-colors"
+        className="flex items-center ml-2 gap-2 text-primary-100 hover:text-cyan-500 transition-colors"
       >
-        <FaExternalLinkAlt />
+        Virtual Profile
       </Link>
     );
     if (type === "virtual" && "socials" in data) {
@@ -81,7 +81,7 @@ const DetailModal: React.FC<DetailModalProps> = ({
             href={socials.WEBSITE}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 text-gray-300 hover:text-cyan-500 transition-colors"
+            className="flex items-center gap-2 text-primary-100 hover:text-cyan-500 transition-colors"
           >
             <FaGlobe className="w-4 h-4" />
             <span>Website</span>
@@ -95,7 +95,7 @@ const DetailModal: React.FC<DetailModalProps> = ({
             href={socials.TWITTER}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 text-gray-300 hover:text-cyan-500 transition-colors"
+            className="flex items-center gap-2 text-primary-100 hover:text-cyan-500 transition-colors"
           >
             <FaTwitter className="w-4 h-4" />
             <span>Twitter</span>
@@ -164,7 +164,7 @@ const DetailModal: React.FC<DetailModalProps> = ({
           <div className="fixed inset-0 bg-black/25 backdrop-blur-sm" />
         </Transition.Child>
 
-        <div className="fixed inset-0 overflow-y-auto">
+        <div className="fixed inset-0 py-4">
           <div className="flex min-h-full items-center justify-center p-4 text-center">
             <Transition.Child
               as={Fragment}
@@ -176,12 +176,21 @@ const DetailModal: React.FC<DetailModalProps> = ({
               leaveTo="opacity-0 scale-95"
             >
               <Dialog.Panel className="w-full max-w-2xl sm:h-[80vh] h-[90vh] transform overflow-hidden rounded-2xl bg-[#15181B] p-6 text-left align-middle shadow-xl transition-all overflow-y-auto">
-                <Dialog.Title
-                  as="h3"
-                  className="text-lg font-medium leading-6 text-white mb-4"
-                >
-                  {virtualData.name} Details
-                </Dialog.Title>
+                <div className="flex justify-between items-center mb-4">
+                  <Dialog.Title
+                    as="h3"
+                    className="text-lg font-medium leading-6 text-white"
+                  >
+                    {virtualData.name} Details
+                  </Dialog.Title>
+                  <button
+                    type="button"
+                    className="inline-flex justify-center rounded-md border border-transparent text-primary-100 px-4 py-2 text-sm font-medium  hover:text-primary-100/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-100 focus-visible:ring-offset-2"
+                    onClick={onClose}
+                  >
+                    X
+                  </button>
+                </div>
 
                 <div className="mt-2 space-y-6">
                   {/* Token Image and Basic Info */}
@@ -365,16 +374,6 @@ const DetailModal: React.FC<DetailModalProps> = ({
                 </div>
                 {/* Social Links */}
                 <div className="flex flex-wrap gap-4 mt-2">{renderLinks()}</div>
-
-                <div className="mt-6">
-                  <button
-                    type="button"
-                    className="inline-flex justify-center rounded-md border border-transparent bg-primary-100 px-4 py-2 text-sm font-medium text-black hover:bg-primary-100/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-100 focus-visible:ring-offset-2"
-                    onClick={onClose}
-                  >
-                    Close
-                  </button>
-                </div>
               </Dialog.Panel>
             </Transition.Child>
           </div>

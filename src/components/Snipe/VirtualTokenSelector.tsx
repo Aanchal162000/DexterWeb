@@ -91,6 +91,35 @@ const VirtualTokenSelector: React.FC<VirtualTokenSelectorProps> = ({
         endsAt: "",
       },
     },
+    {
+      id: "dexter",
+      name: "Dexter",
+      description: "Dexter",
+      role: "base",
+      image: {
+        url: "/Trade/dexterLogo.png",
+      },
+      symbol: "VIRT",
+      priceChangePercent24h: 0,
+      volume24h: 0,
+      totalValueLocked: "0",
+      holderCount: 0,
+      contractAddress: "0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b",
+      mcapInVirtual: 0,
+      userBalance: parseFloat(balances?.VIRT || "0"),
+      nextLaunchstartsAt: [],
+      cores: [],
+      creator: {
+        username: "Dexter",
+        avatar: {
+          url: "/Trade/dexterLogo.png",
+        },
+      },
+      genesis: {
+        startsAt: "",
+        endsAt: "",
+      },
+    },
   ];
 
   const handleTokenSelect = (virtual: IVirtual) => {
@@ -202,10 +231,11 @@ const VirtualTokenSelector: React.FC<VirtualTokenSelectorProps> = ({
               <button
                 key={virtual.id}
                 onClick={() => handleTokenSelect(virtual)}
-                className="w-full px-4 py-3 hover:bg-gray-800/50 transition-colors flex items-center justify-between"
+                disabled={virtual.name == "Dexter"}
+                className="w-full px-4 py-3 hover:bg-gray-800/50 transition-colors flex items-center justify-between disabled:opacity-30"
               >
-                <div className="flex items-center gap-3">
-                  <div className="relative w-10 h-10 overflow-hidden">
+                <div className="flex items-center justify-center gap-3 ">
+                  <div className="relative  overflow-hidden items-center justify-center">
                     <Image
                       src={virtual.image?.url || "/placeholder.png"}
                       alt={virtual.name}

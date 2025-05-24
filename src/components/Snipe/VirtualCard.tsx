@@ -109,7 +109,12 @@ const VirtualCard: React.FC<VirtualCardProps> = ({ virtual, onClick }) => {
                 >
                   {diffDays != -1 ? (
                     <>
-                      <IoIosLock />
+                      <Image
+                        src="/Trade/Lock.png"
+                        alt="Lock"
+                        width={4}
+                        height={4}
+                      />
                       <p>{Math.abs(diffDays!)}d</p>
                     </>
                   ) : (
@@ -123,7 +128,13 @@ const VirtualCard: React.FC<VirtualCardProps> = ({ virtual, onClick }) => {
                   rel="noopener noreferrer"
                   target="_blank"
                 >
-                  <FaExternalLinkAlt className="w-3 h-3 text-gray-400 cursor-pointer hover:text-cyan-500" />
+                  <Image
+                    src="/Trade/Link.png"
+                    alt="Link"
+                    width={4}
+                    height={4}
+                    className="w-3 h-3 text-gray-400 cursor-pointer hover:text-cyan-500"
+                  />
                 </Link>
               </div>
               <div className="flex items-center gap-1">
@@ -137,7 +148,11 @@ const VirtualCard: React.FC<VirtualCardProps> = ({ virtual, onClick }) => {
                       {virtual.contractAddress.slice(0, 4)}...
                       {virtual.contractAddress.slice(-4)}
                     </span>
-                    <BsCopy
+                    <Image
+                      src="/Trade/Copy.png"
+                      alt="Copy"
+                      width={4}
+                      height={4}
                       className="w-2 h-2 cursor-pointer hover:text-cyan-500"
                       onClick={(e) => {
                         e.stopPropagation();

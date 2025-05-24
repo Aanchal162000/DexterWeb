@@ -103,7 +103,7 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
     try {
       setIsLoading(true);
       setIsProcessing(true);
-      processToastId = toast.info("Starting snipe process...", {
+      processToastId = toast.info("Processing Transaction...", {
         autoClose: false,
         closeOnClick: false,
         closeButton: false,
@@ -113,11 +113,11 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
 
       if (!isEth) {
         try {
-          approveToastId = toast.info("Checking token allowance...", {
-            autoClose: false,
-            closeOnClick: false,
-            closeButton: false,
-          });
+          // approveToastId = toast.info("Checking token allowance...", {
+          //   autoClose: false,
+          //   closeOnClick: false,
+          //   closeButton: false,
+          // });
           const allowance = await approvalService.checkAllowance({
             tokenAddress: VIRTUALS_TOKEN_ADDRESS,
             provider: networkData?.provider!,
@@ -152,24 +152,12 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
         }
       }
 
-      if (processToastId) toast.dismiss(processToastId);
-      processToastId = toast.info("Processing deposit...", {
-        autoClose: false,
-        closeOnClick: false,
-        closeButton: false,
-      });
       const receipt = await agentService.deposit({
         tokenAddress: isEth ? WRAPPED_ETH_ADDRESS : VIRTUALS_TOKEN_ADDRESS,
         amount: amount,
         provider: networkData?.provider!,
       });
 
-      if (processToastId) toast.dismiss(processToastId);
-      processToastId = toast.info("Creating agent...", {
-        autoClose: false,
-        closeOnClick: false,
-        closeButton: false,
-      });
       if (receipt.transactionHash) {
         const response = await agentService.createAgent({
           genesisId,

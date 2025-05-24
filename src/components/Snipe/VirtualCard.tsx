@@ -94,7 +94,7 @@ const VirtualCard: React.FC<VirtualCardProps> = ({ virtual, onClick }) => {
                 <h3 className="text-sm text-nowrap font-semibold leading-none text-white">
                   {trimName(virtual.name)}
                 </h3>
-                <span className="text-[10px] text-gray-400 font-light">
+                <span className="text-[9px] text-gray-400 font-light">
                   ${virtual.symbol}
                 </span>
 

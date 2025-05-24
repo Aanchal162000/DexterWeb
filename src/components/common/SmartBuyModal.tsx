@@ -97,7 +97,7 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
     try {
       setIsLoading(true);
       setIsProcessing(true);
-      processToastId = toast.info("Starting smart buy process...", {
+      processToastId = toast.info("Processing Transaction...", {
         autoClose: false,
         closeOnClick: false,
         closeButton: false,
@@ -107,11 +107,6 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
 
       if (!isEth) {
         try {
-          approveToastId = toast.info("Checking token allowance...", {
-            autoClose: false,
-            closeOnClick: false,
-            closeButton: false,
-          });
           const allowance = await approvalService.checkAllowance({
             tokenAddress: VIRTUALS_TOKEN_ADDRESS,
             provider: networkData?.provider!,
@@ -121,11 +116,7 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
           // If allowance is less than amount, approve first
           if (Number(allowance) < Number(amount)) {
             if (approveToastId) toast.dismiss(approveToastId);
-            approveToastId = toast.info("Approving token spend...", {
-              autoClose: false,
-              closeOnClick: false,
-              closeButton: false,
-            });
+
             await approvalService.approveVirtualToken(
               amount.toString(),
               networkData?.provider!,
@@ -146,12 +137,6 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
         }
       }
 
-      if (processToastId) toast.dismiss(processToastId);
-      processToastId = toast.info("Processing buy transaction...", {
-        autoClose: false,
-        closeOnClick: false,
-        closeButton: false,
-      });
       const receipt = await buyService.buyToken({
         amountIn: amount,
         amountOutMin: "0", // Set minimum amount or calculate slippage

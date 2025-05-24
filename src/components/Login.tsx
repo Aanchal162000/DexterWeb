@@ -30,13 +30,17 @@ const Login = () => {
       <div className="absolute h-full w-full !bg-[url('/Login/background.png')] bg-[position:center_right] md:bg-[position:30%] bg-[size:cover] bg-[repeat:no-repeat] z-10 p-5 after:content-[''] after:absolute after:top-0 after:left-0 after:w-full after:h-full after:shadow-[0px_0px_0px_9999px_rgba(0,0,0,0.68)]"></div>
       <div className="relative z-20 w-full h-[calc(100vh-6.8vh)] px-4 md:px-14 flex flex-col">
         <div className="flex py-4">
-          <Image
-            src="/Login/logo.png"
-            alt="Dexter"
-            height={135}
-            width={150}
-            className="w-[100px] md:w-[150px] h-auto"
-          />
+          <div className="flex flex-row gap-2 justify-center items-center text-center  ">
+            <Image
+              src="/Login/webLogo.png"
+              alt="Dexter"
+              height={32}
+              width={32}
+            />
+            <h3 className="text-[2.27rem] leading-[2.7rem] text-white  font-bold font-grotesk">
+              DEXTER
+            </h3>
+          </div>
         </div>
         <div className="relative w-full flex-1 flex flex-col space-y-6 md:space-y-10 items-center justify-center">
           <div className="relative flex flex-col space-y-6 w-full">

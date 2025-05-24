@@ -45,13 +45,16 @@ const Header = () => {
       <div className="max-w-7xl sm:max-w-full mx-auto px-4 sm:px-14 ">
         <div className="flex items-center justify-between h-[4.8rem]">
           {/* Logo */}
-          <div className="flex-shrink-0 ">
+          <div className="flex flex-row text-2xl gap-2 justify-center items-center  ">
             <Image
-              src="/Login/logo.png"
+              src="/Login/webLogo.png"
               alt="Dexter"
-              height={130}
-              width={110}
+              height={26}
+              width={26}
             />
+            <h3 className="text-[1.6rem] leading-[2.1rem] text-white  font-bold font-grotesk">
+              DEXTER
+            </h3>
           </div>
 
           {/* Desktop Navigation */}

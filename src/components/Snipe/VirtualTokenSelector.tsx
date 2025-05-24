@@ -143,11 +143,21 @@ const VirtualTokenSelector: React.FC<VirtualTokenSelectorProps> = ({
         break;
     }
 
-    return tokens.filter(
+    // Filter tokens by search query
+    const filteredTokens = tokens.filter(
       (virtual) =>
         virtual.name.toLowerCase().includes(query) ||
         virtual.symbol.toLowerCase().includes(query)
     );
+
+    // Sort tokens by balance (tokens with balance > 0 come first)
+    return filteredTokens.sort((a, b) => {
+      const balanceA = a.userBalance || 0;
+      const balanceB = b.userBalance || 0;
+      if (balanceA > 0 && balanceB === 0) return -1;
+      if (balanceA === 0 && balanceB > 0) return 1;
+      return 0;
+    });
   };
 
   const filteredTokens = getFilteredTokens();

@@ -65,7 +65,6 @@ const GenesisCard: React.FC<GenesisCardProps> = ({
   const isSubscribed = subscriptionData?.filter(
     (sub: any) => sub.genesisId === genesis.genesisId
   ).length;
-  console.log("genesisi:", isSubscribed);
 
   useEffect(() => {
     const updateTimer = () => {

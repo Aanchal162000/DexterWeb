@@ -56,6 +56,15 @@ export const usePrototypeVirtuals = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  function getTokenUSDPrice(
+    virtualTokenValue: string,
+    virtualTokenUSDPrice: number
+  ): number {
+    const valueInTokens = Number(virtualTokenValue) / 1e18;
+    const priceInUSD = valueInTokens * virtualTokenUSDPrice;
+    return parseFloat(priceInUSD.toFixed(6)); // return price with 6 decimal precision
+  }
+
   useEffect(() => {
     const fetchVirtuals = async () => {
       try {
@@ -79,6 +88,10 @@ export const usePrototypeVirtuals = () => {
           image: item.image,
           symbol: item.symbol,
           priceChangePercent24h: item.priceChangePercent24h,
+          price: getTokenUSDPrice(
+            item.virtualTokenValue,
+            item.mcapInVirtual / 1.94
+          ),
           volume24h: item.volume24h,
           totalValueLocked: item.totalValueLocked,
           holderCount: item.holderCount,

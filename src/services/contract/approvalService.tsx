@@ -90,7 +90,6 @@ class ApprovalService {
 
       // Wait for transaction confirmation
       const receipt = await tx.wait();
-      toast.success("Approval successful!");
 
       return receipt;
     } catch (error: any) {

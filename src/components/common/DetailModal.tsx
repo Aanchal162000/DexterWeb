@@ -234,7 +234,11 @@ const DetailModal: React.FC<DetailModalProps> = ({
                       <div>
                         <p className="text-gray-400 text-sm">Token Price</p>
                         <p className="text-white">
-                          {formatCurrency(metrics.priceUSD)}
+                          {"$" +
+                            data?.price!?.toLocaleString(undefined, {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 5,
+                            })}
                         </p>
                       </div>
                       <div>

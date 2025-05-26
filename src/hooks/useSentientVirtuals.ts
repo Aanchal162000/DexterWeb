@@ -63,6 +63,15 @@ export const useSentientVirtuals = () => {
   const [error, setError] = useState<string | null>(null);
   const [dataList, setDataList] = useLocalStorage<IAssetsData[]>("arbt-assets");
 
+  function getTokenUSDPrice(
+    virtualTokenValue: string,
+    virtualTokenUSDPrice: number
+  ): number {
+    const valueInTokens = Number(virtualTokenValue) / 1e18;
+    const priceInUSD = valueInTokens * virtualTokenUSDPrice;
+    return parseFloat(priceInUSD.toFixed(6)); // return price with 6 decimal precision
+  }
+
   useEffect(() => {
     const fetchVirtuals = async () => {
       try {
@@ -85,6 +94,7 @@ export const useSentientVirtuals = () => {
           image: item.image,
           symbol: item.symbol,
           priceChangePercent24h: item.priceChangePercent24h,
+          price: getTokenUSDPrice(item.virtualTokenValue, 1.94),
           volume24h: item.volume24h,
           totalValueLocked: item.totalValueLocked,
           holderCount: item.holderCount,

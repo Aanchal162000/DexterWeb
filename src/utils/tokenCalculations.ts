@@ -51,7 +51,7 @@ export const formatCurrency = (
   if (isNaN(num)) return "$0.00";
 
   // For very small numbers, use more decimals
-  if (num < 0.000001) {
+  if (num < 0.001) {
     return `$${num.toExponential(decimals)}`;
   }
 

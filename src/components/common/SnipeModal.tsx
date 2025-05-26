@@ -222,7 +222,7 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
       } else {
         // For other errors, show a more user-friendly message
         const errorMessage = error.message || "Unknown error occurred";
-        toast.error(`Transaction failed: ${errorMessage.split("(")[0].trim()}`);
+        toast.error(`Transaction failed`);
       }
     } finally {
       setIsLoading(false);

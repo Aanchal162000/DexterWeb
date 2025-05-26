@@ -481,7 +481,9 @@ const Snipe = () => {
                   toAmount={toAmount.toString()}
                   selectedToCoin={selectedToVirtual!}
                   selectedToNetwork={networkCards[3]}
-                  isApproved={isApproved}
+                  isApproved={
+                    selectedVirtual?.symbol == "ETH" ? true : isApproved
+                  }
                   continueTransaction={handleSwap}
                   isConvert={isConvert}
                   isSwapped={isSwapped}

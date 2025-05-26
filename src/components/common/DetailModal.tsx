@@ -64,7 +64,7 @@ const DetailModal: React.FC<DetailModalProps> = ({
         key="Link"
         href={`https://app.virtuals.io/${
           type == "virtual" ? "virtuals" : "geneses"
-        }/${type == "virtual" ? virtualData.id : genesisData?.genesisId}`}
+        }/${type == "virtual" ? virtualData.id : genesisData?.id}`}
         rel="noopener noreferrer"
         target="_blank"
         className="flex items-center ml-2 gap-2 text-primary-100 hover:text-cyan-500 transition-colors"

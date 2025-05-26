@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
@@ -15,6 +15,7 @@ import { useLoginContext } from "@/context/LoginContext";
 import buyService from "@/services/contract/buyService";
 import { IVirtual } from "@/utils/interface";
 import { TiArrowSortedDown } from "react-icons/ti";
+import useClickOutside from "@/hooks/useClickOutside";
 
 interface SmartBuyModalProps {
   isOpen: boolean;
@@ -48,6 +49,12 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
   const percentageButtons = [10, 25, 50, 100];
   const { address } = useLoginContext();
   const [isFromCoinOpen, setIsFromCoinOpen] = useState(false);
+  const coinSelectRef = useRef<HTMLDivElement>(null);
+  useClickOutside(coinSelectRef, () => {
+    if (isFromCoinOpen) {
+      setIsFromCoinOpen(false);
+    }
+  });
 
   const tokenOptions: TokenOption[] = [
     {
@@ -158,13 +165,30 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
         if (processToastId) toast.dismiss(processToastId);
         toast.error("Smart Buy Failed!");
       }
-    } catch (error) {
+    } catch (error: any) {
       if (approveToastId) toast.dismiss(approveToastId);
       if (processToastId) toast.dismiss(processToastId);
       console.error("Error in smart buy:", error);
-      toast.error(
-        error instanceof Error ? error.message : "Failed to smart buy"
-      );
+      console.error("Error in quick buy:", error);
+
+      // Handle specific error cases
+      if (error.code === "INSUFFICIENT_FUNDS") {
+        toast.error("Insufficient funds to complete the transaction");
+      } else if (error.code === "UNPREDICTABLE_GAS_LIMIT") {
+        toast.error(
+          "Transaction would fail. Please check your input amounts and try again"
+        );
+      } else if (error.message?.includes("user rejected")) {
+        toast.error("Transaction was rejected by user");
+      } else if (error.message?.includes("insufficient funds")) {
+        toast.error("Insufficient balance to complete the transaction");
+      } else if (error.message?.includes("execution reverted")) {
+        toast.error("Transaction failed: Contract execution reverted");
+      } else {
+        // For other errors, show a more user-friendly message
+        const errorMessage = error.message || "Unknown error occurred";
+        toast.error(`Transaction failed: ${errorMessage.split("(")[0].trim()}`);
+      }
     } finally {
       setIsLoading(false);
       setIsProcessing(false);
@@ -206,7 +230,10 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
                     className=" py-3 bg-transparent rounded-lg text-white focus:outline-none focus:border-primary-100 disabled:opacity-50 disabled:cursor-not-allowed"
                     placeholder="Enter amount"
                   />
-                  <div className="flex items-center gap-2">
+                  <button
+                    className="flex items-center gap-2"
+                    onClick={() => setIsFromCoinOpen((prev) => !prev)}
+                  >
                     {selectedVitualtoken?.logo && (
                       <img
                         src={selectedVitualtoken.logo}
@@ -217,20 +244,20 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
                     <span className="text-primary-100 text-sm">
                       {selectedVitualtoken?.symbol || "VIRT"}
                     </span>
-                    <button
-                      onClick={() => setIsFromCoinOpen(true)}
-                      className="text-primary-100 hover:text-primary-100/80 transition-colors"
-                    >
+                    <button className="text-primary-100 hover:text-primary-100/80 transition-colors">
                       <TiArrowSortedDown className="size-5" />
                     </button>
-                  </div>
+                  </button>
                 </div>
               </div>
             </div>
 
             {/* Token Selector Dropdown */}
             {isFromCoinOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-[#1A1A1A] border border-primary-100/20 rounded-lg shadow-lg z-10">
+              <div
+                ref={coinSelectRef}
+                className="absolute right-0 mt-2 w-48 bg-[#1A1A1A] border border-primary-100/20 rounded-lg shadow-lg z-10"
+              >
                 <div className="py-1">
                   {tokenOptions.map((token) => (
                     <button

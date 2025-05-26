@@ -32,9 +32,10 @@ class BuyService {
 
       // First get amountsOut to know what we'll receive
       const amountInBN = ethers.utils.parseUnits(params.amountIn, 18);
-      const amountsOut = params.amountOutMin
-        ? params.amountOutMin
-        : await contract.getAmountsOut(amountInBN, params.path);
+      const amountsOut =
+        Number(params.amountOutMin) != 0
+          ? params.amountOutMin
+          : await contract.getAmountsOut(amountInBN, params.path);
 
       if (!amountsOut || amountsOut.length < 2) {
         throw new Error("Invalid amounts out from contract");
@@ -47,17 +48,18 @@ class BuyService {
 
       // Calculate minimum amount out with slippage
       const slippage = params.slippageTolerance || this.DEFAULT_SLIPPAGE;
-      const ammount = params.amountOutMin ? params.amountOutMin : amountsOut[1];
-      const minAmountOut = ammount
-        .mul(1000 - Math.floor(slippage * 10))
-        .div(1000);
+      const ammount =
+        Number(params.amountOutMin) != 0 ? params.amountOutMin : amountsOut[1];
+      // const minAmountOut = ammount
+      //   .mul(1000 - Math.floor(slippage * 10))
+      //   .div(1000);
 
       let tx;
       const gasLimit = await this.estimateGasLimit(
         contract,
         params,
         amountInBN,
-        minAmountOut
+        ammount
       );
 
       if (
@@ -66,7 +68,7 @@ class BuyService {
       ) {
         tx = await contract.swapExactTokensForTokens(
           amountInBN,
-          minAmountOut,
+          ammount,
           params.path,
           params.to,
           params.timestamp,
@@ -74,7 +76,7 @@ class BuyService {
         );
       } else if (params.selectedToken.symbol === "ETH") {
         tx = await contract.swapExactETHForTokens(
-          minAmountOut,
+          ammount,
           params.path,
           params.to,
           params.timestamp,
@@ -83,7 +85,7 @@ class BuyService {
       } else if (params.selectedToken.symbol === "GETETH") {
         tx = await contract.swapExactTokensForETH(
           amountInBN,
-          minAmountOut,
+          ammount,
           params.path,
           params.to,
           params.timestamp,

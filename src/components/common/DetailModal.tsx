@@ -226,67 +226,69 @@ const DetailModal: React.FC<DetailModalProps> = ({
                   </div>
 
                   {/* Token Information */}
-                  <div className="bg-[#1A1E23] rounded-lg p-4">
-                    <h3 className="text-lg font-semibold text-primary-100 mb-4">
-                      Token Information
-                    </h3>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <p className="text-gray-400 text-sm">Token Price</p>
-                        <p className="text-white">
-                          {data?.price
-                            ? "$" +
-                              data?.price!?.toLocaleString(undefined, {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 5,
-                              })
-                            : "0"}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-gray-400 text-sm">Market Cap</p>
-                        <p className="text-white">
-                          {formatCurrency(metrics.fdvUSD)}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-gray-400 text-sm">FDV</p>
-                        <p className="text-white">
-                          {formatCurrency(metrics.fdvUSD)}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-gray-400 text-sm">TVL</p>
-                        <p className="text-white">
-                          {formatCurrency(metrics.tvlUSD)}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-gray-400 text-sm">24h Change</p>
-                        <p
-                          className={`${
-                            metrics.priceChange24h >= 0
-                              ? "text-green-500"
-                              : "text-red-500"
-                          }`}
-                        >
-                          {formatPercentage(metrics.priceChange24h)}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-gray-400 text-sm">24h Volume</p>
-                        <p className="text-white">
-                          {formatCurrency(metrics.volume24hUSD)}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-gray-400 text-sm">Holders</p>
-                        <p className="text-white">
-                          {formatLargeNumber(metrics.holders)}
-                        </p>
+                  {type == "virtual" && (
+                    <div className="bg-[#1A1E23] rounded-lg p-4">
+                      <h3 className="text-lg font-semibold text-primary-100 mb-4">
+                        Token Information
+                      </h3>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <p className="text-gray-400 text-sm">Token Price</p>
+                          <p className="text-white">
+                            {data?.price
+                              ? "$" +
+                                data?.price!?.toLocaleString(undefined, {
+                                  minimumFractionDigits: 2,
+                                  maximumFractionDigits: 5,
+                                })
+                              : "0"}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-gray-400 text-sm">Market Cap</p>
+                          <p className="text-white">
+                            {formatCurrency(metrics.fdvUSD)}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-gray-400 text-sm">FDV</p>
+                          <p className="text-white">
+                            {formatCurrency(metrics.fdvUSD)}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-gray-400 text-sm">TVL</p>
+                          <p className="text-white">
+                            {formatCurrency(metrics.tvlUSD)}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-gray-400 text-sm">24h Change</p>
+                          <p
+                            className={`${
+                              metrics.priceChange24h >= 0
+                                ? "text-green-500"
+                                : "text-red-500"
+                            }`}
+                          >
+                            {formatPercentage(metrics.priceChange24h)}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-gray-400 text-sm">24h Volume</p>
+                          <p className="text-white">
+                            {formatCurrency(metrics.volume24hUSD)}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-gray-400 text-sm">Holders</p>
+                          <p className="text-white">
+                            {formatLargeNumber(metrics.holders)}
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  )}
 
                   {/* Description */}
                   {virtualData.description && (
@@ -361,7 +363,7 @@ const DetailModal: React.FC<DetailModalProps> = ({
                               {genesisData.genesisAddress}
                             </p>
                             <BsCopy
-                              className="w-4 h-4 cursor-pointer hover:text-cyan-500"
+                              className="w-4 h-4 cursor-pointer text-white hover:text-cyan-500"
                               onClick={() =>
                                 copyToClipboard(genesisData.genesisAddress)
                               }

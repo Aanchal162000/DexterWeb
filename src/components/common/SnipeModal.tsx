@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
@@ -7,337 +7,448 @@ import { agentService } from "@/services/contract/agentService";
 import { toast } from "react-toastify";
 import { useSwapContext } from "@/context/SwapContext";
 import approvalService from "@/services/contract/approvalService";
-import { SnipeContract, VIRTUALS_TOKEN_ADDRESS, WRAPPED_ETH_ADDRESS } from "@/constants/config";
+import {
+  SnipeContract,
+  VIRTUALS_TOKEN_ADDRESS,
+  WRAPPED_ETH_ADDRESS,
+} from "@/constants/config";
 import { useLoginContext } from "@/context/LoginContext";
 import { TiArrowSortedDown } from "react-icons/ti";
 import { Slider, Rail, Handles, Tracks, Ticks } from "react-compound-slider";
 import { addCommas, formatNumberWithSuffix } from "@/utils/helper";
+import useClickOutside from "@/hooks/useClickOutside";
 
 interface SnipeModalProps {
-    isOpen: boolean;
-    onClose: () => void;
-    genesisId: string;
-    name: string;
-    walletAddress: string;
-    endsAt: string;
-    fetchSubscriptionData: () => Promise<void>;
+  isOpen: boolean;
+  onClose: () => void;
+  genesisId: string;
+  name: string;
+  walletAddress: string;
+  endsAt: string;
+  fetchSubscriptionData: () => Promise<void>;
 }
 
 interface TokenOption {
-    name: string;
-    symbol: string;
-    logo: string;
-    balance: string;
+  name: string;
+  symbol: string;
+  logo: string;
+  balance: string;
 }
 
-export function Handle({ handle: { id, value, percent }, getHandleProps }: any) {
-    return (
-        <div
-            style={{
-                left: `${percent}%`,
-                position: "absolute",
-                marginLeft: -8,
-                marginTop: 8,
-                zIndex: 2,
-                width: 16,
-                height: 16,
-                textAlign: "center",
-                cursor: "pointer",
-                borderRadius: "50%",
-                border: "2px solid #25FCFC",
-                backgroundColor: "black",
-                color: "#333",
-            }}
-            {...getHandleProps(id)}
-        >
-            {/* <div style={{ fontFamily: "Roboto", fontSize: 11, marginTop: -35 }}>{value}</div> */}
-        </div>
-    );
+export function Handle({
+  handle: { id, value, percent },
+  getHandleProps,
+}: any) {
+  return (
+    <div
+      style={{
+        left: `${percent}%`,
+        position: "absolute",
+        marginLeft: -8,
+        marginTop: 8,
+        zIndex: 2,
+        width: 16,
+        height: 16,
+        textAlign: "center",
+        cursor: "pointer",
+        borderRadius: "50%",
+        border: "2px solid #25FCFC",
+        backgroundColor: "black",
+        color: "#333",
+      }}
+      {...getHandleProps(id)}
+    >
+      {/* <div style={{ fontFamily: "Roboto", fontSize: 11, marginTop: -35 }}>{value}</div> */}
+    </div>
+  );
 }
 
 function Track({ source, target, getTrackProps }: any) {
-    return (
-        <div
-            style={{
-                position: "absolute",
-                height: 2,
-                zIndex: 1,
-                marginTop: 15,
-                backgroundColor: "#25FCFC",
-                borderRadius: 5,
-                cursor: "pointer",
-                left: `${source.percent}%`,
-                width: `${target.percent - source.percent}%`,
-            }}
-            {...getTrackProps()}
-        />
-    );
+  return (
+    <div
+      style={{
+        position: "absolute",
+        height: 2,
+        zIndex: 1,
+        marginTop: 15,
+        backgroundColor: "#25FCFC",
+        borderRadius: 5,
+        cursor: "pointer",
+        left: `${source.percent}%`,
+        width: `${target.percent - source.percent}%`,
+      }}
+      {...getTrackProps()}
+    />
+  );
 }
 
 function Tick({ tick, count }: any) {
-    return (
-        <div>
-            <div
-                style={{
-                    position: "absolute",
-                    marginTop: 12,
-                    marginLeft: -0.5,
-                    width: 1,
-                    height: 10,
-                    backgroundColor: "#25FCFC",
-                    left: `${tick.percent}%`,
-                }}
-            />
-            <div
-                style={{
-                    position: "absolute",
-                    marginTop: 25,
-                    fontSize: 10,
-                    textAlign: "center",
-                    marginLeft: `${-(100 / count) / 2}%`,
-                    width: `${100 / count}%`,
-                    left: `${tick.percent}%`,
-                }}
-            >
-                ${formatNumberWithSuffix(tick.value)}
-            </div>
-        </div>
-    );
+  return (
+    <div>
+      <div
+        style={{
+          position: "absolute",
+          marginTop: 12,
+          marginLeft: -0.5,
+          width: 1,
+          height: 10,
+          backgroundColor: "#25FCFC",
+          left: `${tick.percent}%`,
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          marginTop: 25,
+          fontSize: 10,
+          textAlign: "center",
+          marginLeft: `${-(100 / count) / 2}%`,
+          width: `${100 / count}%`,
+          left: `${tick.percent}%`,
+        }}
+      >
+        ${formatNumberWithSuffix(tick.value)}
+      </div>
+    </div>
+  );
 }
 
-const SnipeModal: React.FC<SnipeModalProps> = ({ isOpen, onClose, genesisId, name, walletAddress, endsAt, fetchSubscriptionData }) => {
-    const { selectedVitualtoken, setSelctedVirtualToken } = useSwapContext();
-    const { balances } = useWalletBalance();
-    const balance = selectedVitualtoken.symbol === "ETH" ? balances.ETH : balances.VIRT;
-    const calculatedAmount = (parseFloat(balance || "0") * 10) / 100;
+const SnipeModal: React.FC<SnipeModalProps> = ({
+  isOpen,
+  onClose,
+  genesisId,
+  name,
+  walletAddress,
+  endsAt,
+  fetchSubscriptionData,
+}) => {
+  const { selectedVitualtoken, setSelctedVirtualToken } = useSwapContext();
+  const { balances } = useWalletBalance();
+  const balance =
+    selectedVitualtoken.symbol === "ETH" ? balances.ETH : balances.VIRT;
+  const calculatedAmount = (parseFloat(balance || "0") * 10) / 100;
 
-    const [amount, setAmount] = useState(calculatedAmount.toFixed(4).toString());
-    const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-    const [isLoading, setIsLoading] = useState(false);
-    const [isProcessing, setIsProcessing] = useState(false);
-    const { networkData } = useLoginContext();
-    const percentageButtons = [10, 25, 50, 100];
-    const [isFromCoinOpen, setIsFromCoinOpen] = useState(false);
-    const [marketCapBuyRange, setMarketCapBuyRange] = useState(10000000);
+  const [amount, setAmount] = useState(calculatedAmount.toFixed(4).toString());
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const { networkData } = useLoginContext();
+  const percentageButtons = [10, 25, 50, 100];
+  const [isFromCoinOpen, setIsFromCoinOpen] = useState(false);
+  const [marketCapBuyRange, setMarketCapBuyRange] = useState(10000000);
+  const coinSelectRef = useRef<HTMLDivElement>(null);
 
-    const tokenOptions: TokenOption[] = [
-        {
-            name: "Virtuals",
-            symbol: "VIRT",
-            logo: "https://static.cx.metamask.io/api/v1/tokenIcons/8453/0x0b3e328455c4059eeb9e3f84b5543f74e24e7e1b.png",
-            balance: balances.VIRT || "0",
-        },
-        {
-            name: "Ethereum",
-            symbol: "ETH",
-            logo: "/Networks/ETH.png",
-            balance: balances.ETH || "0",
-        },
-    ];
+  useClickOutside(coinSelectRef, () => {
+    if (isFromCoinOpen) {
+      setIsFromCoinOpen(false);
+    }
+  });
 
-    const handleTokenSelect = (token: TokenOption) => {
-        setSelctedVirtualToken(token);
-        setIsFromCoinOpen(false);
-        // Reset amount when token changes
-        setAmount("");
-    };
-    useEffect(() => {
-        handlePercentageClick(10);
-    }, [balances]);
+  const tokenOptions: TokenOption[] = [
+    {
+      name: "Virtuals",
+      symbol: "VIRT",
+      logo: "https://static.cx.metamask.io/api/v1/tokenIcons/8453/0x0b3e328455c4059eeb9e3f84b5543f74e24e7e1b.png",
+      balance: balances.VIRT || "0",
+    },
+    {
+      name: "Ethereum",
+      symbol: "ETH",
+      logo: "/Networks/ETH.png",
+      balance: balances.ETH || "0",
+    },
+    {
+      name: "Dexter",
+      symbol: "DEXTER",
+      logo: "/Trade/dexterLogo.png",
+      balance: "0",
+    },
+  ];
 
-    useEffect(() => {
-        setIsButtonDisabled(!amount || parseFloat(amount) <= 0 || isLoading || isProcessing);
-    }, [amount, isLoading, isProcessing]);
+  const handleTokenSelect = (token: TokenOption) => {
+    setSelctedVirtualToken(token);
+    setIsFromCoinOpen(false);
+    // Reset amount when token changes
+    setAmount("");
+  };
+  useEffect(() => {
+    handlePercentageClick(10);
+  }, [balances]);
 
-    const handlePercentageClick = (percentage: number) => {
-        if (!selectedVitualtoken || isLoading || isProcessing) return;
-        const balance = selectedVitualtoken.symbol === "ETH" ? balances.ETH : balances.VIRT;
-        const calculatedAmount = (parseFloat(balance || "0") * percentage) / 100;
-        setAmount(calculatedAmount.toFixed(4).toString());
-    };
+  useEffect(() => {
+    setIsButtonDisabled(
+      !amount || parseFloat(amount) <= 0 || isLoading || isProcessing
+    );
+  }, [amount, isLoading, isProcessing]);
 
-    const handleSnipe = async () => {
-        if (!selectedVitualtoken || isLoading || isProcessing) return;
+  const handlePercentageClick = (percentage: number) => {
+    if (!selectedVitualtoken || isLoading || isProcessing) return;
+    const balance =
+      selectedVitualtoken.symbol === "ETH" ? balances.ETH : balances.VIRT;
+    const calculatedAmount = (parseFloat(balance || "0") * percentage) / 100;
+    setAmount(calculatedAmount.toFixed(4).toString());
+  };
 
-        let approveToastId: string | number | null = null;
-        let processToastId: string | number | null = null;
+  const handleSnipe = async () => {
+    if (!selectedVitualtoken || isLoading || isProcessing) return;
 
+    let approveToastId: string | number | null = null;
+    let processToastId: string | number | null = null;
+
+    try {
+      setIsLoading(true);
+      setIsProcessing(true);
+      processToastId = toast.info("Processing Transaction...", {
+        autoClose: false,
+        closeOnClick: false,
+        closeButton: false,
+      });
+
+      const isEth = selectedVitualtoken.symbol === "ETH" ? true : false;
+
+      if (!isEth) {
         try {
-            setIsLoading(true);
-            setIsProcessing(true);
-            processToastId = toast.info("Processing Transaction...", {
-                autoClose: false,
-                closeOnClick: false,
-                closeButton: false,
-            });
+          // approveToastId = toast.info("Checking token allowance...", {
+          //   autoClose: false,
+          //   closeOnClick: false,
+          //   closeButton: false,
+          // });
+          const allowance = await approvalService.checkAllowance({
+            tokenAddress: VIRTUALS_TOKEN_ADDRESS,
+            provider: networkData?.provider!,
+            spenderAddress: SnipeContract,
+          });
 
-            const isEth = selectedVitualtoken.symbol === "ETH" ? true : false;
-
-            if (!isEth) {
-                try {
-                    // approveToastId = toast.info("Checking token allowance...", {
-                    //   autoClose: false,
-                    //   closeOnClick: false,
-                    //   closeButton: false,
-                    // });
-                    const allowance = await approvalService.checkAllowance({
-                        tokenAddress: VIRTUALS_TOKEN_ADDRESS,
-                        provider: networkData?.provider!,
-                        spenderAddress: SnipeContract,
-                    });
-
-                    // If allowance is less than amount, approve first
-                    if (Number(allowance) < Number(amount)) {
-                        if (approveToastId) toast.dismiss(approveToastId);
-                        approveToastId = toast.info("Approving token spend...", {
-                            autoClose: false,
-                            closeOnClick: false,
-                            closeButton: false,
-                        });
-                        await approvalService.approveVirtualToken(amount.toString(), networkData?.provider!, VIRTUALS_TOKEN_ADDRESS, SnipeContract);
-                        if (approveToastId) toast.dismiss(approveToastId);
-                        toast.success("Token approved successfully!");
-                    } else {
-                        if (approveToastId) toast.dismiss(approveToastId);
-                    }
-                } catch (error: any) {
-                    if (approveToastId) toast.dismiss(approveToastId);
-                    toast.error("Failed to approve token: " + (error.message || "Unknown error"));
-                    throw error;
-                }
-            }
-
-            const receipt = await agentService.deposit({
-                tokenAddress: isEth ? WRAPPED_ETH_ADDRESS : VIRTUALS_TOKEN_ADDRESS,
-                amount: amount,
-                provider: networkData?.provider!,
-            });
-
-            if (receipt.transactionHash) {
-                const response = await agentService.createAgent({
-                    genesisId,
-                    name,
-                    walletAddress,
-                    token: selectedVitualtoken.symbol === "ETH" ? "eth" : "virtual",
-                    amount: ((Number(amount) - 0.003 * Number(amount)) * 10 ** 18).toString(),
-                    launchTime: new Date(endsAt),
-                });
-                fetchSubscriptionData();
-
-                if (!response.success) {
-                    throw new Error(response.message);
-                }
-                if (processToastId) toast.dismiss(processToastId);
-                toast.success("Snipe successful! 🎉");
-                onClose();
-            } else {
-                if (processToastId) toast.dismiss(processToastId);
-                toast.error("Snipe Failed!");
-            }
-        } catch (error) {
+          // If allowance is less than amount, approve first
+          if (Number(allowance) < Number(amount)) {
             if (approveToastId) toast.dismiss(approveToastId);
-            if (processToastId) toast.dismiss(processToastId);
-            console.error("Error in snipe:", error);
-            toast.error(error instanceof Error ? error.message : "Failed to snipe");
-        } finally {
-            setIsLoading(false);
-            setIsProcessing(false);
+            approveToastId = toast.info("Approving token spend...", {
+              autoClose: false,
+              closeOnClick: false,
+              closeButton: false,
+            });
+            await approvalService.approveVirtualToken(
+              amount.toString(),
+              networkData?.provider!,
+              VIRTUALS_TOKEN_ADDRESS,
+              SnipeContract
+            );
+            if (approveToastId) toast.dismiss(approveToastId);
+            toast.success("Token approved successfully!");
+          } else {
+            if (approveToastId) toast.dismiss(approveToastId);
+          }
+        } catch (error: any) {
+          if (approveToastId) toast.dismiss(approveToastId);
+          toast.error(
+            "Failed to approve token: " + (error.message || "Unknown error")
+          );
+          throw error;
         }
-    };
+      }
 
-    const sliderStyle = {
-        // Give the slider some width
-        position: "relative",
-        width: "100%",
-        height: 40,
-    };
+      const receipt = await agentService.deposit({
+        tokenAddress: isEth ? WRAPPED_ETH_ADDRESS : VIRTUALS_TOKEN_ADDRESS,
+        amount: amount,
+        provider: networkData?.provider!,
+      });
 
-    const railStyle = {
-        position: "absolute",
-        width: "100%",
-        height: 2,
-        marginTop: 15,
-        borderRadius: 5,
-        backgroundColor: "#25FCFC88",
-    };
+      if (receipt.transactionHash) {
+        const response = await agentService.createAgent({
+          genesisId,
+          name,
+          walletAddress,
+          token: selectedVitualtoken.symbol === "ETH" ? "eth" : "virtual",
+          amount: (
+            (Number(amount) - 0.003 * Number(amount)) *
+            10 ** 18
+          ).toString(),
+          launchTime: new Date(endsAt),
+        });
+        fetchSubscriptionData();
 
-    return (
-        <div className={`w-[95%] mx-auto transition-all duration-300 ease-in-out overflow-hidden ${isOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"}`}>
-            <div className="rounded-b-xl bg-primary-100/10 py-2 px-4">
-                <div className="relative flex flex-col pt-3">
-                    <div className="absolute top-3 right-1 flex justify-end items-start">
-                        {/* <h3 className="text-lg font-semibold text-white">Snipe {name}</h3> */}
-                        <button onClick={onClose} className="text-gray-400 hover:text-white">
-                            ✕
-                        </button>
-                    </div>
+        if (!response.success) {
+          throw new Error(response.message);
+        }
+        if (processToastId) toast.dismiss(processToastId);
+        toast.success("Snipe successful! 🎉");
+        onClose();
+      } else {
+        if (processToastId) toast.dismiss(processToastId);
+        toast.error("Snipe Failed!");
+      }
+    } catch (error: any) {
+      if (approveToastId) toast.dismiss(approveToastId);
+      if (processToastId) toast.dismiss(processToastId);
+      console.error("Error in snipe:", error);
+      console.error("Error in quick buy:", error);
 
-                    <div className="">
-                        <label htmlFor="amount" className="block text-sm font-medium text-gray-300 mb-2">
-                            Max Amount
-                        </label>
-                        <div className="relative items-center justify-center">
-                            <div className="relative w-full border border-primary-100/70 rounded flex flex-col items-start justify-center px-4">
-                                <div className="relative w-full flex flex-row items-center justify-between px-2">
-                                    <input
-                                        id="amount"
-                                        value={amount}
-                                        onChange={(e) => setAmount(e.target.value)}
-                                        disabled={isLoading || isProcessing}
-                                        className="w-full  py-3 bg-transparent rounded-lg text-white focus:outline-none focus:border-primary-100 disabled:opacity-50 disabled:cursor-not-allowed"
-                                        placeholder="Enter amount"
-                                    />
-                                    <div className="flex items-center gap-2">
-                                        {selectedVitualtoken?.logo && <img src={selectedVitualtoken.logo} alt={selectedVitualtoken.symbol} className="w-6 h-6 rounded-full" />}
-                                        <span className="text-primary-100 text-sm">{selectedVitualtoken?.symbol || "VIRT"}</span>
-                                        <button onClick={() => setIsFromCoinOpen(true)} className="text-primary-100 hover:text-primary-100/80 transition-colors">
-                                            <TiArrowSortedDown className="size-5" />
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+      // Handle specific error cases
+      if (error.code === "INSUFFICIENT_FUNDS") {
+        toast.error("Insufficient funds to complete the transaction");
+      } else if (error.code === "UNPREDICTABLE_GAS_LIMIT") {
+        toast.error(
+          "Transaction would fail. Please check your input amounts and try again"
+        );
+      } else if (error.message?.includes("user rejected")) {
+        toast.error("Transaction was rejected by user");
+      } else if (error.message?.includes("insufficient funds")) {
+        toast.error("Insufficient balance to complete the transaction");
+      } else if (error.message?.includes("execution reverted")) {
+        toast.error("Transaction failed: Contract execution reverted");
+      } else {
+        // For other errors, show a more user-friendly message
+        const errorMessage = error.message || "Unknown error occurred";
+        toast.error(`Transaction failed: ${errorMessage.split("(")[0].trim()}`);
+      }
+    } finally {
+      setIsLoading(false);
+      setIsProcessing(false);
+    }
+  };
 
-                        {/* Token Selector Dropdown */}
-                        {isFromCoinOpen && (
-                            <div className="absolute right-0 mt-2 w-48 bg-[#1A1A1A] border border-primary-100/20 rounded-lg shadow-lg z-10">
-                                <div className="py-1">
-                                    {tokenOptions.map((token) => (
-                                        <button key={token.symbol} onClick={() => handleTokenSelect(token)} className="w-full px-4 py-2 text-left text-white hover:bg-primary-100/10 flex items-center gap-2">
-                                            <img src={token.logo} alt={token.symbol} className="w-6 h-6 rounded-full" />
-                                            <div className="flex flex-col">
-                                                <span className="text-sm font-medium">{token.symbol}</span>
-                                                <span className="text-xs text-gray-400">Balance: {Number(token.balance).toFixed(6)}</span>
-                                            </div>
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
+  const sliderStyle = {
+    // Give the slider some width
+    position: "relative",
+    width: "100%",
+    height: 40,
+  };
 
-                        <div className="flex justify-between items-center my-2">
-                            <div className="text-gray-300 text-[11px] text-nowrap">Available: {selectedVitualtoken?.symbol === "ETH" ? Number(balances.ETH).toFixed(6) : Number(balances.VIRT).toFixed(6)}</div>
-                            <div className="flex flex-row gap-1">
-                                {percentageButtons.map((percentage) => (
-                                    <button
-                                        key={percentage}
-                                        onClick={() => handlePercentageClick(percentage)}
-                                        disabled={isLoading || isProcessing}
-                                        className="text-white/80 text-[11px] rounded font-bold border border-[#818284] px-[0.1875rem]  disabled:bg-white/5 disabled:text-white/20"
-                                    >
-                                        {percentage}%
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                    <div className="mt-2">
-                        <label htmlFor="amount" className="block text-sm font-medium text-gray-300 mb-2">
-                            Market Cap Buy Range
-                        </label>
-                        <div className="relative items-center justify-center">
-                            <div className="relative w-full border border-primary-100/70 rounded flex flex-col items-start justify-center px-4">
-                                {/* <input
+  const railStyle = {
+    position: "absolute",
+    width: "100%",
+    height: 2,
+    marginTop: 15,
+    borderRadius: 5,
+    backgroundColor: "#25FCFC88",
+  };
+
+  return (
+    <div
+      className={`w-[95%] mx-auto transition-all duration-300 ease-in-out overflow-hidden ${
+        isOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
+      }`}
+    >
+      <div className="rounded-b-xl bg-primary-100/10 py-2 px-4">
+        <div className="relative flex flex-col pt-3">
+          <div className="absolute top-3 right-1 flex justify-end items-start">
+            {/* <h3 className="text-lg font-semibold text-white">Snipe {name}</h3> */}
+            <button
+              onClick={onClose}
+              className="text-gray-400 hover:text-white"
+            >
+              ✕
+            </button>
+          </div>
+
+          <div className="">
+            <label
+              htmlFor="amount"
+              className="block text-sm font-medium text-gray-300 mb-2"
+            >
+              Max Amount
+            </label>
+            <div className="relative items-center justify-center">
+              <div className="relative w-full border border-primary-100/70 rounded flex flex-col items-start justify-center px-4">
+                <div className="relative w-full flex flex-row items-center justify-between px-2">
+                  <input
+                    id="amount"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                    disabled={isLoading || isProcessing}
+                    className="w-full  py-3 bg-transparent rounded-lg text-white focus:outline-none focus:border-primary-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                    placeholder="Enter amount"
+                  />
+                  <button
+                    className="flex items-center gap-2"
+                    onClick={() => setIsFromCoinOpen((prev) => !prev)}
+                  >
+                    {selectedVitualtoken?.logo && (
+                      <img
+                        src={selectedVitualtoken.logo}
+                        alt={selectedVitualtoken.symbol}
+                        className="w-6 h-6 rounded-full"
+                      />
+                    )}
+                    <span className="text-primary-100 text-sm">
+                      {selectedVitualtoken?.symbol || "VIRT"}
+                    </span>
+                    <button className="text-primary-100 hover:text-primary-100/80 transition-colors">
+                      <TiArrowSortedDown className="size-5" />
+                    </button>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Token Selector Dropdown */}
+            {isFromCoinOpen && (
+              <div
+                ref={coinSelectRef}
+                className="absolute right-0 mt-2 w-48  border border-primary-100/30  backdrop-blur-sm  bg-black/25 drop-shadow-lg rounded shadow-lg z-10"
+              >
+                <div className="py-1">
+                  {tokenOptions.map((token) => (
+                    <button
+                      key={token.symbol}
+                      onClick={() => handleTokenSelect(token)}
+                      disabled={token.symbol === "DEXTER"}
+                      className={`disabled:opacity-50 disabled:cursor-not-allowed w-full px-4 py-2 text-left text-white hover:bg-primary-100/10 flex items-center gap-2 ${
+                        token?.symbol != "VIRT"
+                          ? "border-t border-primary-100/30"
+                          : ""
+                      }`}
+                    >
+                      <img
+                        src={token.logo}
+                        alt={token.symbol}
+                        className="w-6 h-6 rounded-full"
+                      />
+                      <div className="flex flex-col">
+                        <span className="text-sm font-medium">
+                          {token.symbol}
+                        </span>
+                        <span className="text-xs text-gray-400">
+                          Balance: {Number(token.balance).toFixed(6)}
+                        </span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="flex justify-between items-center my-2">
+              <div className="text-gray-300 text-[11px] text-nowrap">
+                Available:{" "}
+                {selectedVitualtoken?.symbol === "ETH"
+                  ? Number(balances.ETH).toFixed(6)
+                  : Number(balances.VIRT).toFixed(6)}
+              </div>
+              <div className="flex flex-row gap-1">
+                {percentageButtons.map((percentage) => (
+                  <button
+                    key={percentage}
+                    onClick={() => handlePercentageClick(percentage)}
+                    disabled={isLoading || isProcessing}
+                    className="text-white/80 text-[11px] rounded font-bold border border-[#818284] px-[0.1875rem]  disabled:bg-white/5 disabled:text-white/20"
+                  >
+                    {percentage}%
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="mt-2">
+            <label
+              htmlFor="amount"
+              className="block text-sm font-medium text-gray-300 mb-2"
+            >
+              Market Cap Buy Range
+            </label>
+            <div className="relative items-center justify-center">
+              <div className="relative w-full border border-primary-100/70 rounded flex flex-col items-start justify-center px-4">
+                {/* <input
                                     id="amount"
                                     value={amount}
                                     onChange={(e) => setAmount(e.target.value)}
@@ -345,67 +456,88 @@ const SnipeModal: React.FC<SnipeModalProps> = ({ isOpen, onClose, genesisId, nam
                                     className="w-full py-3 bg-transparent rounded-lg text-white focus:outline-none focus:border-primary-100 disabled:opacity-50 disabled:cursor-not-allowed"
                                     placeholder="Enter amount"
                                 /> */}
-                                <span className="py-3">${addCommas(marketCapBuyRange)}</span>
-                            </div>
-                        </div>
-                        <div className="flex justify-between items-center my-2 px-2">
-                            <Slider rootStyle={sliderStyle} domain={[0, 50000000]} step={1000000} values={[marketCapBuyRange]} onChange={(values) => setMarketCapBuyRange(values[0])}>
-                                <div style={railStyle as any} />
-                                <Handles>
-                                    {({ handles, getHandleProps }) => (
-                                        <div className="slider-handles">
-                                            {handles.map((handle) => (
-                                                <Handle key={handle.id} handle={handle} getHandleProps={getHandleProps} />
-                                            ))}
-                                        </div>
-                                    )}
-                                </Handles>
-                                <Tracks right={false}>
-                                    {({ tracks, getTrackProps }) => (
-                                        <div className="slider-tracks">
-                                            {tracks.map(({ id, source, target }) => (
-                                                <Track key={id} source={source} target={target} getTrackProps={getTrackProps} />
-                                            ))}
-                                        </div>
-                                    )}
-                                </Tracks>
-                                <Ticks values={[0, 10000000, 20000000, 30000000, 40000000, 50000000]}>
-                                    {({ ticks }) => (
-                                        <div className="slider-ticks">
-                                            {ticks.map((tick) => (
-                                                <Tick key={tick.id} tick={tick} count={ticks.length} />
-                                            ))}
-                                        </div>
-                                    )}
-                                </Ticks>
-                            </Slider>
-                        </div>
-                    </div>
-                    <div className="my-4 flex justify-center items-center relative w-full">
-                        <button
-                            onClick={handleSnipe}
-                            disabled={isButtonDisabled}
-                            className={`w-[80%] px-4 py-3 rounded-lg font-medium transition-colors duration-200 ${isButtonDisabled ? "bg-gray-600 text-white cursor-not-allowed" : "bg-primary-100 text-black hover:bg-primary-100/90"}`}
-                        >
-                            {isLoading ? (
-                                <div className="flex items-center justify-center">
-                                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-black mr-2"></div>
-                                    Processing...
-                                </div>
-                            ) : isProcessing ? (
-                                <div className="flex items-center justify-center">
-                                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-black mr-2"></div>
-                                    Transaction in Progress...
-                                </div>
-                            ) : (
-                                "Snipe"
-                            )}
-                        </button>
-                    </div>
-                </div>
+                <span className="py-3">${addCommas(marketCapBuyRange)}</span>
+              </div>
             </div>
+            <div className="flex justify-between items-center my-2 px-2">
+              <Slider
+                rootStyle={sliderStyle}
+                domain={[0, 50000000]}
+                step={1000000}
+                values={[marketCapBuyRange]}
+                onChange={(values) => setMarketCapBuyRange(values[0])}
+              >
+                <div style={railStyle as any} />
+                <Handles>
+                  {({ handles, getHandleProps }) => (
+                    <div className="slider-handles">
+                      {handles.map((handle) => (
+                        <Handle
+                          key={handle.id}
+                          handle={handle}
+                          getHandleProps={getHandleProps}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </Handles>
+                <Tracks right={false}>
+                  {({ tracks, getTrackProps }) => (
+                    <div className="slider-tracks">
+                      {tracks.map(({ id, source, target }) => (
+                        <Track
+                          key={id}
+                          source={source}
+                          target={target}
+                          getTrackProps={getTrackProps}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </Tracks>
+                <Ticks
+                  values={[0, 10000000, 20000000, 30000000, 40000000, 50000000]}
+                >
+                  {({ ticks }) => (
+                    <div className="slider-ticks">
+                      {ticks.map((tick) => (
+                        <Tick key={tick.id} tick={tick} count={ticks.length} />
+                      ))}
+                    </div>
+                  )}
+                </Ticks>
+              </Slider>
+            </div>
+          </div>
+          <div className="my-4 flex justify-center items-center relative w-full">
+            <button
+              onClick={handleSnipe}
+              disabled={isButtonDisabled}
+              className={`w-[80%] px-4 py-3 rounded-lg font-medium transition-colors duration-200 ${
+                isButtonDisabled
+                  ? "bg-gray-600 text-white cursor-not-allowed"
+                  : "bg-primary-100 text-black hover:bg-primary-100/90"
+              }`}
+            >
+              {isLoading ? (
+                <div className="flex items-center justify-center">
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-black mr-2"></div>
+                  Processing...
+                </div>
+              ) : isProcessing ? (
+                <div className="flex items-center justify-center">
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-black mr-2"></div>
+                  Transaction in Progress...
+                </div>
+              ) : (
+                "Smart Buy"
+              )}
+            </button>
+          </div>
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default SnipeModal;

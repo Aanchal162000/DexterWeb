@@ -27,6 +27,7 @@ import { TiArrowSortedDown } from "react-icons/ti";
 import buyService from "@/services/contract/buyService";
 import {
   BuyContract,
+  networkCards,
   VIRTUALS_TOKEN_ADDRESS,
   WRAPPED_ETH_ADDRESS,
 } from "@/constants/config";
@@ -34,6 +35,8 @@ import approvalService from "@/services/contract/approvalService";
 import { useSwapContext } from "@/context/SwapContext";
 import SwapSection from "./SwapSection";
 import useEffectAsync from "@/hooks/useEffectAsync";
+import ConfirmationDialog from "../common/ConfirmationDialog";
+import { ethers } from "ethers";
 
 const Snipe = () => {
   const { networkData } = useLoginContext();
@@ -125,29 +128,48 @@ const Snipe = () => {
       return;
     }
 
+    // Validate amounts
+    if (!fromAmount || !toAmount || isNaN(fromAmount) || isNaN(toAmount)) {
+      toast.error("Invalid amount values");
+      return;
+    }
+
     try {
       toast.info("Starting swap process...", { autoClose: false });
-      const allowance = await approvalService.checkAllowance({
-        tokenAddress: selectedVirtual.contractAddress!,
-        provider: networkData?.provider!,
-      });
+      if (selectedVirtual.symbol != "ETH") {
+        const allowance = await approvalService.checkAllowance({
+          tokenAddress: selectedVirtual.contractAddress!,
+          provider: networkData?.provider!,
+        });
 
-      // If allowance is less than amount, approve first
-      if (Number(allowance) < Number(fromAmount)) {
-        toast.info("Approving token spend...");
-        await approvalService.approveVirtualToken(
-          fromAmount.toString(),
-          networkData?.provider!,
-          selectedVirtual.contractAddress!,
-          BuyContract
-        );
-        toast.success("Token approved successfully!");
+        // If allowance is less than amount, approve first
+        if (Number(allowance) < Number(fromAmount)) {
+          toast.info("Approving token spend...");
+          await approvalService.approveVirtualToken(
+            fromAmount.toString(),
+            networkData?.provider!,
+            selectedVirtual.contractAddress!,
+            BuyContract
+          );
+          toast.success("Token approved successfully!");
+        }
       }
       toast.info("Processing Swap transaction...");
 
+      const key: any =
+        selectedVirtual.symbol == "ETH" || selectedToVirtual.symbol == "ETH"
+          ? selectedVirtual.symbol != "ETH"
+            ? "ETH"
+            : "GETETH"
+          : "VIRT";
+
+      // Convert amounts to wei (18 decimals)
+      const amountInWei = ethers.utils.parseUnits(fromAmount.toString(), 18);
+      const amountOutMinWei = ethers.utils.parseUnits(toAmount.toString(), 18);
+
       const receipt = await buyService.buyToken({
-        amountIn: fromAmount.toString(),
-        amountOutMin: toAmount.toString(), // Set minimum amount or calculate slippage
+        amountIn: amountInWei.toString(),
+        amountOutMin: amountOutMinWei.toString(),
         path: [
           selectedVirtual.contractAddress!,
           selectedToVirtual.contractAddress!,
@@ -157,20 +179,35 @@ const Snipe = () => {
         provider: networkData?.provider!,
         selectedToken: {
           logo: "",
-          name: "VIRT",
-          symbol: "",
+          name: key,
+          symbol: key,
           balance: "0",
         },
       });
 
       toast.success("Swap transaction successful! 🎉");
       console.log("Transaction successful:", receipt);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error in quick buy:", error);
-      toast.error(
-        "Failed to Swap: " +
-          (error instanceof Error ? error.message : "Unknown error")
-      );
+
+      // Handle specific error cases
+      if (error.code === "INSUFFICIENT_FUNDS") {
+        toast.error("Insufficient funds to complete the transaction");
+      } else if (error.code === "UNPREDICTABLE_GAS_LIMIT") {
+        toast.error(
+          "Transaction would fail. Please check your input amounts and try again"
+        );
+      } else if (error.message?.includes("user rejected")) {
+        toast.error("Transaction was rejected by user");
+      } else if (error.message?.includes("insufficient funds")) {
+        toast.error("Insufficient balance to complete the transaction");
+      } else if (error.message?.includes("execution reverted")) {
+        toast.error("Transaction failed: Contract execution reverted");
+      } else {
+        // For other errors, show a more user-friendly message
+        const errorMessage = error.message || "Unknown error occurred";
+        toast.error(`Transaction failed: ${errorMessage.split("(")[0].trim()}`);
+      }
       throw error;
     }
   };
@@ -410,37 +447,24 @@ const Snipe = () => {
             )}
 
             {isConfirmPop && (
-              <DialogContainer
-                setClose={() => setIsConfirmPop(false)}
+              <ConfirmationDialog
+                isOpen={isConfirmPop}
+                onClose={() => setIsConfirmPop(false)}
+                onConfirm={async () => {
+                  setIsConfirmPop(false);
+                  await handleSwap();
+                }}
                 title="Transaction Confirmation"
-              >
-                <div className="p-4">
-                  <div className="text-center mb-4">
-                    <h3 className="text-lg font-medium">Confirm Swap</h3>
-                    <p className="text-sm text-gray-400 mt-1">
-                      You are about to swap {fromAmount} {selectedVirtual?.name}{" "}
-                      for {toAmount} {selectedToVirtual?.name}
-                    </p>
-                  </div>
-                  <div className="flex gap-4">
-                    <button
-                      className="flex-1 py-2 px-4 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors"
-                      onClick={() => setIsConfirmPop(false)}
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      className="flex-1 py-2 px-4 bg-primary-100 text-black rounded-lg hover:brightness-125 transition-all"
-                      onClick={async () => {
-                        setIsConfirmPop(false);
-                        await handleSwap();
-                      }}
-                    >
-                      Confirm
-                    </button>
-                  </div>
-                </div>
-              </DialogContainer>
+                description={`You are about to swap ${fromAmount} ${selectedVirtual?.name} for ${toAmount} ${selectedToVirtual?.name}`}
+                fromAmount={fromAmount}
+                toAmount={toAmount}
+                fromToken={selectedVirtual!}
+                toToken={selectedToVirtual!}
+                fromNetwork={networkCards[3]}
+                toNetwork={networkCards[3]}
+                transactionType="On-Chain Swap"
+                estimatedTime="~ 2-3 mins"
+              />
             )}
 
             {selectedTab === "create" && (

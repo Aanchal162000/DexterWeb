@@ -15,7 +15,7 @@ function DialogContainer({
   const [openPop, setOpenPop] = React.useState(false);
   return (
     <div className="z-40 flex h-full w-full flex-1 top-0 left-0 fixed bg-black/40 items-end justify-center">
-      <div className="fixed mb-6 w-[calc(100%-3rem)] min-h-[312px] flex flex-col text-white bg-[linear-gradient(0deg,#000000_0%,#292929_100%)] border border-primary-100 rounded-xl overflow-hidden">
+      <div className="fixed mb-6 w-[calc(100%-3rem)] min-h-[312px] flex flex-col text-white backdrop-blur-sm bg-[#15181B]/80 border border-primary-100 rounded-xl overflow-hidden">
         <h2 className="flex relative flex-col justify-center items-center text-center border-primary-100 w-[100%] h-[60px] text-sm md:text-base text-primary-100">
           {title}
           <button

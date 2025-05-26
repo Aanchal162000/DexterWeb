@@ -232,16 +232,16 @@ const GenesisCard: React.FC<GenesisCardProps> = ({
           {status === "live" && (
             <button
               onClick={handleSnipe}
-              className="px-2 py-1 rounded  text-sm text-primary-100 border border-primary-100/80 font-semibold hover:bg-cyan-500/20 transition-all duration-300 flex items-center justify-center gap-2"
+              className="w-[72px] p-1   text-nowrap text-[11px] rounded text-primary-100 border border-primary-100/80 font-semibold hover:bg-cyan-500/20 transition-all duration-300 flex items-center justify-center gap-2"
             >
-              <Image
+              {/* <Image
                 src="/Trade/Snipe.png"
                 alt="Link"
                 width={4}
                 height={4}
                 className="w-4 h-4 fill-primary-100"
-              />
-              <span>Snipe</span>
+              /> */}
+              <span>Smart Buy</span>
             </button>
           )}
         </div>

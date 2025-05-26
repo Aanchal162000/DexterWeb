@@ -38,9 +38,9 @@ function OldView({
   } = useSwapContext();
 
   let virtualList = ["heading", ...allCrypto];
-  let isPopularSkipped = false;
+  let isPopularSkipped = true;
   if (allCrypto?.length > 10) {
-    isPopularSkipped = true;
+    isPopularSkipped = false;
     virtualList?.unshift(...["heading", ...popularCrypto]);
   }
 

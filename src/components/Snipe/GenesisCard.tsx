@@ -33,13 +33,17 @@ interface StatusBadgeProps {
 
 const StatusBadge: React.FC<StatusBadgeProps> = ({ status, timeLeft }) => {
   return (
-    <div
-      className={`flex items-center justify-center gap-2  text-primary-100 `}
-    >
+    <div className="flex items-center justify-center gap-2 text-primary-100">
       {status === "upcoming" && ""}
       {status === "live" && ""}
       {status === "ended" && "✔️"}
-      <span className="text-sm font-medium">{timeLeft}</span>
+      <span
+        className={`text-sm font-medium 
+         animate-pulse
+        `}
+      >
+        {timeLeft}
+      </span>
     </div>
   );
 };
@@ -71,15 +75,16 @@ const GenesisCard: React.FC<GenesisCardProps> = ({
 
       if (now < startDate) {
         const seconds = differenceInSeconds(startDate, now);
-        const hours = Math.floor(seconds / 3600);
+        const totalHours = Math.floor(seconds / 3600);
+        const days = Math.floor(totalHours / 24);
+        const hours = totalHours % 24;
         const minutes = Math.floor((seconds % 3600) / 60);
-        const days = Math.floor(seconds / 86400);
         const remainingSeconds = seconds % 60;
         setTimeLeft(
           <>
             Starts in{" "}
             <span className="text-white">
-              {String(hours).padStart(2, "0")}h{" "}
+              {String(days).padStart(2, "0")}d {String(hours).padStart(2, "0")}h{" "}
               {String(minutes).padStart(2, "0")}m{" "}
               {String(remainingSeconds).padStart(2, "0")}s
             </span>
@@ -93,14 +98,16 @@ const GenesisCard: React.FC<GenesisCardProps> = ({
           setStatus("ended");
           return;
         }
-        const hours = Math.floor(remainingSeconds / 3600);
+        const totalHours = Math.floor(remainingSeconds / 3600);
+        const days = Math.floor(totalHours / 24);
+        const hours = totalHours % 24;
         const minutes = Math.floor((remainingSeconds % 3600) / 60);
         const seconds = remainingSeconds % 60;
         setTimeLeft(
           <>
             Live -{" "}
             <span className="text-white">
-              {String(hours).padStart(2, "0")}h{" "}
+              {String(days).padStart(2, "0")}d {String(hours).padStart(2, "0")}h{" "}
               {String(minutes).padStart(2, "0")}m{" "}
               {String(seconds).padStart(2, "0")}s left
             </span>
@@ -202,7 +209,7 @@ const GenesisCard: React.FC<GenesisCardProps> = ({
                 </span> */}
 
                 {genesis.genesisAddress && (
-                  <div className="flex items-center space-x-1 px-1 rounded-md text-[10px] border border-cyan-400/50 text-gray-300">
+                  <div className="flex items-center space-x-1 px-1 rounded text-[10px] border border-cyan-400/50 text-gray-300">
                     <span>
                       {genesis.genesisAddress.slice(0, 4)}...
                       {genesis.genesisAddress.slice(-4)}
@@ -226,7 +233,7 @@ const GenesisCard: React.FC<GenesisCardProps> = ({
           {status === "live" && (
             <button
               onClick={handleSnipe}
-              className="px-2 py-1 rounded-lg  text-sm text-primary-100 border border-primary-100/80 font-semibold hover:bg-cyan-500/20 transition-all duration-300 flex items-center justify-center gap-2"
+              className="px-2 py-1 rounded  text-sm text-primary-100 border border-primary-100/80 font-semibold hover:bg-cyan-500/20 transition-all duration-300 flex items-center justify-center gap-2"
             >
               <Image
                 src="/Trade/Snipe.png"

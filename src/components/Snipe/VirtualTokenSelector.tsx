@@ -263,16 +263,14 @@ const VirtualTokenSelector: React.FC<VirtualTokenSelectorProps> = ({
                 </div>
                 <div className="text-right">
                   <div className="font-medium text-white">
-                    {formatCurrency(virtual.mcapInVirtual || 0)}
+                    {formatCurrency(
+                      Number(virtual.userBalance || 0) *
+                        (virtual.mcapInVirtual || 0)
+                    )}
                   </div>
-                  <div
-                    className={`text-sm ${
-                      (virtual.priceChangePercent24h || 0) >= 0
-                        ? "text-green-500"
-                        : "text-red-500"
-                    }`}
-                  >
-                    {formatPercentage(virtual.priceChangePercent24h || 0)}
+                  <div className="text-sm text-gray-400">
+                    {Number(virtual.userBalance || 0).toFixed(4)}{" "}
+                    {virtual.symbol}
                   </div>
                 </div>
               </button>

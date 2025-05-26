@@ -14,7 +14,7 @@ import HelpCenter from "./HelpCenter/HelpCenter";
 export type IRouterKey = (typeof headerRoutes)[number]["id"];
 
 export const Router: { [key: IRouterKey]: ReactNode } = {
-  Home: <Swap />,
+  Trade: <Swap />,
   Virtuals: <Snipe />,
   Support: <HelpCenter />,
 };

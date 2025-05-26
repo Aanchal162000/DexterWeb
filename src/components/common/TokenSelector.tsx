@@ -103,7 +103,7 @@ const TokenSelector = () => {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <MenuItems className="absolute right-0 mt-2 w-64 origin-top-right rounded-md bg-[#15181B] shadow-lg ring-1 ring-primary-100/20 focus:outline-none backdrop-blur-sm">
+        <MenuItems className="absolute right-0 mt-2 w-56 origin-top-right rounded-md border border-primary-100/30  backdrop-blur-sm  bg-black/25 drop-shadow-lg ring-1 ring-primary-100/20 focus:outline-none ">
           <div className="py-1">
             {tokenOptions.map((token) => (
               <MenuItem key={token.symbol}>
@@ -113,7 +113,10 @@ const TokenSelector = () => {
                     disabled={token.symbol == "DEXTER"}
                     className={`${
                       active ? "bg-primary-100/10" : ""
-                    } flex w-full disabled:opacity-50 items-center justify-between px-4 py-2.5 text-sm text-white hover:bg-primary-100/5 transition-colors duration-200`}
+                    } flex w-full disabled:opacity-60 items-center ${
+                      token.symbol != "VIRT" &&
+                      " border-t border-primary-100/30 "
+                    } justify-between px-4 py-2 text-sm text-white hover:bg-primary-100/5 transition-colors duration-200`}
                   >
                     <div className="flex items-center">
                       <Image

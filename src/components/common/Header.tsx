@@ -13,7 +13,7 @@ import {
   MenuItem,
   MenuItems,
 } from "@headlessui/react";
-import { HiChevronUpDown } from "react-icons/hi2";
+
 import { MdContentCopy } from "react-icons/md";
 import { HiOutlineExternalLink, HiOutlineLogout } from "react-icons/hi";
 import { TiArrowSortedDown } from "react-icons/ti";
@@ -21,7 +21,8 @@ import { toast } from "react-toastify";
 import { IoMenu } from "react-icons/io5";
 
 const Header = () => {
-  const tabs = ["Home", "Virtuals", "Alerts", "DCA", "Support"];
+  const tabs = ["Trade", "Virtuals", "Support"];
+  // "Alerts", "DCA"
   const { activeTab, address, setActiveTab, networkData, setAddress } =
     useLoginContext();
   const network = networkCards.filter(
@@ -108,7 +109,7 @@ const Header = () => {
                   leaveFrom="transform opacity-100 scale-100"
                   leaveTo="transform opacity-0 scale-95"
                 >
-                  <MenuItems className="absolute right-0 mt-2 w-56 origin-top-right rounded-md bg-[#15181B] shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                  <MenuItems className="absolute right-0 mt-2 w-56 origin-top-right rounded-md border border-primary-100/30  backdrop-blur-sm  bg-black/25 drop-shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <div className="py-1">
                       <MenuItem>
                         <button
@@ -128,7 +129,7 @@ const Header = () => {
                               "_blank"
                             )
                           }
-                          className="flex w-full items-center px-4 py-2 text-sm text-white hover:bg-primary-100/10"
+                          className="flex w-full items-center px-4 py-2 text-sm text-white  border-t border-primary-100/30  hover:bg-primary-100/10"
                         >
                           <HiOutlineExternalLink className="mr-3 h-5 w-5" />
                           View on Explorer
@@ -137,7 +138,7 @@ const Header = () => {
                       <MenuItem>
                         <button
                           onClick={() => setAddress(null)}
-                          className="flex w-full items-center px-4 py-2 text-sm text-white hover:bg-primary-100/10"
+                          className="flex w-full items-center px-4 py-2 text-sm  border-t border-primary-100/30  text-white hover:bg-primary-100/10"
                         >
                           <HiOutlineLogout className="mr-3 h-5 w-5" />
                           Disconnect
@@ -165,7 +166,7 @@ const Header = () => {
                 leaveFrom="transform opacity-100 scale-100"
                 leaveTo="transform opacity-0 scale-95"
               >
-                <MenuItems className="absolute right-0 mt-2 w-56 origin-top-right rounded-md bg-[#15181B] shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <MenuItems className="absolute right-0 mt-2 w-56 origin-top-right rounded-md  backdrop-blur-sm border-[1px] border-primary-100/20 shadow-lg ring-1  ring-opacity-5 focus:outline-none">
                   <div className="py-1">
                     {tabs.map((item) => (
                       <MenuItem key={item}>
@@ -198,7 +199,7 @@ const Header = () => {
                             onClick={() =>
                               address &&
                               window.open(
-                                `https://bscscan.com/address/${address}`,
+                                `https://basecscan.com/address/${address}`,
                                 "_blank"
                               )
                             }

@@ -85,15 +85,13 @@ const SwapHeader: React.FC<HeaderProps> = ({ selectedTab, setSelectedTab }) => {
     setSelectedNetwork({
       name: "Fiat",
       status: "active",
-      image: "/network/Fiat.png",
+      image: "/networks/Fiat.png",
       id: "Fiat",
       code: "fiat",
     });
     setSelectedCoin(fiatCurrency.find((item: any) => item.shortName == "USD"));
-    setSelectedToNetwork(
-      networkCards?.find((item) => item?.name == "Arbitrum")!
-    );
-    setSelectedToCoin(arbitrumList?.find((item) => item?.shortName == "USDC")!);
+    setSelectedToNetwork(networkCards?.find((item) => item?.name == "Base")!);
+    setSelectedToCoin(baseList?.find((item) => item?.shortName == "ETH")!);
     setIsFiatBridge(true);
     setFromAmount(0);
   }

@@ -10,7 +10,7 @@ import {
   formatLargeNumber,
 } from "@/utils/tokenCalculations";
 import { FaExternalLinkAlt } from "react-icons/fa";
-import { IoIosLock } from "react-icons/io";
+import { RiLock2Line } from "react-icons/ri";
 import { toast } from "react-toastify";
 import { BsCopy } from "react-icons/bs";
 import { useTokenMetrics } from "@/hooks/useTokenMetrics";
@@ -99,7 +99,7 @@ const VirtualCard: React.FC<VirtualCardProps> = ({ virtual, onClick }) => {
                 </span>
 
                 <div
-                  className={`flex flex-row justify-center items-center text-[10px] gap-[2px] rounded p-[1px] ${
+                  className={`flex flex-row justify-center items-center text-[10px] gap-[2px] rounded px-[3px] py-[1px] ${
                     diffDays == -1
                       ? "bg-gray-700 text-white"
                       : diffDays! > 7
@@ -109,12 +109,7 @@ const VirtualCard: React.FC<VirtualCardProps> = ({ virtual, onClick }) => {
                 >
                   {diffDays != -1 ? (
                     <>
-                      <Image
-                        src="/Trade/Lock.png"
-                        alt="Lock"
-                        width={4}
-                        height={4}
-                      />
+                      <RiLock2Line className="w-3 h-3" />
                       <p>{Math.abs(diffDays!)}d</p>
                     </>
                   ) : (
@@ -138,12 +133,12 @@ const VirtualCard: React.FC<VirtualCardProps> = ({ virtual, onClick }) => {
                 </Link>
               </div>
               <div className="flex items-center gap-1">
-                <span className="px-1 rounded-md text-[10px] border border-cyan-400/50 text-gray-300  capitalize">
+                <span className="px-1 rounded text-[10px] border border-cyan-400/50 text-gray-300  capitalize">
                   {virtual.role?.toLowerCase()}
                 </span>
 
                 {virtual.contractAddress && (
-                  <div className="flex items-center space-x-1 px-1 rounded-md text-[10px] border border-cyan-400/50 text-gray-300">
+                  <div className="flex items-center space-x-1 px-1 rounded text-[10px] border border-cyan-400/50 text-gray-300">
                     <span>
                       {virtual.contractAddress.slice(0, 4)}...
                       {virtual.contractAddress.slice(-4)}
@@ -166,7 +161,7 @@ const VirtualCard: React.FC<VirtualCardProps> = ({ virtual, onClick }) => {
           </div>
           <button
             onClick={handleSmartBuyClick}
-            className="w-[72px] p-1   text-nowrap text-[11px] rounded-lg text-primary-100 border border-primary-100/80 font-semibold hover:bg-cyan-500/20 transition-all duration-300 flex items-center justify-center gap-2"
+            className="w-[72px] p-1   text-nowrap text-[11px] rounded text-primary-100 border border-primary-100/80 font-semibold hover:bg-cyan-500/20 transition-all duration-300 flex items-center justify-center gap-2"
           >
             {/* <Image
               src="/Trade/smartBuy.png"
@@ -187,10 +182,10 @@ const VirtualCard: React.FC<VirtualCardProps> = ({ virtual, onClick }) => {
                 {formatCurrency(metrics.priceUSD)}
               </span>
             </div>
-            <div className="text-[9px] flex flex-row space-x-1  items-center justify-center">
+            <div className="text-[10px] flex flex-row space-x-1  items-center justify-center">
               <span className="text-gray-400 translate-y-[1px]">24h: </span>
               <span
-                className={` text-[10px] ${
+                className={`text-[11px] ${
                   metrics.priceChange24h >= 0
                     ? "text-green-500"
                     : "text-red-500"
@@ -199,15 +194,15 @@ const VirtualCard: React.FC<VirtualCardProps> = ({ virtual, onClick }) => {
                 {formatPercentage(metrics.priceChange24h)}
               </span>
             </div>
-            <div className="text-[9px] flex flex-row space-x-1 items-center justify-center">
+            <div className="text-[10px] flex flex-row space-x-1 items-center justify-center">
               <span className="text-gray-400 translate-y-[1px]">Vol: </span>
-              <span className="text-white  text-[10px]">
+              <span className="text-white  text-[11px]">
                 {formatCurrency(metrics.volume24hUSD)}
               </span>
             </div>
-            <div className="text-[9px] flex flex-row space-x-1 items-center justify-center">
+            <div className="text-[10px] flex flex-row space-x-1 items-center justify-center">
               <span className="text-gray-400 translate-y-[1px]">Holders: </span>
-              <span className="text-white  text-[10px]">
+              <span className="text-white  text-[11px]">
                 {formatLargeNumber(metrics.holders)}
               </span>
             </div>

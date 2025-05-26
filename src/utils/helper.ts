@@ -86,6 +86,6 @@ export const formatNumberWithSuffix = (value: number, locale = 'en-US'): string 
   } else if (Math.abs(value) >= 1_000) {
     return formatter.format(value / 1_000) + 'K';
   }
-
+  
   return formatter.format(value);
 };

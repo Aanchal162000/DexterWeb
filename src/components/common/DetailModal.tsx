@@ -238,7 +238,7 @@ const DetailModal: React.FC<DetailModalProps> = ({
                             data?.price!?.toLocaleString(undefined, {
                               minimumFractionDigits: 2,
                               maximumFractionDigits: 5,
-                            })}
+                            }) || "0"}
                         </p>
                       </div>
                       <div>

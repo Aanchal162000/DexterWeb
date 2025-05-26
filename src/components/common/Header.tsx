@@ -125,7 +125,7 @@ const Header = () => {
                           onClick={() =>
                             address &&
                             window.open(
-                              `https://basecscan.com/address/${address}`,
+                              `https://basescan.org/address/${address}`,
                               "_blank"
                             )
                           }

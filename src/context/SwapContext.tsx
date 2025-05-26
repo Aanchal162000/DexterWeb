@@ -837,7 +837,7 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
       setUsdPriceS2(usdBalance);
       return;
     } else setUsdPriceS1(usdBalance);
-    const minLimit = 1;
+    const minLimit = 3;
 
     const oneUSDBalance = Number(Number(1 / usdRate) || 0);
     console.log("curent balance", oneUSDBalance, usdRate, usdBalance);

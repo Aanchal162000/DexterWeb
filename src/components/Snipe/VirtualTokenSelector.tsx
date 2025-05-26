@@ -264,8 +264,7 @@ const VirtualTokenSelector: React.FC<VirtualTokenSelectorProps> = ({
                 <div className="text-right">
                   <div className="font-medium text-white">
                     {formatCurrency(
-                      Number(virtual.userBalance || 0) *
-                        (virtual.mcapInVirtual || 0)
+                      Number(virtual.userBalance || 0) * (virtual.price || 0)
                     )}
                   </div>
                   <div className="text-sm text-gray-400">

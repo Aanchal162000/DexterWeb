@@ -230,22 +230,6 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
     }
   };
 
-  const sliderStyle = {
-    // Give the slider some width
-    position: "relative",
-    width: "100%",
-    height: 40,
-  };
-
-  const railStyle = {
-    position: "absolute",
-    width: "100%",
-    height: 2,
-    marginTop: 15,
-    borderRadius: 5,
-    backgroundColor: "#25FCFC88",
-  };
-
   return (
     <div
       className={`w-[95%] mx-auto transition-all duration-300 ease-in-out overflow-hidden ${

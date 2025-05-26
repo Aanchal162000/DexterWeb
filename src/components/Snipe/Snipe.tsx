@@ -27,6 +27,7 @@ import { TiArrowSortedDown } from "react-icons/ti";
 import buyService from "@/services/contract/buyService";
 import {
   BuyContract,
+  ERC20ABI,
   networkCards,
   VIRTUALS_TOKEN_ADDRESS,
   WRAPPED_ETH_ADDRESS,
@@ -37,6 +38,11 @@ import SwapSection from "./SwapSection";
 import useEffectAsync from "@/hooks/useEffectAsync";
 import ConfirmationDialog from "../common/ConfirmationDialog";
 import { ethers } from "ethers";
+import Web3 from "web3";
+import { rpcConfig, TRXService } from "@/services/transaction";
+import ConfirmPop from "../Swap/ConfirmPop";
+import Status from "../Swap/Status";
+import SnipeStatus from "./SnipeStatus";
 
 const Snipe = () => {
   const { networkData } = useLoginContext();
@@ -52,6 +58,7 @@ const Snipe = () => {
   const [isCreatingAgent, setIsCreatingAgent] = useState(false);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
   const [activePercentage, setActivePercentage] = useState<number | null>(null);
+  const [releaseHash, setReleaseHash] = useState<string | null>(null);
 
   const [showPercentages, setShowPercentages] = useState<{
     id: string;
@@ -66,6 +73,14 @@ const Snipe = () => {
   const { selectedVitualtoken } = useSwapContext();
   const { balances, isLoading: balanceLoading } = useWalletBalance();
   const [selectedAgent, setSelectedAgent] = useState("Sentient Agents");
+  const [isSwapped, setIsSwapped] = useState<boolean>(false);
+  const [isFinalStep, setIsFinalStep] = useState<boolean>(false);
+  const [isApproved, setIsApproved] = useState<boolean>(false);
+  const [isConvert, setIsConvert] = useState<boolean>(false);
+  const [isTokenRelease, setIsTokenRelease] = useState<boolean>(false);
+  const [errored, setErrored] = useState<boolean>(false);
+  const [approvalHash, setApprovalHash] = useState<string | null>(null);
+  const [swapHash, setSwapHash] = useState<string | null>(null);
 
   const {
     data: genesisData,
@@ -123,6 +138,7 @@ const Snipe = () => {
   }, [address]);
 
   const handleSwap = async () => {
+    setIsFinalStep(true);
     if (!address || balanceLoading || !selectedVirtual || !selectedToVirtual) {
       toast.error("Please connect your wallet and select a token");
       return;
@@ -135,60 +151,37 @@ const Snipe = () => {
     }
 
     try {
-      toast.info("Starting swap process...", { autoClose: false });
-      if (selectedVirtual.symbol != "ETH") {
-        const allowance = await approvalService.checkAllowance({
-          tokenAddress: selectedVirtual.contractAddress!,
-          provider: networkData?.provider!,
-        });
+      setIsConfirmPop(true);
+      setIsFinalStep(true);
+      setErrored(false);
 
-        // If allowance is less than amount, approve first
-        if (Number(allowance) < Number(fromAmount)) {
-          toast.info("Approving token spend...");
-          await approvalService.approveVirtualToken(
-            fromAmount.toString(),
-            networkData?.provider!,
-            selectedVirtual.contractAddress!,
-            BuyContract
-          );
-          toast.success("Token approved successfully!");
-        }
+      // Proceed with swap
+      const trxService = TRXService.getInstance();
+      const signer = networkData?.provider.getSigner();
+      setIsConvert(true);
+      const result = await trxService.executeSwapTransaction(
+        networkData?.chainId?.toString() || "1",
+        (Number(fromAmount) * 10 ** 18).toString(),
+        selectedVirtual.contractAddress!,
+        selectedToVirtual.contractAddress!,
+        "0.5", // 0.5% slippage
+        address,
+        signer!
+      );
+
+      if (result.success) {
+        setIsSwapped(true);
+        setReleaseHash(result?.chainTxInfo?.transactionHash!);
+        setIsTokenRelease(true);
+        toast.success("Swap transaction successful! 🎉");
+        console.log("Transaction successful:", result.chainTxInfo);
+      } else {
+        throw new Error(result.error?.message || "Swap failed");
       }
-      toast.info("Processing Swap transaction...");
-
-      const key: any =
-        selectedVirtual.symbol == "ETH" || selectedToVirtual.symbol == "ETH"
-          ? selectedVirtual.symbol != "ETH"
-            ? "ETH"
-            : "GETETH"
-          : "VIRT";
-
-      // Convert amounts to wei (18 decimals)
-      const amountInWei = ethers.utils.parseUnits(fromAmount.toString(), 18);
-      const amountOutMinWei = ethers.utils.parseUnits(toAmount.toString(), 18);
-
-      const receipt = await buyService.buyToken({
-        amountIn: amountInWei.toString(),
-        amountOutMin: amountOutMinWei.toString(),
-        path: [
-          selectedVirtual.contractAddress!,
-          selectedToVirtual.contractAddress!,
-        ],
-        to: address,
-        timestamp: Math.floor(Date.now() / 1000) + 86400, // 1 day from now
-        provider: networkData?.provider!,
-        selectedToken: {
-          logo: "",
-          name: key,
-          symbol: key,
-          balance: "0",
-        },
-      });
-
-      toast.success("Swap transaction successful! 🎉");
-      console.log("Transaction successful:", receipt);
     } catch (error: any) {
-      console.error("Error in quick buy:", error);
+      console.error("Error in swap:", error);
+      setErrored(true);
+      setIsFinalStep(false);
 
       // Handle specific error cases
       if (error.code === "INSUFFICIENT_FUNDS") {
@@ -208,9 +201,9 @@ const Snipe = () => {
         const errorMessage = error.message || "Unknown error occurred";
         toast.error(`Transaction failed: ${errorMessage.split("(")[0].trim()}`);
       }
-      throw error;
     }
   };
+
   useEffectAsync(async () => {
     if (selectedVirtual || selectedToVirtual) {
       setIsBalanceLoading(true);
@@ -268,6 +261,19 @@ const Snipe = () => {
   useEffect(() => {
     validationCheck();
   }, [selectedVirtual, selectedToVirtual, fromAmount, toAmount, loading]);
+
+  const resetSwapStates = () => {
+    setFromAmount(0);
+    setToAmount(0);
+    setIsSwapped(false);
+    setIsFinalStep(false);
+    setIsApproved(false);
+    setIsConvert(false);
+    setIsTokenRelease(false);
+    setErrored(false);
+    setSelectedVirtual(null);
+    setSelectedToVirtual(null);
+  };
 
   return (
     <div className="w-full h-full overflow-y-auto lg:overflow-y-hidden lg:h-full flex-1 flex flex-col lg:flex-row lg:px-14 sm:px-7 px-4 py-3 gap-3 justify-center">
@@ -447,24 +453,101 @@ const Snipe = () => {
             )}
 
             {isConfirmPop && (
-              <ConfirmationDialog
-                isOpen={isConfirmPop}
-                onClose={() => setIsConfirmPop(false)}
-                onConfirm={async () => {
+              <DialogContainer
+                setClose={() => {
                   setIsConfirmPop(false);
-                  await handleSwap();
+                  if (isApproved) {
+                    setIsFinalStep(false);
+                    resetSwapStates();
+                  }
                 }}
-                title="Transaction Confirmation"
-                description={`You are about to swap ${fromAmount} ${selectedVirtual?.name} for ${toAmount} ${selectedToVirtual?.name}`}
-                fromAmount={fromAmount}
-                toAmount={toAmount}
-                fromToken={selectedVirtual!}
-                toToken={selectedToVirtual!}
-                fromNetwork={networkCards[3]}
-                toNetwork={networkCards[3]}
-                transactionType="On-Chain Swap"
-                estimatedTime="~ 2-3 mins"
-              />
+                confirmClose={isApproved && (isSwapped || isTokenRelease)}
+                title={
+                  errored
+                    ? "Transaction Failed"
+                    : !isApproved
+                    ? "Transaction Approval"
+                    : isConvert
+                    ? isSwapped || isTokenRelease
+                      ? "Transaction Completed"
+                      : "Transaction In Progress"
+                    : "Transaction Confirmation"
+                }
+              >
+                <ConfirmationDialog
+                  selectedCoin={selectedVirtual!}
+                  selectedNetwork={networkCards[3]}
+                  fromAmount={fromAmount.toString()}
+                  toAmount={toAmount.toString()}
+                  selectedToCoin={selectedToVirtual!}
+                  selectedToNetwork={networkCards[3]}
+                  isApproved={isApproved}
+                  continueTransaction={handleSwap}
+                  isConvert={isConvert}
+                  isSwapped={isSwapped}
+                  isTokenRelease={isTokenRelease}
+                  setIsFinalStep={setIsFinalStep}
+                  resetSwapStates={resetSwapStates}
+                  setIsApproved={setIsApproved}
+                  walletAddress={address!}
+                  signer={networkData?.provider.getSigner()!}
+                  setIsConfirmPop={setIsConfirmPop}
+                  approvalHash={approvalHash}
+                  swapHash={swapHash}
+                  setApprovalHash={setApprovalHash}
+                  setSwapHash={setSwapHash}
+                  releaseHash={releaseHash}
+                  setReleaseHash={setReleaseHash}
+                />
+              </DialogContainer>
+            )}
+
+            {isFinalStep && (
+              <DialogContainer
+                setClose={() => {
+                  setIsConfirmPop(false);
+                  setIsFinalStep(false);
+
+                  resetSwapStates();
+                }}
+                title={
+                  errored
+                    ? "Transaction Failed"
+                    : isConvert &&
+                      (!isApproved || !isSwapped || !isTokenRelease)
+                    ? "Transaction in Progress"
+                    : "Transaction Completed"
+                }
+                confirmClose={
+                  isConvert && (!isApproved || !isSwapped || !isTokenRelease)
+                }
+              >
+                <SnipeStatus
+                  selectedCoin={selectedVirtual!}
+                  selectedNetwork={networkCards[3]}
+                  fromAmount={fromAmount.toString()}
+                  toAmount={toAmount.toString()}
+                  selectedToCoin={selectedToVirtual!}
+                  selectedToNetwork={networkCards[3]}
+                  isApproved={isApproved}
+                  continueTransaction={handleSwap}
+                  isConvert={isConvert}
+                  isSwapped={isSwapped}
+                  isTokenRelease={isTokenRelease}
+                  setIsFinalStep={setIsFinalStep}
+                  resetSwapStates={resetSwapStates}
+                  setIsApproved={setIsApproved}
+                  walletAddress={address!}
+                  signer={networkData?.provider.getSigner()!}
+                  setIsConfirmPop={setIsConfirmPop}
+                  approvalHash={approvalHash}
+                  swapHash={swapHash}
+                  setApprovalHash={setApprovalHash}
+                  setSwapHash={setSwapHash}
+                  releaseHash={releaseHash}
+                  setReleaseHash={setReleaseHash}
+                />
+              </DialogContainer>
             )}
 
             {selectedTab === "create" && (

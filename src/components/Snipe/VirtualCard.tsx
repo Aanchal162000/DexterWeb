@@ -176,14 +176,18 @@ const VirtualCard: React.FC<VirtualCardProps> = ({ virtual, onClick }) => {
         {/* Bottom Row */}
         <div className="relative px-4 py-2 items-center justify-center border-t-[0.5px] border-primary-100/60 w-full">
           <div className="flex flex-row gap-1 relative w-full items-center justify-between">
-            <div className="text-[9px] flex flex-row space-x-1  items-center justify-center">
-              <span className="text-gray-400 translate-y-[1px]">Price: </span>
-              <span className="text-white  text-[10px]">
-                {formatCurrency(metrics.priceUSD)}
+            <div className="text-[10px] flex flex-row space-x-1  items-center justify-center">
+              <span className="text-gray-400">Price: </span>
+              <span className="text-white  text-[11px]">
+                {"$" +
+                  virtual?.price!?.toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 5,
+                  })}
               </span>
             </div>
             <div className="text-[10px] flex flex-row space-x-1  items-center justify-center">
-              <span className="text-gray-400 translate-y-[1px]">24h: </span>
+              <span className="text-gray-400">24h: </span>
               <span
                 className={`text-[11px] ${
                   metrics.priceChange24h >= 0
@@ -195,13 +199,13 @@ const VirtualCard: React.FC<VirtualCardProps> = ({ virtual, onClick }) => {
               </span>
             </div>
             <div className="text-[10px] flex flex-row space-x-1 items-center justify-center">
-              <span className="text-gray-400 translate-y-[1px]">Vol: </span>
+              <span className="text-gray-400">Vol: </span>
               <span className="text-white  text-[11px]">
                 {formatCurrency(metrics.volume24hUSD)}
               </span>
             </div>
             <div className="text-[10px] flex flex-row space-x-1 items-center justify-center">
-              <span className="text-gray-400 translate-y-[1px]">Holders: </span>
+              <span className="text-gray-400">Holders: </span>
               <span className="text-white  text-[11px]">
                 {formatLargeNumber(metrics.holders)}
               </span>

@@ -49,6 +49,7 @@ import { useDebounce } from "use-debounce";
 import useIsFirstEffect from "@/hooks/useIsFirstEffect";
 import { getUSDPrices } from "@/services/apiCached";
 import useEffectAsync from "@/hooks/useEffectAsync";
+import { getEVMLiquidity } from "@/services/apiCross";
 
 export const isSymbiosisFlow = false; // For Pure Frontend Symbiosis Flow
 export const isContractSymbiosisFlow = true; // For Contract Based Symbiosis Flow
@@ -117,7 +118,15 @@ export function useSwapContext() {
 }
 
 export default function SwapProvider({ children }: { children: ReactNode }) {
-  const { networkData, address, triggerAPIs, trigger } = useLoginContext();
+  const { networkData, address, triggerAPIs, trigger, setActiveTab } =
+    useLoginContext();
+
+  const [selectedVitualtoken, setSelctedVirtualToken] = useState<TokenOption>({
+    name: "Virtuals",
+    symbol: "VIRT",
+    logo: "https://static.cx.metamask.io/api/v1/tokenIcons/8453/0x0b3e328455c4059eeb9e3f84b5543f74e24e7e1b.png",
+    balance: "0",
+  });
 
   //states
   const [selectedCoin, setSelectedCoin] = useState<ICoin | null>(defaultTokenA);
@@ -148,6 +157,7 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
   const [isConvert, setIsConvert] = useState<boolean>(false);
   const [isTokenRelease, setIsTokenRelease] = useState<boolean>(false);
   const [isTypingLoading, setIsTypingLoading] = useState<boolean>(false);
+  const [isUsingOurBridge, setIsUsingOurBridge] = useState<boolean>(false);
 
   //Transaction Information
   const [approvalHash, setApprovalHash] = useState<string | null>(null);
@@ -156,13 +166,6 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
   const [usdPriceS1, setUsdPriceS1] = useState<number>(0.0);
   const [usdPriceS2, setUsdPriceS2] = useState<number>(0.0);
   const [transFee, setTransFee] = useState<number>(0.0);
-
-  const [selectedVitualtoken, setSelctedVirtualToken] = useState<TokenOption>({
-    name: "Virtuals",
-    symbol: "VIRT",
-    logo: "https://static.cx.metamask.io/api/v1/tokenIcons/8453/0x0b3e328455c4059eeb9e3f84b5543f74e24e7e1b.png",
-    balance: "0",
-  });
 
   const [debouncedFromAmount] = useDebounce(fromAmount, 1000);
   const isSameChain = selectedNetwork?.id === selectedToNetwork?.id;
@@ -189,8 +192,6 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
       coin.shortName === "USDC" && coin.chainId === Number(networkData?.chainId)
   )?.address;
   const usdcPOL = "0x3c499c542cef5e3811e1192ce70d8cc03d5c3359";
-
-  console.log("fromtokendata", fromTokenData);
 
   //To remove functional useEffects from running on mount, and only on dependency trigger
   const isFirstLoad = useIsFirstEffect();
@@ -346,15 +347,16 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
     if (Number(fromTokenData?.balance) > Number(fromAmount)) {
       setIsFinalStep(true);
       try {
+        setIsConvert(true);
         const res = isSymbiosisFlow
           ? await getSymbiosisSwapCalldata()
           : await getSwapData();
-        setIsConvert(true);
         isSymbiosisFlow
-          ? executeSymbiosisTransaction(res)
-          : sendTransaction(res);
+          ? await executeSymbiosisTransaction(res)
+          : await sendTransaction(res);
       } catch (err: any) {
         setIsFinalStep(false);
+        setIsConvert(false);
         toastError(err instanceof Error ? err?.message.split("(")[0] : err);
       }
     } else {
@@ -435,6 +437,12 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
         // Call Swap function
         bridgeData = await bridgingContract.swap(...lockArgs);
       } else {
+        const isUseAdminLiquidity = await canUseAdminLiquidity();
+        if (isUsingOurBridge && !isUseAdminLiquidity) {
+          throw new Error(
+            "Liquidity changed just before transaction, Please retry!"
+          );
+        }
         //Call Lock function
         const lockArgs = [
           data,
@@ -443,7 +451,7 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
           ),
           selectedToCoin?.address,
           toAddress,
-          isContractSymbiosisFlow ? 1 : 0,
+          isContractSymbiosisFlow && !isUseAdminLiquidity ? 1 : 0,
         ];
         //https://www.devoven.com/encoding/string-to-bytes32
 
@@ -484,7 +492,7 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
       if ((err as any)?.error) {
         toastUpdate(TOAST_ID.PROCESS, {
           type: "error",
-          render: `Transaction failed, ERR : ${String(
+          render: `Transaction failed, Error : ${String(
             (err as any)?.error?.message
           )?.slice(0, 30)}`,
         });
@@ -519,7 +527,7 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
         setIsFinalStep(false);
         toastUpdate(TOAST_ID.PROCESS, {
           type: "error",
-          render: `Transaction Failed.`,
+          render: `Transaction Failed : Contract Failed to Lock. Please retry!`,
         });
         throw `Transaction Failed : ${txHash}`;
       }
@@ -552,9 +560,10 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
       let recalls = 0;
       // Continuously check the status of the hash until the releaseHash is not found
       while (!releaseTxId) {
+        await sleepTimer(15000);
         // Check if timer is up by 5 minutes
         // console.log("timer: ", recalls);
-        if (recalls >= 40) {
+        if (recalls >= 80) {
           throw new Error(`Timeout ERR: Transaction release might take time.`);
         }
         const { data } = await axios.get(`${apiUrls.transApi}/${hash}`);
@@ -566,7 +575,6 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
           if (data.transaction?.processed)
             releaseTxId = data?.transaction?.releaseHash;
         }
-        await sleepTimer(30000);
         recalls += 1;
       }
       setReleaseHash(releaseTxId);
@@ -582,9 +590,22 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
       );
       toastUpdate(TOAST_ID.PROCESS, {
         type: "error",
-        render: `Something Went Wrong. ${
-          (err as any).message
-        }. Please contact admin or write to help support. We will resolve it soon. Thanks.`,
+        render: (
+          <>
+            <div>
+              Something Went Wrong!{" "}
+              {(err as any)?.message?.toString()?.slice(0, 80)}. Please contact
+              admin or write to help support. We will resolve it soon. Thanks.
+              <br />
+              <button
+                onClick={() => handleSupportError((err as any)?.message)}
+                className="text-xs px-2 py-0.5 border border-zinc-700 rounded-md"
+              >
+                Click here to write to support!
+              </button>
+            </div>
+          </>
+        ),
         autoClose: false,
       });
       console.error(err instanceof Error ? err.message : err);
@@ -822,6 +843,61 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
     );
   };
 
+  const canUseAdminLiquidity = async (): Promise<any> => {
+    try {
+      const myToken = selectedCoin?.coingeckoId?.toLowerCase();
+      const usdRate = await getUSDPrices(myToken as string, true);
+      const usdBalance = (fromAmount as number) * usdRate;
+      const response = await getEVMLiquidity(
+        networkAbb[selectedToNetwork?.id! as number].code
+      );
+
+      let isUseOurLiquidity = false;
+      if (Number(response.data?.usdcBalance) / 3 > Number(usdBalance)) {
+        isUseOurLiquidity = true;
+      }
+      console.log(
+        "can use admin liquidity",
+        isUseOurLiquidity,
+        " --other-- ",
+        usdBalance,
+        response.data?.usdcBalance,
+        isUseOurLiquidity
+      );
+      return isUseOurLiquidity;
+    } catch (err) {
+      console.error("Error fetching Admin liquidity:", err);
+      throw err;
+    }
+  };
+
+  const handleSupportError = async (errorStack: string) => {
+    setActiveTab("help-center");
+    await sleepTimer(1500);
+    const hashField = document.getElementsByName(
+      "transhash"
+    )[0] as HTMLInputElement;
+    const addField = document.getElementsByName(
+      "address"
+    )[0] as HTMLInputElement;
+    const messageField = document.getElementsByName(
+      "message"
+    )[0] as HTMLInputElement;
+    if (hashField) {
+      hashField.value = swapHash || "";
+    }
+    if (addField) {
+      addField.value = toAddress || address || "";
+    }
+    if (messageField) {
+      messageField.value =
+        "This is to inform you that my transaction is struck and hoping it resolves sooner." +
+        errorStack
+          ? ` Error : ${errorStack}`
+          : "";
+    }
+  };
+
   const checkMinUSDSwapAmt = async (
     isToToken: boolean = false,
     toAmt: number = 0
@@ -837,10 +913,13 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
       setUsdPriceS2(usdBalance);
       return;
     } else setUsdPriceS1(usdBalance);
-    const minLimit = 3;
 
     const oneUSDBalance = Number(Number(1 / usdRate) || 0);
-    console.log("curent balance", oneUSDBalance, usdRate, usdBalance);
+    const isUseAdminLiquidity = await canUseAdminLiquidity();
+    setIsUsingOurBridge(isUseAdminLiquidity);
+
+    const minLimit = isUseAdminLiquidity ? 1 : 4;
+    console.log("current balance", oneUSDBalance, usdRate, usdBalance);
     let minAmount = Number(oneUSDBalance)
       ? Number(Number(oneUSDBalance * minLimit) + 0.000001).toFixed(6)
       : "0";
@@ -848,7 +927,7 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
     // let isEth = selectedNetwork?.name == "Ethereum";
     if (usdBalance < minLimit) {
       setFromAmount(Number(minAmount).toFixed(6));
-      toastInfo(`Min transaction amount capped at 3 USD.`);
+      toastInfo(`Min transaction amount capped at ${minLimit} USD.`);
       throw new Error("transaction amount not in range");
     }
     // } else if ((usdBalance > 5 && !isEth) || (isEth && usdBalance > 10)) {

@@ -42,7 +42,7 @@ export default function RootLayout({
           pauseOnFocusLoss
           draggable
           pauseOnHover
-          theme="light"
+          theme="dark"
           toastStyle={{
             background: "rgba(21, 24, 27, 0.8)",
             backdropFilter: "blur(8px)",

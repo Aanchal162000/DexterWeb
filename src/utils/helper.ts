@@ -1,4 +1,3 @@
-
 export const sleepTimer = async (milliseconds: number): Promise<unknown> =>
   await new Promise((resolve) => setTimeout(resolve, milliseconds));
 
@@ -74,3 +73,19 @@ export const formatNumber = (e: any) => {
 };
 
 export const toNumFixed = (n: number | string) => Number(n).toFixed(Number(n) > 1 && Number(n) < 0 ? 2 : Number(n) > 0.0001 ? 4 : 6);
+
+export const formatNumberWithSuffix = (value: number, locale = 'en-US'): string => {
+  const formatter = new Intl.NumberFormat(locale, {
+    maximumFractionDigits: 1
+  });
+
+  if (Math.abs(value) >= 1_000_000_000) {
+    return formatter.format(value / 1_000_000_000) + 'B';
+  } else if (Math.abs(value) >= 1_000_000) {
+    return formatter.format(value / 1_000_000) + 'M';
+  } else if (Math.abs(value) >= 1_000) {
+    return formatter.format(value / 1_000) + 'K';
+  }
+
+  return formatter.format(value);
+};

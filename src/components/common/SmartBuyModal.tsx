@@ -178,8 +178,8 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
       }`}
     >
       <div className="rounded-b-xl bg-primary-100/10 py-2 px-4">
-        <div className="flex flex-col ">
-          <div className="flex justify-end items-start">
+        <div className="relative flex flex-col pt-3">
+          <div className="absolute top-3 right-1 flex justify-end items-start">
             <button
               onClick={onClose}
               className="text-gray-400 hover:text-white"

@@ -266,15 +266,16 @@ const Assets = ({
                         : "text-prime-red"
                     }`}
                   >
-                    {formatPrecision(
-                      item.difference.toString().replace("-", "")
-                    ) +
-                      " (" +
-                      (!item.difference?.toString().includes("-") ? "+" : "-") +
+                    {(!item.difference?.toString().includes("-") ? "+" : "-") +
                       formatPrecision(
                         item.percentageDifference.toString().replace("-", "")
                       ) +
-                      "%)"}
+                      "% " +
+                      "(" +
+                      formatPrecision(
+                        item.difference.toString().replace("-", "")
+                      ).toString() +
+                      ")"}
                   </div>
                 </td>
                 <td>

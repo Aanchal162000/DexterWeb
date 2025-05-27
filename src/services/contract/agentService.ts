@@ -10,6 +10,7 @@ interface AgentRequest {
   token: "eth" | "virtual";
   amount: string;
   launchTime: Date;
+  marketCap: string;
 }
 
 interface AgentResponse {

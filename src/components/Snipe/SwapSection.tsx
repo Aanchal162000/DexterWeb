@@ -14,6 +14,7 @@ import snipeAbi from "@/constants/abis/snipe.json";
 import { useAlchemyProvider } from "@/hooks/useAlchemyProvider";
 import { QuoteRequestParams } from "@/services/contract/interfaces";
 import { agentService } from "@/services/contract/agentService";
+import { toastError } from "@/utils/toast";
 
 interface SwapSectionProps {
   selectedVirtual: IVirtual | null;
@@ -48,7 +49,32 @@ const SwapSection: React.FC<SwapSectionProps> = ({
   const [isEstimating, setIsEstimating] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const [debouncedFromAmount] = useDebounce(fromAmount, 1000);
-  const { address } = useLoginContext();
+  const { address, networkData, switchNetwork } = useLoginContext();
+
+  // Add network check effect
+  useEffect(() => {
+    const checkAndSwitchNetwork = async () => {
+      if (networkData?.chainId !== 8453) {
+        // Base chain ID
+        try {
+          await switchNetwork(8453);
+        } catch (error) {
+          console.error("Failed to switch network:", error);
+          toastError("Please switch to Base network to continue");
+        }
+      }
+    };
+
+    if (address) {
+      checkAndSwitchNetwork();
+    }
+  }, [
+    address,
+    networkData?.chainId,
+    switchNetwork,
+    fromAmount,
+    selectedVirtual,
+  ]);
 
   const handleFocus = (ref: React.RefObject<HTMLInputElement>) => {
     const input = ref.current;

@@ -50,6 +50,7 @@ import useIsFirstEffect from "@/hooks/useIsFirstEffect";
 import { getUSDPrices } from "@/services/apiCached";
 import useEffectAsync from "@/hooks/useEffectAsync";
 import { getEVMLiquidity } from "@/services/apiCross";
+import { useWalletBalance } from "@/hooks/useWalletBalance";
 
 export const isSymbiosisFlow = false; // For Pure Frontend Symbiosis Flow
 export const isContractSymbiosisFlow = true; // For Contract Based Symbiosis Flow
@@ -146,6 +147,7 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
 
   //Data States
   const [isBalanceLoading, setIsBalanceLoading] = useState<boolean>(false);
+
   const [fromTokenData, setFromTokenData] = useState<ITokenData | null>(null);
   const [fromToken2Bal, setFromToken2Bal] = useState<number | null>(null);
 

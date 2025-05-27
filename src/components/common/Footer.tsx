@@ -21,7 +21,7 @@ const Footer = (props: any) => {
       }`}
     >
       <div>
-        <p className="text-zinc-400 text-sm sm:text-sm">
+        <p className="text-zinc-400 text-xs sm:text-sm">
           Powered By{" "}
           <a
             href="https://zkcross.network/"

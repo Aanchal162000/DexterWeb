@@ -19,7 +19,9 @@ export const loginUser = async (request: {
 };
 
 //To Create User
-export const createUser = async (request: { wallet: { signature: string; address: string; timestamp: number }[] }) => {
+export const createUser = async (request: {
+  wallet: { signature: string; address: string; timestamp: number }[];
+}) => {
   try {
     let { data } = await axios.post(`${baseURL}/user/create`, { ...request });
     console.log("Response", data);
@@ -33,7 +35,9 @@ export const createUser = async (request: { wallet: { signature: string; address
 //To Connect Wallet(Send 2 Wallet)
 export const connectWallet = async (request: any) => {
   try {
-    let { data } = await axios.post(`${baseURL}/user/connectWallet`, { wallet: request.wallet });
+    let { data } = await axios.post(`${baseURL}/user/connectWallet`, {
+      wallet: request.wallet,
+    });
     console.log("Response", data);
     return data;
   } catch (error: any) {
@@ -45,7 +49,9 @@ export const connectWallet = async (request: any) => {
 //To Merge Wallet(Send 2 Wallet)
 export const mergeWallet = async (request: any) => {
   try {
-    let { data } = await axios.post(`${baseURL}/user/mergeWallet`, { wallet: request.wallet });
+    let { data } = await axios.post(`${baseURL}/user/mergeWallet`, {
+      wallet: request.wallet,
+    });
     console.log("Response", data);
     return data;
   } catch (error: any) {
@@ -57,7 +63,11 @@ export const mergeWallet = async (request: any) => {
 //To Update Wallet
 export const updateWallet = async (request: any) => {
   try {
-    let { data } = await axios.post(`${baseURL}/user/update`, { wallet: request.wallet, email: request.email, phone: request.phone });
+    let { data } = await axios.post(`${baseURL}/user/update`, {
+      wallet: request.wallet,
+      email: request.email,
+      phone: request.phone,
+    });
     console.log("Response", data);
     return data;
   } catch (error: any) {
@@ -80,7 +90,11 @@ export const getAssets = async (request: { address: string }) => {
 };
 
 //To Get transaction history for a user
-export const getTransactions = async (request: { address: string; page: number; itemsPerPage: number }) => {
+export const getTransactions = async (request: {
+  address: string;
+  page: number;
+  itemsPerPage: number;
+}) => {
   try {
     let res = await axios.get(`${baseURL}/wallet/history/${request.address}`, {
       params: { page: request.page, itemsPerPage: request.itemsPerPage },
@@ -102,12 +116,16 @@ export const getTransactionsAll = async (request: {
   controller?: AbortController;
 }) => {
   try {
-    let res = await axios.get(`${baseURL}/wallet/transactions/all/${request.address}`, {
-      params: { page: request.page, itemsPerPage: request.itemsPerPage },
-      signal: request?.controller?.signal,
-    });
+    let res = await axios.get(
+      `${baseURL}/wallet/transactions/all/${request.address}`,
+      {
+        params: { page: request.page, itemsPerPage: request.itemsPerPage },
+        signal: request?.controller?.signal,
+      }
+    );
     console.log("Response", res);
-    if (!res?.data?.success || res?.data?.message === "No Transactions found") throw new Error(res?.data?.message);
+    if (!res?.data?.success || res?.data?.message === "No Transactions found")
+      throw new Error(res?.data?.message);
     return res?.data;
   } catch (error: any) {
     throw error;

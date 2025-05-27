@@ -180,7 +180,7 @@ export default function FiatProvider({ children }: { children: ReactNode }) {
       if (error instanceof Error) toastError(error?.message);
       toastError("Fiat Swap API Error");
       setIsTypingLoading(false);
-      setToAmount(0.0);
+      setToAmount(0);
       console.log("Fiat swap error", error);
     }
   };

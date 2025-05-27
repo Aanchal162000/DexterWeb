@@ -43,6 +43,7 @@ import { rpcConfig, TRXService } from "@/services/transaction";
 import ConfirmPop from "../Swap/ConfirmPop";
 import Status from "../Swap/Status";
 import SnipeStatus from "./SnipeStatus";
+import { TokenOption } from "@/components/common/TokenSelector";
 
 const Snipe = () => {
   const { networkData } = useLoginContext();
@@ -70,9 +71,12 @@ const Snipe = () => {
   const isMobile = useMediaQuery({ maxWidth: 768 });
   const { virtuals, loading, error } = useSentientVirtuals();
   const { address } = useLoginContext();
-  const { selectedVitualtoken } = useSwapContext();
-  const { balances, isLoading: balanceLoading } = useWalletBalance();
-  const [selectedAgent, setSelectedAgent] = useState("Sentient Agents");
+  const { selectedVitualtoken, setSelctedVirtualToken } = useSwapContext();
+  const {
+    balances,
+    isLoading: balanceLoading,
+    refetch: refetchBalances,
+  } = useWalletBalance();
   const [isSwapped, setIsSwapped] = useState<boolean>(false);
   const [isFinalStep, setIsFinalStep] = useState<boolean>(false);
   const [isApproved, setIsApproved] = useState<boolean>(false);
@@ -175,32 +179,24 @@ const Snipe = () => {
         setIsTokenRelease(true);
         toast.success("Swap transaction successful! 🎉");
         console.log("Transaction successful:", result.chainTxInfo);
+
+        // Trigger balance refresh after successful swap
+        await refetchBalances();
+
+        // Update virtual token balance in context
+        setSelctedVirtualToken((prev: TokenOption) => ({
+          ...prev,
+          balance: balances.VIRT || "0",
+        }));
       } else {
         throw new Error(result.error?.message || "Swap failed");
       }
-    } catch (error: any) {
-      console.error("Error in swap:", error);
-      setErrored(true);
+    } catch (error) {
+      console.error("Swap error:", error);
+      toast.error(error instanceof Error ? error.message : "Swap failed");
       setIsFinalStep(false);
-
-      // Handle specific error cases
-      if (error.code === "INSUFFICIENT_FUNDS") {
-        toast.error("Insufficient funds to complete the transaction");
-      } else if (error.code === "UNPREDICTABLE_GAS_LIMIT") {
-        toast.error(
-          "Transaction would fail. Please check your input amounts and try again"
-        );
-      } else if (error.message?.includes("user rejected")) {
-        toast.error("Transaction was rejected by user");
-      } else if (error.message?.includes("insufficient funds")) {
-        toast.error("Insufficient balance to complete the transaction");
-      } else if (error.message?.includes("execution reverted")) {
-        toast.error("Transaction failed: Contract execution reverted");
-      } else {
-        // For other errors, show a more user-friendly message
-        const errorMessage = error.message || "Unknown error occurred";
-        toast.error(`Transaction failed: ${errorMessage.split("(")[0].trim()}`);
-      }
+      setIsConvert(false);
+      setErrored(true);
     }
   };
 
@@ -228,7 +224,7 @@ const Snipe = () => {
         setIsBalanceLoading(false);
       }
     }
-  }, [selectedVirtual, selectedToVirtual]);
+  }, [selectedVirtual?.symbol, selectedToVirtual?.symbol]);
 
   const handleCloseCreateAgent = () => {
     setIsCreatingAgent(false);
@@ -303,16 +299,34 @@ const Snipe = () => {
                   <div className="text-red-500 text-center p-4">
                     {genesisError}
                   </div>
+                ) : genesisData &&
+                  genesisData.data &&
+                  genesisData.data.length > 0 ? (
+                  [...genesisData.data]
+                    .sort((a, b) => {
+                      const aIsSubscribed = subscriptionData?.some(
+                        (sub: any) => sub.genesisId === a.genesisId
+                      );
+                      const bIsSubscribed = subscriptionData?.some(
+                        (sub: any) => sub.genesisId === b.genesisId
+                      );
+                      if (aIsSubscribed && !bIsSubscribed) return -1;
+                      if (!aIsSubscribed && bIsSubscribed) return 1;
+                      return 0;
+                    })
+                    .map((genesis) => (
+                      <GenesisCard
+                        key={genesis.id}
+                        genesis={genesis}
+                        onClick={() => {}}
+                        subscriptionData={subscriptionData}
+                        fetchSubscriptionData={fetchSubscriptionData}
+                      />
+                    ))
                 ) : (
-                  genesisData?.data.map((genesis) => (
-                    <GenesisCard
-                      key={genesis.id}
-                      genesis={genesis}
-                      onClick={() => {}}
-                      subscriptionData={subscriptionData}
-                      fetchSubscriptionData={fetchSubscriptionData}
-                    />
-                  ))
+                  <div className="text-center text-gray-400 py-8">
+                    No genesis launches found
+                  </div>
                 )}
               </div>
             </div>
@@ -324,15 +338,13 @@ const Snipe = () => {
             </h2>
             <div className="flex-1 overflow-y-auto overflow-x-hidden p-4">
               <div className="space-y-4">
-                {genesisLoading ? (
+                {loading ? (
                   <div className="flex justify-center items-center h-32">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-100"></div>
                   </div>
-                ) : genesisError ? (
-                  <div className="text-red-500 text-center p-4">
-                    {genesisError}
-                  </div>
-                ) : (
+                ) : error ? (
+                  <div className="text-red-500 text-center p-4">{error}</div>
+                ) : virtuals?.length > 0 ? (
                   virtuals.map((virtual) => (
                     <VirtualCard
                       key={virtual.id}
@@ -340,6 +352,10 @@ const Snipe = () => {
                       onClick={() => handleCardClick(virtual)}
                     />
                   ))
+                ) : (
+                  <div className="text-center text-gray-400 py-8">
+                    No sentient agents found
+                  </div>
                 )}
               </div>
             </div>
@@ -351,15 +367,15 @@ const Snipe = () => {
             </h2>
             <div className="flex-1 overflow-y-auto overflow-x-hidden p-4">
               <div className="space-y-4">
-                {genesisLoading ? (
+                {prototypeLoading ? (
                   <div className="flex justify-center items-center h-32">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-100"></div>
                   </div>
-                ) : genesisError ? (
+                ) : prototypeError ? (
                   <div className="text-red-500 text-center p-4">
-                    {genesisError}
+                    {prototypeError}
                   </div>
-                ) : (
+                ) : prototypeVirtuals?.length > 0 ? (
                   prototypeVirtuals.map((virtual) => (
                     <VirtualCard
                       key={virtual.id}
@@ -367,6 +383,10 @@ const Snipe = () => {
                       onClick={() => handleCardClick(virtual)}
                     />
                   ))
+                ) : (
+                  <div className="text-center text-gray-400 py-8">
+                    No prototype agents found
+                  </div>
                 )}
               </div>
             </div>

@@ -164,7 +164,11 @@ const GenesisCard: React.FC<GenesisCardProps> = ({
   return (
     <div className="relative">
       <div
-        className="ralative flex flex-col rounded-xl cursor-pointer border-[0.5px] border-cyan-500/50  transition-all duration-300 h-fit  min-h-[7.2rem]"
+        className={`ralative flex flex-col rounded-xl cursor-pointer ${
+          isSubscribed
+            ? "border-2 border-cyan-500 shadow-[0_0_15px_rgba(6,182,212,0.3)]"
+            : "border-[0.5px] border-cyan-500/50"
+        } transition-all duration-300 h-fit min-h-[7.2rem]`}
         onClick={handleCardClick}
       >
         {/* Top Row */}
@@ -248,7 +252,7 @@ const GenesisCard: React.FC<GenesisCardProps> = ({
         {isSubscribed ? (
           <div className="flex flex-col gap-2 mt-2">
             <div className="border-t-[0.5px] border-cyan-500/50 flex justify-center items-center p-2 text-sm font-medium">
-              Snipe active! Dexter will auto-buy at launch
+              Smart Buy active! Dexter will auto-buy at launch
             </div>
           </div>
         ) : (

@@ -1,11 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 import { useLoginContext } from "../../context/LoginContext";
 import { isSymbiosisFlow, useSwapContext } from "../../context/SwapContext";
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { FiLoader } from "react-icons/fi";
 import { FaArrowRight, FaLink } from "react-icons/fa6";
 import { formatAddress } from "@/utils/helper";
 import { useFiatContext } from "../../context/FiatContext";
+import useTimer from "@/hooks/useTimer";
 
 const Status: React.FC<{
   setIsConfirmPop: Dispatch<SetStateAction<boolean>>;
@@ -35,6 +36,33 @@ const Status: React.FC<{
   const { transakStatus, resetFiatStates } = useFiatContext();
   const isSwitchNeeded = Boolean(selectedNetwork?.id !== networkData?.chainId);
   const isSameChain = selectedNetwork?.id === selectedToNetwork?.id;
+
+  const [secondsLeft, setSecondsLeft] = useState(180); // 3 minutes = 180 seconds
+
+  useEffect(() => {
+    if (secondsLeft <= 0) return;
+
+    const intervalId = setInterval(() => {
+      setSecondsLeft((prev) => {
+        if (prev <= 1) {
+          clearInterval(intervalId);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, [secondsLeft]);
+
+  const formatTime = (totalSeconds: number): string => {
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(
+      2,
+      "0"
+    )}`;
+  };
 
   // Show loader if processing else check icon for done.
   const checkerLoader = (isChecked: unknown) =>
@@ -297,11 +325,9 @@ const Status: React.FC<{
                   />
                 </a>
               ) : (
-                <img
-                  src="/trx/Explore.png"
-                  alt="open-transaction-link"
-                  className="size-3 opacity-0"
-                />
+                <span className="text-xs text-white/80">
+                  {formatTime(secondsLeft)}
+                </span>
               )}
             </div>
           </div>

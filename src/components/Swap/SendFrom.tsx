@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable react/jsx-no-duplicate-props */
-import { useFiatContext } from "../../context/FiatContext";
-import { useSwapContext } from "../../context/SwapContext";
+
+import { useSwapContext } from "@/context/SwapContext";
 import {
   ChangeEvent,
   Dispatch,
@@ -10,12 +10,11 @@ import {
   useRef,
   useState,
 } from "react";
-import { HiMiniArrowUpTray } from "react-icons/hi2";
+
 import ImageNext from "../common/ImageNext";
-import { fiatList } from "../../constants/config";
+import { fiatList } from "@/constants/config";
 import { formatNumber, truncateToFixed, toNumFixed } from "@/utils/helper";
 import { IoInformationCircle } from "react-icons/io5";
-import { useLoginContext } from "../../context/LoginContext";
 import { TiArrowSortedDown } from "react-icons/ti";
 import clsx from "clsx";
 
@@ -94,7 +93,7 @@ function SendFrom({
   return (
     <>
       <div
-        className="border border-primary-100 rounded-lg py-3 px-4 mb-2 flex flex-col items-center gap-3"
+        className="border border-[#818284] rounded-lg py-3 px-4 mb-2 flex flex-col items-center gap-3"
         onClick={() => inputRef.current.focus()}
       >
         <div className="flex w-full items-center  text-prime-zinc-50  justify-between">

@@ -187,6 +187,7 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
             10 ** 18
           ).toString(),
           launchTime: new Date(endsAt),
+          marketCap: marketCapBuyRange.toString(),
         });
         fetchSubscriptionData();
 

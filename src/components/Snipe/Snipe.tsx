@@ -274,6 +274,13 @@ const Snipe = () => {
     setSelectedVirtual(null);
     setSelectedToVirtual(null);
   };
+  useEffect(() => {
+    if (selectedVirtual?.symbol == "ETH") {
+      setIsApproved(true);
+    } else {
+      setIsApproved(false);
+    }
+  }, [selectedVirtual]);
 
   return (
     <div className="w-full h-full overflow-y-auto lg:overflow-y-hidden lg:h-full flex-1 flex flex-col lg:flex-row lg:px-14 sm:px-7 px-4 py-3 gap-3 justify-center">

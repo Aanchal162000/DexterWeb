@@ -11,7 +11,6 @@ export const BRIDGEABI = require("./abis/bridgeContract.json");
 export const tokenList: ICoin[] = require("./jsons/token_list.json");
 export const fiatList = require("./jsons/fiat_list.json");
 export const arbitrumList: IArbCoin[] = require("./jsons/arbitrum.json");
-export const tokenPriceList = require("./jsons/token_price.json");
 export const baseList: IArbCoin[] = require("./jsons/baseList.json");
 export const avalancheList = require("./jsons/avalanche.json");
 export const optimismList = require("./jsons/optimism.json");

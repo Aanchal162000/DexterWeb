@@ -41,7 +41,7 @@ export const useTokenMetrics = (
         priceUSD: Number(price.toFixed(3)),
         fdvUSD: Number(fdv.toFixed(2)),
         tvlUSD: Number(tvl.toFixed(2)),
-        holders: virtual.holderCount || 0,
+        holders: parseInt(virtual?.holderCount?.toString()) || 0,
         volume24hUSD: virtual.volume24h || 0,
         priceChange24h: virtual.priceChangePercent24h || 0,
       };

@@ -130,7 +130,7 @@ const config: Config = {
         lg: "1024px",
         xl: "1280px",
         "2xl": "1536px",
-        'desktop': '2100px',
+        desktop: "2100px",
       },
       fontFamily: {
         sans: ["Inter", "sans-serif"],
@@ -149,6 +149,7 @@ const config: Config = {
         "5xl": ["3rem", { lineHeight: "1" }],
         "6xl": ["3.75rem", { lineHeight: "1" }],
       },
+
       animation: {
         "fade-in": "fadeIn 0.5s ease-in-out",
         "slide-in-right": "slideInFromRight 0.5s ease-in-out",
@@ -159,8 +160,33 @@ const config: Config = {
         bounce: "bounce 1s infinite",
         pulse: "pulse 2s infinite",
         spin: "spin 1s linear infinite",
+        blinker: "blink 1s linear infinite",
+        slow: "spin 4s linear infinite",
       },
       keyframes: {
+        blink: {
+          "0%": {
+            opacity: "0.3",
+          },
+          "20%": {
+            opacity: "0.5",
+          },
+          "50%": {
+            opacity: " 0.6",
+          },
+          "60%": {
+            opacity: "0.7",
+          },
+          "70%": {
+            opacity: "0.5",
+          },
+          "90%": {
+            opacity: "0.3",
+          },
+          "100%": {
+            opacity: "0.2",
+          },
+        },
         fadeIn: {
           "0%": { opacity: "0" },
           "100%": { opacity: "1" },

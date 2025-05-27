@@ -5,7 +5,7 @@ import {
   setupCache,
 } from "axios-cache-interceptor";
 import { baseURL } from "./userService";
-import { tokenPriceList } from "@/constants/config";
+import tokenPriceList from "@/constants/jsons/token_price.json";
 
 const instance = Axios.create();
 
@@ -24,7 +24,7 @@ export const getUSDPrices = async (
   findByCode: boolean = false
 ) => {
   try {
-    const coinId = findByCode
+    const coinId: any = findByCode
       ? myToken
       : tokenPriceList?.find((c: any) => c?.symbol === myToken)?.id;
     // const { data } = await axiosCache.get(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd`, {

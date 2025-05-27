@@ -49,7 +49,6 @@ const SwapSection: React.FC<SwapSectionProps> = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const [debouncedFromAmount] = useDebounce(fromAmount, 1000);
   const { address } = useLoginContext();
-  const { getSigner } = useAlchemyProvider();
 
   const handleFocus = (ref: React.RefObject<HTMLInputElement>) => {
     const input = ref.current;

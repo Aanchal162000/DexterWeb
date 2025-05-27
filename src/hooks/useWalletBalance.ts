@@ -23,7 +23,7 @@ export const useWalletBalance = () => {
   const [balances, setBalances] = useState<WalletBalances>({});
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { address, networkData } = useLoginContext();
+  const { address, networkData, trigger } = useLoginContext();
   const { getProvider } = useAlchemyProvider();
 
   const fetchTokenBalance = async (
@@ -134,7 +134,7 @@ export const useWalletBalance = () => {
         window.ethereum.removeListener("chainChanged", fetchBalances);
       }
     };
-  }, [address, networkData?.provider]);
+  }, [address, networkData?.provider, trigger]);
 
   return { balances, isLoading, error, refetch: fetchBalances };
 };

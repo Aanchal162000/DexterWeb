@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { IVirtual } from "@/utils/interface";
+import { IAssetsData, IVirtual } from "@/utils/interface";
 import { ethers } from "ethers";
 import approvalService from "@/services/contract/approvalService";
 import { usePeriodicRefresh } from "./usePeriodicRefresh";
+import { useLocalStorage } from "./useLocalStorage";
 
 interface PrototypeVirtualResponse {
   data: {
@@ -56,6 +57,7 @@ export const usePrototypeVirtuals = () => {
   const [virtuals, setVirtuals] = useState<IVirtual[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [dataList, setDataList] = useLocalStorage<IAssetsData[]>("arbt-assets");
 
   function getTokenUSDPrice(
     virtualTokenValue: string,
@@ -103,6 +105,12 @@ export const usePrototypeVirtuals = () => {
         genesis: item.genesis,
         nextLaunchstartsAt: [],
       }));
+      transformedVirtuals.map((virtual) => {
+        const filter = dataList?.filter((data) => data.token == virtual.symbol);
+        if (filter?.length) {
+          virtual.userBalance = filter[0]?.tokenAmount;
+        }
+      });
 
       setVirtuals(transformedVirtuals);
       setLoading(false);
@@ -111,6 +119,10 @@ export const usePrototypeVirtuals = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchVirtuals();
+  }, [dataList]);
 
   // Use periodic refresh hook
   usePeriodicRefresh({

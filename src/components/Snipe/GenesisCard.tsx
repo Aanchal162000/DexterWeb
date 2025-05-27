@@ -66,6 +66,21 @@ const GenesisCard: React.FC<GenesisCardProps> = ({
     (sub: any) => sub.genesisId === genesis.genesisId
   ).length;
 
+  // Add custom animation style
+  const pulseAnimation = `
+    @keyframes glowPulse {
+      0% {
+        box-shadow: 0 0 5px rgba(74, 222, 128, 0.2);
+      }
+      50% {
+        box-shadow: 0 0 15px rgba(74, 222, 128, 0.4);
+      }
+      100% {
+        box-shadow: 0 0 5px rgba(74, 222, 128, 0.2);
+      }
+    }
+  `;
+
   useEffect(() => {
     const updateTimer = () => {
       const now = new Date();
@@ -163,10 +178,11 @@ const GenesisCard: React.FC<GenesisCardProps> = ({
 
   return (
     <div className="relative">
+      <style>{pulseAnimation}</style>
       <div
         className={`ralative flex flex-col rounded-xl cursor-pointer ${
           isSubscribed
-            ? "border-2 border-cyan-500 shadow-[0_0_15px_rgba(6,182,212,0.3)]"
+            ? "border-2 border-[#4ade80] animate-[glowPulse_2s_ease-in-out_infinite]"
             : "border-[0.5px] border-cyan-500/50"
         } transition-all duration-300 h-fit min-h-[7.2rem]`}
         onClick={handleCardClick}

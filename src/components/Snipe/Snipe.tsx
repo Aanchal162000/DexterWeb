@@ -46,7 +46,7 @@ import SnipeStatus from "./SnipeStatus";
 import { TokenOption } from "@/components/common/TokenSelector";
 
 const Snipe = () => {
-  const { networkData } = useLoginContext();
+  const { networkData, triggerAPIs } = useLoginContext();
   const [isFromCoinOpen, setIsFromCoinOpen] = useState(false);
   const [isToCoinOpen, setIsToCoinOpen] = useState(false);
   const [selectedTab, setSelectedTab] = useState<"swap" | "create">("swap");
@@ -176,6 +176,7 @@ const Snipe = () => {
       if (result.success) {
         setIsSwapped(true);
         setReleaseHash(result?.chainTxInfo?.transactionHash!);
+        triggerAPIs();
         setIsTokenRelease(true);
         toast.success("Swap transaction successful! 🎉");
         console.log("Transaction successful:", result.chainTxInfo);

@@ -49,6 +49,7 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
   const percentageButtons = [10, 25, 50, 100];
   const { address } = useLoginContext();
   const [isFromCoinOpen, setIsFromCoinOpen] = useState(false);
+  const { triggerAPIs } = useLoginContext();
   const coinSelectRef = useRef<HTMLDivElement>(null);
   useClickOutside(coinSelectRef, () => {
     if (isFromCoinOpen) {
@@ -159,6 +160,7 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
 
       if (receipt.transactionHash) {
         if (processToastId) toast.dismiss(processToastId);
+        triggerAPIs();
         toast.success("Smart Buy successful! 🎉");
         onClose();
       } else {

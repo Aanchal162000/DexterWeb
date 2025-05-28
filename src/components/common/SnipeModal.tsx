@@ -59,6 +59,9 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
   const { networkData } = useLoginContext();
   const percentageButtons = [10, 25, 50, 100];
   const [isFromCoinOpen, setIsFromCoinOpen] = useState(false);
+  const [selectedPercentage, setSelectPercentage] = useState<
+    10 | 25 | 50 | 100 | number
+  >(10);
   const [marketCapBuyRange, setMarketCapBuyRange] = useState(1500000);
   const coinSelectRef = useRef<HTMLDivElement>(null);
 
@@ -107,6 +110,7 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
 
   const handlePercentageClick = (percentage: number) => {
     if (!selectedVitualtoken || isLoading || isProcessing) return;
+    setSelectPercentage(percentage);
     const balance =
       selectedVitualtoken.symbol === "ETH" ? balances.ETH : balances.VIRT;
     const calculatedAmount = (parseFloat(balance || "0") * percentage) / 100;
@@ -341,7 +345,11 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
                     key={percentage}
                     onClick={() => handlePercentageClick(percentage)}
                     disabled={isLoading || isProcessing}
-                    className="text-white/80 text-[11px] rounded font-bold border border-[#818284] px-[0.1875rem]  disabled:bg-white/5 disabled:text-white/20"
+                    className={`text-white/80 text-[11px] rounded font-bold border ${
+                      selectedPercentage == percentage
+                        ? "border-primary-100"
+                        : "border-[#818284]"
+                    }  px-[0.1875rem]  disabled:bg-white/5 disabled:text-white/20`}
                   >
                     {percentage}%
                   </button>

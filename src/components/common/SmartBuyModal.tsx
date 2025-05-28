@@ -51,6 +51,9 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
   const [isFromCoinOpen, setIsFromCoinOpen] = useState(false);
   const { triggerAPIs } = useLoginContext();
   const coinSelectRef = useRef<HTMLDivElement>(null);
+  const [selectedPercentage, setSelectPercentage] = useState<
+    10 | 25 | 50 | 100 | number
+  >(10);
   useClickOutside(coinSelectRef, () => {
     if (isFromCoinOpen) {
       setIsFromCoinOpen(false);
@@ -90,6 +93,7 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
 
   const handlePercentageClick = (percentage: number) => {
     if (!selectedVitualtoken || isLoading || isProcessing) return;
+    setSelectPercentage(percentage);
     const balance =
       selectedVitualtoken.symbol === "ETH" ? balances.ETH : balances.VIRT;
     const calculatedAmount = (parseFloat(balance || "0") * percentage) / 100;
@@ -299,7 +303,11 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
                     key={percentage}
                     onClick={() => handlePercentageClick(percentage)}
                     disabled={isLoading || isProcessing}
-                    className="text-white/80 text-[11px] rounded font-bold border border-[#818284] px-[0.1875rem]  disabled:bg-white/5 disabled:text-white/20"
+                    className={`text-white/80 text-[11px] rounded font-bold border ${
+                      selectedPercentage == percentage
+                        ? "border-primary-100"
+                        : "border-[#818284]"
+                    }  px-[0.1875rem]  disabled:bg-white/5 disabled:text-white/20`}
                   >
                     {percentage}%
                   </button>

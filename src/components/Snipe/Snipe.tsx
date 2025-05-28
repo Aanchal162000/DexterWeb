@@ -143,8 +143,8 @@ const Snipe = () => {
                 <Image
                   src="/common/Refresh.png"
                   alt="Refresh"
-                  width={28}
-                  height={28}
+                  width={20}
+                  height={20}
                   className={clsx(
                     "transition-transform duration-300",
                     isRefreshing && "animate-spin"
@@ -155,16 +155,16 @@ const Snipe = () => {
                 <Image
                   src="/common/Filter.png"
                   alt="Filter"
-                  width={24}
-                  height={24}
+                  width={18}
+                  height={18}
                 />
               </button>
               <button>
                 <Image
                   src="/common/Settings.png"
                   alt="Setting"
-                  width={24}
-                  height={24}
+                  width={18}
+                  height={18}
                 />
               </button>
             </div>

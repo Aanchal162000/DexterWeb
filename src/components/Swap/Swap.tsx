@@ -4,7 +4,9 @@ import Swidget from "./Swidget";
 
 const Swap = () => {
   return (
-    <div className={` `}>
+    <div
+      className={`w-full h-full overflow-y-auto lg:overflow-y-hidden lg:h-full flex-1 flex flex-row lg:px-14 sm:px-7 px-4 py-3 gap-4 justify-center`}
+    >
       <div className="w-full md:flex hidden overflow-hidden">
         <Overview />
       </div>

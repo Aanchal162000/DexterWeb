@@ -10,7 +10,11 @@ const AgentSection: React.FC<AgentSectionProps> = ({
   renderItem,
 }) => {
   return (
-    <div className="flex flex-col relative w-1/3 border-r border-primary-100 h-full">
+    <div
+      className={`flex flex-col relative w-1/3 ${
+        type != "sentient" ? "border-r" : ""
+      }  border-primary-100 h-full`}
+    >
       <div className="border-b border-primary-200 py-2 flex justify-center items-center text-base font-bold text-primary-100">
         {title}
       </div>

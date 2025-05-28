@@ -66,6 +66,21 @@ const GenesisCard: React.FC<GenesisCardProps> = ({
     (sub: any) => sub.genesisId === genesis.genesisId
   ).length;
 
+  // Add custom animation style
+  const pulseAnimation = `
+    @keyframes glowPulse {
+      0% {
+        box-shadow: 0 0 5px rgba(74, 222, 128, 0.2);
+      }
+      50% {
+        box-shadow: 0 0 15px rgba(74, 222, 128, 0.4);
+      }
+      100% {
+        box-shadow: 0 0 5px rgba(74, 222, 128, 0.2);
+      }
+    }
+  `;
+
   useEffect(() => {
     const updateTimer = () => {
       const now = new Date();
@@ -163,8 +178,13 @@ const GenesisCard: React.FC<GenesisCardProps> = ({
 
   return (
     <div className="relative">
+      <style>{pulseAnimation}</style>
       <div
-        className="ralative flex flex-col rounded-xl cursor-pointer border-[0.5px] border-cyan-500/50  transition-all duration-300 h-fit  min-h-[7.2rem]"
+        className={`ralative flex flex-col rounded-xl cursor-pointer ${
+          isSubscribed
+            ? "border-2 border-[#4ade80] animate-[glowPulse_2s_ease-in-out_infinite]"
+            : "border-[0.5px] border-cyan-500/50"
+        } transition-all duration-300 h-fit min-h-[7.2rem]`}
         onClick={handleCardClick}
       >
         {/* Top Row */}
@@ -248,7 +268,7 @@ const GenesisCard: React.FC<GenesisCardProps> = ({
         {isSubscribed ? (
           <div className="flex flex-col gap-2 mt-2">
             <div className="border-t-[0.5px] border-cyan-500/50 flex justify-center items-center p-2 text-sm font-medium">
-              Snipe active! Dexter will auto-buy at launch
+              Smart Buy active! Dexter will auto-buy at launch
             </div>
           </div>
         ) : (

@@ -78,28 +78,36 @@ const Assets = ({
       await refetchBalances();
 
       setDataList(
-        assets.map((data: IResponseAssets) => {
-          let chain = tokenSymbolList?.find(
-            (item) => item.code === data?.chainSymbol
-          )?.chainId as number;
+        assets
+          .map((data: IResponseAssets) => {
+            let chain = tokenSymbolList?.find(
+              (item) => item.code === data?.chainSymbol
+            )?.chainId as number;
 
-          return {
-            tokenAmount: data.balanceFormatted,
-            usdAmount: Number(data.usdValue)
-              ? Number(data.usdValue)?.toFixed(4)
-              : 0,
-            perUsd: Number(data?.usdPrice)
-              ? Number(data?.usdPrice)?.toFixed(4)
-              : 0,
-            difference: Number(data?.usdPrice24hrUsdChange)?.toFixed(4) ?? 0,
-            percentageDifference:
-              Number(data?.usdPrice24hrPercentChange)?.toFixed(4) ?? 0,
-            network: data?.chainName,
-            token: data?.symbol,
-            imgToken: data?.logo,
-            imgNetwork: chainsLogo[chain] as string,
-          };
-        }) as IAssetsData[]
+            return {
+              tokenAmount: data.balanceFormatted,
+              usdAmount: Number(data.usdValue)
+                ? Number(data.usdValue)?.toFixed(4)
+                : 0,
+              perUsd: Number(data?.usdPrice)
+                ? Number(data?.usdPrice)?.toFixed(4)
+                : 0,
+              difference: Number(data?.usdPrice24hrUsdChange)?.toFixed(4) ?? 0,
+              percentageDifference:
+                Number(data?.usdPrice24hrPercentChange)?.toFixed(4) ?? 0,
+              network: data?.chainName,
+              token: data?.symbol,
+              imgToken: data?.logo,
+              imgNetwork: chainsLogo[chain] as string,
+              isBase: data?.chainName?.toLowerCase() === "base",
+            };
+          })
+          .sort((a, b) => {
+            // Sort Base assets first
+            if (a.isBase && !b.isBase) return -1;
+            if (!a.isBase && b.isBase) return 1;
+            return 0;
+          }) as IAssetsData[]
       );
     } catch (error) {
       toastError("Something Went Wrong");

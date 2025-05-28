@@ -4,6 +4,7 @@ import { formatCurrency, formatPercentage } from "@/utils/tokenCalculations";
 import Image from "next/image";
 import { LuSearch } from "react-icons/lu";
 import { useWalletBalance } from "@/hooks/useWalletBalance";
+import { useTokenPrices } from "@/hooks/useTokenPrices";
 
 interface VirtualTokenSelectorProps {
   setIsCoinOpen: (isOpen: boolean) => void;
@@ -32,6 +33,7 @@ const VirtualTokenSelector: React.FC<VirtualTokenSelectorProps> = ({
   >("sentient");
   const [showAllTokens, setShowAllTokens] = useState(false);
   const { balances } = useWalletBalance();
+  const { prices, loading: pricesLoading } = useTokenPrices();
 
   const baseTokens: IVirtual[] = [
     {
@@ -49,6 +51,7 @@ const VirtualTokenSelector: React.FC<VirtualTokenSelectorProps> = ({
       contractAddress: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
       mcapInVirtual: 0,
       userBalance: parseFloat(balances?.ETH || "0"),
+      price: prices?.BASE?.ethereum || 0,
       nextLaunchstartsAt: [],
       cores: [],
       creator: {
@@ -78,6 +81,7 @@ const VirtualTokenSelector: React.FC<VirtualTokenSelectorProps> = ({
       contractAddress: "0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b",
       mcapInVirtual: 0,
       userBalance: parseFloat(balances?.VIRT || "0"),
+      price: prices?.BASE?.virtual || 0,
       nextLaunchstartsAt: [],
       cores: [],
       creator: {

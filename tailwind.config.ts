@@ -163,6 +163,7 @@ const config: Config = {
         spin: "spin 1s linear infinite",
         blinker: "blink 1s linear infinite",
         slow: "spin 4s linear infinite",
+        lineAnim: "lineAnim 1.2s linear infinite",
       },
       keyframes: {
         blink: {
@@ -187,6 +188,11 @@ const config: Config = {
           "100%": {
             opacity: "0.2",
           },
+        },
+        lineAnim: {
+          "0%": { left: "-40%" },
+          "50%": { left: "20%", width: "40%" },
+          "100%": { left: "100%", width: "60%" },
         },
         fadeIn: {
           "0%": { opacity: "0" },

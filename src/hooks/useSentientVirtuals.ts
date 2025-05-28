@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { IAssetsData, IVirtual } from "@/utils/interface";
 import { useLocalStorage } from "./useLocalStorage";
+import { useLoginContext } from "@/context/LoginContext";
 
 interface SentientVirtualResponse {
   data: {
@@ -62,6 +63,7 @@ export const useSentientVirtuals = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [dataList, setDataList] = useLocalStorage<IAssetsData[]>("arbt-assets");
+  const { trigger } = useLoginContext();
 
   function getTokenUSDPrice(
     virtualTokenValue: string,
@@ -126,7 +128,7 @@ export const useSentientVirtuals = () => {
     };
 
     fetchVirtuals();
-  }, []);
+  }, [trigger, dataList]);
 
   return { virtuals, loading, error };
 };

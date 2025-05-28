@@ -1046,7 +1046,7 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
       console.log(err);
       setFromAmount(0.0);
       setUsdPrice(0.0);
-      setToAmount(0.0);
+      setToAmount(0);
     } finally {
       setIsTypingLoading(false);
     }
@@ -1055,7 +1055,7 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
   const resetSwapStates = () => {
     setIsApproved(false);
     setFromAmount(0.0);
-    setToAmount(0.0);
+    setToAmount(0);
     setIsConvert(false);
     setIsFinalStep(false);
     setIsSwapped(false);

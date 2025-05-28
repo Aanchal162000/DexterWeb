@@ -47,6 +47,7 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
 }) => {
   const { selectedVitualtoken, setSelctedVirtualToken } = useSwapContext();
   const { balances } = useWalletBalance();
+  const { triggerAPIs } = useLoginContext();
   const balance =
     selectedVitualtoken.symbol === "ETH" ? balances.ETH : balances.VIRT;
   const calculatedAmount = (parseFloat(balance || "0") * 10) / 100;
@@ -189,6 +190,7 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
           launchTime: new Date(endsAt),
           marketCap: marketCapBuyRange.toString(),
         });
+        triggerAPIs();
         fetchSubscriptionData();
 
         if (!response.success) {

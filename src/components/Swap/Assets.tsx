@@ -79,6 +79,7 @@ const Assets = ({
 
       setDataList(
         assets
+          .filter((data: IResponseAssets) => Number(data.balanceFormatted) > 0)
           .map((data: IResponseAssets) => {
             let chain = tokenSymbolList?.find(
               (item) => item.code === data?.chainSymbol

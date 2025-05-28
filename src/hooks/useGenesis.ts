@@ -62,5 +62,5 @@ export const useGenesis = () => {
     },
   });
 
-  return { data, loading, error };
+  return { data, loading, error, fetchGenesis };
 };

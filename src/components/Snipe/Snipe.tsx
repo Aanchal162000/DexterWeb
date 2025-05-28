@@ -18,24 +18,27 @@ import AgentSection from "./AgentSection";
 
 const Snipe = () => {
   const [selectedTab, setSelectedTab] = useState<"swap" | "create">("swap");
-  const { virtuals, loading, error } = useSentientVirtuals();
+  const { virtuals, loading, error, fetchVirtuals } = useSentientVirtuals();
   const { address } = useLoginContext();
 
   const {
     data: genesisData,
     loading: genesisLoading,
     error: genesisError,
+    fetchGenesis,
   } = useGenesis();
 
   const {
     virtuals: prototypeVirtuals,
     loading: prototypeLoading,
     error: prototypeError,
+    fetchVirtuals: fetchPrototypeVirtuals,
   } = usePrototypeVirtuals();
   const [selectedSnipeTab, setSelectedSnipeTab] = useState<
     "aiAgents" | "transaction"
   >("aiAgents");
   const [subscriptionData, setSubscriptionData] = useState<any>(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   // Add useEffect to fetch subscription data
   const fetchSubscriptionData = async () => {
@@ -59,6 +62,21 @@ const Snipe = () => {
 
   const handleCloseCreateAgent = () => {
     // Handle close create agent
+  };
+
+  const handleRefresh = async () => {
+    try {
+      setIsRefreshing(true);
+      await Promise.all([
+        fetchVirtuals(),
+        fetchGenesis(),
+        fetchPrototypeVirtuals(),
+      ]);
+    } catch (error) {
+      console.error("Error refreshing data:", error);
+    } finally {
+      setIsRefreshing(false);
+    }
   };
 
   const renderGenesisItem = (genesis: any) => {
@@ -121,12 +139,16 @@ const Snipe = () => {
               </button>
             </div>
             <div className="text-sm sm:text-sm gap-5 font-medium hidden sm:flex items-center">
-              <button>
+              <button onClick={handleRefresh} disabled={isRefreshing}>
                 <Image
                   src="/common/Refresh.png"
                   alt="Refresh"
                   width={28}
                   height={28}
+                  className={clsx(
+                    "transition-transform duration-300",
+                    isRefreshing && "animate-spin"
+                  )}
                 />
               </button>
               <button>

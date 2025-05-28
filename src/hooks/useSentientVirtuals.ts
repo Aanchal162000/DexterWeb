@@ -153,5 +153,5 @@ export const useSentientVirtuals = () => {
     },
   });
 
-  return { virtuals, loading, error };
+  return { virtuals, loading, error, fetchVirtuals };
 };

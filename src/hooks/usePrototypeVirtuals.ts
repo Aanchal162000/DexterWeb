@@ -145,5 +145,5 @@ export const usePrototypeVirtuals = () => {
     },
   });
 
-  return { virtuals, loading, error };
+  return { virtuals, loading, error, fetchVirtuals };
 };

@@ -1,90 +1,25 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { IVirtual } from "@/utils/interface";
-import VirtualCard from "./VirtualCard";
-import CreateAgentForm from "./CreateAgentForm";
-import { useMediaQuery } from "react-responsive";
+
 import { useSentientVirtuals } from "@/hooks/useSentientVirtuals";
-import Image from "next/image";
-import {
-  formatCurrency,
-  formatPercentage,
-  calculatePrice24hAgo,
-  weiToEther,
-} from "@/utils/tokenCalculations";
 import { useGenesis } from "@/hooks/useGenesis";
-import GenesisCard from "./GenesisCard";
 import { usePrototypeVirtuals } from "@/hooks/usePrototypeVirtuals";
 import { useLoginContext } from "@/context/LoginContext";
-import { useWalletBalance } from "@/hooks/useWalletBalance";
+import CreateAgentForm from "./CreateAgentForm";
+import SnipeSwap from "./SnipeSwap";
+import clsx from "clsx";
+import Image from "next/image";
 import { toast } from "react-toastify";
-import VirtualTokenSelector from "./VirtualTokenSelector";
-import DialogContainer from "../Swap/DialogContainer";
-import { LuArrowUpDown } from "react-icons/lu";
-import ImageNext from "../common/ImageNext";
-import { TiArrowSortedDown } from "react-icons/ti";
-import buyService from "@/services/contract/buyService";
-import {
-  BuyContract,
-  ERC20ABI,
-  networkCards,
-  VIRTUALS_TOKEN_ADDRESS,
-  WRAPPED_ETH_ADDRESS,
-} from "@/constants/config";
-import approvalService from "@/services/contract/approvalService";
-import { useSwapContext } from "@/context/SwapContext";
-import SwapSection from "./SwapSection";
-import useEffectAsync from "@/hooks/useEffectAsync";
-import ConfirmationDialog from "../common/ConfirmationDialog";
-import { ethers } from "ethers";
-import Web3 from "web3";
-import { rpcConfig, TRXService } from "@/services/transaction";
-import ConfirmPop from "../Swap/ConfirmPop";
-import Status from "../Swap/Status";
-import SnipeStatus from "./SnipeStatus";
-import { TokenOption } from "@/components/common/TokenSelector";
+import GenesisCard from "./GenesisCard";
+import VirtualCard from "./VirtualCard";
+
+import AgentSection from "./AgentSection";
 
 const Snipe = () => {
-  const { networkData, triggerAPIs } = useLoginContext();
-  const [isFromCoinOpen, setIsFromCoinOpen] = useState(false);
-  const [isToCoinOpen, setIsToCoinOpen] = useState(false);
   const [selectedTab, setSelectedTab] = useState<"swap" | "create">("swap");
-  const [fromAmount, setFromAmount] = useState<number>(0.0);
-  const [toAmount, setToAmount] = useState<number>(0.0);
-  const [buttonText, setButtonText] = useState<string>("Select Token");
-  const [isConfirmPop, setIsConfirmPop] = useState<boolean>(false);
-  const [subscriptionData, setSubscriptionData] = useState<any>(null);
-
-  const [isCreatingAgent, setIsCreatingAgent] = useState(false);
-  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
-  const [activePercentage, setActivePercentage] = useState<number | null>(null);
-  const [releaseHash, setReleaseHash] = useState<string | null>(null);
-
-  const [showPercentages, setShowPercentages] = useState<{
-    id: string;
-    type: "buy" | "sell";
-  } | null>(null);
-
-  const [isAnimating, setIsAnimating] = useState(false);
-
-  const isMobile = useMediaQuery({ maxWidth: 768 });
   const { virtuals, loading, error } = useSentientVirtuals();
   const { address } = useLoginContext();
-  const { selectedVitualtoken, setSelctedVirtualToken } = useSwapContext();
-  const {
-    balances,
-    isLoading: balanceLoading,
-    refetch: refetchBalances,
-  } = useWalletBalance();
-  const [isSwapped, setIsSwapped] = useState<boolean>(false);
-  const [isFinalStep, setIsFinalStep] = useState<boolean>(false);
-  const [isApproved, setIsApproved] = useState<boolean>(false);
-  const [isConvert, setIsConvert] = useState<boolean>(false);
-  const [isTokenRelease, setIsTokenRelease] = useState<boolean>(false);
-  const [errored, setErrored] = useState<boolean>(false);
-  const [approvalHash, setApprovalHash] = useState<string | null>(null);
-  const [swapHash, setSwapHash] = useState<string | null>(null);
 
   const {
     data: genesisData,
@@ -97,29 +32,10 @@ const Snipe = () => {
     loading: prototypeLoading,
     error: prototypeError,
   } = usePrototypeVirtuals();
-
-  const [processingVirtuals, setProcessingVirtuals] = useState<{
-    [key: string]: {
-      buy: boolean;
-      sell: boolean;
-    };
-  }>({});
-  const [selectedVirtual, setSelectedVirtual] = useState<IVirtual | null>(
-    virtuals[0]
-  );
-  const [selectedToVirtual, setSelectedToVirtual] = useState<IVirtual | null>(
-    virtuals[1]
-  );
-
-  const [isBalanceLoading, setIsBalanceLoading] = useState(false);
-
-  // Add useEffect to set selected tokens when sentient agents are loaded
-  useEffect(() => {
-    if (virtuals.length >= 2 && !loading) {
-      setSelectedVirtual(virtuals[0]);
-      setSelectedToVirtual(virtuals[1]);
-    }
-  }, [virtuals, loading]);
+  const [selectedSnipeTab, setSelectedSnipeTab] = useState<
+    "aiAgents" | "transaction"
+  >("aiAgents");
+  const [subscriptionData, setSubscriptionData] = useState<any>(null);
 
   // Add useEffect to fetch subscription data
   const fetchSubscriptionData = async () => {
@@ -141,451 +57,174 @@ const Snipe = () => {
     fetchSubscriptionData();
   }, [address]);
 
-  const handleSwap = async () => {
-    setIsFinalStep(true);
-    if (!address || balanceLoading || !selectedVirtual || !selectedToVirtual) {
-      toast.error("Please connect your wallet and select a token");
-      return;
-    }
-
-    // Validate amounts
-    if (!fromAmount || !toAmount || isNaN(fromAmount) || isNaN(toAmount)) {
-      toast.error("Invalid amount values");
-      return;
-    }
-
-    try {
-      setIsConfirmPop(true);
-      setIsFinalStep(true);
-      setErrored(false);
-
-      // Proceed with swap
-      const trxService = TRXService.getInstance();
-      const signer = networkData?.provider.getSigner();
-      setIsConvert(true);
-      const result = await trxService.executeSwapTransaction(
-        networkData?.chainId?.toString() || "1",
-        (Number(fromAmount) * 10 ** 18).toString(),
-        selectedVirtual.contractAddress!,
-        selectedToVirtual.contractAddress!,
-        "0.5", // 0.5% slippage
-        address,
-        signer!
-      );
-
-      if (result.success) {
-        setIsSwapped(true);
-        setReleaseHash(result?.chainTxInfo?.transactionHash!);
-        triggerAPIs();
-        setIsTokenRelease(true);
-        toast.success("Swap transaction successful! 🎉");
-        console.log("Transaction successful:", result.chainTxInfo);
-
-        // Trigger balance refresh after successful swap
-        await refetchBalances();
-
-        // Update virtual token balance in context
-        setSelctedVirtualToken((prev: TokenOption) => ({
-          ...prev,
-          balance: balances.VIRT || "0",
-        }));
-      } else {
-        throw new Error(result.error?.message || "Swap failed");
-      }
-    } catch (error) {
-      console.error("Swap error:", error);
-      toast.error(error instanceof Error ? error.message : "Swap failed");
-      setIsFinalStep(false);
-      setIsConvert(false);
-      setErrored(true);
-    }
-  };
-
-  useEffectAsync(async () => {
-    if (selectedVirtual || selectedToVirtual) {
-      setIsBalanceLoading(true);
-      try {
-        if (selectedVirtual) {
-          const value = await approvalService.balanceOf({
-            tokenAddress: selectedVirtual.contractAddress!,
-            provider: networkData?.provider!,
-          });
-          selectedVirtual.userBalance = Number(value);
-        }
-        if (selectedToVirtual) {
-          const value = await approvalService.balanceOf({
-            tokenAddress: selectedToVirtual.contractAddress!,
-            provider: networkData?.provider!,
-          });
-          selectedToVirtual.userBalance = Number(value);
-        }
-      } catch (error) {
-        console.error("Error fetching balance:", error);
-      } finally {
-        setIsBalanceLoading(false);
-      }
-    }
-  }, [selectedVirtual?.symbol, selectedToVirtual?.symbol]);
-
   const handleCloseCreateAgent = () => {
-    setIsCreatingAgent(false);
+    // Handle close create agent
   };
 
-  const handleCardClick = (virtual: IVirtual) => {
-    setSelectedVirtual(virtual);
-    setIsDetailsModalOpen(true);
-  };
-
-  function validationCheck() {
-    if (loading) {
-      setButtonText("Loading...");
-    } else if (!selectedVirtual || !selectedToVirtual) {
-      setButtonText("Select Token");
-    } else if (fromAmount == 0 || toAmount == 0) {
-      setButtonText("Enter Amount");
-    } else {
-      setButtonText("Trade");
+  const renderGenesisItem = (genesis: any) => {
+    // Check if the Genesis has ended
+    const now = new Date();
+    const endDate = new Date(genesis.endsAt);
+    if (now > endDate) {
+      return null; // Don't render ended Genesis cards
     }
-  }
 
-  function swapFields() {
-    const tempFrom = selectedVirtual;
-    const tempTo = selectedToVirtual;
-    setSelectedVirtual(tempTo);
-    setSelectedToVirtual(tempFrom);
-  }
-
-  useEffect(() => {
-    validationCheck();
-  }, [selectedVirtual, selectedToVirtual, fromAmount, toAmount, loading]);
-
-  const resetSwapStates = () => {
-    setFromAmount(0);
-    setToAmount(0);
-    setIsSwapped(false);
-    setIsFinalStep(false);
-    setIsApproved(false);
-    setIsConvert(false);
-    setIsTokenRelease(false);
-    setErrored(false);
-    setSelectedVirtual(null);
-    setSelectedToVirtual(null);
+    return (
+      <GenesisCard
+        key={genesis.id}
+        genesis={genesis}
+        onClick={() => {}}
+        subscriptionData={subscriptionData}
+        fetchSubscriptionData={fetchSubscriptionData}
+      />
+    );
   };
-  useEffect(() => {
-    if (selectedVirtual?.symbol == "ETH") {
-      setIsApproved(true);
-    } else {
-      setIsApproved(false);
-    }
-  }, [selectedVirtual]);
+
+  const renderVirtualItem = (virtual: any) => (
+    <VirtualCard key={virtual.id} virtual={virtual} />
+  );
 
   return (
-    <div className="w-full h-full overflow-y-auto lg:overflow-y-hidden lg:h-full flex-1 flex flex-col lg:flex-row lg:px-14 sm:px-7 px-4 py-3 gap-3 justify-center">
-      {/* Main content area - now flex-col on mobile, flex-row on larger screens */}
-      <div className="w-full flex flex-col lg:flex-row gap-3">
-        {/* Left section containing all three boxes */}
-        <div className="w-full h-full grid grid-cols-3 gap-3">
-          {/* Genesis Launches Box */}
-          <div className="h-full w-full backdrop-blur-sm bg-[#15181B]/80 border border-primary-100 rounded-xl text-white flex flex-col overflow-hidden">
-            <h2 className="text-lg md:text-xl font-semibold text-primary-100 text-center p-4">
-              Genesis Launches
-            </h2>
-            <div className="flex-1 overflow-y-auto overflow-x-hidden p-4">
-              <div className="space-y-4">
-                {genesisLoading ? (
-                  <div className="flex justify-center items-center h-32">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-100"></div>
-                  </div>
-                ) : genesisError ? (
-                  <div className="text-red-500 text-center p-4">
-                    {genesisError}
-                  </div>
-                ) : genesisData &&
-                  genesisData.data &&
-                  genesisData.data.length > 0 ? (
-                  [...genesisData.data]
-                    .sort((a, b) => {
-                      const aIsSubscribed = subscriptionData?.some(
-                        (sub: any) => sub.genesisId === a.genesisId
-                      );
-                      const bIsSubscribed = subscriptionData?.some(
-                        (sub: any) => sub.genesisId === b.genesisId
-                      );
-                      if (aIsSubscribed && !bIsSubscribed) return -1;
-                      if (!aIsSubscribed && bIsSubscribed) return 1;
-                      return 0;
-                    })
-                    .map((genesis) => (
-                      <GenesisCard
-                        key={genesis.id}
-                        genesis={genesis}
-                        onClick={() => {}}
-                        subscriptionData={subscriptionData}
-                        fetchSubscriptionData={fetchSubscriptionData}
-                      />
-                    ))
-                ) : (
-                  <div className="text-center text-gray-400 py-8">
-                    No genesis launches found
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-          {/* Sentient Agents Box */}
-          <div className="h-full w-full backdrop-blur-sm bg-[#15181B]/80 border border-primary-100 rounded-xl text-white flex flex-col overflow-hidden">
-            <h2 className="text-lg md:text-xl font-semibold text-primary-100 text-center p-4">
-              Sentient Agents
-            </h2>
-            <div className="flex-1 overflow-y-auto overflow-x-hidden p-4">
-              <div className="space-y-4">
-                {loading ? (
-                  <div className="flex justify-center items-center h-32">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-100"></div>
-                  </div>
-                ) : error ? (
-                  <div className="text-red-500 text-center p-4">{error}</div>
-                ) : virtuals?.length > 0 ? (
-                  virtuals.map((virtual) => (
-                    <VirtualCard
-                      key={virtual.id}
-                      virtual={virtual}
-                      onClick={() => handleCardClick(virtual)}
-                    />
-                  ))
-                ) : (
-                  <div className="text-center text-gray-400 py-8">
-                    No sentient agents found
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-          {/* Prototype Agents Box */}
-          <div className="h-full w-full backdrop-blur-sm bg-[#15181B]/80 border border-primary-100 rounded-xl text-white flex flex-col overflow-hidden">
-            <h2 className="text-lg md:text-xl font-semibold text-primary-100 text-center p-4">
-              Prototype Agents
-            </h2>
-            <div className="flex-1 overflow-y-auto overflow-x-hidden p-4">
-              <div className="space-y-4">
-                {prototypeLoading ? (
-                  <div className="flex justify-center items-center h-32">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-100"></div>
-                  </div>
-                ) : prototypeError ? (
-                  <div className="text-red-500 text-center p-4">
-                    {prototypeError}
-                  </div>
-                ) : prototypeVirtuals?.length > 0 ? (
-                  prototypeVirtuals.map((virtual) => (
-                    <VirtualCard
-                      key={virtual.id}
-                      virtual={virtual}
-                      onClick={() => handleCardClick(virtual)}
-                    />
-                  ))
-                ) : (
-                  <div className="text-center text-gray-400 py-8">
-                    No prototype agents found
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Swap/Create Section */}
-        <div className="w-full sm:!w-[clamp(24%,26.8rem,39%)] min-w-[23.75rem] flex-shrink-0 flex justify-center items-center h-full lg:ml-2">
-          <div className="bg-[#15181B]/80 backdrop-blur-sm text-white border border-primary-100 rounded-xl relative h-full w-full shadow-md overflow-y-hidden">
-            <div className="gap-x-5 flex flex-row items-center justify-around lg:justify-start border-[#818284] w-full px-4 lg:px-8 py-4 lg:py-6">
+    <div className="w-full h-full overflow-y-auto lg:overflow-y-hidden lg:h-full flex-1 flex flex-row lg:px-14 sm:px-7 px-4 py-3 gap-4 justify-center">
+      <div className="w-full md:flex hidden overflow-hidden">
+        {/* OverView section  */}
+        <div className="relative h-full w-full backdrop-blur-sm bg-[#15181B]/80 border border-primary-100 rounded-xl text-white flex flex-col ">
+          <div className="flex items-center justify-between pt-4 pb-4 border-b border-primary-100 px-8">
+            <div className="gap-4 sm:gap-6 flex [&>button]:py-2 sm:w-fit w-full">
               <button
-                className={`flex flex-row items-center justify-center font-semibold underline-offset-[0.625rem] text-sm sm:text-base ${
-                  selectedTab === "swap"
+                className={clsx(
+                  "text-sm sm:text-base flex items-center gap-2 font-semibold font-primary sm:w-fit w-full justify-center underline-offset-[0.625rem]",
+                  selectedSnipeTab === "aiAgents"
                     ? "text-primary-100 underline"
-                    : "text-white/60"
-                }`}
-                onClick={() => setSelectedTab("swap")}
+                    : "text-prime-zinc-100"
+                )}
+                onClick={() => setSelectedSnipeTab("aiAgents")}
               >
-                Swap
+                {/* <MdWallet className="size-6" /> */}
+                AI Agents
               </button>
+              <div className="h-10 w-px bg-prime-background-100 sm:hidden" />
               <button
-                className={`flex flex-row items-center justify-center font-semibold underline-offset-[0.625rem] text-sm sm:text-base ${
-                  selectedTab === "create"
+                className={clsx(
+                  "text-sm sm:text-base flex items-center gap-2 font-semibold font-primary sm:w-fit w-full justify-center text-nowrap underline-offset-[0.625rem]",
+                  selectedSnipeTab === "transaction"
                     ? "text-primary-100 underline"
-                    : "text-white/60"
-                }`}
-                onClick={() => setSelectedTab("create")}
+                    : "text-prime-zinc-100"
+                )}
+                onClick={() => setSelectedSnipeTab("transaction")}
               >
-                Create
-              </button>
-
-              <button
-                className="text-white/60 text-xs ml-auto"
-                onClick={() => {}}
-              >
-                Reset
+                {/* <PiClockCounterClockwiseBold className="size-6" /> */}
+                <div className="flex">
+                  Transactions&nbsp;
+                  <span className="sm:block hidden">History</span>
+                </div>
               </button>
             </div>
-
-            {selectedTab === "swap" && (
-              <SwapSection
-                selectedVirtual={selectedVirtual}
-                selectedToVirtual={selectedToVirtual}
-                fromAmount={fromAmount}
-                toAmount={toAmount}
-                setIsFromCoinOpen={setIsFromCoinOpen}
-                setIsToCoinOpen={setIsToCoinOpen}
-                setFromAmount={setFromAmount}
-                setToAmount={setToAmount}
-                swapFields={swapFields}
-                buttonText={buttonText}
-                setIsConfirmPop={setIsConfirmPop}
-                isBalanceLoading={isBalanceLoading}
+            <div className="text-sm sm:text-sm gap-5 font-medium hidden sm:flex items-center">
+              <button>
+                <Image
+                  src="/common/Refresh.png"
+                  alt="Refresh"
+                  width={28}
+                  height={28}
+                />
+              </button>
+              <button>
+                <Image
+                  src="/common/Filter.png"
+                  alt="Filter"
+                  width={24}
+                  height={24}
+                />
+              </button>
+              <button>
+                <Image
+                  src="/common/Settings.png"
+                  alt="Setting"
+                  width={24}
+                  height={24}
+                />
+              </button>
+            </div>
+          </div>
+          {selectedSnipeTab == "aiAgents" && (
+            <div className="flex flex-row relative w-full h-full">
+              <AgentSection
+                title="Genesis Launches"
+                type="genesis"
+                data={genesisData?.data || []}
+                loading={genesisLoading}
+                error={genesisError}
+                renderItem={renderGenesisItem}
               />
-            )}
+              <AgentSection
+                title="Prototype Agents"
+                type="prototype"
+                data={prototypeVirtuals || []}
+                loading={prototypeLoading}
+                error={prototypeError}
+                renderItem={renderVirtualItem}
+              />
+              <AgentSection
+                title="Sentient Agents"
+                type="sentient"
+                data={virtuals || []}
+                loading={loading}
+                error={error}
+                renderItem={renderVirtualItem}
+              />
+            </div>
+          )}
+        </div>
+      </div>
+      {/* Swap/Create Section */}
+      <div className="sm:!w-[clamp(38%,30rem,43%)] min-w-[23.75rem] w-full flex justify-center items-center h-full">
+        <div className="bg-[#15181B]/80 backdrop-blur-sm text-white border border-primary-100 rounded-xl relative h-full w-full shadow-md overflow-y-hidden">
+          {/* Tab Selection */}
+          <div className="gap-x-5 flex flex-row items-center justify-around lg:justify-start border-[#818284] w-full px-4 lg:px-8 py-4 lg:py-6">
+            <button
+              className={`flex flex-row items-center justify-center font-semibold underline-offset-[0.625rem] text-sm sm:text-base ${
+                selectedTab === "swap"
+                  ? "text-primary-100 underline"
+                  : "text-white/60"
+              }`}
+              onClick={() => setSelectedTab("swap")}
+            >
+              Swap
+            </button>
+            <button
+              className={`flex flex-row items-center justify-center font-semibold underline-offset-[0.625rem] text-sm sm:text-base ${
+                selectedTab === "create"
+                  ? "text-primary-100 underline"
+                  : "text-white/60"
+              }`}
+              onClick={() => setSelectedTab("create")}
+            >
+              Create
+            </button>
 
-            {isFromCoinOpen && (
-              <DialogContainer
-                setClose={() => setIsFromCoinOpen(false)}
-                title="Select Token"
-              >
-                <VirtualTokenSelector
-                  setIsCoinOpen={setIsFromCoinOpen}
-                  fromOrTo="FromSelection"
-                  setSelectedCoin={setSelectedVirtual}
-                  title="Send From"
-                  sentientVirtuals={virtuals}
-                  prototypeVirtuals={prototypeVirtuals}
-                  sentientLoading={loading}
-                  prototypeLoading={prototypeLoading}
-                />
-              </DialogContainer>
-            )}
-
-            {isToCoinOpen && (
-              <DialogContainer
-                setClose={() => setIsToCoinOpen(false)}
-                title="Select Token"
-              >
-                <VirtualTokenSelector
-                  setIsCoinOpen={setIsToCoinOpen}
-                  fromOrTo="ToSelection"
-                  setSelectedCoin={setSelectedToVirtual}
-                  title="Receive As"
-                  sentientVirtuals={virtuals}
-                  prototypeVirtuals={prototypeVirtuals}
-                  sentientLoading={loading}
-                  prototypeLoading={prototypeLoading}
-                />
-              </DialogContainer>
-            )}
-
-            {isConfirmPop && (
-              <DialogContainer
-                setClose={() => {
-                  setIsConfirmPop(false);
-                  if (isApproved) {
-                    setIsFinalStep(false);
-                    resetSwapStates();
-                  }
-                }}
-                confirmClose={isApproved && (isSwapped || isTokenRelease)}
-                title={
-                  errored
-                    ? "Transaction Failed"
-                    : !isApproved
-                    ? "Transaction Approval"
-                    : isConvert
-                    ? isSwapped || isTokenRelease
-                      ? "Transaction Completed"
-                      : "Transaction In Progress"
-                    : "Transaction Confirmation"
-                }
-              >
-                <ConfirmationDialog
-                  selectedCoin={selectedVirtual!}
-                  selectedNetwork={networkCards[3]}
-                  fromAmount={fromAmount.toString()}
-                  toAmount={toAmount.toString()}
-                  selectedToCoin={selectedToVirtual!}
-                  selectedToNetwork={networkCards[3]}
-                  isApproved={
-                    selectedVirtual?.symbol == "ETH" ? true : isApproved
-                  }
-                  continueTransaction={handleSwap}
-                  isConvert={isConvert}
-                  isSwapped={isSwapped}
-                  isTokenRelease={isTokenRelease}
-                  setIsFinalStep={setIsFinalStep}
-                  resetSwapStates={resetSwapStates}
-                  setIsApproved={setIsApproved}
-                  walletAddress={address!}
-                  signer={networkData?.provider.getSigner()!}
-                  setIsConfirmPop={setIsConfirmPop}
-                  approvalHash={approvalHash}
-                  swapHash={swapHash}
-                  setApprovalHash={setApprovalHash}
-                  setSwapHash={setSwapHash}
-                  releaseHash={releaseHash}
-                  setReleaseHash={setReleaseHash}
-                />
-              </DialogContainer>
-            )}
-
-            {isFinalStep && (
-              <DialogContainer
-                setClose={() => {
-                  setIsConfirmPop(false);
-                  setIsFinalStep(false);
-
-                  resetSwapStates();
-                }}
-                title={
-                  errored
-                    ? "Transaction Failed"
-                    : isConvert &&
-                      (!isApproved || !isSwapped || !isTokenRelease)
-                    ? "Transaction in Progress"
-                    : "Transaction Completed"
-                }
-                confirmClose={
-                  isConvert && (!isApproved || !isSwapped || !isTokenRelease)
-                }
-              >
-                <SnipeStatus
-                  selectedCoin={selectedVirtual!}
-                  selectedNetwork={networkCards[3]}
-                  fromAmount={fromAmount.toString()}
-                  toAmount={toAmount.toString()}
-                  selectedToCoin={selectedToVirtual!}
-                  selectedToNetwork={networkCards[3]}
-                  isApproved={isApproved}
-                  continueTransaction={handleSwap}
-                  isConvert={isConvert}
-                  isSwapped={isSwapped}
-                  isTokenRelease={isTokenRelease}
-                  setIsFinalStep={setIsFinalStep}
-                  resetSwapStates={resetSwapStates}
-                  setIsApproved={setIsApproved}
-                  walletAddress={address!}
-                  signer={networkData?.provider.getSigner()!}
-                  setIsConfirmPop={setIsConfirmPop}
-                  approvalHash={approvalHash}
-                  swapHash={swapHash}
-                  setApprovalHash={setApprovalHash}
-                  setSwapHash={setSwapHash}
-                  releaseHash={releaseHash}
-                  setReleaseHash={setReleaseHash}
-                />
-              </DialogContainer>
-            )}
-
-            {selectedTab === "create" && (
-              <div className="px-4 lg:px-8">
-                <CreateAgentForm onClose={handleCloseCreateAgent} />
-              </div>
-            )}
+            <button
+              className="text-white/60 text-xs ml-auto"
+              onClick={() => {}}
+            >
+              Reset
+            </button>
           </div>
+
+          {selectedTab === "swap" && (
+            <SnipeSwap
+              virtuals={virtuals}
+              prototypeVirtuals={prototypeVirtuals}
+              loading={loading}
+              prototypeLoading={prototypeLoading}
+            />
+          )}
+
+          {selectedTab === "create" && (
+            <div className="px-4 lg:px-8">
+              <CreateAgentForm onClose={handleCloseCreateAgent} />
+            </div>
+          )}
         </div>
       </div>
     </div>

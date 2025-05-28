@@ -36,6 +36,24 @@
     "coingeckoId": "aerodrome-finance"
   },
   {
+    "id": "8453-0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b",
+    "address": "0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b",
+    "name": "Virtual",
+    "shortName": "VIRT",
+    "decimals": 18,
+    "chainId": 8453,
+    "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/8453/0x0b3e328455c4059eeb9e3f84b5543f74e24e7e1b.png",
+    "tradeable": true,
+    "isQuoteToken": false,
+    "isStableCoin": false,
+    "currentPrice": {
+      "price": 0,
+      "__typename": "GqlTokenCurrentPrice"
+    },
+    "__typename": "GqlToken",
+    "coingeckoId": "virtual-protocol"
+  },
+  {
     "id": "8453-0xeb466342c4d449bc9f53a865d5cb90586f405215",
     "address": "0xeb466342c4d449bc9f53a865d5cb90586f405215",
     "name": "axlUSDC",

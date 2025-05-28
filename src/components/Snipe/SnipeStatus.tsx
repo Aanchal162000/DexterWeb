@@ -341,7 +341,7 @@ function SnipeStatus({
             resetFiatStates();
             resetSwapStates();
           }}
-          disabled={isConvert && (!isApproved || !isSwapped || !isTokenRelease)}
+          disabled={isConvert && (!isApproved || !isTokenRelease)}
           className="disabled:bg-prime-zinc-500 h-10 bg-prime-blue-100 w-full text-white py-3 rounded-md text-sm flex items-center justify-center text-center  justify-self-end"
         >
           Buy Again

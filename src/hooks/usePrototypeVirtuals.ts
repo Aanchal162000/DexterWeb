@@ -57,7 +57,11 @@ export const usePrototypeVirtuals = () => {
   const [virtuals, setVirtuals] = useState<IVirtual[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [dataList, setDataList] = useLocalStorage<IAssetsData[]>("arbt-assets");
+  const [localVirtuals, setLocalVirtuals] = useLocalStorage<IVirtual[]>(
+    "prototype-virtuals",
+    []
+  );
+  const [dataList] = useLocalStorage<IAssetsData[]>("arbt-assets");
 
   function getTokenUSDPrice(
     virtualTokenValue: string,
@@ -73,38 +77,36 @@ export const usePrototypeVirtuals = () => {
       const response = await fetch(
         "https://api.virtuals.io/api/virtuals?filters[status]=1&filters[chain]=BASE&sort[0]=volume24h%3Adesc&sort[1]=createdAt%3Adesc&populate[0]=image&populate[1]=genesis&pagination[page]=1&pagination[pageSize]=100&isGrouped=1&noCache=0"
       );
-
       if (!response.ok) {
-        throw new Error("Failed to fetch virtuals");
+        throw new Error("Failed to fetch prototype virtuals");
       }
-
       const data: PrototypeVirtualResponse = await response.json();
 
-      // Transform the API response to match our IVirtual interface
-      const transformedVirtuals: IVirtual[] = data.data.map((item) => ({
-        id: item.id.toString(),
-        name: item.name,
-        description: item.description,
-        contractAddress: item.preToken,
-        role: item.role,
-        image: item.image,
-        symbol: item.symbol,
-        priceChangePercent24h: item.priceChangePercent24h,
-        price: getTokenUSDPrice(
-          item.virtualTokenValue,
-          item.mcapInVirtual / 1.94
-        ),
-        volume24h: item.volume24h,
-        totalValueLocked: item.totalValueLocked,
-        holderCount: item.holderCount,
-        virtualTokenValue: item.virtualTokenValue,
-        mcapInVirtual: item.mcapInVirtual,
-        socials: item.socials,
-        cores: item.cores,
-        creator: item.creator,
-        genesis: item.genesis,
+      const transformedVirtuals: IVirtual[] = data.data.map((virtual) => ({
+        id: virtual.id.toString(),
+        name: virtual.name,
+        description: virtual.description,
+        role: virtual.role,
+        preToken: virtual.preToken,
+        image: virtual.image,
+        symbol: virtual.symbol,
+        priceChangePercent24h: virtual.priceChangePercent24h,
+        volume24h: virtual.volume24h,
+        totalValueLocked: virtual.totalValueLocked,
+        holderCount: virtual.holderCount,
+        virtualTokenValue: virtual.virtualTokenValue,
+        mcapInVirtual: virtual.mcapInVirtual,
+        socials: virtual.socials,
+        cores: virtual.cores,
+        creator: virtual.creator,
+        genesis: virtual.genesis,
         nextLaunchstartsAt: [],
+        price: getTokenUSDPrice(
+          virtual.virtualTokenValue,
+          virtual.mcapInVirtual / 1.94
+        ),
       }));
+
       transformedVirtuals.map((virtual) => {
         const filter = dataList?.filter((data) => data.token == virtual.symbol);
         if (filter?.length) {
@@ -113,9 +115,15 @@ export const usePrototypeVirtuals = () => {
       });
 
       setVirtuals(transformedVirtuals);
-      setLoading(false);
+      setLocalVirtuals(transformedVirtuals); // Store successful data in localStorage
+      setError(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
+      // Keep using the previous data if available
+      if (!virtuals.length && localVirtuals?.length) {
+        setVirtuals(localVirtuals);
+      }
+    } finally {
       setLoading(false);
     }
   };
@@ -128,6 +136,13 @@ export const usePrototypeVirtuals = () => {
   usePeriodicRefresh({
     interval: 30000, // 30 seconds
     onRefresh: fetchVirtuals,
+    onError: (error) => {
+      console.error("Prototype virtuals refresh error:", error);
+      // Keep using the previous data if available
+      if (!virtuals.length && localVirtuals?.length) {
+        setVirtuals(localVirtuals);
+      }
+    },
   });
 
   return { virtuals, loading, error };

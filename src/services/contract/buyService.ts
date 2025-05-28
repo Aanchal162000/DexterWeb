@@ -50,16 +50,16 @@ class BuyService {
       const slippage = params.slippageTolerance || this.DEFAULT_SLIPPAGE;
       const ammount =
         Number(params.amountOutMin) != 0 ? params.amountOutMin : amountsOut[1];
-      // const minAmountOut = ammount
-      //   .mul(1000 - Math.floor(slippage * 10))
-      //   .div(1000);
+
+      // Reduce amount out by 1% for buffer
+      const bufferAmount = ammount.mul(99).div(100); // 1% reduction
 
       let tx;
       const gasLimit = await this.estimateGasLimit(
         contract,
         params,
         amountInBN,
-        ammount
+        bufferAmount
       );
 
       if (
@@ -68,7 +68,7 @@ class BuyService {
       ) {
         tx = await contract.swapExactTokensForTokens(
           amountInBN,
-          ammount,
+          bufferAmount,
           params.path,
           params.to,
           params.timestamp,
@@ -76,7 +76,7 @@ class BuyService {
         );
       } else if (params.selectedToken.symbol === "ETH") {
         tx = await contract.swapExactETHForTokens(
-          ammount,
+          bufferAmount,
           params.path,
           params.to,
           params.timestamp,
@@ -85,7 +85,7 @@ class BuyService {
       } else if (params.selectedToken.symbol === "GETETH") {
         tx = await contract.swapExactTokensForETH(
           amountInBN,
-          ammount,
+          bufferAmount,
           params.path,
           params.to,
           params.timestamp,
@@ -118,11 +118,12 @@ class BuyService {
     minAmountOut: ethers.BigNumber
   ): Promise<ethers.BigNumber> {
     try {
+      let estimatedGas;
       if (
         params.selectedToken.symbol === "VIRT" ||
         params.selectedToken.symbol === "GETVIRT"
       ) {
-        return await contract.estimateGas.swapExactTokensForTokens(
+        estimatedGas = await contract.estimateGas.swapExactTokensForTokens(
           amountInBN,
           minAmountOut,
           params.path,
@@ -130,20 +131,25 @@ class BuyService {
           params.timestamp
         );
       } else if (params.selectedToken.symbol === "ETH") {
-        return await contract.estimateGas.swapExactETHForTokens(
+        estimatedGas = await contract.estimateGas.swapExactETHForTokens(
           minAmountOut,
           params.path,
           params.to,
           params.timestamp,
           { value: amountInBN }
         );
+      } else {
+        throw new Error(
+          `Unsupported token symbol: ${params.selectedToken.symbol}`
+        );
       }
-      throw new Error(
-        `Unsupported token symbol: ${params.selectedToken.symbol}`
-      );
+
+      // Add 30% buffer to the estimated gas
+      const gasWithBuffer = estimatedGas.mul(130).div(100);
+      return gasWithBuffer;
     } catch (error) {
       console.warn("Gas estimation failed, using default gas limit");
-      return ethers.utils.parseUnits("300000", 0); // Default gas limit
+      return ethers.utils.parseUnits("400000", 0); // Increased default gas limit
     }
   }
 }

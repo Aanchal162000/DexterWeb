@@ -38,8 +38,8 @@
   {
     "id": "8453-0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b",
     "address": "0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b",
-    "name": "Virtual",
-    "shortName": "VIRT",
+    "name": "Virtual Protocol",
+    "shortName": "VIRTUAL",
     "decimals": 18,
     "chainId": 8453,
     "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/8453/0x0b3e328455c4059eeb9e3f84b5543f74e24e7e1b.png",

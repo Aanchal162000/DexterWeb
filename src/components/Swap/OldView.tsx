@@ -124,7 +124,7 @@ function OldView({
     );
   };
 
-  if (!allCrypto?.length || !popularCrypto?.length) return null;
+  if (!allCrypto?.length) return null;
   return (
     <>
       {/* <div className="flex justify-between text-[0.8rem] font-semibold items-center mt-2 mb-3">

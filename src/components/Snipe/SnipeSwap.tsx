@@ -20,6 +20,7 @@ interface SnipeSwapProps {
   prototypeVirtuals: IVirtual[];
   loading: boolean;
   prototypeLoading: boolean;
+  resetCount: number;
 }
 
 const SnipeSwap: React.FC<SnipeSwapProps> = ({
@@ -27,13 +28,13 @@ const SnipeSwap: React.FC<SnipeSwapProps> = ({
   prototypeVirtuals,
   loading,
   prototypeLoading,
+  resetCount,
 }) => {
   const { networkData, triggerAPIs, address } = useLoginContext();
-  const { selectedVitualtoken, setSelctedVirtualToken } = useSwapContext();
   const [isFromCoinOpen, setIsFromCoinOpen] = useState(false);
   const [isToCoinOpen, setIsToCoinOpen] = useState(false);
-  const [fromAmount, setFromAmount] = useState<number>(0.0);
-  const [toAmount, setToAmount] = useState<number>(0.0);
+  const [fromAmount, setFromAmount] = useState<number>(0);
+  const [toAmount, setToAmount] = useState<number>(0);
   const [buttonText, setButtonText] = useState<string>("Select Token");
   const [isConfirmPop, setIsConfirmPop] = useState<boolean>(false);
   const [isFinalStep, setIsFinalStep] = useState<boolean>(false);
@@ -45,6 +46,9 @@ const SnipeSwap: React.FC<SnipeSwapProps> = ({
   const [swapHash, setSwapHash] = useState<string | null>(null);
   const [releaseHash, setReleaseHash] = useState<string | null>(null);
   const [isBalanceLoading, setIsBalanceLoading] = useState(false);
+  const [selectedPercentage, setSelectedPercentage] = useState<number | null>(
+    null
+  );
 
   const {
     balances,
@@ -52,19 +56,17 @@ const SnipeSwap: React.FC<SnipeSwapProps> = ({
     refetch: refetchBalances,
   } = useWalletBalance();
 
-  const [selectedVirtual, setSelectedVirtual] = useState<IVirtual | null>(
-    virtuals[0]
-  );
+  const [selectedVirtual, setSelectedVirtual] = useState<IVirtual | null>(null);
   const [selectedToVirtual, setSelectedToVirtual] = useState<IVirtual | null>(
-    virtuals[1]
+    null
   );
 
   useEffect(() => {
-    if (virtuals.length >= 2 && !loading) {
+    if (virtuals.length) {
       setSelectedVirtual(virtuals[0]);
       setSelectedToVirtual(virtuals[1]);
     }
-  }, [virtuals, loading]);
+  }, []);
 
   useEffectAsync(async () => {
     if (selectedVirtual || selectedToVirtual) {
@@ -151,7 +153,12 @@ const SnipeSwap: React.FC<SnipeSwapProps> = ({
     setErrored(false);
     setSelectedVirtual(null);
     setSelectedToVirtual(null);
+    setSelectedPercentage(null);
   };
+
+  useEffect(() => {
+    resetSwapStates();
+  }, [resetCount]);
 
   const swapFields = () => {
     const tempFrom = selectedVirtual;
@@ -199,6 +206,9 @@ const SnipeSwap: React.FC<SnipeSwapProps> = ({
         buttonText={buttonText}
         setIsConfirmPop={setIsConfirmPop}
         isBalanceLoading={isBalanceLoading}
+        resetSwapStates={resetSwapStates}
+        selectedPercentage={selectedPercentage}
+        setSelectedPercentage={setSelectedPercentage}
       />
 
       {isFromCoinOpen && (

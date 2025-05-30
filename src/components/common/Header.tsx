@@ -102,7 +102,7 @@ const Header = () => {
                   <MenuItems className="absolute left-[-40px] mt-2 w-80 origin-top-right rounded-md border-2 border-primary-100/30  backdrop-blur-sm  bg-black/40 drop-shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <IoMdArrowDropup className="absolute left-[44px] top-[-15px] text-primary-100 size-6" />
                     <div className="py-1">
-                      <div className="flex items-center justify-between px-4 py-4 text-white">
+                      <div className="flex items-center justify-between px-4 py-2 text-white">
                         Alerts
                         <img
                           src={"/alert/settings.png"}

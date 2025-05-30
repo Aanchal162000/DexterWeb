@@ -110,6 +110,8 @@ interface ISwapState {
   isBalanceLoading: boolean;
   selectedVitualtoken: TokenOption;
   setSelctedVirtualToken: Dispatch<SetStateAction<TokenOption>>;
+  selectedPercentage: number | null;
+  setSelectedPercentage: Dispatch<SetStateAction<number | null>>;
 }
 
 const SwapContext = createContext<ISwapState>({} as ISwapState);
@@ -131,6 +133,9 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
 
   //states
   const [selectedCoin, setSelectedCoin] = useState<ICoin | null>(defaultTokenA);
+  const [selectedPercentage, setSelectedPercentage] = useState<number | null>(
+    null
+  );
   const [selectedToCoin, setSelectedToCoin] = useState<ICoin | null>(
     defaultTokenB
   );
@@ -139,8 +144,8 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
   );
   const [selectedToNetwork, setSelectedToNetwork] =
     useState<INetworkCard | null>(baseNetwork);
-  const [fromAmount, setFromAmount] = useState<number | string>(0.0);
-  const [toAmount, setToAmount] = useState<number>(0.0);
+  const [fromAmount, setFromAmount] = useState<number | string>(0);
+  const [toAmount, setToAmount] = useState<number>(0);
   const [toAddress, setToAddress] = useState<string | null>(address);
   const [usdPrice, setUsdPrice] = useState<number>(0);
   const [errored, setErrored] = useState<string | null>(null);
@@ -761,6 +766,11 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
       setIsFinalStep(false);
     }
   };
+  useEffect(() => {
+    setFromAmount(0);
+    setSelectedPercentage(null);
+    setToAmount(0);
+  }, [networkData]);
 
   const handleSwapProgress = async (chainId: string, txHash: string) => {
     const url = `${apiUrls.symbiosisBaseUrl}/v1/tx/${chainId}/${txHash}`;
@@ -929,7 +939,6 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
     // let isEth = selectedNetwork?.name == "Ethereum";
     if (usdBalance < minLimit) {
       setFromAmount(Number(minAmount).toFixed(6));
-      toastInfo(`Min transaction amount capped at ${minLimit} USD.`);
       throw new Error("transaction amount not in range");
     }
     // } else if ((usdBalance > 5 && !isEth) || (isEth && usdBalance > 10)) {
@@ -1044,8 +1053,8 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
         );
       else toastError((err as any)?.message || "Something went wrong");
       console.log(err);
-      setFromAmount(0.0);
-      setUsdPrice(0.0);
+      setFromAmount(0);
+      setUsdPrice(0);
       setToAmount(0);
     } finally {
       setIsTypingLoading(false);
@@ -1054,7 +1063,7 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
 
   const resetSwapStates = () => {
     setIsApproved(false);
-    setFromAmount(0.0);
+    setFromAmount(0);
     setToAmount(0);
     setIsConvert(false);
     setIsFinalStep(false);
@@ -1067,6 +1076,7 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
     setToAddress(address);
     setErrored(null);
     triggerAPIs();
+    setSelectedPercentage(null);
   };
 
   return (
@@ -1111,6 +1121,8 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
         isBalanceLoading,
         selectedVitualtoken,
         setSelctedVirtualToken,
+        selectedPercentage,
+        setSelectedPercentage,
       }}
     >
       {children}

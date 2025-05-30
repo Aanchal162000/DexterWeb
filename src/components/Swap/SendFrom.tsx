@@ -33,8 +33,11 @@ function SendFrom({
     fromTokenData,
     usdPriceS1,
     isBalanceLoading,
+    selectedPercentage,
+    setSelectedPercentage,
   } = useSwapContext();
   const [isFocused, setIsFocused] = useState<boolean>(false);
+  const percentage = [0.1, 0.25, 0.5, 1];
 
   const selectedFiat =
     fiatList &&
@@ -72,6 +75,7 @@ function SendFrom({
   };
 
   const handlePercentCost = (value: number) => {
+    setSelectedPercentage(value);
     if (value === 1) {
       // if (selectedCoin?.address!.toLowerCase() == "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee") {
       //   setFromAmount(String(Number(fromTokenData?.balance || 0).toFixed(6)));
@@ -93,7 +97,7 @@ function SendFrom({
   return (
     <>
       <div
-        className="border border-[#818284] rounded-lg py-3 px-4 mb-2 flex flex-col items-center gap-3"
+        className="border border-primary-100 rounded-lg py-3 px-4 mb-2 flex flex-col items-center gap-3"
         onClick={() => inputRef.current.focus()}
       >
         <div className="flex w-full items-center  text-prime-zinc-50  justify-between">
@@ -133,12 +137,16 @@ function SendFrom({
                 <IoInformationCircle className="size-4" /> Gas fee/buffer will
                 be adjusted.
               </div>
-              {[0.1, 0.25, 0.5, 1].map((value) => (
+              {percentage.map((value) => (
                 <button
                   key={value}
                   disabled={isBalanceLoading}
                   onClick={() => handlePercentCost(value)}
-                  className="text-white/80 text-xs rounded font-bold border border-[#818284] px-[0.1875rem] mx-0.5 disabled:bg-white/5 disabled:text-white/20"
+                  className={`text-white/80 text-xs rounded font-bold border ${
+                    selectedPercentage == value && selectedPercentage != null
+                      ? "border-primary-100"
+                      : "border-[#818284]"
+                  }  px-[0.1875rem] mx-0.5 disabled:bg-white/5 disabled:text-white/20`}
                 >
                   {value * 100}%
                 </button>

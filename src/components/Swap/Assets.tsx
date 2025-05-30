@@ -52,8 +52,6 @@ const Assets = ({
   } = useWalletBalance();
   const [loading, setLoading] = useState<boolean>(false);
   const [backgroundSync, setBackgroundSync] = useState<boolean>(false);
-  const totalPages = Math.ceil(dataList?.length! / 8);
-  const [currentPageNo, setCurrentPageNo] = useState<number>(1);
   const [trigger, setTrigger] = useState<number>(0);
 
   const tableContainerRef = useRef<HTMLDivElement>(null);
@@ -79,7 +77,10 @@ const Assets = ({
 
       setDataList(
         assets
-          .filter((data: IResponseAssets) => Number(data.balanceFormatted) > 0)
+          .filter(
+            (data: IResponseAssets) =>
+              Number(Number(data.balanceFormatted)?.toFixed(4)) > 0
+          )
           .map((data: IResponseAssets) => {
             let chain = tokenSymbolList?.find(
               (item) => item.code === data?.chainSymbol

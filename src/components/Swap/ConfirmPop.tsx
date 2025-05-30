@@ -132,14 +132,14 @@ function ConfirmPop({
           </button>
         ) : (
           <>
-            {!isApproved && (
-              <button
-                onClick={() => approveAmount()}
-                className="w-full h-10 disabled:bg-prime-gray-200 bg-prime-blue-100 items-center justify-center text-center rounded-lg text-sm"
-              >
-                Approve
-              </button>
-            )}
+            <button
+              onClick={() => approveAmount()}
+              disabled={isApproved}
+              className="w-full h-10 disabled:bg-prime-gray-200 bg-prime-blue-100 items-center justify-center text-center rounded-lg text-sm"
+            >
+              Approve
+            </button>
+
             <button
               onClick={() => continueTransaction()}
               disabled={!isApproved}

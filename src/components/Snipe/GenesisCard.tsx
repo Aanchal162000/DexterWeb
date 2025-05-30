@@ -182,7 +182,7 @@ const GenesisCard: React.FC<GenesisCardProps> = ({
       <div
         className={`ralative flex flex-col rounded-xl cursor-pointer ${
           isSubscribed
-            ? "border-2 border-[#4ade80] animate-[glowPulse_2s_ease-in-out_infinite]"
+            ? "border-1 border-[#4ade80] animate-[glowPulse_2s_ease-in-out_infinite]"
             : "border-[0.5px] border-cyan-500/50"
         } transition-all duration-300 h-fit min-h-[7.2rem]`}
         onClick={handleCardClick}

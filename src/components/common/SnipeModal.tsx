@@ -62,7 +62,7 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
   const [selectedPercentage, setSelectPercentage] = useState<
     10 | 25 | 50 | 100 | number
   >(10);
-  const [marketCapBuyRange, setMarketCapBuyRange] = useState(1500000);
+  const [marketCapBuyRange, setMarketCapBuyRange] = useState(10000000);
   const coinSelectRef = useRef<HTMLDivElement>(null);
 
   useClickOutside(coinSelectRef, () => {

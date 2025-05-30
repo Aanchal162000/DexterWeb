@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { HiMiniArrowDownTray } from "react-icons/hi2";
+
 import ImageNext from "../common/ImageNext";
 import { Dispatch, SetStateAction } from "react";
 import { useSwapContext } from "../../context/SwapContext";

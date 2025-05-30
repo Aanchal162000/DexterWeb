@@ -37,23 +37,23 @@ const Status: React.FC<{
   const isSwitchNeeded = Boolean(selectedNetwork?.id !== networkData?.chainId);
   const isSameChain = selectedNetwork?.id === selectedToNetwork?.id;
 
-  const [secondsLeft, setSecondsLeft] = useState(180); // 3 minutes = 180 seconds
+  const [secondsElapsed, setSecondsElapsed] = useState(0);
 
   useEffect(() => {
-    if (secondsLeft <= 0) return;
+    if (secondsElapsed >= 600) return; // Stop at 10 minutes
 
     const intervalId = setInterval(() => {
-      setSecondsLeft((prev) => {
-        if (prev <= 1) {
+      setSecondsElapsed((prev) => {
+        if (prev >= 599) {
           clearInterval(intervalId);
-          return 0;
+          return 600;
         }
-        return prev - 1;
+        return prev + 1;
       });
     }, 1000);
 
     return () => clearInterval(intervalId);
-  }, [secondsLeft]);
+  }, [secondsElapsed]);
 
   const formatTime = (totalSeconds: number): string => {
     const minutes = Math.floor(totalSeconds / 60);
@@ -63,7 +63,6 @@ const Status: React.FC<{
       "0"
     )}`;
   };
-
   // Show loader if processing else check icon for done.
   const checkerLoader = (isChecked: unknown) =>
     Boolean(isChecked) ? (
@@ -326,7 +325,7 @@ const Status: React.FC<{
                 </a>
               ) : (
                 <span className="text-xs text-white/80">
-                  {formatTime(secondsLeft)}
+                  {formatTime(secondsElapsed)}
                 </span>
               )}
             </div>
@@ -344,11 +343,7 @@ const Status: React.FC<{
             resetSwapStates();
           }}
           disabled={
-            isConvert &&
-            (transakStatus === "processing" ||
-              !isApproved ||
-              !isSwapped ||
-              (!isSameChain && !isTokenRelease))
+            isConvert && (transakStatus === "processing" || !isTokenRelease)
           }
           className="disabled:bg-prime-zinc-500 h-10 bg-prime-blue-100 w-full text-white py-3 rounded-md text-sm flex items-center justify-center text-center  justify-self-end"
         >

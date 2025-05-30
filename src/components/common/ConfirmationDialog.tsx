@@ -160,22 +160,21 @@ function ConfirmationDialog({
           </button>
         ) : (
           <>
-            {!isApproved && (
-              <button
-                onClick={() => handleApprove()}
-                disabled={isApproving}
-                className="w-full h-10 disabled:bg-prime-gray-200 bg-prime-blue-100 items-center justify-center text-center rounded-lg text-sm relative"
-              >
-                {isApproving ? (
-                  <div className="flex items-center justify-center gap-2">
-                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    <span>Approving...</span>
-                  </div>
-                ) : (
-                  "Approve"
-                )}
-              </button>
-            )}
+            <button
+              onClick={() => handleApprove()}
+              disabled={isApproving || isApproved}
+              className="w-full h-10 disabled:bg-prime-gray-200 bg-prime-blue-100 items-center justify-center text-center rounded-lg text-sm relative"
+            >
+              {isApproving ? (
+                <div className="flex items-center justify-center gap-2">
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  <span>Approving...</span>
+                </div>
+              ) : (
+                "Approve"
+              )}
+            </button>
+
             <button
               onClick={() => continueTransaction()}
               disabled={!isApproved}

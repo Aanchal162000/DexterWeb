@@ -46,13 +46,13 @@ export const formatCurrency = (
   amount: number | string,
   decimals: number = 2
 ): string => {
-  if (!amount) return "$0.00";
+  if (!amount) return "$0";
   const num = typeof amount === "string" ? parseFloat(amount) : amount;
-  if (isNaN(num)) return "$0.00";
+  if (isNaN(num)) return "$0";
 
-  // For very small numbers, use more decimals
+  // For very small numbers, use more decimal places instead of scientific notation
   if (num < 0.001) {
-    return `$${num.toExponential(decimals)}`;
+    return `$${num.toFixed(6)}`;
   }
 
   // For very large numbers, use K/M/B/T suffixes

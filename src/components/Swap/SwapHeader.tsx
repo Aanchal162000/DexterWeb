@@ -32,6 +32,7 @@ const SwapHeader: React.FC<HeaderProps> = ({ selectedTab, setSelectedTab }) => {
     isFiatBridge,
     setToAmount,
     toAmount,
+    setSelectedPercentage,
   } = useSwapContext();
   const { transakStatus, resetFiatStates, setOpenFiatModal } = useFiatContext();
 
@@ -58,6 +59,7 @@ const SwapHeader: React.FC<HeaderProps> = ({ selectedTab, setSelectedTab }) => {
     setSelectedToCoin(usdcCoin);
     setIsFiatBridge(false);
     setFromAmount(0);
+    setSelectedPercentage(null);
     setToAmount(0);
   }
 

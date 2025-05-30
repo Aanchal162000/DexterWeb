@@ -71,6 +71,7 @@ function SelectCoin({
       "TBC",
       "BNB",
       "USDC",
+      "VIRTUAL",
       "ETH",
       "POL",
       "USDT",

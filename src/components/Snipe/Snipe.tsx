@@ -15,6 +15,7 @@ import GenesisCard from "./GenesisCard";
 import VirtualCard from "./VirtualCard";
 
 import AgentSection from "./AgentSection";
+import FilterDropdown from "./FilterDropdown";
 
 const Snipe = () => {
   const [selectedTab, setSelectedTab] = useState<"swap" | "create">("swap");
@@ -39,6 +40,18 @@ const Snipe = () => {
   >("aiAgents");
   const [subscriptionData, setSubscriptionData] = useState<any>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [selectedFilter, setSelectedFilter] = useState<any>(null);
+  const [resetCount, setResetCount] = useState<number>(0);
+
+  const filterOptions = [
+    { id: "24hrsChange", name: "24hrs Change" },
+    { id: "volume", name: "Volume" },
+    { id: "holders", name: "Holders" },
+  ];
+
+  const handleFilterSelect = (option: any) => {
+    setSelectedFilter(option);
+  };
 
   // Add useEffect to fetch subscription data
   const fetchSubscriptionData = async () => {
@@ -118,7 +131,6 @@ const Snipe = () => {
                 )}
                 onClick={() => setSelectedSnipeTab("aiAgents")}
               >
-                {/* <MdWallet className="size-6" /> */}
                 AI Agents
               </button>
               <div className="h-10 w-px bg-prime-background-100 sm:hidden" />
@@ -131,7 +143,6 @@ const Snipe = () => {
                 )}
                 onClick={() => setSelectedSnipeTab("transaction")}
               >
-                {/* <PiClockCounterClockwiseBold className="size-6" /> */}
                 <div className="flex">
                   Transactions&nbsp;
                   <span className="sm:block hidden">History</span>
@@ -151,10 +162,16 @@ const Snipe = () => {
                   )}
                 />
               </button>
+              {/* handleFilterSelect */}
+              {/* <FilterDropdown
+                options={filterOptions}
+                onSelect={() => {}}
+                selectedOption={selectedFilter}
+              /> */}
               <button>
                 <Image
                   src="/common/Filter.png"
-                  alt="Filter"
+                  alt="Setting"
                   width={18}
                   height={18}
                 />
@@ -171,30 +188,42 @@ const Snipe = () => {
           </div>
           {selectedSnipeTab == "aiAgents" && (
             <div className="flex flex-row relative w-full h-full">
-              <AgentSection
-                title="Genesis Launches"
-                type="genesis"
-                data={genesisData?.data || []}
-                loading={genesisLoading}
-                error={genesisError}
-                renderItem={renderGenesisItem}
-              />
-              <AgentSection
-                title="Prototype Agents"
-                type="prototype"
-                data={prototypeVirtuals || []}
-                loading={prototypeLoading}
-                error={prototypeError}
-                renderItem={renderVirtualItem}
-              />
-              <AgentSection
-                title="Sentient Agents"
-                type="sentient"
-                data={virtuals || []}
-                loading={loading}
-                error={error}
-                renderItem={renderVirtualItem}
-              />
+              {(!selectedFilter ||
+                selectedFilter.id === "all" ||
+                selectedFilter.id === "genesis") && (
+                <AgentSection
+                  title="Genesis Launches"
+                  type="genesis"
+                  data={genesisData?.data || []}
+                  loading={genesisLoading}
+                  error={genesisError}
+                  renderItem={renderGenesisItem}
+                />
+              )}
+              {(!selectedFilter ||
+                selectedFilter.id === "all" ||
+                selectedFilter.id === "prototype") && (
+                <AgentSection
+                  title="Prototype Agents"
+                  type="prototype"
+                  data={prototypeVirtuals || []}
+                  loading={prototypeLoading}
+                  error={prototypeError}
+                  renderItem={renderVirtualItem}
+                />
+              )}
+              {(!selectedFilter ||
+                selectedFilter.id === "all" ||
+                selectedFilter.id === "sentient") && (
+                <AgentSection
+                  title="Sentient Agents"
+                  type="sentient"
+                  data={virtuals || []}
+                  loading={loading}
+                  error={error}
+                  renderItem={renderVirtualItem}
+                />
+              )}
             </div>
           )}
         </div>
@@ -227,7 +256,9 @@ const Snipe = () => {
 
             <button
               className="text-white/60 text-xs ml-auto"
-              onClick={() => {}}
+              onClick={() => {
+                setResetCount((prev) => prev + 1);
+              }}
             >
               Reset
             </button>
@@ -239,6 +270,7 @@ const Snipe = () => {
               prototypeVirtuals={prototypeVirtuals}
               loading={loading}
               prototypeLoading={prototypeLoading}
+              resetCount={resetCount}
             />
           )}
 

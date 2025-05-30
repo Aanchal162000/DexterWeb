@@ -48,23 +48,23 @@ function SnipeStatus({
       setIsActive(false);
     }
   }, [isTokenRelease, isSameChain, isSymbiosisFlow, setIsActive]);
-  const [secondsLeft, setSecondsLeft] = useState(180); // 3 minutes = 180 seconds
+  const [secondsElapsed, setSecondsElapsed] = useState(0);
 
   useEffect(() => {
-    if (secondsLeft <= 0) return;
+    if (secondsElapsed >= 600) return; // Stop at 10 minutes
 
     const intervalId = setInterval(() => {
-      setSecondsLeft((prev) => {
-        if (prev <= 1) {
+      setSecondsElapsed((prev) => {
+        if (prev >= 599) {
           clearInterval(intervalId);
-          return 0;
+          return 600;
         }
-        return prev - 1;
+        return prev + 1;
       });
     }, 1000);
 
     return () => clearInterval(intervalId);
-  }, [secondsLeft]);
+  }, [secondsElapsed]);
 
   const formatTime = (totalSeconds: number): string => {
     const minutes = Math.floor(totalSeconds / 60);
@@ -290,11 +290,9 @@ function SnipeStatus({
                 />
               </a>
             ) : (
-              <img
-                src="/trx/Explore.png"
-                alt="open-transaction-link"
-                className="size-3 opacity-0"
-              />
+              <span className="text-xs text-white/80">
+                {formatTime(secondsElapsed)}
+              </span>
             )}
           </div>
         </div>
@@ -324,7 +322,7 @@ function SnipeStatus({
                 </a>
               ) : (
                 <span className="text-xs text-white/80">
-                  {formatTime(secondsLeft)}
+                  {formatTime(secondsElapsed)}
                 </span>
               )}
             </div>

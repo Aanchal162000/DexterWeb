@@ -29,6 +29,9 @@ interface SwapSectionProps {
   buttonText: string;
   setIsConfirmPop: (isOpen: boolean) => void;
   isBalanceLoading: boolean;
+  resetSwapStates: () => void;
+  selectedPercentage: number | null;
+  setSelectedPercentage: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
 const SwapSection: React.FC<SwapSectionProps> = ({
@@ -44,6 +47,9 @@ const SwapSection: React.FC<SwapSectionProps> = ({
   buttonText,
   setIsConfirmPop,
   isBalanceLoading,
+  selectedPercentage,
+  setSelectedPercentage,
+  resetSwapStates,
 }) => {
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [isEstimating, setIsEstimating] = useState<boolean>(false);
@@ -190,7 +196,11 @@ const SwapSection: React.FC<SwapSectionProps> = ({
               <button
                 key={value}
                 onClick={() => handlePercentCost(value)}
-                className="text-white/80 text-xs rounded font-bold border border-[#818284] px-[0.1875rem] mx-0.5 disabled:bg-white/5 disabled:text-white/20"
+                className={`text-white/80 text-xs rounded font-bold border ${
+                  selectedPercentage == value && selectedPercentage != null
+                    ? "border-primary-100"
+                    : "border-[#818284]"
+                }  px-[0.1875rem] mx-0.5 disabled:bg-white/5 disabled:text-white/20`}
               >
                 {value * 100}%
               </button>
@@ -320,7 +330,7 @@ const SwapSection: React.FC<SwapSectionProps> = ({
                 </div>
               </div>
             ) : (
-              toAmount || "0.0"
+              toAmount || "0"
             )}
           </div>
         </div>

@@ -8,8 +8,7 @@ import {
 } from "@headlessui/react";
 import Image from "next/image";
 import { IoMdArrowDropup } from "react-icons/io";
-
-import { MdOutlineArrowDropDown, MdOutlineArrowDropUp } from "react-icons/md";
+import { BiSolidUpArrow, BiSolidDownArrow } from "react-icons/bi";
 
 interface FilterOption {
   id: string;
@@ -52,7 +51,7 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
         leaveTo="transform opacity-0 scale-95"
       >
         <MenuItems className="absolute -right-2 mt-2 w-60 origin-top-right z-20 rounded-md border-2 border-primary-100 backdrop-blur-sm bg-black/30 drop-shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-          <IoMdArrowDropup className="absolute right-[14px] top-[-15px] text-primary-100 size-6" />
+          <IoMdArrowDropup className="absolute right-[4px] top-[-24px] text-primary-100 size-10" />
           <div className="py-1">
             <div className="flex items-center justify-center px-4 py-2 text-white text-lg font-bold">
               Sort by
@@ -69,17 +68,29 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
                     <p className="text-white text-sm">{option.name}</p>
                   </div>
 
-                  <div className="flex flex-col  ml-2">
-                    <MdOutlineArrowDropUp
-                      className={`size-6 ${
-                        isDescending ? "text-gray-500" : "text-white"
-                      }`}
-                    />
-                    <MdOutlineArrowDropDown
-                      className={`size-8 -translate-y-2 ${
-                        isDescending ? "text-white" : "text-gray-500"
-                      }`}
-                    />
+                  <div className="flex flex-col ml-2">
+                    <button className="size-3">
+                      <BiSolidUpArrow
+                        className={`w-full h-full ${
+                          selectedOption?.id === option.id
+                            ? isDescending
+                              ? "text-gray-500"
+                              : "text-white"
+                            : "text-gray-500"
+                        }`}
+                      />
+                    </button>
+                    <button className="size-3">
+                      <BiSolidDownArrow
+                        className={`w-full h-full ${
+                          selectedOption?.id === option.id
+                            ? isDescending
+                              ? "text-white"
+                              : "text-gray-500"
+                            : "text-gray-500"
+                        }`}
+                      />
+                    </button>
                   </div>
                 </button>
               </MenuItem>

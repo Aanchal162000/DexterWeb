@@ -67,12 +67,26 @@ export const usePrototypeVirtuals = () => {
     virtualTokenValue: string,
     virtualTokenUSDPrice: number
   ): number {
+    console.log("Check", virtualTokenValue, virtualTokenUSDPrice);
     const valueInTokens = Number(virtualTokenValue) / 1e18;
     const priceInUSD = valueInTokens * virtualTokenUSDPrice;
     return parseFloat(priceInUSD.toFixed(6)); // return price with 6 decimal precision
   }
 
   const fetchVirtuals = async () => {
+    let prices: any;
+
+    try {
+      const response = await fetch("https://api.virtuals.io/api/dex/prices");
+      const data = await response.json();
+      prices = data.data;
+      console.log("prices", prices);
+      setLoading(false);
+    } catch (err) {
+      setError("Failed to fetch token prices");
+      setLoading(false);
+    }
+
     try {
       const response = await fetch(
         "https://api.virtuals.io/api/virtuals?filters[status]=1&filters[chain]=BASE&sort[0]=volume24h%3Adesc&sort[1]=createdAt%3Adesc&populate[0]=image&populate[1]=genesis&pagination[page]=1&pagination[pageSize]=100&isGrouped=1&noCache=0"
@@ -103,7 +117,7 @@ export const usePrototypeVirtuals = () => {
         nextLaunchstartsAt: [],
         price: getTokenUSDPrice(
           virtual.virtualTokenValue,
-          virtual.mcapInVirtual / 1.94
+          prices?.BASE?.virtual!
         ),
       }));
 

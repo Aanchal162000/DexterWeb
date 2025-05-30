@@ -353,6 +353,21 @@ const SwapSection: React.FC<SwapSectionProps> = ({
         </div>
       </div>
 
+      {/* Unit Price Display */}
+      {selectedVirtual &&
+        selectedToVirtual &&
+        fromAmount > 0 &&
+        toAmount > 0 && (
+          <div className="w-full mt-4 px-4 py-1  rounded-lg">
+            <div className="flex justify-center items-center text-sm text-zinc-400">
+              <span className="text-white">
+                1 {selectedVirtual.name} = {(toAmount / fromAmount).toFixed(6)}{" "}
+                {selectedToVirtual.name}
+              </span>
+            </div>
+          </div>
+        )}
+
       {/* Trade Button */}
       <button
         className="w-full mt-6 py-4 bg-primary-100 text-black font-medium rounded-lg hover:brightness-125 transition-all disabled:opacity-50 disabled:cursor-not-allowed"

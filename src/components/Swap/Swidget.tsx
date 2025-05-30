@@ -236,6 +236,23 @@ function Swidget() {
         )}
         <ReceiveAs setIsToCoinOpen={setIsToCoinOpen} />
         {/* <AddressBox onToggle={toggleAddressModalClose} isOpen={isAddressModalOpen} setRecipientAddress={setRecipientAddress} /> */}
+
+        {/* Unit Price Display */}
+        {selectedCoin &&
+          selectedToCoin &&
+          Number(fromAmount) > 0 &&
+          Number(toAmount) > 0 && (
+            <div className="w-full mt-4 px-4 py-1 rounded-lg">
+              <div className="flex justify-center items-center text-sm text-zinc-400">
+                <span className="text-white">
+                  1 {selectedCoin.name} ={" "}
+                  {(Number(toAmount) / Number(fromAmount)).toFixed(6)}{" "}
+                  {selectedToCoin.name}
+                </span>
+              </div>
+            </div>
+          )}
+
         <SwitcherButton
           buttonText={buttonText}
           setIsConfirmPop={setIsConfirmPop}

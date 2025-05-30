@@ -16,6 +16,9 @@ import VirtualCard from "./VirtualCard";
 
 import AgentSection from "./AgentSection";
 import FilterDropdown from "./FilterDropdown";
+import AlertsSettings from "./AlertsSettings";
+import { useSettings } from "@/context/SettingsContext";
+import TransactionHistory from "./TransactionHistory";
 
 const Snipe = () => {
   const [selectedTab, setSelectedTab] = useState<"swap" | "create">("swap");
@@ -40,8 +43,13 @@ const Snipe = () => {
   >("aiAgents");
   const [subscriptionData, setSubscriptionData] = useState<any>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [selectedFilter, setSelectedFilter] = useState<any>(null);
+  const [selectedFilter, setSelectedFilter] = useState<any>({
+    id: "24hrsChange",
+    name: "24hrs Change",
+  });
+  const [isDescending, setIsDescending] = useState(true);
   const [resetCount, setResetCount] = useState<number>(0);
+  const { showSettings, setShowSettings } = useSettings();
 
   const filterOptions = [
     { id: "24hrsChange", name: "24hrs Change" },
@@ -49,8 +57,27 @@ const Snipe = () => {
     { id: "holders", name: "Holders" },
   ];
 
-  const handleFilterSelect = (option: any) => {
+  const handleFilterSelect = (option: any, isDescending: boolean) => {
     setSelectedFilter(option);
+    setIsDescending(isDescending);
+  };
+
+  const sortVirtuals = (virtuals: any[]) => {
+    if (!virtuals) return [];
+
+    const sortedVirtuals = [...virtuals];
+    const sortKey =
+      selectedFilter.id === "24hrsChange"
+        ? "priceChangePercent24h"
+        : selectedFilter.id === "volume"
+        ? "volume24h"
+        : "holderCount";
+
+    return sortedVirtuals.sort((a, b) => {
+      const aValue = a[sortKey] || 0;
+      const bValue = b[sortKey] || 0;
+      return isDescending ? aValue - bValue : bValue - aValue;
+    });
   };
 
   // Add useEffect to fetch subscription data
@@ -129,7 +156,10 @@ const Snipe = () => {
                     ? "text-primary-100 underline"
                     : "text-prime-zinc-100"
                 )}
-                onClick={() => setSelectedSnipeTab("aiAgents")}
+                onClick={() => {
+                  setSelectedSnipeTab("aiAgents");
+                  setShowSettings(false);
+                }}
               >
                 AI Agents
               </button>
@@ -141,7 +171,10 @@ const Snipe = () => {
                     ? "text-primary-100 underline"
                     : "text-prime-zinc-100"
                 )}
-                onClick={() => setSelectedSnipeTab("transaction")}
+                onClick={() => {
+                  setSelectedSnipeTab("transaction");
+                  setShowSettings(false);
+                }}
               >
                 <div className="flex">
                   Transactions&nbsp;
@@ -162,21 +195,12 @@ const Snipe = () => {
                   )}
                 />
               </button>
-              {/* handleFilterSelect */}
-              {/* <FilterDropdown
+              <FilterDropdown
                 options={filterOptions}
-                onSelect={() => {}}
+                onSelect={handleFilterSelect}
                 selectedOption={selectedFilter}
-              /> */}
-              <button>
-                <Image
-                  src="/common/Filter.png"
-                  alt="Setting"
-                  width={18}
-                  height={18}
-                />
-              </button>
-              <button>
+              />
+              <button onClick={() => setShowSettings(true)}>
                 <Image
                   src="/common/Settings.png"
                   alt="Setting"
@@ -186,43 +210,39 @@ const Snipe = () => {
               </button>
             </div>
           </div>
-          {selectedSnipeTab == "aiAgents" && (
-            <div className="flex flex-row relative w-full h-full">
-              {(!selectedFilter ||
-                selectedFilter.id === "all" ||
-                selectedFilter.id === "genesis") && (
-                <AgentSection
-                  title="Genesis Launches"
-                  type="genesis"
-                  data={genesisData?.data || []}
-                  loading={genesisLoading}
-                  error={genesisError}
-                  renderItem={renderGenesisItem}
-                />
-              )}
-              {(!selectedFilter ||
-                selectedFilter.id === "all" ||
-                selectedFilter.id === "prototype") && (
-                <AgentSection
-                  title="Prototype Agents"
-                  type="prototype"
-                  data={prototypeVirtuals || []}
-                  loading={prototypeLoading}
-                  error={prototypeError}
-                  renderItem={renderVirtualItem}
-                />
-              )}
-              {(!selectedFilter ||
-                selectedFilter.id === "all" ||
-                selectedFilter.id === "sentient") && (
-                <AgentSection
-                  title="Sentient Agents"
-                  type="sentient"
-                  data={virtuals || []}
-                  loading={loading}
-                  error={error}
-                  renderItem={renderVirtualItem}
-                />
+          {showSettings ? (
+            <AlertsSettings onClose={() => setShowSettings(false)} />
+          ) : (
+            <div className="flex-1 overflow-y-auto">
+              {selectedSnipeTab === "aiAgents" ? (
+                <div className="flex flex-row relative w-full h-full">
+                  <AgentSection
+                    title="Genesis Launches"
+                    type="genesis"
+                    data={genesisData?.data || []}
+                    loading={genesisLoading}
+                    error={genesisError}
+                    renderItem={renderGenesisItem}
+                  />
+                  <AgentSection
+                    title="Prototype Agents"
+                    type="prototype"
+                    data={sortVirtuals(prototypeVirtuals) || []}
+                    loading={prototypeLoading}
+                    error={prototypeError}
+                    renderItem={renderVirtualItem}
+                  />
+                  <AgentSection
+                    title="Sentient Agents"
+                    type="sentient"
+                    data={sortVirtuals(virtuals) || []}
+                    loading={loading}
+                    error={error}
+                    renderItem={renderVirtualItem}
+                  />
+                </div>
+              ) : (
+                <TransactionHistory />
               )}
             </div>
           )}

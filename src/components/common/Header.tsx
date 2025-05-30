@@ -3,6 +3,7 @@
 import React, { Fragment, useState } from "react";
 import Image from "next/image";
 import { useLoginContext } from "@/context/LoginContext";
+import { useSettings } from "@/context/SettingsContext";
 import { headerRoutes, networkCards } from "@/constants/config";
 import { IRouter } from "@/utils/interface";
 import TokenSelector from "./TokenSelector";
@@ -27,6 +28,7 @@ const Header = () => {
   // "Alerts", "DCA"
   const { activeTab, address, setActiveTab, networkData, setAddress } =
     useLoginContext();
+  const { setShowSettings } = useSettings();
   const network = networkCards.filter(
     (network) => network?.id == networkData?.chainId!
   );
@@ -41,6 +43,10 @@ const Header = () => {
     if (!address) return;
     toast.info("Address Copied");
     window.navigator.clipboard.writeText(address);
+  };
+
+  const handleSettingsClick = () => {
+    setShowSettings(true);
   };
 
   return (
@@ -104,15 +110,17 @@ const Header = () => {
                     <div className="py-1">
                       <div className="flex items-center justify-between px-4 py-2 text-white">
                         Alerts
-                        <img
-                          src={"/alert/settings.png"}
-                          alt="notifications"
-                          className="size-5 object-contain"
-                        />
+                        <button onClick={handleSettingsClick}>
+                          <img
+                            src={"/alert/settings.png"}
+                            alt="notifications"
+                            className="size-5 object-contain"
+                          />
+                        </button>
                       </div>
                       <MenuItem>
                         <button
-                          onClick={copyAddressHandler}
+                          // onClick={copyAddressHandler}
                           className="flex w-full items-center px-4 py-5 text-sm text-white border-t border-primary-100/30 bg-green-500/30"
                         >
                           <img

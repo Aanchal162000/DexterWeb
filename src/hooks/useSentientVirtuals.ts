@@ -3,6 +3,7 @@ import { IAssetsData, IVirtual } from "@/utils/interface";
 import { useLocalStorage } from "./useLocalStorage";
 import { useLoginContext } from "@/context/LoginContext";
 import { usePeriodicRefresh } from "./usePeriodicRefresh";
+import { useTokenPrices } from "./useTokenPrices";
 
 interface SentientVirtualResponse {
   data: {
@@ -74,12 +75,26 @@ export const useSentientVirtuals = () => {
     virtualTokenValue: string,
     virtualTokenUSDPrice: number
   ): number {
+    console.log("Check", virtualTokenValue, virtualTokenUSDPrice);
     const valueInTokens = Number(virtualTokenValue) / 1e18;
     const priceInUSD = valueInTokens * virtualTokenUSDPrice;
     return parseFloat(priceInUSD.toFixed(6)); // return price with 6 decimal precision
   }
 
   const fetchVirtuals = async () => {
+    let prices: any;
+
+    try {
+      const response = await fetch("https://api.virtuals.io/api/dex/prices");
+      const data = await response.json();
+      prices = data.data;
+      console.log("prices", prices);
+      setLoading(false);
+    } catch (err) {
+      setError("Failed to fetch token prices");
+      setLoading(false);
+    }
+
     try {
       const response = await fetch(
         "https://api.virtuals.io/api/virtuals?filters[status]=2&filters[chain]=BASE&sort[0]=volume24h%3Adesc&sort[1]=createdAt%3Adesc&populate[0]=image&populate[1]=genesis&populate[2]=creator&pagination[page]=1&pagination[pageSize]=100&noCache=0"
@@ -100,7 +115,7 @@ export const useSentientVirtuals = () => {
         image: item.image,
         symbol: item.symbol,
         priceChangePercent24h: item.priceChangePercent24h,
-        price: getTokenUSDPrice(item.virtualTokenValue, 1.94),
+        price: getTokenUSDPrice(item.virtualTokenValue, prices?.BASE?.virtual!),
         volume24h: item.volume24h,
         totalValueLocked: item.totalValueLocked,
         holderCount: item.holderCount,

@@ -6,6 +6,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import FiatProvider from "@/context/FiatContext";
 import SwapProvider from "@/context/SwapContext";
+import { SettingsProvider } from "@/context/SettingsContext";
 
 export const metadata: Metadata = {
   title: "Dexter",
@@ -29,7 +30,9 @@ export default function RootLayout({
       <body className={` w-screen h-screen  antialiased`}>
         <LoginProvider>
           <SwapProvider>
-            <FiatProvider>{children}</FiatProvider>
+            <FiatProvider>
+              <SettingsProvider>{children}</SettingsProvider>
+            </FiatProvider>
           </SwapProvider>
         </LoginProvider>
         <ToastContainer

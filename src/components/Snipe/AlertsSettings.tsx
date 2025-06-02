@@ -123,97 +123,97 @@ const AlertsSettings: React.FC<AlertsSettingsProps> = ({ onClose }) => {
         <div className="flex-1 w-full py-[2px]">
           {deliveryChannelOptions.map((option, index) => (
             <div
-              className={`py-4 px-8 ${
+              className={`py-4 px-8 flex flex-row  ${
                 (index + 1) % 2 != 0 ? "bg-primary-100/20" : "bg-none"
-              }  ${
-                !index
-                  ? "flex flex-row gap-[19.2rem]"
-                  : "flex flex-row gap-4 justify-center items-center"
-              } `}
+              }   `}
             >
-              {!index && (
-                <div>
-                  <h4 className="text-base leading-[1.3rem] font-bold text-white mb-[1px]">
-                    Alerts Delivery Channel
-                  </h4>
-                  <p className="text-gray-400 font-semibold text-xs">
-                    Choose how Dexter delivers the alerts
-                  </p>
-                </div>
-              )}
-              <div
-                key={option.id}
-                className="flex gap-8 items-center justify-between py-2"
-              >
-                <Switch
-                  checked={option.enabled}
-                  onChange={option.onChange}
-                  className={clsx(
-                    "relative inline-flex h-7 w-12 items-center rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary-100 focus:ring-offset-2 focus:ring-offset-gray-800 flex-shrink-0",
-                    option.enabled ? "bg-primary-100" : "bg-gray-600"
-                  )}
+              <div className="relative w-[45%]  items-center justify-start">
+                {!index && (
+                  <>
+                    <h4 className="text-base leading-[1.3rem] font-bold text-white mb-[1px]">
+                      Alerts Delivery Channel
+                    </h4>
+                    <p className="text-gray-400 font-semibold text-sm">
+                      Choose how Dexter delivers the alerts
+                    </p>
+                  </>
+                )}
+              </div>
+
+              <div className="relative w-[55%]  items-center justify-start">
+                <div
+                  key={option.id}
+                  className="flex  gap-8 items-center justify-start py-2"
                 >
-                  <span
+                  <Switch
+                    checked={option.enabled}
+                    onChange={option.onChange}
                     className={clsx(
-                      "inline-block h-4 w-4 transform rounded-lg bg-white transition-transform flex-shrink-0",
-                      option.enabled ? "translate-x-6" : "translate-x-1"
+                      "relative inline-flex h-7 w-12 items-center rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary-100 focus:ring-offset-2 focus:ring-offset-gray-800 ",
+                      option.enabled ? "bg-primary-100" : "bg-gray-600"
                     )}
-                  />
-                </Switch>
-                <div className="text-gray-200 text-base font-semibold w-24">
-                  {option.title}
+                  >
+                    <span
+                      className={clsx(
+                        "inline-block h-4 w-4 transform rounded-lg bg-white transition-transform ",
+                        option.enabled ? "translate-x-6" : "translate-x-1"
+                      )}
+                    />
+                  </Switch>
+                  <div className="text-gray-200 text-base font-semibold w-24">
+                    {option.title}
+                  </div>
                 </div>
               </div>
             </div>
           ))}
           {alertControlOptions.map((option, index) => (
             <div
-              className={`py-4 px-8 ${
+              className={`py-4 px-8  flex flex-row ${
                 (index + 1) % 2 != 0 ? "bg-primary-100/20" : "bg-none"
-              }  ${
-                !index
-                  ? "flex flex-row gap-[14.6rem]"
-                  : "flex flex-row gap-4 justify-start items-center"
-              } `}
+              }  `}
             >
-              {!index && (
-                <div>
-                  <h4 className="text-base leading-[1.3rem] font-bold text-white mb-[1px]">
-                    Dexter Alerts Control
-                  </h4>
-                  <p className="text-gray-400 font-semibold text-xs">
-                    Let dexter track what matters, so you dont't have to
-                  </p>
-                </div>
-              )}
-              <div
-                key={option.id}
-                className={`flex ${
-                  index && "ml-[31.8rem]"
-                } gap-8 items-center justify-center py-2`}
-              >
-                <Switch
-                  checked={option.enabled}
-                  onChange={option.onChange}
-                  className={clsx(
-                    "relative inline-flex h-7 w-12 items-center rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary-100 focus:ring-offset-2 focus:ring-offset-gray-800 flex-shrink-0",
-                    option.enabled ? "bg-primary-100" : "bg-gray-600"
-                  )}
+              <div className="relative w-[45%]  items-center justify-start">
+                {!index && (
+                  <>
+                    <h4 className="text-base leading-[1.3rem] font-bold text-white mb-[1px]">
+                      Dexter Alerts Control
+                    </h4>
+                    <p className="text-gray-400 font-semibold text-sm">
+                      Let dexter track what matters, so you dont't have to
+                    </p>
+                  </>
+                )}
+              </div>
+
+              <div className="relative w-[55%]  items-center justify-start">
+                <div
+                  key={option.id}
+                  className={`flex  gap-8 items-center justify-center py-2 `}
                 >
-                  <span
+                  <Switch
+                    checked={option.enabled}
+                    onChange={option.onChange}
                     className={clsx(
-                      "inline-block h-4 w-4 transform rounded-lg bg-white transition-transform flex-shrink-0",
-                      option.enabled ? "translate-x-6" : "translate-x-1"
+                      "relative inline-flex h-7 w-12 items-center rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary-100 focus:ring-offset-2 focus:ring-offset-gray-800 flex-shrink-0",
+                      option.enabled ? "bg-primary-100" : "bg-gray-600"
                     )}
-                  />
-                </Switch>
-                <div className="text-gray-200 text-base font-semibold flex-1 ">
-                  <h4 className="text-base leading-[1.2rem] font-bold text-white mb-[1px]">
-                    {option.title}
-                  </h4>
-                  <p className="text-gray-400 font-semibold text-xs">
-                    {option.description}
-                  </p>
+                  >
+                    <span
+                      className={clsx(
+                        "inline-block h-4 w-4 transform rounded-lg bg-white transition-transform flex-shrink-0",
+                        option.enabled ? "translate-x-6" : "translate-x-1"
+                      )}
+                    />
+                  </Switch>
+                  <div className="text-gray-200 text-base font-semibold flex-1 ">
+                    <h4 className="text-base leading-[1.2rem] font-bold text-white mb-[1px]">
+                      {option.title}
+                    </h4>
+                    <p className="text-gray-400 font-semibold text-sm">
+                      {option.description}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>

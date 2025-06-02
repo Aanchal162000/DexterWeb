@@ -43,10 +43,8 @@ const Snipe = () => {
   >("aiAgents");
   const [subscriptionData, setSubscriptionData] = useState<any>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [selectedFilter, setSelectedFilter] = useState<any>({
-    id: "24hrsChange",
-    name: "24hrs Change",
-  });
+
+  const [selectedFilter, setSelectedFilter] = useState<any>();
   const [isDescending, setIsDescending] = useState(true);
   const [resetCount, setResetCount] = useState<number>(0);
   const { showSettings, setShowSettings } = useSettings();
@@ -65,11 +63,14 @@ const Snipe = () => {
   const sortVirtuals = (virtuals: any[]) => {
     if (!virtuals) return [];
 
+    // If no filter is selected, return the original array
+    if (!selectedFilter) return virtuals;
+
     const sortedVirtuals = [...virtuals];
     const sortKey =
-      selectedFilter.id === "24hrsChange"
+      selectedFilter?.id === "24hrsChange"
         ? "priceChangePercent24h"
-        : selectedFilter.id === "volume"
+        : selectedFilter?.id === "volume"
         ? "volume24h"
         : "holderCount";
 

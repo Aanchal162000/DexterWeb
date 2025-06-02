@@ -23,7 +23,7 @@
     "shortName": "OP",
     "address": "0x4200000000000000000000000000000000000042",
     "decimals": 18,
-    "coingeckoId": "one-play",
+    "coingeckoId": "optimism",
     "logo": "https://static.cx.metamask.io/api/v1/tokenIcons/10/0x4200000000000000000000000000000000000042.png",
     "chainId": 10
   },

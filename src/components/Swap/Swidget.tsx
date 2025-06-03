@@ -245,9 +245,9 @@ function Swidget() {
             <div className="w-full mt-4 px-4 py-1 rounded-lg">
               <div className="flex justify-center items-center text-sm text-zinc-400">
                 <span className="text-white">
-                  1 {selectedCoin.name} ={" "}
+                  1 {selectedCoin.shortName} ={" "}
                   {(Number(toAmount) / Number(fromAmount)).toFixed(6)}{" "}
-                  {selectedToCoin.name}
+                  {selectedToCoin.shortName}
                 </span>
               </div>
             </div>

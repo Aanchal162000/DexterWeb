@@ -234,11 +234,11 @@ export class TRXService {
         ERC20ABI,
         signer
       );
-      const amountInWei = ethers.utils.parseUnits("100", "ether");
 
+      // Use the actual amount passed to the function
       const tx = await tokenContract.approve(
         approveData[0]?.dexContractAddress,
-        amountInWei
+        amount
       );
 
       const receipt = await tx.wait();

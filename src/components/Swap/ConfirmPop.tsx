@@ -135,7 +135,9 @@ function ConfirmPop({
             <button
               onClick={() => approveAmount()}
               disabled={isApproved}
-              className="w-full h-10 disabled:bg-prime-gray-200 bg-prime-blue-100 items-center justify-center text-center rounded-lg text-sm"
+              className={`w-full h-10 disabled:bg-prime-gray-200 ${
+                !isApproved ? "animate-blinker" : ""
+              } bg-prime-blue-100 items-center justify-center text-center rounded-lg text-sm`}
             >
               Approve
             </button>

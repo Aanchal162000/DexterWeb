@@ -45,9 +45,16 @@ function ConfirmationDialog({
     try {
       setIsApproving(true);
       const trxService = TRXService.getInstance();
+      console.log("fromAmount", fromAmount);
+
+      // Convert to wei without scientific notation
+      const amountInWei = BigInt(
+        Math.floor(Number(fromAmount) * 10 ** 18)
+      ).toString();
+
       const result = await trxService.approveTransaction(
         selectedNetwork?.id.toString(),
-        (Number(fromAmount) * 10 ** 18)?.toString() || "0",
+        amountInWei,
         selectedCoin.contractAddress!,
         networkData?.provider.getSigner()!,
         walletAddress
@@ -163,7 +170,9 @@ function ConfirmationDialog({
             <button
               onClick={() => handleApprove()}
               disabled={isApproving || isApproved}
-              className="w-full h-10 disabled:bg-prime-gray-200 bg-prime-blue-100 items-center justify-center text-center rounded-lg text-sm relative"
+              className={`w-full h-10 disabled:bg-prime-gray-200 ${
+                !(isApproving || isApproved) ? "animate-blinker" : ""
+              } bg-prime-blue-100 items-center justify-center text-center rounded-lg text-sm relative`}
             >
               {isApproving ? (
                 <div className="flex items-center justify-center gap-2">

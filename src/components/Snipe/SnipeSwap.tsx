@@ -115,9 +115,14 @@ const SnipeSwap: React.FC<SnipeSwapProps> = ({
       const signer = networkData?.provider.getSigner();
       setIsConvert(true);
 
+      // Convert to wei without scientific notation
+      const amountInWei = BigInt(
+        Math.floor(Number(fromAmount) * 10 ** 18)
+      ).toString();
+
       const result = await trxService.executeSwapTransaction(
         networkData?.chainId?.toString() || "1",
-        (Number(fromAmount) * 10 ** 18).toString(),
+        amountInWei,
         selectedVirtual.contractAddress!,
         selectedToVirtual.contractAddress!,
         "0.5",
@@ -128,6 +133,8 @@ const SnipeSwap: React.FC<SnipeSwapProps> = ({
       if (result.success) {
         setIsTokenRelease(true);
         setReleaseHash(result?.chainTxInfo?.transactionHash!);
+        setSwapHash(result?.chainTxInfo?.transactionHash!);
+
         triggerAPIs();
         toast.success("Swap transaction successful! 🎉");
         await refetchBalances();

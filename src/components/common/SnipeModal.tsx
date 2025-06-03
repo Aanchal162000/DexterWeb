@@ -182,15 +182,16 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
       });
 
       if (receipt.transactionHash) {
+        // Convert to wei without scientific notation
+        const amountInWei = BigInt(
+          Math.floor((Number(amount) - 0.003 * Number(amount)) * 10 ** 18)
+        ).toString();
         const response = await agentService.createAgent({
           genesisId,
           name,
           walletAddress,
           token: selectedVitualtoken.symbol === "ETH" ? "eth" : "virtual",
-          amount: (
-            (Number(amount) - 0.003 * Number(amount)) *
-            10 ** 18
-          ).toString(),
+          amount: amountInWei,
           launchTime: new Date(endsAt),
           marketCap: marketCapBuyRange.toString(),
         });

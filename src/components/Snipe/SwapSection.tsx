@@ -146,6 +146,7 @@ const SwapSection: React.FC<SwapSectionProps> = ({
   ]);
 
   const handlePercentCost = (value: number) => {
+    setSelectedPercentage(value);
     if (value === 1) {
       let newValue = (value * (100 - 0.5)) / 100;
       setFromAmount(
@@ -196,6 +197,7 @@ const SwapSection: React.FC<SwapSectionProps> = ({
               <button
                 key={value}
                 onClick={() => handlePercentCost(value)}
+                disabled={isBalanceLoading || !selectedVirtual}
                 className={`text-white/80 text-xs rounded font-bold border ${
                   selectedPercentage == value && selectedPercentage != null
                     ? "border-primary-100"
@@ -361,8 +363,8 @@ const SwapSection: React.FC<SwapSectionProps> = ({
           <div className="w-full mt-4 px-4 py-1  rounded-lg">
             <div className="flex justify-center items-center text-sm text-zinc-400">
               <span className="text-white">
-                1 {selectedVirtual.name} = {(toAmount / fromAmount).toFixed(6)}{" "}
-                {selectedToVirtual.name}
+                1 {selectedVirtual?.symbol} ={" "}
+                {(toAmount / fromAmount).toFixed(6)} {selectedToVirtual?.symbol}
               </span>
             </div>
           </div>

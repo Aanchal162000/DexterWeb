@@ -30,6 +30,10 @@ const VirtualCard: React.FC<VirtualCardProps> = ({ virtual, onClick }) => {
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const metrics = useTokenMetrics(virtual);
   const is2Xl = useMediaQuery({ minWidth: 1536 });
+  function truncateToFixed(num: number, decimals: number): string {
+    const factor = Math.pow(10, decimals);
+    return (Math.floor(num * factor) / factor).toFixed(decimals);
+  }
 
   const getTimeUntilLaunch = () => {
     if (!virtual.genesis?.startsAt) return null;
@@ -179,11 +183,7 @@ const VirtualCard: React.FC<VirtualCardProps> = ({ virtual, onClick }) => {
             <div className="text-[10px] flex flex-row space-x-1  items-center justify-center">
               <span className="text-gray-400">Price: </span>
               <span className="text-white  text-[11px]">
-                {"$" +
-                  virtual?.price!?.toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 5,
-                  })}
+                {"$" + truncateToFixed(virtual?.price!, 5)}
               </span>
             </div>
             <div className="text-[10px] flex flex-row space-x-1  items-center justify-center">

@@ -213,7 +213,7 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
     const isForcedNetwork = Boolean(forceToken && forceNetwork);
     let currentToken = forceToken ? forceToken : selectedCoin;
     let currentNetwork = forceNetwork ? forceNetwork : selectedNetwork;
-    console.log("curr id", currentNetwork?.id!);
+
     let currentApproveContract = forceContract
       ? forceContract
       : contractAddress[currentNetwork?.id!];
@@ -364,7 +364,13 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
       } catch (err: any) {
         setIsFinalStep(false);
         setIsConvert(false);
-        toastError(err instanceof Error ? err?.message.split("(")[0] : err);
+        const errorMessage =
+          err instanceof Error
+            ? err.message.split("(")[0]
+            : typeof err === "string"
+            ? err
+            : "An unknown error occurred";
+        toastError(errorMessage);
       }
     } else {
       toastError("Insufficient Balance to Complete the Transaction");
@@ -481,8 +487,23 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
           ),
         });
 
-        //Calling bridge lock function
-        bridgeData = await bridgingContract.lock(...lockArgs);
+        // Estimate gas and add buffer
+        const gasEstimate = await bridgingContract.estimateGas.lock(
+          ...lockArgs
+        );
+        const gasWithBuffer = gasEstimate.mul(140).div(100); // Add 20% buffer
+
+        //Calling bridge lock function with gas limit
+        if (
+          selectedCoin?.address!.toLowerCase() !=
+          "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+        ) {
+          bridgeData = await bridgingContract.lock(...lockArgs, {
+            gasLimit: gasWithBuffer,
+          });
+        } else {
+          bridgeData = await bridgingContract.lock(...lockArgs);
+        }
 
         // Set swap only after hash generated for swap on contract, and show release process for lock function
         setIsSwapped(true);
@@ -865,7 +886,7 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
       );
 
       let isUseOurLiquidity = false;
-      if (Number(response.data?.usdcBalance) / 3 > Number(usdBalance)) {
+      if (10 > Number(usdBalance)) {
         isUseOurLiquidity = true;
       }
       console.log(

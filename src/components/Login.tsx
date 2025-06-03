@@ -81,7 +81,7 @@ const Login = () => {
                     <h3 className="text-primary-100 sm:text-lg text-base font-normal mb-2">
                       0{index + 1}
                     </h3>
-                    <h3 className="text-primary-100 sm:text-lg text-xs font-bold mb-2">
+                    <h3 className="text-primary-100 sm:text-lg text-sm font-bold mb-2">
                       {box.title}
                     </h3>
                     <p

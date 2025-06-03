@@ -63,6 +63,9 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
     10 | 25 | 50 | 100 | number
   >(10);
   const [marketCapBuyRange, setMarketCapBuyRange] = useState(10000000);
+  const [activeControl, setActiveControl] = useState<"slider" | "input">(
+    "slider"
+  );
   const coinSelectRef = useRef<HTMLDivElement>(null);
 
   useClickOutside(coinSelectRef, () => {
@@ -115,6 +118,20 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
       selectedVitualtoken.symbol === "ETH" ? balances.ETH : balances.VIRT;
     const calculatedAmount = (parseFloat(balance || "0") * percentage) / 100;
     setAmount(calculatedAmount.toFixed(4).toString());
+  };
+
+  const handleMarketCapChange = (value: number) => {
+    setMarketCapBuyRange(value);
+    setActiveControl("slider");
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    // Only allow numbers and empty string
+    if (value === "" || /^\d*$/.test(value)) {
+      setMarketCapBuyRange(value === "" ? 0 : Number(value));
+      setActiveControl("input");
+    }
   };
 
   const handleSnipe = async () => {
@@ -367,21 +384,23 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
             </label>
             <div className="relative items-center justify-center">
               <div className="relative w-full border border-primary-100/70 rounded flex flex-col items-start justify-center px-4">
-                {/* <input
-                                    id="amount"
-                                    value={marketCapBuyRange}
-                                    onChange={(e) => setMarketCapBuyRange(Number(e.target.value))}
-                                    disabled={isLoading || isProcessing}
-                                    className="w-full py-3 bg-transparent rounded-lg text-white focus:outline-none focus:border-primary-100 disabled:opacity-50 disabled:cursor-not-allowed"
-                                    placeholder="Enter amount"
-                                /> */}
-                <span className="py-3">${addCommas(marketCapBuyRange)}</span>
+                <input
+                  id="marketCap"
+                  value={marketCapBuyRange}
+                  onChange={handleInputChange}
+                  onFocus={() => setActiveControl("input")}
+                  disabled={isLoading || isProcessing}
+                  className="w-full py-3 bg-transparent rounded-lg text-white focus:outline-none focus:border-primary-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                  placeholder="Enter market cap"
+                />
               </div>
             </div>
             <div className="flex justify-between items-center my-2 px-2">
               <Slider
-                marketCapBuyRange={marketCapBuyRange}
-                setMarketCapBuyRange={setMarketCapBuyRange}
+                marketCapBuyRange={
+                  activeControl === "slider" ? marketCapBuyRange : 0
+                }
+                setMarketCapBuyRange={handleMarketCapChange}
               />
             </div>
           </div>

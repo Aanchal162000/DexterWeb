@@ -78,7 +78,7 @@ const VirtualCard: React.FC<VirtualCardProps> = ({ virtual, onClick }) => {
   return (
     <div className="relative">
       <div
-        className="min-h-[7.2rem] h-fit rounded-xl cursor-pointer border-[0.5px] border-primary-100/60 hover:border-cyan-500/40 transition-all duration-300 w-full"
+        className="min-h-[7.2rem] z-50 h-fit rounded-xl cursor-pointer border-[0.5px] border-primary-100/60 hover:border-cyan-500/40 transition-all duration-300 w-full"
         onClick={handleCardClick}
       >
         {/* Top Row */}

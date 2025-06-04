@@ -317,7 +317,7 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
             {isFromCoinOpen && (
               <div
                 ref={coinSelectRef}
-                className="absolute right-0 mt-2 w-48  border border-primary-100/30  backdrop-blur-sm  bg-black/25 drop-shadow-lg rounded shadow-lg z-10"
+                className="absolute right-0 mt-2 w-48  border border-primary-100/30  backdrop-blur-sm  bg-black/40 drop-shadow-lg rounded shadow-lg z-10"
               >
                 <div className="py-1">
                   {tokenOptions.map((token) => (

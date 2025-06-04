@@ -75,7 +75,6 @@ export const useSentientVirtuals = () => {
     virtualTokenValue: string,
     virtualTokenUSDPrice: number
   ): number {
-    console.log("Check", virtualTokenValue, virtualTokenUSDPrice);
     const valueInTokens = Number(virtualTokenValue) / 1e18;
     const priceInUSD = valueInTokens * virtualTokenUSDPrice;
     return parseFloat(priceInUSD.toFixed(8)); // return price with 6 decimal precision

@@ -37,6 +37,52 @@ interface AgentStatusResponse {
   };
 }
 
+interface IUserDeposit {
+  amount: string;
+  marketCap: string;
+  token: "eth" | "virtual";
+}
+
+interface ITransaction {
+  status: "not_started" | "pending" | "completed" | "failed";
+}
+
+interface ITimestamps {
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface IAgentTransaction {
+  agentId: string;
+  agentName: string;
+  genesisId: string;
+  launchTime: string;
+  agentStatus: string;
+  userDeposit: IUserDeposit;
+  transaction: ITransaction;
+  timestamps: ITimestamps;
+}
+
+interface ITransactionResponse {
+  success: boolean;
+  message: string;
+  data: {
+    walletAddress: string;
+    transactions: IAgentTransaction[];
+    pagination: {
+      totalCount: number;
+      currentCount: number;
+      limit: number;
+      page: number;
+      totalPages: number;
+      hasMore: boolean;
+      hasPrevious: boolean;
+      nextPage: number | null;
+      previousPage: number | null;
+    };
+  };
+}
+
 class AgentService {
   private static instance: AgentService;
   private loading: boolean = false;
@@ -250,6 +296,21 @@ class AgentService {
       return parsedAmount.toFixed(decimals);
     } catch (error) {
       console.error("Error formatting amount:", error);
+      throw error;
+    }
+  }
+
+  public async getUserTransactions(
+    walletAddress: string
+  ): Promise<ITransactionResponse> {
+    try {
+      const response = await fetch(
+        `https://dexter-backend-ucdt5.ondigitalocean.app/api/user-transactions/0x74620d236F6A7D7Ce874ff8868Fb3b9668735F3C`
+      );
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Error fetching user transactions:", error);
       throw error;
     }
   }

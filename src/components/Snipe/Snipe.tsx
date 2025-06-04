@@ -39,7 +39,7 @@ const Snipe = () => {
     fetchVirtuals: fetchPrototypeVirtuals,
   } = usePrototypeVirtuals();
   const [selectedSnipeTab, setSelectedSnipeTab] = useState<
-    "aiAgents" | "transaction"
+    "aiAgents" | "transaction" | null
   >("aiAgents");
   const [subscriptionData, setSubscriptionData] = useState<any>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -153,7 +153,7 @@ const Snipe = () => {
               <button
                 className={clsx(
                   "text-sm sm:text-base flex items-center gap-2 font-semibold font-primary sm:w-fit w-full justify-center underline-offset-[0.625rem]",
-                  selectedSnipeTab === "aiAgents"
+                  selectedSnipeTab && selectedSnipeTab === "aiAgents"
                     ? "text-primary-100 underline"
                     : "text-prime-zinc-100"
                 )}
@@ -168,7 +168,7 @@ const Snipe = () => {
               <button
                 className={clsx(
                   "text-sm sm:text-base flex items-center gap-2 font-semibold font-primary sm:w-fit w-full justify-center text-nowrap underline-offset-[0.625rem]",
-                  selectedSnipeTab === "transaction"
+                  selectedSnipeTab && selectedSnipeTab === "transaction"
                     ? "text-primary-100 underline"
                     : "text-prime-zinc-100"
                 )}
@@ -201,7 +201,12 @@ const Snipe = () => {
                 onSelect={handleFilterSelect}
                 selectedOption={selectedFilter}
               />
-              <button onClick={() => setShowSettings(true)}>
+              <button
+                onClick={() => {
+                  setShowSettings(true);
+                  setSelectedSnipeTab(null);
+                }}
+              >
                 <Image
                   src="/common/Settings.png"
                   alt="Setting"

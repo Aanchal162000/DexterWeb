@@ -103,14 +103,14 @@ const VirtualTokenSelector: React.FC<VirtualTokenSelectorProps> = ({
       image: {
         url: "/Trade/dexterLogo.png",
       },
-      symbol: "VIRT",
+      symbol: "DEXTER",
       priceChangePercent24h: 0,
       volume24h: 0,
       totalValueLocked: "0",
       holderCount: 0,
       contractAddress: "0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b",
       mcapInVirtual: 0,
-      userBalance: parseFloat(balances?.VIRT || "0"),
+      userBalance: 0,
       nextLaunchstartsAt: [],
       cores: [],
       creator: {

@@ -111,7 +111,7 @@ const AlertsSettings: React.FC<AlertsSettingsProps> = ({ onClose }) => {
     <div className="w-full h-full  backdrop-blur-sm text-white overflow-y-auto">
       <div className="w-full flex flex-col ">
         {/* Header Section */}
-        <div className="mb-8 border-b border-primary-100  py-6 px-8">
+        <div className="mb-8 border-b border-primary-100  py-5 px-8">
           <h1 className="text-xl leading-[1.6rem] font-bold text-white mb-[2px]">
             Dexter Alerts – Virtuals Smart Alerts
           </h1>
@@ -124,16 +124,16 @@ const AlertsSettings: React.FC<AlertsSettingsProps> = ({ onClose }) => {
           {deliveryChannelOptions.map((option, index) => (
             <div
               className={`py-4 px-8 flex flex-row  ${
-                (index + 1) % 2 != 0 ? "bg-primary-100/20" : "bg-none"
+                (index + 1) % 2 != 0 ? "bg-[#818284]/10" : "bg-none"
               }   `}
             >
               <div className="relative w-[45%]  items-center justify-start">
                 {!index && (
                   <>
-                    <h4 className="text-base leading-[1.3rem] font-bold text-white mb-[1px]">
+                    <h4 className="text-lg leading-[1.3rem] font-bold text-white mb-[1px]">
                       Alerts Delivery Channel
                     </h4>
-                    <p className="text-gray-400 font-semibold text-sm">
+                    <p className="text-gray-400 font-semibold text-base">
                       Choose how Dexter delivers the alerts
                     </p>
                   </>
@@ -143,14 +143,14 @@ const AlertsSettings: React.FC<AlertsSettingsProps> = ({ onClose }) => {
               <div className="relative w-[55%]  items-center justify-start">
                 <div
                   key={option.id}
-                  className="flex  gap-8 items-center justify-start py-2"
+                  className="flex  gap-8 items-center justify-start py-1"
                 >
                   <Switch
                     checked={option.enabled}
                     onChange={option.onChange}
                     className={clsx(
                       "relative inline-flex h-7 w-12 items-center rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary-100 focus:ring-offset-2 focus:ring-offset-gray-800 ",
-                      option.enabled ? "bg-primary-100" : "bg-gray-600"
+                      option.enabled ? "bg-[#0047DA]" : "bg-gray-600"
                     )}
                   >
                     <span
@@ -170,16 +170,16 @@ const AlertsSettings: React.FC<AlertsSettingsProps> = ({ onClose }) => {
           {alertControlOptions.map((option, index) => (
             <div
               className={`py-4 px-8  flex flex-row ${
-                (index + 1) % 2 != 0 ? "bg-primary-100/20" : "bg-none"
+                (index + 1) % 2 != 0 ? "bg-[#818284]/10" : "bg-none"
               }  `}
             >
               <div className="relative w-[45%]  items-center justify-start">
                 {!index && (
                   <>
-                    <h4 className="text-base leading-[1.3rem] font-bold text-white mb-[1px]">
+                    <h4 className="text-lg leading-[1.3rem] font-bold text-white mb-[1px]">
                       Dexter Alerts Control
                     </h4>
-                    <p className="text-gray-400 font-semibold text-sm">
+                    <p className="text-gray-400 font-semibold text-base">
                       Let dexter track what matters, so you dont't have to
                     </p>
                   </>
@@ -189,14 +189,14 @@ const AlertsSettings: React.FC<AlertsSettingsProps> = ({ onClose }) => {
               <div className="relative w-[55%]  items-center justify-start">
                 <div
                   key={option.id}
-                  className={`flex  gap-8 items-center justify-center py-2 `}
+                  className={`flex  gap-8 items-center justify-center py-1 `}
                 >
                   <Switch
                     checked={option.enabled}
                     onChange={option.onChange}
                     className={clsx(
                       "relative inline-flex h-7 w-12 items-center rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary-100 focus:ring-offset-2 focus:ring-offset-gray-800 flex-shrink-0",
-                      option.enabled ? "bg-primary-100" : "bg-gray-600"
+                      option.enabled ? "bg-[#0047DA]" : "bg-gray-600"
                     )}
                   >
                     <span

@@ -6,13 +6,22 @@ import Link from "next/link";
 import { useLoginContext } from "../context/LoginContext";
 import Footer from "./common/Footer";
 import Image from "next/image";
+import { useState } from "react";
+import EarlyAccess from "./Swap/EarlyAccess";
 
 const Login = () => {
   const { connectWallet, address, loading } = useLoginContext();
+  const [isEarlyAccessOpen, setIsEarlyAccessOpen] = useState(false);
 
   const handleEnterLab = async () => {
-    await connectWallet("Metamask");
+    // await connectWallet("Metamask");
+    setIsEarlyAccessOpen(true);
   };
+
+  const handleCloseEarlyAccess = () => {
+    setIsEarlyAccessOpen(false);
+  };
+
   const features = [
     {
       title: "Smart Buy",
@@ -132,6 +141,10 @@ const Login = () => {
         </div>
       </div>
       <Footer />
+      <EarlyAccess
+        isOpen={isEarlyAccessOpen}
+        onClose={handleCloseEarlyAccess}
+      />
     </div>
   );
 };

@@ -132,11 +132,11 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
           });
 
           // If allowance is less than amount, approve first
-          if (Number(allowance) < Number(amount)) {
+          if (Number(allowance) < Number(amount) + 0.2) {
             if (approveToastId) toast.dismiss(approveToastId);
 
             await approvalService.approveVirtualToken(
-              amount.toString(),
+              (Number(amount) + 0.2).toString(),
               networkData?.provider!,
               VIRTUALS_TOKEN_ADDRESS,
               BuyContract

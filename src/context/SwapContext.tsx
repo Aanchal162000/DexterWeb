@@ -439,14 +439,6 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
             value: ParseEthUtil(fromAmount, selectedCoin?.decimals).toString(),
           });
         }
-        console.log(lockArgs);
-        console.log({
-          data: data,
-          address: toAddress,
-          gas: ethers.utils.formatEther(
-            await bridgingContract.estimateGas.swap(...lockArgs)
-          ),
-        });
         // Call Swap function
         bridgeData = await bridgingContract.swap(...lockArgs);
       } else {
@@ -465,6 +457,7 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
           selectedToCoin?.address,
           toAddress,
           isContractSymbiosisFlow && !isUseAdminLiquidity ? 1 : 0,
+          "dexter",
         ];
         //https://www.devoven.com/encoding/string-to-bytes32
 
@@ -477,15 +470,6 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
             value: ParseEthUtil(fromAmount, selectedCoin?.decimals)?.toString(),
           });
         }
-        console.log("lokag", lockArgs);
-        console.log({
-          data: data,
-          finalNet: selectedToNetwork?.id,
-          finalCoin: selectedToCoin?.address,
-          gas: ethers.utils.formatEther(
-            await bridgingContract.estimateGas.lock(...lockArgs)
-          ),
-        });
 
         // Estimate gas and add buffer
         const gasEstimate = await bridgingContract.estimateGas.lock(

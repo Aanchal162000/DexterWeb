@@ -165,7 +165,7 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
           });
 
           // If allowance is less than amount, approve first
-          if (Number(allowance) < Number(amount)) {
+          if (Number(allowance) < Number(amount + 0.1)) {
             if (approveToastId) toast.dismiss(approveToastId);
             approveToastId = toast.info("Approving token spend...", {
               autoClose: false,
@@ -173,7 +173,7 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
               closeButton: false,
             });
             await approvalService.approveVirtualToken(
-              amount.toString(),
+              (Number(amount) + 0.1).toString(),
               networkData?.provider!,
               VIRTUALS_TOKEN_ADDRESS,
               SnipeContract
@@ -201,8 +201,10 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
       if (receipt.transactionHash) {
         // Convert to wei without scientific notation
         const amountInWei = BigInt(
-          Math.floor((Number(amount) - 0.003 * Number(amount)) * 10 ** 18)
+          Math.floor(Number(amount) * 10 ** 18) -
+            Math.floor(Number(amount) * 0.003 * 10 ** 18)
         ).toString();
+        console.log("amountinWei", amountInWei);
         const response = await agentService.createAgent({
           genesisId,
           name,

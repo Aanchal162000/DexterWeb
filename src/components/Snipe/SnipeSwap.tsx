@@ -134,7 +134,6 @@ const SnipeSwap: React.FC<SnipeSwapProps> = ({
         setIsTokenRelease(true);
         setReleaseHash(result?.chainTxInfo?.transactionHash!);
         setSwapHash(result?.chainTxInfo?.transactionHash!);
-
         triggerAPIs();
         toast.success("Swap transaction successful! 🎉");
         await refetchBalances();
@@ -161,6 +160,7 @@ const SnipeSwap: React.FC<SnipeSwapProps> = ({
     setSelectedVirtual(null);
     setSelectedToVirtual(null);
     setSelectedPercentage(null);
+    setSwapHash(null);
   };
 
   useEffect(() => {

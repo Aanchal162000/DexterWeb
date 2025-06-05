@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
 import { IAssetsData, IVirtual } from "@/utils/interface";
-import { ethers } from "ethers";
-import approvalService from "@/services/contract/approvalService";
 import { usePeriodicRefresh } from "./usePeriodicRefresh";
 import { useLocalStorage } from "./useLocalStorage";
 

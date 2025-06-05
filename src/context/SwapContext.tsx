@@ -426,21 +426,44 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
       let bridgeData = null;
       console.log("calling contract", contractAddress[selectedNetwork?.id!]);
 
-      if (isSameChain) {
-        //Call Lock function
-        const lockArgs = [data, toAddress];
+      // Calculate the value for native token transactions
+      const isNativeToken =
+        selectedCoin?.address!.toLowerCase() ===
+        "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
+      const value = isNativeToken
+        ? ParseEthUtil(fromAmount, selectedCoin?.decimals).toString()
+        : "0";
 
-        //For native tokens, add value param to the lock function
-        if (
-          selectedCoin?.address!.toLowerCase() ==
-          "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
-        ) {
-          lockArgs.push({
-            value: ParseEthUtil(fromAmount, selectedCoin?.decimals).toString(),
-          });
-        }
-        // Call Swap function
-        bridgeData = await bridgingContract.swap(...lockArgs);
+      // Prepare arguments for both swap and lock functions
+      const swapArgs = [data, toAddress];
+      const lockArgs = [
+        data,
+        ethers.utils.formatBytes32String(
+          networkAbb[Number(selectedToNetwork?.id)].code
+        ),
+        selectedToCoin?.address,
+        toAddress,
+        isContractSymbiosisFlow && !(await canUseAdminLiquidity()) ? 1 : 0,
+        "dexter",
+      ];
+
+      // Prepare transaction options
+      const txOptions = {
+        gasLimit: undefined as any, // Will be set after estimation
+        value: isNativeToken ? value : undefined,
+      };
+
+      // Estimate gas with 40% buffer
+      const gasEstimate = await bridgingContract.estimateGas[
+        isSameChain ? "swap" : "lock"
+      ](...(isSameChain ? swapArgs : lockArgs), txOptions);
+
+      const gasWithBuffer = gasEstimate.mul(140).div(100); // Add 40% buffer
+      txOptions.gasLimit = gasWithBuffer;
+
+      if (isSameChain) {
+        //Call Swap function
+        bridgeData = await bridgingContract.swap(...swapArgs, txOptions);
       } else {
         const isUseAdminLiquidity = await canUseAdminLiquidity();
         if (isUsingOurBridge && !isUseAdminLiquidity) {
@@ -448,46 +471,8 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
             "Liquidity changed just before transaction, Please retry!"
           );
         }
-        //Call Lock function
-        const lockArgs = [
-          data,
-          ethers.utils.formatBytes32String(
-            networkAbb[Number(selectedToNetwork?.id)].code
-          ),
-          selectedToCoin?.address,
-          toAddress,
-          isContractSymbiosisFlow && !isUseAdminLiquidity ? 1 : 0,
-          "dexter",
-        ];
-        //https://www.devoven.com/encoding/string-to-bytes32
 
-        //For native tokens, add value param to the lock function
-        if (
-          selectedCoin?.address!.toLowerCase() ==
-          "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
-        ) {
-          lockArgs.push({
-            value: ParseEthUtil(fromAmount, selectedCoin?.decimals)?.toString(),
-          });
-        }
-
-        // Estimate gas and add buffer
-        const gasEstimate = await bridgingContract.estimateGas.lock(
-          ...lockArgs
-        );
-        const gasWithBuffer = gasEstimate.mul(140).div(100); // Add 20% buffer
-
-        //Calling bridge lock function with gas limit
-        if (
-          selectedCoin?.address!.toLowerCase() !=
-          "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
-        ) {
-          bridgeData = await bridgingContract.lock(...lockArgs, {
-            gasLimit: gasWithBuffer,
-          });
-        } else {
-          bridgeData = await bridgingContract.lock(...lockArgs);
-        }
+        bridgeData = await bridgingContract.lock(...lockArgs, txOptions);
 
         // Set swap only after hash generated for swap on contract, and show release process for lock function
         setIsSwapped(true);

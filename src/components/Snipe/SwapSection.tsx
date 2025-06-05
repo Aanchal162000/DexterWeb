@@ -15,16 +15,17 @@ import { useAlchemyProvider } from "@/hooks/useAlchemyProvider";
 import { QuoteRequestParams } from "@/services/contract/interfaces";
 import { agentService } from "@/services/contract/agentService";
 import { toastError } from "@/utils/toast";
+import { formatNumber } from "@/utils/helper";
 
 interface SwapSectionProps {
   selectedVirtual: IVirtual | null;
   selectedToVirtual: IVirtual | null;
-  fromAmount: number;
-  toAmount: number;
+  fromAmount: number | string;
+  toAmount: number | string;
   setIsFromCoinOpen: (isOpen: boolean) => void;
   setIsToCoinOpen: (isOpen: boolean) => void;
-  setFromAmount: (amount: number) => void;
-  setToAmount: (amount: number) => void;
+  setFromAmount: (amount: number | string) => void;
+  setToAmount: (amount: number | string) => void;
   swapFields: () => void;
   buttonText: string;
   setIsConfirmPop: (isOpen: boolean) => void;
@@ -56,6 +57,7 @@ const SwapSection: React.FC<SwapSectionProps> = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const [debouncedFromAmount] = useDebounce(fromAmount, 1000);
   const { address, networkData, switchNetwork } = useLoginContext();
+  const pollingIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   // Add network check effect
   useEffect(() => {
@@ -89,52 +91,65 @@ const SwapSection: React.FC<SwapSectionProps> = ({
       input.setSelectionRange(length, length);
     }
   };
-  useEffectAsync(async () => {
+
+  // Function to fetch quote
+  const fetchQuote = async () => {
+    if (
+      !address ||
+      !debouncedFromAmount ||
+      !selectedVirtual?.contractAddress ||
+      !selectedToVirtual?.contractAddress
+    ) {
+      setToAmount(0);
+      return;
+    }
+
+    try {
+      const params: QuoteRequestParams = {
+        chainId: 8453,
+        toChainId: 8453,
+        fromTokenAddress: selectedVirtual.contractAddress,
+        toTokenAddress: selectedToVirtual.contractAddress,
+        amount: debouncedFromAmount.toString(),
+        userWalletAddress: address,
+        slippage: 0.1,
+        slippageType: 1,
+        pmm: 1,
+        gasDropType: 0,
+        forbiddenBridgeTypes: 0,
+        dexIds: "34,29",
+      };
+
+      const estimate = await agentService.getQuote(params);
+      setToAmount(Number((estimate - 0.03).toFixed(4)));
+      setIsEstimating(false);
+    } catch (error: any) {
+      console.error("Estimation failed:", error);
+      setToAmount(0);
+      setIsEstimating(false);
+    }
+  };
+
+  // Start polling when conditions are met
+  useEffect(() => {
     if (
       debouncedFromAmount &&
       selectedVirtual?.contractAddress &&
-      selectedToVirtual?.contractAddress
+      selectedToVirtual?.contractAddress &&
+      address
     ) {
-      setIsEstimating(true);
-      try {
-        if (
-          !address ||
-          !debouncedFromAmount ||
-          !selectedVirtual.contractAddress ||
-          !selectedToVirtual.contractAddress
-        ) {
-          setToAmount(0);
-          return;
+      // Initial fetch
+      fetchQuote();
+
+      // Start polling every 10 seconds
+      pollingIntervalRef.current = setInterval(fetchQuote, 10000);
+
+      // Cleanup function
+      return () => {
+        if (pollingIntervalRef.current) {
+          clearInterval(pollingIntervalRef.current);
         }
-
-        const fetchQuote = async () => {
-          const params: QuoteRequestParams = {
-            chainId: 8453, // Base chain
-            toChainId: 8453,
-            fromTokenAddress: selectedVirtual.contractAddress!,
-            toTokenAddress: selectedToVirtual.contractAddress!,
-            amount: debouncedFromAmount.toString(),
-            userWalletAddress: address,
-            slippage: 0.1,
-            slippageType: 1,
-            pmm: 1,
-            gasDropType: 0,
-            forbiddenBridgeTypes: 0,
-            dexIds: "34,29", // Example DEX IDs
-          };
-
-          const estimate = await agentService.getQuote(params);
-          console.log("estimate final", estimate);
-          setToAmount(Number((estimate - 0.03).toFixed(4)));
-        };
-
-        fetchQuote();
-      } catch (error: any) {
-        console.error("Estimation failed:", error);
-        setToAmount(0);
-      } finally {
-        setIsEstimating(false);
-      }
+      };
     } else {
       setToAmount(0);
       setIsEstimating(false);
@@ -143,7 +158,16 @@ const SwapSection: React.FC<SwapSectionProps> = ({
     debouncedFromAmount,
     selectedVirtual?.contractAddress,
     selectedToVirtual?.contractAddress,
+    address,
   ]);
+
+  // Stop polling when confirm popup is opened
+  const handleConfirmClick = () => {
+    if (pollingIntervalRef.current) {
+      clearInterval(pollingIntervalRef.current);
+    }
+    setIsConfirmPop(true);
+  };
 
   const handlePercentCost = (value: number) => {
     setSelectedPercentage(value);
@@ -249,7 +273,7 @@ const SwapSection: React.FC<SwapSectionProps> = ({
               setIsFocused(true);
             }}
             onBlur={() => setIsFocused(false)}
-            onChange={(e) => setFromAmount(Number(e.target.value))}
+            onChange={(e) => setFromAmount(formatNumber(e.target.value))}
           />
         </div>
         <div className="w-full flex flex-row flex-nowrap justify-between items-center text-white">
@@ -358,13 +382,14 @@ const SwapSection: React.FC<SwapSectionProps> = ({
       {/* Unit Price Display */}
       {selectedVirtual &&
         selectedToVirtual &&
-        fromAmount > 0 &&
-        toAmount > 0 && (
+        Number(fromAmount) > 0 &&
+        Number(toAmount) > 0 && (
           <div className="w-full mt-4 px-4 py-1  rounded-lg">
             <div className="flex justify-center items-center text-sm text-zinc-400">
               <span className="text-white">
                 1 {selectedVirtual?.symbol} ={" "}
-                {(toAmount / fromAmount).toFixed(6)} {selectedToVirtual?.symbol}
+                {(Number(toAmount) / Number(fromAmount)).toFixed(6)}{" "}
+                {selectedToVirtual?.symbol}
               </span>
             </div>
           </div>
@@ -373,7 +398,7 @@ const SwapSection: React.FC<SwapSectionProps> = ({
       {/* Trade Button */}
       <button
         className="w-full mt-6 py-4 bg-primary-100 text-black font-medium rounded-lg hover:brightness-125 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-        onClick={() => setIsConfirmPop(true)}
+        onClick={handleConfirmClick}
         disabled={buttonText !== "Trade"}
       >
         {buttonText}

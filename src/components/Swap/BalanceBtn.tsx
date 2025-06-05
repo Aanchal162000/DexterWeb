@@ -38,7 +38,7 @@ export default function BalanceBtn({
       }
       //ARB Balance
       const alchemyProvider = await new ethers.providers.JsonRpcProvider(
-        alchemyProviderURL[42161]
+        alchemyProviderURL[8453]
       );
       const abi = ["function balanceOf(address owner) view returns (uint256)"];
       const arbTokenContract = new ethers.Contract(

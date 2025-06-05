@@ -3,7 +3,6 @@ import { IAssetsData, IVirtual } from "@/utils/interface";
 import { useLocalStorage } from "./useLocalStorage";
 import { useLoginContext } from "@/context/LoginContext";
 import { usePeriodicRefresh } from "./usePeriodicRefresh";
-import { useTokenPrices } from "./useTokenPrices";
 
 interface SentientVirtualResponse {
   data: {

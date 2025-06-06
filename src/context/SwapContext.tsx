@@ -453,13 +453,19 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
         value: isNativeToken ? value : undefined,
       };
 
-      // Estimate gas with 40% buffer
-      const gasEstimate = await bridgingContract.estimateGas[
-        isSameChain ? "swap" : "lock"
-      ](...(isSameChain ? swapArgs : lockArgs), txOptions);
+      try {
+        // Estimate gas with 40% buffer
+        const gasEstimate = await bridgingContract.estimateGas[
+          isSameChain ? "swap" : "lock"
+        ](...(isSameChain ? swapArgs : lockArgs), txOptions);
 
-      const gasWithBuffer = gasEstimate.mul(140).div(100); // Add 40% buffer
-      txOptions.gasLimit = gasWithBuffer;
+        const gasWithBuffer = gasEstimate.mul(140).div(100); // Add 40% buffer
+        txOptions.gasLimit = gasWithBuffer;
+      } catch (gasError: any) {
+        console.error("Gas estimation failed:", gasError);
+        // If gas estimation fails, try with a higher fixed gas limit
+        txOptions.gasLimit = 1000000; // Higher gas limit for cross-chain
+      }
 
       if (isSameChain) {
         //Call Swap function
@@ -481,27 +487,35 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
       // console.log(bridgeData);
       setIsFinalStep(true);
       getTransactionReceiptMined(bridgeData.hash, "continue");
-    } catch (err) {
+    } catch (err: any) {
       setErrored(
         "Something Went Wrong. Please contact admin or write to help support."
       );
       console.log("error in send ", JSON.stringify(err), err);
+
+      // Enhanced error handling
+      let errorMessage = "Transaction failed";
+      if (err?.error?.message?.includes("execution reverted")) {
+        errorMessage =
+          "Swap execution failed - This could be due to insufficient liquidity or high price impact";
+      } else if (err?.code === "UNPREDICTABLE_GAS_LIMIT") {
+        errorMessage =
+          "Transaction failed - Gas estimation failed. Please try with higher gas limit";
+      } else if (err?.code === "INSUFFICIENT_FUNDS") {
+        errorMessage = "Insufficient funds for gas * price + value";
+      }
+
       if ((err as any)?.error) {
         toastUpdate(TOAST_ID.PROCESS, {
           type: "error",
-          render: `Transaction failed, Error : ${String(
-            (err as any)?.error?.message
-          )?.slice(0, 30)}`,
+          render: `Transaction failed: ${errorMessage}`,
         });
-      } else
+      } else {
         toastUpdate(TOAST_ID.PROCESS, {
           type: "error",
-          render: `Transaction failed, Error : ${
-            (err as any)?.data?.message ||
-            (err as any)?.code?.slice(0, 30) ||
-            (err as any)?.message
-          }`,
+          render: `Transaction failed: ${errorMessage}`,
         });
+      }
       setIsFinalStep(false);
     }
   };
@@ -524,7 +538,9 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
         setIsFinalStep(false);
         toastUpdate(TOAST_ID.PROCESS, {
           type: "error",
-          render: `Transaction Failed : Contract Failed to Lock. Please retry!`,
+          render: `Transaction Failed : Contract Failed to ${
+            isSameChain ? "Swap" : "Lock"
+          }. Please retry!`,
         });
         throw `Transaction Failed : ${txHash}`;
       }

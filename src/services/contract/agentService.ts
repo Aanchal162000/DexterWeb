@@ -305,7 +305,7 @@ class AgentService {
   ): Promise<ITransactionResponse> {
     try {
       const response = await fetch(
-        `https://dexter-backend-ucdt5.ondigitalocean.app/api/user-transactions/0x74620d236F6A7D7Ce874ff8868Fb3b9668735F3C`
+        `https://dexter-backend-ucdt5.ondigitalocean.app/api/user-transactions/${walletAddress}`
       );
       const data = await response.json();
       return data;

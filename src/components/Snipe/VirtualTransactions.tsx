@@ -6,7 +6,7 @@ import clsx from "clsx";
 import ImageNext from "../common/ImageNext";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { formatAddress } from "@/utils/helper";
-import { toastSuccess } from "@/utils/toast";
+import { toastSuccess, toastError, toastInfo } from "@/utils/toast";
 import CopyTooltip from "../common/CopyTooltip";
 import InfoTooltip from "../common/InfoTooltip";
 import { MdCallMade, MdCallReceived } from "react-icons/md";
@@ -18,8 +18,13 @@ import dayjs from "@/services/dayjsConfig";
 import LoaderLine from "../common/LoaderLine";
 import { agentService } from "@/services/contract/agentService";
 import { ParseWeiUtil } from "@/utils/helper";
-import { tokenSymbolList, chainsLogo } from "@/constants/config";
+import {
+  tokenSymbolList,
+  chainsLogo,
+  VIRTUALS_TOKEN_ADDRESS,
+} from "@/constants/config";
 import { useMergedTokens } from "@/hooks/useMergedTokens";
+import { toast } from "react-toastify";
 
 interface IVirtualTransaction {
   type: "in" | "out";
@@ -45,11 +50,18 @@ const typeChange: { [key: string]: string } = {
   in: "IN",
   out: "OUT",
 };
+const statusType: { [key: string]: string } = {
+  failed: "Failed",
+  not_started: "Active",
+  pending: "Pending",
+  confirmed: "Completed",
+};
 
 const VirtualTransactions = () => {
-  const { address } = useLoginContext();
+  const { address, networkData } = useLoginContext();
   const [loading, setLoading] = useState<boolean>(true);
   const [backgroundSync, setBackgroundSync] = useState<boolean>(false);
+  const [processingTx, setProcessingTx] = useState<string | null>(null);
   const [transactionList, setTransactionList] = useLocalStorage<
     IVirtualTransaction[]
   >("virtual-transactions", []);
@@ -78,70 +90,57 @@ const VirtualTransactions = () => {
       const response = await agentService.getUserTransactions(
         address as string
       );
-      console.log("Resonse", mergedTokens, response);
 
       if (response.success && response.data?.transactions) {
-        const formattedTransactions = response.data.transactions.map(
-          (transaction) => {
-            const chainObj = tokenSymbolList.find(
-              (item) => item.conversionSymbol === "base"
-            );
+        const formattedTransactions = response.data.transactions.map((trx) => {
+          const chainObj = tokenSymbolList.find(
+            (item) => item.conversionSymbol === "base"
+          );
 
-            // Find token in merged tokens list
-            const tokenObj = mergedTokens.find(
-              (token) =>
-                token.name?.toLowerCase() ===
-                transaction.agentName?.toLowerCase()
-            );
+          // Find token in merged tokens list
+          const tokenObj = mergedTokens.find(
+            (token) =>
+              token.name?.toLowerCase() === trx.agentName?.toLowerCase()
+          );
 
-            const chainLogo =
-              chainsLogo[
-                chainObj?.code?.toLowerCase() as keyof typeof chainsLogo
-              ] || "";
+          console.log("tokenObj", tokenObj);
+          const chainLogo =
+            chainsLogo[
+              chainObj?.code?.toLowerCase() as keyof typeof chainsLogo
+            ] || "";
 
-            // Determine transaction type based on agent type
-            const transactionType = transaction.genesisId
-              ? "in"
-              : ("out" as IVirtualTransaction["type"]);
+          // Determine transaction type based on agent type
+          const transactionType =
+            trx.transaction.status === "not_started"
+              ? ("out" as IVirtualTransaction["type"])
+              : "in";
 
-            return {
-              type: transactionType,
-              fromNetwork: chainObj?.code || "",
-              toNetwork: chainObj?.code || "",
-              fromToken: tokenObj?.name || transaction.agentName,
-              toToken: tokenObj?.name || transaction.agentName,
-              srcAmount: ParseWeiUtil(
-                transaction.userDeposit.amount,
-                18
-              ).toString(),
-              depositToken:
-                transaction.userDeposit.token === "virtual" ? "VIRT" : "ETH",
-              hash:
-                transaction.transaction.hash.slice(0, 4) +
-                  "...." +
-                  transaction.transaction.hash.slice(-4) || "", // No transaction hash in new response
-              processed:
-                transaction.transaction.status === "not_started"
-                  ? "Active"
-                  : "Completed",
-              ago: dayjs(transaction.timestamps.createdAt).fromNow(),
-              date: dayjs(transaction.timestamps.createdAt).format(
-                "DD-MM-YYYY HH:mm:ss"
-              ),
-              dateShort: dayjs(transaction.timestamps.createdAt).format(
-                "DD-MM-YYYY HH:mm:ss"
-              ),
-              imgFromToken: tokenObj?.logo || "",
-              imgToToken: tokenObj?.logo || "",
-              imgFromNetwork: chainLogo,
-              imgToNetwork: chainLogo,
-              actionType:
-                transaction.transaction.status === "not_started"
-                  ? "Smart Buy"
-                  : "Stake",
-            };
-          }
-        );
+          return {
+            type: transactionType,
+            fromNetwork: chainObj?.code || "",
+            toNetwork: chainObj?.code || "",
+            fromToken: tokenObj?.name || trx.agentName,
+            toToken: tokenObj?.name || trx.agentName,
+            srcAmount: ParseWeiUtil(trx.userDeposit.amount, 18).toString(),
+            depositToken: trx.userDeposit.token === "virtual" ? "VIRT" : "ETH",
+            hash:
+              trx.transaction.status === "not_started"
+                ? trx.userDeposit.depositTxHash
+                : trx.transaction.hash || "", // Store full hash
+            processed: statusType[trx.transaction.status],
+            ago: dayjs(trx.timestamps.createdAt).fromNow(),
+            date: dayjs(trx.timestamps.createdAt).format("DD-MM-YYYY HH:mm:ss"),
+            dateShort: dayjs(trx.timestamps.createdAt).format(
+              "DD-MM-YYYY HH:mm:ss"
+            ),
+            imgFromToken: tokenObj?.logo || "",
+            imgToToken: tokenObj?.logo || "",
+            imgFromNetwork: chainLogo,
+            imgToNetwork: chainLogo,
+            actionType:
+              trx.transaction.status === "not_started" ? "Smart Buy" : "Stake",
+          };
+        });
 
         setTransactionList(formattedTransactions);
       }
@@ -157,6 +156,71 @@ const VirtualTransactions = () => {
       fetchVirtualTransactions();
     }
   }, [address, tokensLoading]);
+
+  const handleWithdraw = async (
+    amount: string,
+    token: string,
+    hash: string
+  ) => {
+    let processToastId: string | number | null = null;
+    setProcessingTx(hash);
+
+    try {
+      processToastId = toast.info("Processing Transaction...", {
+        autoClose: false,
+        closeOnClick: false,
+        closeButton: false,
+      });
+      const tokenAddress =
+        token === "VIRT"
+          ? VIRTUALS_TOKEN_ADDRESS
+          : "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
+
+      const receipt = await agentService.withdraw({
+        tokenAddress: tokenAddress!,
+        amount: amount,
+        provider: networkData?.provider!,
+      });
+      if (receipt.transactionHash) {
+        if (processToastId) toast.dismiss(processToastId);
+        toastSuccess("Withdrawal initiated successfully!");
+      }
+    } catch (error: any) {
+      if (processToastId) toast.dismiss(processToastId);
+      console.error("Withdrawal error:", error);
+
+      // Handle specific error cases
+      if (error?.message?.includes("UNPREDICTABLE_GAS_LIMIT")) {
+        if (error?.reason?.includes("Insufficient deposit")) {
+          toastError("Insufficient deposit balance for withdrawal");
+        } else if (error?.reason?.includes("execution reverted")) {
+          // Extract the specific error reason from the revert message
+          const revertReason = error.reason
+            .split("execution reverted:")[1]
+            ?.trim();
+          toastError(revertReason || "Transaction failed. Please try again.");
+        } else {
+          toastError(
+            "Transaction may fail. Please check your balance and try again."
+          );
+        }
+      } else if (error?.code === 4001) {
+        // User rejected the transaction
+        toastInfo("Transaction cancelled by user");
+      } else if (error?.code === -32603) {
+        // Internal JSON-RPC error
+        toastError("Network error. Please try again later.");
+      } else {
+        // Generic error handling
+        const errorMessage =
+          error?.message || "Failed to process withdrawal. Please try again.";
+        toastError(errorMessage);
+      }
+    } finally {
+      setProcessingTx(null);
+      await fetchVirtualTransactions();
+    }
+  };
 
   if (loading || tokensLoading) {
     return (
@@ -266,15 +330,50 @@ const VirtualTransactions = () => {
                 </td>
                 <td>
                   <div className="flex items-center gap-2">
-                    {item.hash
-                      ? item.hash.slice(0, 4) + "....." + item.hash.slice(-4)
-                      : ""}
+                    {item.hash ? (
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm">
+                          {item.hash.slice(0, 4) + "...." + item.hash.slice(-4)}
+                        </span>
+                        <CopyTooltip
+                          onClick={() => {
+                            navigator.clipboard.writeText(item.hash);
+                            toastSuccess("Transaction Hash Copied");
+                          }}
+                          tooltip="Copy Transaction Hash"
+                        />
+                      </div>
+                    ) : (
+                      <span className="text-sm text-prime-zinc-100">-</span>
+                    )}
                   </div>
                 </td>
                 <td>
                   {item.processed == "Active" && (
-                    <button className=" w-[80px] p-1 border hover:bg-primary-100/20 border-primary-100 rounded text-white text-sm font-bold ">
-                      Cancel
+                    <button
+                      disabled={processingTx === item.hash}
+                      className={clsx(
+                        "w-[80px] p-1 border border-primary-100 rounded text-white text-sm font-bold flex items-center justify-center gap-2",
+                        processingTx === item.hash
+                          ? "opacity-70 cursor-not-allowed"
+                          : "hover:bg-primary-100/20"
+                      )}
+                      onClick={() => {
+                        handleWithdraw(
+                          item.srcAmount,
+                          item.depositToken,
+                          item.hash
+                        );
+                      }}
+                    >
+                      {processingTx === item.hash ? (
+                        <>
+                          <VscSync className="size-4 animate-spin" />
+                          <span>Cancel</span>
+                        </>
+                      ) : (
+                        "Cancel"
+                      )}
                     </button>
                   )}
                 </td>

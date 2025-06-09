@@ -74,7 +74,9 @@ export function truncateToFixed(num: any, decimals: any) {
 export const formatPrecision = (num: number) => {
   if (isNaN(num)) return num;
   return Number(num) < 1.0 && Number(num) !== 0
-    ? Number(num).toFixed(4)
+    ? Number(num) < 0.0001
+      ? Number(num).toFixed(6)
+      : Number(num).toFixed(4)
     : Number(num).toFixed(2);
 };
 

@@ -22,6 +22,7 @@ import { toast } from "react-toastify";
 import { IoMenu } from "react-icons/io5";
 import { IoMdArrowDropup } from "react-icons/io";
 import { IoMdArrowDropright } from "react-icons/io";
+import { useNotifications } from "@/hooks/useNotifications";
 
 const Header = () => {
   const tabs = ["Trade", "Virtuals", "Support"];
@@ -33,6 +34,13 @@ const Header = () => {
     (network) => network?.id == networkData?.chainId!
   );
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const {
+    notifications,
+    hasUnread,
+    markAsRead,
+    markAllAsRead,
+    connectionStatus,
+  } = useNotifications(address!);
 
   const handleTabClick = (item: string) => {
     let tab = headerRoutes.filter((route: IRouter) => route.name == item);
@@ -88,12 +96,22 @@ const Header = () => {
             <div className="flex items-center space-x-4">
               <Menu as="div" className="relative inline-block text-left w-fit">
                 <div>
-                  <MenuButton className="flex items-center justify-center p-2">
+                  <MenuButton className="flex items-center justify-center p-2 relative">
                     <img
-                      src={true ? "/alert/bell-on.png" : "/alert/bell-off.png"}
+                      src={
+                        hasUnread ? "/alert/bell-on.png" : "/alert/bell-off.png"
+                      }
                       alt="notifications"
-                      className="size-6 object-contain"
+                      className={`size-6 object-contain ${
+                        connectionStatus === "error" ? "opacity-50" : ""
+                      }`}
                     />
+                    {hasUnread && (
+                      <div className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full" />
+                    )}
+                    {connectionStatus === "error" && (
+                      <div className="absolute -top-1 -right-1 w-2 h-2 bg-yellow-500 rounded-full" />
+                    )}
                   </MenuButton>
                 </div>
                 <Transition
@@ -105,44 +123,73 @@ const Header = () => {
                   leaveFrom="transform opacity-100 scale-100"
                   leaveTo="transform opacity-0 scale-95"
                 >
-                  <MenuItems className="absolute left-[-40px] mt-2 w-80 origin-top-right rounded-md border-2 border-primary-100/30  backdrop-blur-sm  bg-black/40 drop-shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                  <MenuItems className="absolute left-[-40px] mt-2 w-80 origin-top-right rounded-md border-2 border-primary-100/30 backdrop-blur-sm bg-black/40 drop-shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <IoMdArrowDropup className="absolute left-[44px] top-[-15px] text-primary-100 size-6" />
                     <div className="py-1">
                       <div className="flex items-center justify-between px-4 py-2 text-white">
                         Alerts
-                        <button onClick={handleSettingsClick}>
-                          <img
-                            src={"/alert/settings.png"}
-                            alt="notifications"
-                            className="size-5 object-contain"
-                          />
-                        </button>
+                        <div className="flex items-center gap-2">
+                          {connectionStatus === "error" && (
+                            <span className="text-xs text-yellow-500">
+                              Connection error
+                            </span>
+                          )}
+                          {notifications.length > 0 && (
+                            <button
+                              onClick={markAllAsRead}
+                              className="text-xs text-primary-100 hover:text-primary-100/80"
+                            >
+                              Mark all as read
+                            </button>
+                          )}
+                          <button onClick={handleSettingsClick}>
+                            <img
+                              src={"/alert/settings.png"}
+                              alt="notifications"
+                              className="size-5 object-contain"
+                            />
+                          </button>
+                        </div>
                       </div>
-                      <MenuItem>
-                        <button
-                          // onClick={copyAddressHandler}
-                          className="flex w-full items-center px-4 py-5 text-sm text-white border-t border-primary-100/30 bg-green-500/30"
-                        >
-                          <img
-                            src={"/alert/bell-on.png"}
-                            alt="notifications"
-                            className="mr-3 h-5 w-5 border border-green-100 rounded-full"
-                          />
-                          <div className="flex flex-col items-start justify-center">
-                            <p className="text-white text-sm">
-                              Virtuals portfolio up by{" "}
-                              <span className="text-green-500">+10%</span>
-                            </p>
-                            <p className="opacity-70 text-xs">
-                              5 mins ago • Portfolio
-                            </p>
-                          </div>
+                      {notifications.length === 0 ? (
+                        <div className="px-4 py-5 text-sm text-white/70 text-center">
+                          No notifications
+                        </div>
+                      ) : (
+                        notifications.map((notification) => (
+                          <MenuItem key={notification.id}>
+                            <button
+                              onClick={() => markAsRead(notification.id)}
+                              className={`flex w-full items-center px-4 py-5 text-sm text-white border-t border-primary-100/30 ${
+                                !notification.read ? "bg-green-500/30" : ""
+                              }`}
+                            >
+                              <img
+                                src={"/alert/bell-on.png"}
+                                alt="notifications"
+                                className="mr-3 h-5 w-5 border border-green-100 rounded-full"
+                              />
+                              <div className="flex flex-col items-start justify-center">
+                                <p className="text-white text-sm">
+                                  {notification.message}
+                                </p>
+                                <p className="opacity-70 text-xs">
+                                  {new Date(
+                                    notification.timestamp
+                                  ).toLocaleTimeString()}{" "}
+                                  • {notification.type}
+                                </p>
+                              </div>
+                            </button>
+                          </MenuItem>
+                        ))
+                      )}
+                      {notifications.length > 0 && (
+                        <button className="flex w-full items-center justify-center px-4 py-3 border-t border-primary-100/30 text-primary-100 text-xs">
+                          See all activity
+                          <IoMdArrowDropright className="size-5 object-contain" />
                         </button>
-                      </MenuItem>
-                      <button className="flex w-full items-center justify-center px-4 py-3 border-t border-primary-100/30 text-primary-100 text-xs">
-                        See all activity
-                        <IoMdArrowDropright className="size-5 object-contain" />
-                      </button>
+                      )}
                     </div>
                   </MenuItems>
                 </Transition>

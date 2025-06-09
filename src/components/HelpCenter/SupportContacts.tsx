@@ -2,12 +2,12 @@ const supportList = [
   {
     label: "Support Queries",
     para: "Reach us at ",
-    link: "support@zkcross.network",
+    link: "support@dexterslab.ai",
   },
   {
     label: "Partnership Queries",
     para: "Reach us at ",
-    link: "partnerships@zkcross.network",
+    link: "partnerships@dexterslab.ai",
   },
   // {
   //   label: "Human Resource Queries",

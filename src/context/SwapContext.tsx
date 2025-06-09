@@ -447,29 +447,55 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
         "dexter",
       ];
 
-      // Prepare transaction options
+      // Prepare transaction options with a higher base gas limit
       const txOptions = {
-        gasLimit: undefined as any, // Will be set after estimation
+        gasLimit: undefined as any,
         value: isNativeToken ? value : undefined,
       };
 
       try {
-        // Estimate gas with 40% buffer
+        // First attempt with normal gas estimation
         const gasEstimate = await bridgingContract.estimateGas[
           isSameChain ? "swap" : "lock"
         ](...(isSameChain ? swapArgs : lockArgs), txOptions);
 
-        const gasWithBuffer = gasEstimate.mul(140).div(100); // Add 40% buffer
+        // Add 50% buffer for safety
+        const gasWithBuffer = gasEstimate.mul(150).div(100);
         txOptions.gasLimit = gasWithBuffer;
       } catch (gasError: any) {
-        console.error("Gas estimation failed:", gasError);
-        // If gas estimation fails, try with a higher fixed gas limit
-        txOptions.gasLimit = 1000000; // Higher gas limit for cross-chain
+        console.error("Initial gas estimation failed:", gasError);
+
+        // If initial estimation fails, try with a higher fixed gas limit
+        // Use different limits for different operations
+        const baseGasLimit = isSameChain ? 500000 : 1000000;
+        txOptions.gasLimit = baseGasLimit;
+
+        // For cross-chain transactions, add extra buffer
+        if (!isSameChain) {
+          txOptions.gasLimit = baseGasLimit * 2;
+        }
       }
 
       if (isSameChain) {
-        //Call Swap function
-        bridgeData = await bridgingContract.swap(...swapArgs, txOptions);
+        // Call Swap function with retry mechanism
+        let retryCount = 0;
+        const maxRetries = 3;
+
+        while (retryCount < maxRetries) {
+          try {
+            bridgeData = await bridgingContract.swap(...swapArgs, txOptions);
+            setIsSwapped(true);
+            setSwapHash(bridgeData.hash);
+            break;
+          } catch (swapError: any) {
+            retryCount++;
+            if (retryCount === maxRetries) throw swapError;
+
+            // Increase gas limit for next retry
+            txOptions.gasLimit = txOptions.gasLimit.mul(120).div(100);
+            await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait 1 second before retry
+          }
+        }
       } else {
         const isUseAdminLiquidity = await canUseAdminLiquidity();
         if (isUsingOurBridge && !isUseAdminLiquidity) {
@@ -479,12 +505,10 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
         }
 
         bridgeData = await bridgingContract.lock(...lockArgs, txOptions);
-
-        // Set swap only after hash generated for swap on contract, and show release process for lock function
         setIsSwapped(true);
         setSwapHash(bridgeData.hash);
       }
-      // console.log(bridgeData);
+
       setIsFinalStep(true);
       getTransactionReceiptMined(bridgeData.hash, "continue");
     } catch (err: any) {
@@ -493,29 +517,27 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
       );
       console.log("error in send ", JSON.stringify(err), err);
 
-      // Enhanced error handling
+      // Enhanced error handling with specific messages
       let errorMessage = "Transaction failed";
       if (err?.error?.message?.includes("execution reverted")) {
-        errorMessage =
-          "Swap execution failed - This could be due to insufficient liquidity or high price impact";
+        if (err?.error?.message?.includes("Swap execution failed")) {
+          errorMessage =
+            "Swap failed - This could be due to insufficient liquidity or high price impact. Please try with a different amount or token pair.";
+        } else {
+          errorMessage =
+            "Transaction reverted - Please check your input parameters and try again.";
+        }
       } else if (err?.code === "UNPREDICTABLE_GAS_LIMIT") {
         errorMessage =
-          "Transaction failed - Gas estimation failed. Please try with higher gas limit";
+          "Gas estimation failed - Please try with a higher gas limit or different amount.";
       } else if (err?.code === "INSUFFICIENT_FUNDS") {
         errorMessage = "Insufficient funds for gas * price + value";
       }
 
-      if ((err as any)?.error) {
-        toastUpdate(TOAST_ID.PROCESS, {
-          type: "error",
-          render: `Transaction failed: ${errorMessage}`,
-        });
-      } else {
-        toastUpdate(TOAST_ID.PROCESS, {
-          type: "error",
-          render: `Transaction failed: ${errorMessage}`,
-        });
-      }
+      toastUpdate(TOAST_ID.PROCESS, {
+        type: "error",
+        render: `Transaction failed: ${errorMessage}`,
+      });
       setIsFinalStep(false);
     }
   };

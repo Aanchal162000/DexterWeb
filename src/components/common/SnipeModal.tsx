@@ -164,8 +164,16 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
             spenderAddress: SnipeContract,
           });
 
+          // Convert amount to number and add buffer
+          const amountWithBuffer = Number(amount) + 0.001 * Number(amount);
+
+          // Ensure we have valid numbers for comparison
+          if (isNaN(amountWithBuffer)) {
+            throw new Error("Invalid amount value");
+          }
+
           // If allowance is less than amount, approve first
-          if (Number(allowance) < Number(amount + 0.1)) {
+          if (Number(allowance) < amountWithBuffer) {
             if (approveToastId) toast.dismiss(approveToastId);
             approveToastId = toast.info("Approving token spend...", {
               autoClose: false,
@@ -208,11 +216,12 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
         const response = await agentService.createAgent({
           genesisId,
           name,
-          walletAddress,
-          token: selectedVitualtoken.symbol === "ETH" ? "eth" : "virtual",
-          amount: amountInWei,
+          // walletAddress,
+          // token: selectedVitualtoken.symbol === "ETH" ? "eth" : "virtual",
+          // amount: amountInWei,
           launchTime: new Date(endsAt),
           marketCap: marketCapBuyRange.toString(),
+          txHash: receipt.transactionHash,
         });
         triggerAPIs();
         fetchSubscriptionData();

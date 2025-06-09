@@ -28,7 +28,10 @@ export const ParseWeiUtil = (amount: any, decimal: any): number => {
   return response;
 };
 
-export function formatAddress(address?: string | null, subLength: number = 6): string | null {
+export function formatAddress(
+  address?: string | null,
+  subLength: number = 6
+): string | null {
   if (!address) return null;
   return `${address.slice(0, subLength)}....${address.slice(-subLength)}`;
 }
@@ -37,18 +40,30 @@ export function numberWithCommas(input: number | string): string {
   // console.log("com", input);
   const firstHalf = input.toString().split(".")[0];
   const secondHalf = input.toString().split(".")[1];
-  return [firstHalf.replace(/\B(?=(\d{3})+(?!\d))/g, ","), secondHalf].join(".");
+  return [firstHalf.replace(/\B(?=(\d{3})+(?!\d))/g, ","), secondHalf].join(
+    "."
+  );
 }
 
 export function numberToMask(input: number | string): string {
   return input.toString().replace(/\d/g, "X");
 }
 
-export function addTrailZeros(input: any, desiredFrontLength: number, desiredBackLength: number): string {
+export function addTrailZeros(
+  input: any,
+  desiredFrontLength: number,
+  desiredBackLength: number
+): string {
   if (!input) return "0.0";
   const firstHalf = input.toString().split(".")[0];
-  const secondHalf = Number(input)?.toFixed(desiredBackLength).toString().split(".")[1];
-  return [firstHalf.toString().padStart(desiredFrontLength, "0"), secondHalf].join(".");
+  const secondHalf = Number(input)
+    ?.toFixed(desiredBackLength)
+    .toString()
+    .split(".")[1];
+  return [
+    firstHalf.toString().padStart(desiredFrontLength, "0"),
+    secondHalf,
+  ].join(".");
 }
 
 export function truncateToFixed(num: any, decimals: any) {
@@ -58,7 +73,9 @@ export function truncateToFixed(num: any, decimals: any) {
 
 export const formatPrecision = (num: number) => {
   if (isNaN(num)) return num;
-  return Number(num) < 1.00 && Number(num) !== 0 ? Number(num).toFixed(4) : Number(num).toFixed(2)
+  return Number(num) < 1.0 && Number(num) !== 0
+    ? Number(num).toFixed(4)
+    : Number(num).toFixed(2);
 };
 
 export const formatNumber = (e: any) => {
@@ -68,24 +85,31 @@ export const formatNumber = (e: any) => {
   if (val === ".") return "0.";
   if (!val.includes(".") && val.endsWith("0") && Number(val) === 0) return "0";
   if (!val.includes(".")) val = val.replace(/^0+/, "");
-  if (val.slice(0, -1).includes(".") && val.endsWith(".")) val = val.slice(0, -1);
+  if (val.slice(0, -1).includes(".") && val.endsWith("."))
+    val = val.slice(0, -1);
   return val;
 };
 
-export const toNumFixed = (n: number | string) => Number(n).toFixed(Number(n) > 1 && Number(n) < 0 ? 2 : Number(n) > 0.0001 ? 4 : 6);
+export const toNumFixed = (n: number | string) =>
+  Number(n).toFixed(
+    Number(n) > 1 && Number(n) < 0 ? 2 : Number(n) > 0.0001 ? 4 : 8
+  );
 
-export const formatNumberWithSuffix = (value: number, locale = 'en-US'): string => {
+export const formatNumberWithSuffix = (
+  value: number,
+  locale = "en-US"
+): string => {
   const formatter = new Intl.NumberFormat(locale, {
-    maximumFractionDigits: 1
+    maximumFractionDigits: 1,
   });
 
   if (Math.abs(value) >= 1_000_000_000) {
-    return formatter.format(value / 1_000_000_000) + 'B';
+    return formatter.format(value / 1_000_000_000) + "B";
   } else if (Math.abs(value) >= 1_000_000) {
-    return formatter.format(value / 1_000_000) + 'M';
+    return formatter.format(value / 1_000_000) + "M";
   } else if (Math.abs(value) >= 1_000) {
-    return formatter.format(value / 1_000) + 'K';
+    return formatter.format(value / 1_000) + "K";
   }
-  
+
   return formatter.format(value);
 };

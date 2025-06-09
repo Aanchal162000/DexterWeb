@@ -116,7 +116,10 @@ const VirtualTransactions = () => {
               ).toString(),
               depositToken:
                 transaction.userDeposit.token === "virtual" ? "VIRT" : "ETH",
-              hash: "", // No transaction hash in new response
+              hash:
+                transaction.transaction.hash.slice(0, 4) +
+                  "...." +
+                  transaction.transaction.hash.slice(-4) || "", // No transaction hash in new response
               processed:
                 transaction.transaction.status === "not_started"
                   ? "Active"
@@ -263,7 +266,9 @@ const VirtualTransactions = () => {
                 </td>
                 <td>
                   <div className="flex items-center gap-2">
-                    {item.hash || ""}
+                    {item.hash
+                      ? item.hash.slice(0, 4) + "....." + item.hash.slice(-4)
+                      : ""}
                   </div>
                 </td>
                 <td>

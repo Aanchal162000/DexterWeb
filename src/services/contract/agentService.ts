@@ -6,11 +6,12 @@ import { QuoteRequestParams } from "./interfaces";
 interface AgentRequest {
   genesisId: string;
   name: string;
-  walletAddress: string;
-  token: "eth" | "virtual";
-  amount: string;
+  // walletAddress: string;
+  // token: "eth" | "virtual";
+  // amount: string;
   launchTime: Date;
   marketCap: string;
+  txHash: string;
 }
 
 interface AgentResponse {
@@ -45,6 +46,7 @@ interface IUserDeposit {
 
 interface ITransaction {
   status: "not_started" | "pending" | "completed" | "failed";
+  hash: string;
 }
 
 interface ITimestamps {

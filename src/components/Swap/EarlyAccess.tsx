@@ -3,6 +3,7 @@ import { Dialog, DialogPanel, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import WalletSelect from "./WalletSelect";
 import DexterAccessChecklist from "./DexterAccessChecklist";
+import AccessService from "@/services/accessService";
 
 interface EarlyAccessProps {
   isOpen: boolean;
@@ -25,6 +26,96 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
   const [isInviteCodeVisible, setIsInviteCodeVisible] = useState(false);
   const [showChecklist, setShowChecklist] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [email, setEmail] = useState("");
+  const [otp, setOtp] = useState("");
+  const [timer, setTimer] = useState(0);
+  const [isEmailValid, setIsEmailValid] = useState(false);
+  const [isOtpSent, setIsOtpSent] = useState(false);
+  const [isOtpVerified, setIsOtpVerified] = useState(false);
+  const [isTwitterConnected, setIsTwitterConnected] = useState(false);
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const accessService = AccessService.getInstance();
+
+  // Reset verification state when email changes
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newEmail = e.target.value;
+    setEmail(newEmail);
+    // Reset verification states
+    setIsOtpSent(false);
+    setIsOtpVerified(false);
+    setOtp("");
+    setTimer(0);
+    setError("");
+  };
+
+  useEffect(() => {
+    setIsEmailValid(emailPattern.test(email));
+  }, [email]);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (timer > 0) {
+      interval = setInterval(() => {
+        setTimer((prev) => prev - 1);
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [timer]);
+
+  const handleSendOtp = async () => {
+    try {
+      setIsLoading(true);
+      setError("");
+      // Simulate successful OTP send
+      setIsOtpSent(true);
+      setTimer(60);
+    } catch (err) {
+      setError("Failed to send OTP. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleVerifyOtp = async () => {
+    try {
+      setIsLoading(true);
+      setError("");
+      // Simulate successful OTP verification
+      setIsOtpVerified(true);
+    } catch (err) {
+      setError("Invalid OTP. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleTwitterConnect = () => {
+    // Simulate successful Twitter connection
+    setIsTwitterConnected(true);
+  };
+
+  const handleSecureSpot = async () => {
+    if (!isOtpVerified || !selectedWallet || !isTwitterConnected) {
+      setError("Please complete all required steps");
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      setError("");
+      // Simulate successful spot securing
+      setShowChecklist(true);
+    } catch (err) {
+      setError("Failed to secure your spot. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const isFormComplete = isOtpVerified && selectedWallet && isTwitterConnected;
 
   const [steps, setSteps] = useState<Step[]>([
     {
@@ -132,6 +223,14 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
           setIsInviteCodeVisible(false);
           setShowChecklist(false);
           setShowSuccess(false);
+          setEmail("");
+          setOtp("");
+          setTimer(0);
+          setIsOtpSent(false);
+          setIsOtpVerified(false);
+          setIsTwitterConnected(false);
+          setError("");
+          setIsLoading(false);
         }}
       >
         <Transition.Child
@@ -208,6 +307,8 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
                         <div className="relative">
                           <input
                             type="email"
+                            value={email}
+                            onChange={handleEmailChange}
                             placeholder="Enter your email"
                             className="w-full px-4 py-3 bg-transparent border border-primary-100/40 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary-100"
                           />
@@ -222,14 +323,43 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
                         <div className="relative">
                           <input
                             type="text"
+                            value={otp}
+                            onChange={(e) => setOtp(e.target.value)}
                             placeholder="6-digits verification code"
                             className="w-full px-4 py-3 bg-transparent border border-primary-100/40 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary-100 pr-24"
                           />
-                          <button className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1.5 text-primary-100 hover:bg-primary-100/10 rounded transition-colors">
-                            Send
+                          <button
+                            onClick={handleSendOtp}
+                            disabled={!isEmailValid || timer > 0 || isLoading}
+                            className={`absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1.5 text-primary-100 hover:bg-primary-100/10 rounded transition-colors ${
+                              (!isEmailValid || timer > 0 || isLoading) &&
+                              "opacity-50 cursor-not-allowed"
+                            }`}
+                          >
+                            {isLoading
+                              ? "Sending..."
+                              : timer > 0
+                              ? `Resend (${timer}s)`
+                              : "Send"}
                           </button>
                         </div>
+                        {isOtpSent && !isOtpVerified && (
+                          <button
+                            onClick={handleVerifyOtp}
+                            disabled={!otp || isLoading}
+                            className={`w-full mt-2 px-4 py-2 bg-primary-100 text-black font-medium rounded-lg hover:bg-primary-100/90 transition-colors ${
+                              (!otp || isLoading) &&
+                              "opacity-50 cursor-not-allowed"
+                            }`}
+                          >
+                            {isLoading ? "Verifying..." : "Verify OTP"}
+                          </button>
+                        )}
                       </div>
+
+                      {error && (
+                        <p className="text-red-500 text-sm mt-2">{error}</p>
+                      )}
 
                       {/* Wallet Selection */}
                       <div className="space-y-2">
@@ -247,8 +377,17 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
                         <label className="text-white text-sm font-medium">
                           Connect X
                         </label>
-                        <button className="w-full px-4 py-3 bg-gradient-to-r from-black to-zinc-800 border border-primary-100/40 rounded-lg text-gray-400 hover:bg-opacity-90 transition-colors flex items-center justify-between">
-                          <span>Link your X account</span>
+                        <button
+                          onClick={handleTwitterConnect}
+                          className={`w-full px-4 py-3 bg-gradient-to-r from-black to-zinc-800 border border-primary-100/40 rounded-lg text-gray-400 hover:bg-opacity-90 transition-colors flex items-center justify-between ${
+                            isTwitterConnected ? "border-green-500" : ""
+                          }`}
+                        >
+                          <span>
+                            {isTwitterConnected
+                              ? "Connected to X"
+                              : "Link your X account"}
+                          </span>
                           <svg
                             className="w-5 h-5 text-gray-400"
                             viewBox="0 0 24 24"
@@ -290,10 +429,13 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
                       </div>
                       <div className="relative w-full flex justify-center items-center py-4">
                         <button
-                          onClick={() => setShowChecklist(true)}
-                          className="px-10 py-3 bg-primary-100 text-black font-bold rounded-lg hover:bg-primary-100/90 transition-colors"
+                          onClick={handleSecureSpot}
+                          disabled={!isFormComplete}
+                          className={`px-10 py-3 bg-primary-100 text-black font-bold rounded-lg hover:bg-primary-100/90 transition-colors ${
+                            !isFormComplete && "opacity-50 cursor-not-allowed"
+                          }`}
                         >
-                          Secure your spot
+                          {isLoading ? "Processing..." : "Secure your Spot"}
                         </button>
                       </div>
                     </div>

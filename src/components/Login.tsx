@@ -134,7 +134,7 @@ const Login = () => {
                   Connecting...
                 </div>
               ) : (
-                <>Enter Lab</>
+                <>Early Access</>
               )}
             </button>
           </div>

@@ -426,29 +426,76 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
       let bridgeData = null;
       console.log("calling contract", contractAddress[selectedNetwork?.id!]);
 
-      if (isSameChain) {
-        //Call Lock function
-        const lockArgs = [data, toAddress];
+      // Calculate the value for native token transactions
+      const isNativeToken =
+        selectedCoin?.address!.toLowerCase() ===
+        "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
+      const value = isNativeToken
+        ? ParseEthUtil(fromAmount, selectedCoin?.decimals).toString()
+        : "0";
 
-        //For native tokens, add value param to the lock function
-        if (
-          selectedCoin?.address!.toLowerCase() ==
-          "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
-        ) {
-          lockArgs.push({
-            value: ParseEthUtil(fromAmount, selectedCoin?.decimals).toString(),
-          });
+      // Prepare arguments for both swap and lock functions
+      const swapArgs = [data, toAddress];
+      const lockArgs = [
+        data,
+        ethers.utils.formatBytes32String(
+          networkAbb[Number(selectedToNetwork?.id)].code
+        ),
+        selectedToCoin?.address,
+        toAddress,
+        isContractSymbiosisFlow && !(await canUseAdminLiquidity()) ? 1 : 0,
+        "dexter",
+      ];
+
+      // Prepare transaction options with a higher base gas limit
+      const txOptions = {
+        gasLimit: undefined as any,
+        value: isNativeToken ? value : undefined,
+      };
+
+      try {
+        // First attempt with normal gas estimation
+        const gasEstimate = await bridgingContract.estimateGas[
+          isSameChain ? "swap" : "lock"
+        ](...(isSameChain ? swapArgs : lockArgs), txOptions);
+
+        // Add 50% buffer for safety
+        const gasWithBuffer = gasEstimate.mul(150).div(100);
+        txOptions.gasLimit = gasWithBuffer;
+      } catch (gasError: any) {
+        console.error("Initial gas estimation failed:", gasError);
+
+        // If initial estimation fails, try with a higher fixed gas limit
+        // Use different limits for different operations
+        const baseGasLimit = isSameChain ? 500000 : 1000000;
+        txOptions.gasLimit = baseGasLimit;
+
+        // For cross-chain transactions, add extra buffer
+        if (!isSameChain) {
+          txOptions.gasLimit = baseGasLimit * 2;
         }
-        console.log(lockArgs);
-        console.log({
-          data: data,
-          address: toAddress,
-          gas: ethers.utils.formatEther(
-            await bridgingContract.estimateGas.swap(...lockArgs)
-          ),
-        });
-        // Call Swap function
-        bridgeData = await bridgingContract.swap(...lockArgs);
+      }
+
+      if (isSameChain) {
+        // Call Swap function with retry mechanism
+        let retryCount = 0;
+        const maxRetries = 3;
+
+        while (retryCount < maxRetries) {
+          try {
+            bridgeData = await bridgingContract.swap(...swapArgs, txOptions);
+            setIsSwapped(true);
+            setSwapHash(bridgeData.hash);
+            break;
+          } catch (swapError: any) {
+            retryCount++;
+            if (retryCount === maxRetries) throw swapError;
+
+            // Increase gas limit for next retry
+            txOptions.gasLimit = txOptions.gasLimit.mul(120).div(100);
+            await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait 1 second before retry
+          }
+        }
       } else {
         const isUseAdminLiquidity = await canUseAdminLiquidity();
         if (isUsingOurBridge && !isUseAdminLiquidity) {
@@ -456,83 +503,41 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
             "Liquidity changed just before transaction, Please retry!"
           );
         }
-        //Call Lock function
-        const lockArgs = [
-          data,
-          ethers.utils.formatBytes32String(
-            networkAbb[Number(selectedToNetwork?.id)].code
-          ),
-          selectedToCoin?.address,
-          toAddress,
-          isContractSymbiosisFlow && !isUseAdminLiquidity ? 1 : 0,
-        ];
-        //https://www.devoven.com/encoding/string-to-bytes32
 
-        //For native tokens, add value param to the lock function
-        if (
-          selectedCoin?.address!.toLowerCase() ==
-          "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
-        ) {
-          lockArgs.push({
-            value: ParseEthUtil(fromAmount, selectedCoin?.decimals)?.toString(),
-          });
-        }
-        console.log("lokag", lockArgs);
-        console.log({
-          data: data,
-          finalNet: selectedToNetwork?.id,
-          finalCoin: selectedToCoin?.address,
-          gas: ethers.utils.formatEther(
-            await bridgingContract.estimateGas.lock(...lockArgs)
-          ),
-        });
-
-        // Estimate gas and add buffer
-        const gasEstimate = await bridgingContract.estimateGas.lock(
-          ...lockArgs
-        );
-        const gasWithBuffer = gasEstimate.mul(140).div(100); // Add 20% buffer
-
-        //Calling bridge lock function with gas limit
-        if (
-          selectedCoin?.address!.toLowerCase() !=
-          "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
-        ) {
-          bridgeData = await bridgingContract.lock(...lockArgs, {
-            gasLimit: gasWithBuffer,
-          });
-        } else {
-          bridgeData = await bridgingContract.lock(...lockArgs);
-        }
-
-        // Set swap only after hash generated for swap on contract, and show release process for lock function
+        bridgeData = await bridgingContract.lock(...lockArgs, txOptions);
         setIsSwapped(true);
         setSwapHash(bridgeData.hash);
       }
-      // console.log(bridgeData);
+
       setIsFinalStep(true);
       getTransactionReceiptMined(bridgeData.hash, "continue");
-    } catch (err) {
+    } catch (err: any) {
       setErrored(
         "Something Went Wrong. Please contact admin or write to help support."
       );
       console.log("error in send ", JSON.stringify(err), err);
-      if ((err as any)?.error) {
-        toastUpdate(TOAST_ID.PROCESS, {
-          type: "error",
-          render: `Transaction failed, Error : ${String(
-            (err as any)?.error?.message
-          )?.slice(0, 30)}`,
-        });
-      } else
-        toastUpdate(TOAST_ID.PROCESS, {
-          type: "error",
-          render: `Transaction failed, Error : ${
-            (err as any)?.data?.message ||
-            (err as any)?.code?.slice(0, 30) ||
-            (err as any)?.message
-          }`,
-        });
+
+      // Enhanced error handling with specific messages
+      let errorMessage = "Transaction failed";
+      if (err?.error?.message?.includes("execution reverted")) {
+        if (err?.error?.message?.includes("Swap execution failed")) {
+          errorMessage =
+            "Swap failed - This could be due to insufficient liquidity or high price impact. Please try with a different amount or token pair.";
+        } else {
+          errorMessage =
+            "Transaction reverted - Please check your input parameters and try again.";
+        }
+      } else if (err?.code === "UNPREDICTABLE_GAS_LIMIT") {
+        errorMessage =
+          "Gas estimation failed - Please try with a higher gas limit or different amount.";
+      } else if (err?.code === "INSUFFICIENT_FUNDS") {
+        errorMessage = "Insufficient funds for gas * price + value";
+      }
+
+      toastUpdate(TOAST_ID.PROCESS, {
+        type: "error",
+        render: `Transaction failed: ${errorMessage}`,
+      });
       setIsFinalStep(false);
     }
   };
@@ -555,7 +560,9 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
         setIsFinalStep(false);
         toastUpdate(TOAST_ID.PROCESS, {
           type: "error",
-          render: `Transaction Failed : Contract Failed to Lock. Please retry!`,
+          render: `Transaction Failed : Contract Failed to ${
+            isSameChain ? "Swap" : "Lock"
+          }. Please retry!`,
         });
         throw `Transaction Failed : ${txHash}`;
       }

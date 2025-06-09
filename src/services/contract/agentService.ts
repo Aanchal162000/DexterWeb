@@ -6,11 +6,12 @@ import { QuoteRequestParams } from "./interfaces";
 interface AgentRequest {
   genesisId: string;
   name: string;
-  walletAddress: string;
-  token: "eth" | "virtual";
-  amount: string;
+  // walletAddress: string;
+  // token: "eth" | "virtual";
+  // amount: string;
   launchTime: Date;
   marketCap: string;
+  txHash: string;
 }
 
 interface AgentResponse {
@@ -34,6 +35,54 @@ interface AgentStatusResponse {
     walletAddress: string;
     createdAt: string;
     updatedAt: string;
+  };
+}
+
+interface IUserDeposit {
+  amount: string;
+  marketCap: string;
+  token: "eth" | "virtual";
+  depositTxHash: string;
+}
+
+interface ITransaction {
+  status: "not_started" | "pending" | "completed" | "failed";
+  hash: string;
+}
+
+interface ITimestamps {
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface IAgentTransaction {
+  agentId: string;
+  agentName: string;
+  genesisId: string;
+  launchTime: string;
+  agentStatus: string;
+  userDeposit: IUserDeposit;
+  transaction: ITransaction;
+  timestamps: ITimestamps;
+}
+
+interface ITransactionResponse {
+  success: boolean;
+  message: string;
+  data: {
+    walletAddress: string;
+    transactions: IAgentTransaction[];
+    pagination: {
+      totalCount: number;
+      currentCount: number;
+      limit: number;
+      page: number;
+      totalPages: number;
+      hasMore: boolean;
+      hasPrevious: boolean;
+      nextPage: number | null;
+      previousPage: number | null;
+    };
   };
 }
 
@@ -99,6 +148,39 @@ class AgentService {
       return receipt;
     } catch (error) {
       console.error("Error in deposit:", error);
+      throw error;
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  public async withdraw(
+    params: DepositParams
+  ): Promise<ethers.providers.TransactionReceipt> {
+    try {
+      this.loading = true;
+      const { tokenAddress, amount, provider } = params;
+
+      // Create contract instance with signer
+      const contract = new ethers.Contract(
+        this.contract,
+        this.abi,
+        provider.getSigner()
+      );
+
+      // Convert amount to wei (18 decimals)
+      const amountInWei = ethers.utils.parseUnits(amount, 18);
+      console.log("amount", amount, amountInWei);
+
+      let tx;
+
+      tx = await contract.withdraw(tokenAddress, amountInWei);
+
+      // Wait for transaction to be mined
+      const receipt = await tx.wait();
+      return receipt;
+    } catch (error) {
+      console.error("Error in withdraw:", error);
       throw error;
     } finally {
       this.loading = false;
@@ -250,6 +332,21 @@ class AgentService {
       return parsedAmount.toFixed(decimals);
     } catch (error) {
       console.error("Error formatting amount:", error);
+      throw error;
+    }
+  }
+
+  public async getUserTransactions(
+    walletAddress: string
+  ): Promise<ITransactionResponse> {
+    try {
+      const response = await fetch(
+        `https://dexter-backend-ucdt5.ondigitalocean.app/api/user-transactions/${walletAddress}`
+      );
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Error fetching user transactions:", error);
       throw error;
     }
   }

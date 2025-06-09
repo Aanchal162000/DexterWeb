@@ -15,7 +15,7 @@ export const baseList: IArbCoin[] = require("./jsons/baseList.json");
 export const avalancheList = require("./jsons/avalanche.json");
 export const optimismList = require("./jsons/optimism.json");
 export const BuyContract = "0xa74e5595bd0a29a0E437ACF6461F624CE6218E9f";
-export const SnipeContract = "0x70Bbf55CC7D401Bb780e07FE4b7fF8F18Db91BfA";
+export const SnipeContract = "0x0D781AbdF93A2506d35d2395A1151Cfa068E1CDA";
 export const VIRTUALS_TOKEN_ADDRESS =
   "0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b";
 export const WRAPPED_ETH_ADDRESS = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2";
@@ -375,13 +375,13 @@ export const chainsLogo: any = {
 };
 
 export const contractAddress: { [key: string | number]: string } = {
+  56: "0x03D6324ED7d82082687A1E8EAD606f3cb5Fd46De", //bnb
   1: "0xB7C016d5C8c0243e008461e82b2C83682d63Bd57", //eth
-  56: "0xEAA25504596fFb6D6bEDfBe9458083323f6F425A", //bnb
-  137: "0x44F357E5f021C8061969Aaa69F2d98FBb297EED7", //poly
-  42161: "0x8042d3C1e09AAf362bF6930B10c80ac2b0A648B0", //arb
-  8453: "0xf8976F4F4F1c047891b994d34d32A3a8974721A9", //base
-  10: "0xd385c30e1A47C4ce9385877e7951E98A46264e5F", //op
-  43114: "0x6d6e736414a2913e327853F87B5377702a7F9bc6", //ava
+  137: "0x49FB7caCD332D1F875CD52e7eF242f7ba60F5Bbb", //poly
+  42161: "0x5c19420301985b0e20767415a3af100Cb79FE130", //arb
+  8453: "0xE18CD8DEeec0180459c20Ef1d6b96bd5f816C84e", //base
+  43114: "0x9F4E7DF562c7cCFb8b06B561eb21A33ea85af789", //ava
+  10: "0x25DC5Df66AF9176c1d3Ae0b9231ABbbfA7157503", //op
 };
 
 export const alchemyProviderURL: { [key: string | number]: string } = {

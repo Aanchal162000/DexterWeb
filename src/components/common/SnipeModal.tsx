@@ -164,8 +164,16 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
             spenderAddress: SnipeContract,
           });
 
+          // Convert amount to number and add buffer
+          const amountWithBuffer = Number(amount) + 0.001 * Number(amount);
+
+          // Ensure we have valid numbers for comparison
+          if (isNaN(amountWithBuffer)) {
+            throw new Error("Invalid amount value");
+          }
+
           // If allowance is less than amount, approve first
-          if (Number(allowance) < Number(amount)) {
+          if (Number(allowance) < amountWithBuffer) {
             if (approveToastId) toast.dismiss(approveToastId);
             approveToastId = toast.info("Approving token spend...", {
               autoClose: false,
@@ -173,7 +181,7 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
               closeButton: false,
             });
             await approvalService.approveVirtualToken(
-              amount.toString(),
+              (Number(amount) + 0.1).toString(),
               networkData?.provider!,
               VIRTUALS_TOKEN_ADDRESS,
               SnipeContract
@@ -201,16 +209,19 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
       if (receipt.transactionHash) {
         // Convert to wei without scientific notation
         const amountInWei = BigInt(
-          Math.floor((Number(amount) - 0.003 * Number(amount)) * 10 ** 18)
+          Math.floor(Number(amount) * 10 ** 18) -
+            Math.floor(Number(amount) * 0.003 * 10 ** 18)
         ).toString();
+        console.log("amountinWei", amountInWei);
         const response = await agentService.createAgent({
           genesisId,
           name,
-          walletAddress,
-          token: selectedVitualtoken.symbol === "ETH" ? "eth" : "virtual",
-          amount: amountInWei,
+          // walletAddress,
+          // token: selectedVitualtoken.symbol === "ETH" ? "eth" : "virtual",
+          // amount: amountInWei,
           launchTime: new Date(endsAt),
           marketCap: marketCapBuyRange.toString(),
+          txHash: receipt.transactionHash,
         });
         triggerAPIs();
         fetchSubscriptionData();
@@ -317,7 +328,7 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
             {isFromCoinOpen && (
               <div
                 ref={coinSelectRef}
-                className="absolute right-0 mt-2 w-48  border border-primary-100/30  backdrop-blur-sm  bg-black/25 drop-shadow-lg rounded shadow-lg z-10"
+                className="absolute right-0 mt-2 w-48  border border-primary-100/30  backdrop-blur-sm  bg-black/40 drop-shadow-lg rounded shadow-lg z-10"
               >
                 <div className="py-1">
                   {tokenOptions.map((token) => (

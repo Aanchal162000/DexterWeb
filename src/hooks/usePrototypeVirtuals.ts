@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
 import { IAssetsData, IVirtual } from "@/utils/interface";
-import { ethers } from "ethers";
-import approvalService from "@/services/contract/approvalService";
 import { usePeriodicRefresh } from "./usePeriodicRefresh";
 import { useLocalStorage } from "./useLocalStorage";
 
@@ -67,7 +65,6 @@ export const usePrototypeVirtuals = () => {
     virtualTokenValue: string,
     virtualTokenUSDPrice: number
   ): number {
-    console.log("Check", virtualTokenValue, virtualTokenUSDPrice);
     const valueInTokens = Number(virtualTokenValue) / 1e18;
     const priceInUSD = valueInTokens * virtualTokenUSDPrice;
     return parseFloat(priceInUSD.toFixed(8)); // return price with 6 decimal precision

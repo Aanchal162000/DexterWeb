@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { IVirtual } from "@/utils/interface";
 import { useLoginContext } from "@/context/LoginContext";
-import { useSwapContext } from "@/context/SwapContext";
+
 import { useWalletBalance } from "@/hooks/useWalletBalance";
 import { toast } from "react-toastify";
 import DialogContainer from "../Swap/DialogContainer";
@@ -10,10 +10,11 @@ import SwapSection from "./SwapSection";
 import ConfirmationDialog from "../common/ConfirmationDialog";
 import SnipeStatus from "./SnipeStatus";
 import { networkCards } from "@/constants/config";
-import { TokenOption } from "@/components/common/TokenSelector";
+
 import { TRXService } from "@/services/transaction";
 import useEffectAsync from "@/hooks/useEffectAsync";
 import approvalService from "@/services/contract/approvalService";
+import { ethers } from "ethers";
 
 interface SnipeSwapProps {
   virtuals: IVirtual[];
@@ -33,8 +34,8 @@ const SnipeSwap: React.FC<SnipeSwapProps> = ({
   const { networkData, triggerAPIs, address } = useLoginContext();
   const [isFromCoinOpen, setIsFromCoinOpen] = useState(false);
   const [isToCoinOpen, setIsToCoinOpen] = useState(false);
-  const [fromAmount, setFromAmount] = useState<number>(0);
-  const [toAmount, setToAmount] = useState<number>(0);
+  const [fromAmount, setFromAmount] = useState<number | string>(0);
+  const [toAmount, setToAmount] = useState<number | string>(0);
   const [buttonText, setButtonText] = useState<string>("Select Token");
   const [isConfirmPop, setIsConfirmPop] = useState<boolean>(false);
   const [isFinalStep, setIsFinalStep] = useState<boolean>(false);
@@ -101,7 +102,12 @@ const SnipeSwap: React.FC<SnipeSwapProps> = ({
       return;
     }
 
-    if (!fromAmount || !toAmount || isNaN(fromAmount) || isNaN(toAmount)) {
+    if (
+      !fromAmount ||
+      !toAmount ||
+      isNaN(Number(fromAmount)) ||
+      isNaN(Number(toAmount))
+    ) {
       toast.error("Invalid amount values");
       return;
     }
@@ -112,7 +118,8 @@ const SnipeSwap: React.FC<SnipeSwapProps> = ({
       setErrored(false);
 
       const trxService = TRXService.getInstance();
-      const signer = networkData?.provider.getSigner();
+      const Provider = networkData?.provider as ethers.providers.Web3Provider;
+      const signer = await Provider.getSigner(address!);
       setIsConvert(true);
 
       // Convert to wei without scientific notation
@@ -134,7 +141,6 @@ const SnipeSwap: React.FC<SnipeSwapProps> = ({
         setIsTokenRelease(true);
         setReleaseHash(result?.chainTxInfo?.transactionHash!);
         setSwapHash(result?.chainTxInfo?.transactionHash!);
-
         triggerAPIs();
         toast.success("Swap transaction successful! 🎉");
         await refetchBalances();
@@ -145,6 +151,7 @@ const SnipeSwap: React.FC<SnipeSwapProps> = ({
       console.error("Swap error:", error);
       toast.error(error instanceof Error ? error.message : "Swap failed");
       setIsFinalStep(false);
+      setIsTokenRelease(false);
       setIsConvert(false);
       setErrored(true);
     }
@@ -161,6 +168,7 @@ const SnipeSwap: React.FC<SnipeSwapProps> = ({
     setSelectedVirtual(null);
     setSelectedToVirtual(null);
     setSelectedPercentage(null);
+    setSwapHash(null);
   };
 
   useEffect(() => {

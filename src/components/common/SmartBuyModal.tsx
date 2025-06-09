@@ -73,6 +73,12 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
       logo: "/Networks/ETH.png",
       balance: balances.ETH || "0",
     },
+    {
+      name: "Dexter",
+      symbol: "DEXTER",
+      logo: "/Trade/dexterLogo.png",
+      balance: "0",
+    },
   ];
 
   useEffect(() => {
@@ -126,11 +132,12 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
           });
 
           // If allowance is less than amount, approve first
-          if (Number(allowance) < Number(amount)) {
+          const amountWithBuffer = Number(amount) + 0.001 * Number(amount);
+          if (Number(allowance) < amountWithBuffer) {
             if (approveToastId) toast.dismiss(approveToastId);
 
             await approvalService.approveVirtualToken(
-              amount.toString(),
+              (Number(amount) + 0.2).toString(),
               networkData?.provider!,
               VIRTUALS_TOKEN_ADDRESS,
               BuyContract
@@ -203,11 +210,11 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
 
   return (
     <div
-      className={`w-[95%] mx-auto transition-all duration-300 ease-in-out overflow-hidden ${
-        isOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
+      className={`w-[95%] mx-auto transition-all duration-300 ease-in-out ${
+        isOpen ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0"
       }`}
     >
-      <div className="rounded-b-xl bg-primary-100/10 py-2 px-4">
+      <div className="rounded-b-xl bg-primary-100/10 py-2 px-4 relative">
         <div className="relative flex flex-col pt-3">
           <div className="absolute top-3 right-1 flex justify-end items-start">
             <button
@@ -256,39 +263,40 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
                   </button>
                 </div>
               </div>
-            </div>
-
-            {/* Token Selector Dropdown */}
-            {isFromCoinOpen && (
-              <div
-                ref={coinSelectRef}
-                className="absolute right-0 mt-2 w-48 bg-[#1A1A1A] border border-primary-100/20 rounded-lg shadow-lg z-10"
-              >
-                <div className="py-1">
-                  {tokenOptions.map((token) => (
-                    <button
-                      key={token.symbol}
-                      onClick={() => handleTokenSelect(token)}
-                      className="w-full px-4 py-2 text-left text-white hover:bg-primary-100/10 flex items-center gap-2"
-                    >
-                      <img
-                        src={token.logo}
-                        alt={token.symbol}
-                        className="w-6 h-6 rounded-full"
-                      />
-                      <div className="flex flex-col">
-                        <span className="text-sm font-medium">
-                          {token.symbol}
-                        </span>
-                        <span className="text-xs text-gray-400">
-                          Balance: {Number(token.balance).toFixed(6)}
-                        </span>
-                      </div>
-                    </button>
-                  ))}
+              {/* Token Selector Dropdown */}
+              {isFromCoinOpen && (
+                <div
+                  ref={coinSelectRef}
+                  className="absolute z-[100] right-0  mt-2 w-48 overflow-auto border border-primary-100/20 backdrop-blur-sm bg-black/40 drop-shadow-lg rounded shadow-lg max-h-[200px]"
+                  style={{ top: "100%" }}
+                >
+                  <div className="py-1">
+                    {tokenOptions.map((token) => (
+                      <button
+                        key={token.symbol}
+                        onClick={() => handleTokenSelect(token)}
+                        disabled={token.symbol === "DEXTER"}
+                        className="w-full px-4 py-2 text-left text-white hover:bg-primary-100/10 flex border-b last:border-b-0 border-primary-100/20 items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        <img
+                          src={token.logo}
+                          alt={token.symbol}
+                          className="w-6 h-6 rounded-full"
+                        />
+                        <div className="flex flex-col">
+                          <span className="text-sm font-medium">
+                            {token.symbol}
+                          </span>
+                          <span className="text-xs text-gray-400">
+                            Balance: {Number(token.balance).toFixed(6)}
+                          </span>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
 
             <div className="flex justify-between items-center my-2">
               <div className="text-gray-400 text-[11px] text-nowrap">

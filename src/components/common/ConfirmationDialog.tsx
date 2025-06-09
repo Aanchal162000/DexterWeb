@@ -49,7 +49,7 @@ function ConfirmationDialog({
 
       // Convert to wei without scientific notation
       const amountInWei = BigInt(
-        Math.floor(Number(fromAmount) * 10 ** 18)
+        Math.floor((Number(fromAmount) + 0.001 * Number(fromAmount)) * 10 ** 18)
       ).toString();
 
       const result = await trxService.approveTransaction(

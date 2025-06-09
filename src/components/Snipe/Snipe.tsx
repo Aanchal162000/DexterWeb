@@ -19,6 +19,7 @@ import FilterDropdown from "./FilterDropdown";
 import AlertsSettings from "./AlertsSettings";
 import { useSettings } from "@/context/SettingsContext";
 import TransactionHistory from "./TransactionHistory";
+import VirtualTransactions from "./VirtualTransactions";
 
 const Snipe = () => {
   const [selectedTab, setSelectedTab] = useState<"swap" | "create">("swap");
@@ -54,6 +55,9 @@ const Snipe = () => {
     { id: "volume", name: "Volume" },
     { id: "holders", name: "Holders" },
   ];
+  useEffect(() => {
+    setShowSettings(false);
+  }, []);
 
   const handleFilterSelect = (option: any, isDescending: boolean) => {
     setSelectedFilter(option);
@@ -248,7 +252,8 @@ const Snipe = () => {
                   />
                 </div>
               ) : (
-                <TransactionHistory />
+                // <TransactionHistory />
+                <VirtualTransactions />
               )}
             </div>
           )}

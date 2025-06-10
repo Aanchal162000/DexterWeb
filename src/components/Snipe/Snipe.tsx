@@ -20,11 +20,13 @@ import AlertsSettings from "./AlertsSettings";
 import { useSettings } from "@/context/SettingsContext";
 import TransactionHistory from "./TransactionHistory";
 import VirtualTransactions from "./VirtualTransactions";
+import { useMediaQuery } from "react-responsive";
 
 const Snipe = () => {
   const [selectedTab, setSelectedTab] = useState<"swap" | "create">("swap");
   const { virtuals, loading, error, fetchVirtuals } = useSentientVirtuals();
   const { address } = useLoginContext();
+  const isMd = useMediaQuery({ minWidth: 768 });
 
   const {
     data: genesisData,
@@ -49,6 +51,7 @@ const Snipe = () => {
   const [isDescending, setIsDescending] = useState(true);
   const [resetCount, setResetCount] = useState<number>(0);
   const { showSettings, setShowSettings } = useSettings();
+  const [bottomTab, setBottomTab] = useState<"list" | "dex">("list");
 
   const filterOptions = [
     { id: "24hrsChange", name: "24hrs Change" },
@@ -124,7 +127,7 @@ const Snipe = () => {
     }
   };
 
-  const renderGenesisItem = (genesis: any) => {
+  const   renderGenesisItem = (genesis: any) => {
     // Check if the Genesis has ended
     const now = new Date();
     const endDate = new Date(genesis.endsAt);
@@ -148,8 +151,9 @@ const Snipe = () => {
   );
 
   return (
-    <div className="w-full h-full overflow-y-auto lg:overflow-y-hidden lg:h-full flex-1 flex flex-row lg:px-14 sm:px-7 px-4 py-3 gap-4 justify-center">
-      <div className="w-full md:flex hidden overflow-hidden">
+    <div className="w-full h-full overflow-y-auto lg:overflow-y-hidden lg:h-full flex-1 flex sm:flex-row flex-col lg:px-14 sm:px-7 px-4 py-3 gap-4 justify-center">
+      {(isMd || bottomTab === "list") &&
+      <div className="w-full flex overflow-hidden">
         {/* OverView section  */}
         <div className="relative h-full w-full backdrop-blur-sm bg-[#15181B]/80 border border-primary-100 rounded-xl text-white flex flex-col ">
           <div className="flex items-center justify-between pt-4 pb-4 border-b border-primary-100 px-8">
@@ -258,8 +262,9 @@ const Snipe = () => {
             </div>
           )}
         </div>
-      </div>
+      </div>}
       {/* Swap/Create Section */}
+      {(isMd || bottomTab === "dex") &&
       <div className="sm:!w-[clamp(38%,30rem,43%)] min-w-[23.75rem] w-full flex justify-center items-center h-full">
         <div className="bg-[#15181B]/80 backdrop-blur-sm text-white border border-primary-100 rounded-xl relative h-full w-full shadow-md overflow-y-hidden">
           {/* Tab Selection */}
@@ -311,6 +316,10 @@ const Snipe = () => {
             </div>
           )}
         </div>
+      </div>}
+      <div className="md:hidden w-full flex flex-row border-t border-primary-100">
+        <button className={`basis-1/2 shrink-0 ${bottomTab === "list" ? "bg-white/20 border border-t-none" : ""}`} onClick={() => setBottomTab("list")}>List</button>
+        <button className={`basis-1/2 shrink-0 ${bottomTab === "dex" ? "bg-white/20 border border-t-none" : ""}`} onClick={() => setBottomTab("dex")}>Dex</button>
       </div>
     </div>
   );

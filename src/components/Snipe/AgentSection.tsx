@@ -11,7 +11,7 @@ const AgentSection: React.FC<AgentSectionProps> = ({
 }) => {
   return (
     <div
-      className={`flex flex-col relative w-1/3 ${
+      className={`flex flex-col relative sm:w-1/3 w-[90%] shrink-0 ${
         type != "sentient" ? "border-r" : ""
       }  border-primary-100 h-full`}
     >

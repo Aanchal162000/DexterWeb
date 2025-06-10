@@ -6,7 +6,7 @@ import SupportContacts from "./SupportContacts";
 export default function HelpCenter() {
   return (
     <div
-      className={`w-full h-full overflow-y-auto lg:overflow-y-hidden lg:h-full flex-1 flex flex-row lg:px-14 sm:px-7 px-4 py-3 gap-4 items-center justify-between`}
+      className={`w-full h-full overflow-y-auto lg:overflow-y-hidden lg:h-full flex-1 flex md:flex-row flex-col lg:px-14 sm:px-7 px-4 py-3 gap-4 items-center justify-between`}
     >
       {/* <div className="flex flex-col overflow-hidden h-full w-screen overflow-y-auto bg-black sm:py-2 py-10"> */}
       {/* <div className="relative shrink-0 screen-container min-h-full overflow-y-auto flex sm:flex-row flex-col overflow-hidden xl:text-lg w-full items-center justify-center px-[6%]"> */}

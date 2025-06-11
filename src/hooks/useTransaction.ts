@@ -44,7 +44,6 @@ export default function useTransaction({
         bridgeTransactions,
         erc20Transactions,
         internalTransactions,
-        userTransactions,
         transactionsCount,
       }: any = await getTransactionsAll({
         address: address as string,
@@ -179,72 +178,11 @@ export default function useTransaction({
           });
           return;
         }
-        if (
-          userTransactions?.some(
-            (item: any) =>
-              item.hash === trx?.hash &&
-              !isAddressEqual(item.toAddress, trx.toAddress) &&
-              isAddressEqual(item.chainId, trx.chainId)
-          )
-        ) {
-          let trns = userTransactions?.find(
-            (item: any) =>
-              item.hash === trx.hash &&
-              !isAddressEqual(item.toAddress, trx.toAddress) &&
-              isAddressEqual(item.chainId, trx.chainId)
-          );
-          // console.log("swap", trns, trx);
-          const chainObj = tokenSymbolList.find(
-            (item) => item.conversionSymbol === trns?.chainId?.toLowerCase()
-          );
-          let isFromMyAddress = isAddressEqual(trx.fromAddress, address!);
-
-          outHashes.push(trx?.hash);
-          output.push({
-            fromNetwork: chainObj?.code,
-            toNetwork: chainObj?.code,
-            fromTokenAddress: isFromMyAddress ? trx?.token : "NATIVE",
-            toTokenAddress: isFromMyAddress ? "NATIVE" : trx?.token,
-            srcAmount: isFromMyAddress ? trx?.value : trns?.value,
-            swapAmount: isFromMyAddress ? trns?.value : trx?.value,
-            timeStamp: trx.blockTimeStamp,
-            hash: trx?.hash,
-            type: "swap",
-          });
-          return;
-        }
       });
       bridgeTransactions?.forEach((item: any) => {
         //Bridge
         outHashes.push(...[item?.lockHash, item?.releaseHash]);
         output.push({ ...item, type: "bridge" });
-      });
-      userTransactions?.forEach((trx: any) => {
-        //IN-OUT
-        if (outHashes.includes(trx?.hash)) return;
-        let notBridgeTransaction = !(
-          bridge_contract.includes(trx?.toAddress) ||
-          bridge_contract.includes(trx?.fromAddress)
-        );
-        if (
-          trx?.fromAddress?.toUpperCase() === address?.toUpperCase() &&
-          notBridgeTransaction
-        ) {
-          outHashes.push(trx?.hash);
-          output.push({ ...trx, type: "out" });
-        } else if (
-          trx?.toAddress?.toUpperCase() === address?.toUpperCase() &&
-          notBridgeTransaction
-        ) {
-          outHashes.push(trx?.hash);
-          output.push({ ...trx, type: "in" });
-        }
-      });
-      // console.log("outHash", outHashes);
-      userTransactions.forEach((item: any) => {
-        if (!outHashes.includes(item?.hash)) {
-          output.push({ ...item, type: "fail" });
-        }
       });
 
       output.sort((a: any, b: any) => {

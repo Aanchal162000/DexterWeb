@@ -790,7 +790,7 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
     } catch (err: any) {
       console.error("Error executing Symbiosis transaction:", err);
       toastDismiss(TOAST_ID.PROCESS);
-      toastError(err?.message || "Transaction failed");
+      toastError("Transaction failed");
       setIsFinalStep(false);
     }
   };

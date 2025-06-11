@@ -15,7 +15,11 @@ import {
 import { useLoginContext } from "@/context/LoginContext";
 import { TiArrowSortedDown } from "react-icons/ti";
 import SliderHandler from "./Slider";
-import { addCommas, formatNumberWithSuffix } from "@/utils/helper";
+import {
+  addCommas,
+  formatNumberWithCommas,
+  formatNumberWithSuffix,
+} from "@/utils/helper";
 import useClickOutside from "@/hooks/useClickOutside";
 import Slider from "./Slider";
 
@@ -62,7 +66,7 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
   const [selectedPercentage, setSelectPercentage] = useState<
     10 | 25 | 50 | 100 | number
   >(10);
-  const [marketCapBuyRange, setMarketCapBuyRange] = useState(10000000);
+  const [marketCapBuyRange, setMarketCapBuyRange] = useState<number>(10000000);
   const [activeControl, setActiveControl] = useState<"slider" | "input">(
     "slider"
   );
@@ -230,7 +234,7 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
           throw new Error(response.message);
         }
         if (processToastId) toast.dismiss(processToastId);
-        toast.success("Snipe successful! 🎉");
+        toast.success("Snipe successful!");
         onClose();
       } else {
         if (processToastId) toast.dismiss(processToastId);
@@ -397,7 +401,7 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
               <div className="relative w-full border border-primary-100/70 rounded flex flex-col items-start justify-center px-4">
                 <input
                   id="marketCap"
-                  value={marketCapBuyRange}
+                  value={formatNumberWithCommas(marketCapBuyRange)}
                   onChange={handleInputChange}
                   onFocus={() => setActiveControl("input")}
                   disabled={isLoading || isProcessing}

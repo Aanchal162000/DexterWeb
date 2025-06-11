@@ -62,7 +62,6 @@ function Transaction() {
   >(`arbt-transactions-${currentPageNo}`, null, () => setLoading(false), [
     currentPageNo,
   ]);
-  // console.log("trna", transactionList)
 
   const filteredList: ITransactionData[] | undefined = transactionList?.filter(
     (item: any) =>

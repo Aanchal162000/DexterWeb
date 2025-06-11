@@ -49,6 +49,10 @@ export function numberToMask(input: number | string): string {
   return input.toString().replace(/\d/g, "X");
 }
 
+export function formatNumberWithCommas(num: number | string): string {
+  return Number(num).toLocaleString("en-US");
+}
+
 export function addTrailZeros(
   input: any,
   desiredFrontLength: number,
@@ -75,7 +79,9 @@ export const formatPrecision = (num: number) => {
   if (isNaN(num)) return num;
   return Number(num) < 1.0 && Number(num) !== 0
     ? Number(num) < 0.0001
-      ? Number(num).toFixed(6)
+      ? Number(num) < 0.000001
+        ? Number(num)
+        : Number(num).toFixed(6)
       : Number(num).toFixed(4)
     : Number(num).toFixed(2);
 };

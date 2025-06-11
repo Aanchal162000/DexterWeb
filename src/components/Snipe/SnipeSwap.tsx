@@ -142,14 +142,14 @@ const SnipeSwap: React.FC<SnipeSwapProps> = ({
         setReleaseHash(result?.chainTxInfo?.transactionHash!);
         setSwapHash(result?.chainTxInfo?.transactionHash!);
         triggerAPIs();
-        toast.success("Swap transaction successful! 🎉");
+        toast.success("Swap transaction successful!");
         await refetchBalances();
       } else {
-        throw new Error(result.error?.message || "Swap failed");
+        throw new Error("Swap failed. Please try again.");
       }
     } catch (error) {
       console.error("Swap error:", error);
-      toast.error(error instanceof Error ? error.message : "Swap failed");
+      toast.error("Swap failed. Please try again.");
       setIsFinalStep(false);
       setIsTokenRelease(false);
       setIsConvert(false);

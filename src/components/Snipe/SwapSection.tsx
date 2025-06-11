@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { IVirtual } from "@/utils/interface";
 import { LuArrowUpDown } from "react-icons/lu";
 import { TiArrowSortedDown } from "react-icons/ti";
@@ -15,7 +15,7 @@ import { useAlchemyProvider } from "@/hooks/useAlchemyProvider";
 import { QuoteRequestParams } from "@/services/contract/interfaces";
 import { agentService } from "@/services/contract/agentService";
 import { toastError } from "@/utils/toast";
-import { formatNumber } from "@/utils/helper";
+import { formatNumber, formatNumberWithCommas } from "@/utils/helper";
 
 interface SwapSectionProps {
   selectedVirtual: IVirtual | null;
@@ -92,6 +92,25 @@ const SwapSection: React.FC<SwapSectionProps> = ({
     }
   };
 
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    let val: string | number = e.target.value;
+
+    // Set only floating number
+    val = val.replace(/[^0-9.]/g, "");
+    if (val === ".") val = "0.";
+    else {
+      if (!val.includes(".") && val.endsWith("0") && Number(val) === 0)
+        val = "0";
+      else {
+        if (!val.includes(".")) val = val.replace(/^0+/, "");
+        if (val.slice(0, -1).includes(".") && val.endsWith("."))
+          val = val.slice(0, -1);
+      }
+    }
+
+    setFromAmount(formatNumberWithCommas(val));
+  };
+
   // Function to fetch quote
   const fetchQuote = async () => {
     if (
@@ -121,7 +140,11 @@ const SwapSection: React.FC<SwapSectionProps> = ({
       };
 
       const estimate = await agentService.getQuote(params);
-      setToAmount(Number((estimate - 0.03).toFixed(4)));
+      setToAmount(
+        formatNumberWithCommas(
+          Number((estimate - 0.001 * Number(estimate)).toFixed(4))
+        )
+      );
       setIsEstimating(false);
     } catch (error: any) {
       console.error("Estimation failed:", error);
@@ -258,22 +281,19 @@ const SwapSection: React.FC<SwapSectionProps> = ({
           <input
             className="!outline-none text-white text-lg w-full placeholder:text-base text-right sm:font-bold [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-transparent placeholder:text-prime-zinc-100"
             type="text"
-            ref={inputRef}
-            placeholder="Enter an amount"
-            autoComplete="off"
+            placeholder={isFocused ? `0.0` : "Enter Amount"}
+            onFocus={(e: any) => setIsFocused(true)}
+            onBlur={(e: any) => setIsFocused(false)}
+            maxLength={8}
+            // value={selectedNetwork?.name == "Fiat" ? fiatAmount : fromAmount}
             value={
               !Boolean(Number(fromAmount)) &&
               isFocused &&
               !String(fromAmount).includes(".")
-                ? undefined
+                ? ""
                 : fromAmount
             }
-            onFocus={() => {
-              handleFocus(inputRef);
-              setIsFocused(true);
-            }}
-            onBlur={() => setIsFocused(false)}
-            onChange={(e) => setFromAmount(formatNumber(e.target.value))}
+            onChange={handleInputChange}
           />
         </div>
         <div className="w-full flex flex-row flex-nowrap justify-between items-center text-white">
@@ -284,7 +304,9 @@ const SwapSection: React.FC<SwapSectionProps> = ({
                 <div className="animate-pulse bg-gray-700 h-4 w-20 rounded"></div>
               ) : (
                 <span className="">
-                  {Number(selectedVirtual.userBalance || 0).toFixed(6)}
+                  {formatNumberWithCommas(
+                    Number(selectedVirtual.userBalance || 0).toFixed(6)
+                  )}
                 </span>
               )}
               {selectedVirtual.name}
@@ -368,7 +390,9 @@ const SwapSection: React.FC<SwapSectionProps> = ({
                 <div className="animate-pulse bg-gray-700 h-4 w-20 rounded"></div>
               ) : (
                 <span className="">
-                  {Number(selectedToVirtual.userBalance || 0).toFixed(6)}
+                  {formatNumberWithCommas(
+                    Number(selectedToVirtual.userBalance || 0).toFixed(8)
+                  )}
                 </span>
               )}
               {selectedToVirtual.name}
@@ -388,7 +412,9 @@ const SwapSection: React.FC<SwapSectionProps> = ({
             <div className="flex justify-center items-center text-sm text-zinc-400">
               <span className="text-white">
                 1 {selectedVirtual?.symbol} ={" "}
-                {(Number(toAmount) / Number(fromAmount)).toFixed(6)}{" "}
+                {formatNumberWithCommas(
+                  (Number(toAmount) / Number(fromAmount)).toFixed(6)
+                )}{" "}
                 {selectedToVirtual?.symbol}
               </span>
             </div>

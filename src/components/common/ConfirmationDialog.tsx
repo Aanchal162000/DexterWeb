@@ -69,7 +69,7 @@ function ConfirmationDialog({
         throw new Error("Approval failed");
       }
     } catch (error: any) {
-      toast.error(error.message || "Failed to approve token");
+      toast.error("Failed to approve token");
     } finally {
       setIsApproving(false);
     }

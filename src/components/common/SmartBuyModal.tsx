@@ -149,9 +149,7 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
           }
         } catch (error: any) {
           if (approveToastId) toast.dismiss(approveToastId);
-          toast.error(
-            "Failed to approve token: " + (error.message || "Unknown error")
-          );
+          toast.error("Failed to approve token:");
           throw error;
         }
       }
@@ -199,7 +197,7 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
         toast.error("Transaction failed: Contract execution reverted");
       } else {
         // For other errors, show a more user-friendly message
-        const errorMessage = error.message || "Unknown error occurred";
+
         toast.error(`Transaction failed`);
       }
     } finally {

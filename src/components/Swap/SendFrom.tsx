@@ -1,6 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
-/* eslint-disable react/jsx-no-duplicate-props */
-
 import { useSwapContext } from "@/context/SwapContext";
 import {
   ChangeEvent,
@@ -10,10 +7,14 @@ import {
   useRef,
   useState,
 } from "react";
-
 import ImageNext from "../common/ImageNext";
 import { fiatList } from "@/constants/config";
-import { formatNumber, truncateToFixed, toNumFixed } from "@/utils/helper";
+import {
+  formatNumber,
+  truncateToFixed,
+  toNumFixed,
+  formatNumberWithCommas,
+} from "@/utils/helper";
 import { IoInformationCircle } from "react-icons/io5";
 import { TiArrowSortedDown } from "react-icons/ti";
 import clsx from "clsx";
@@ -29,15 +30,12 @@ function SendFrom({
     selectedNetwork,
     setFromAmount,
     isFiatBridge,
-    isApproved,
+
     fromTokenData,
     usdPriceS1,
     isBalanceLoading,
-    selectedPercentage,
-    setSelectedPercentage,
   } = useSwapContext();
   const [isFocused, setIsFocused] = useState<boolean>(false);
-  const percentage = [0.1, 0.25, 0.5, 1];
 
   const selectedFiat =
     fiatList &&
@@ -60,10 +58,6 @@ function SendFrom({
 
   const maxAmount = truncateToFixed(Number(fromTokenData?.balance ?? 0), 4);
 
-  // console.log("first", maxAmount, minFiatAmount, selectedFiat, selectedFiatCoin, fiatList);
-
-  const minMaxAmount = Number(isFiatBridge ? minFiatAmount : maxAmount) ?? 0.0;
-
   const inputRef: any = useRef(null);
 
   const handleFocus = (ref: RefObject<HTMLInputElement>) => {
@@ -74,12 +68,27 @@ function SendFrom({
     }
   };
 
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    let val: string | number = e.target.value;
+
+    // Set only floating number
+    val = val.replace(/[^0-9.]/g, "");
+    if (val === ".") val = "0.";
+    else {
+      if (!val.includes(".") && val.endsWith("0") && Number(val) === 0)
+        val = "0";
+      else {
+        if (!val.includes(".")) val = val.replace(/^0+/, "");
+        if (val.slice(0, -1).includes(".") && val.endsWith("."))
+          val = val.slice(0, -1);
+      }
+    }
+
+    setFromAmount(formatNumberWithCommas(val));
+  };
+
   const handlePercentCost = (value: number) => {
-    setSelectedPercentage(value);
     if (value === 1) {
-      // if (selectedCoin?.address!.toLowerCase() == "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee") {
-      //   setFromAmount(String(Number(fromTokenData?.balance || 0).toFixed(6)));
-      // } else {
       let newValue = (value * (100 - 0.5)) / 100;
       setFromAmount(
         String(
@@ -97,8 +106,8 @@ function SendFrom({
   return (
     <>
       <div
-        className="border border-primary-100 rounded-lg py-3 px-4 mb-2 flex flex-col items-center gap-3"
-        onClick={() => inputRef.current.focus()}
+        className="border border-[#818284] rounded-lg py-3 px-4 mb-2 flex flex-col items-center gap-3"
+        onClick={() => inputRef?.current?.focus()}
       >
         <div className="flex w-full items-center  text-prime-zinc-50  justify-between">
           <div className="text-zinc-400 text-sm flex gap-3 items-center justify-center">
@@ -137,16 +146,12 @@ function SendFrom({
                 <IoInformationCircle className="size-4" /> Gas fee/buffer will
                 be adjusted.
               </div>
-              {percentage.map((value) => (
+              {[0.1, 0.25, 0.5, 1].map((value) => (
                 <button
                   key={value}
                   disabled={isBalanceLoading}
                   onClick={() => handlePercentCost(value)}
-                  className={`text-white/80 text-xs rounded font-bold border ${
-                    selectedPercentage == value && selectedPercentage != null
-                      ? "border-primary-100"
-                      : "border-[#818284]"
-                  }  px-[0.1875rem] mx-0.5 disabled:bg-white/5 disabled:text-white/20`}
+                  className="text-white/80 text-xs rounded font-bold border border-[#818284] px-[0.1875rem] mx-0.5 disabled:bg-white/5 disabled:text-white/20"
                 >
                   {value * 100}%
                 </button>
@@ -180,22 +185,19 @@ function SendFrom({
           <input
             className="!outline-none text-white text-lg w-full placeholder:text-base text-right sm:font-bold [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-transparent placeholder:text-prime-zinc-100"
             type="text"
-            ref={inputRef}
-            placeholder="Enter an amount"
-            autoComplete="off"
+            placeholder={isFocused ? `0.0` : "Enter Amount"}
+            onFocus={(e: any) => setIsFocused(true)}
+            onBlur={(e: any) => setIsFocused(false)}
+            maxLength={8}
+            // value={selectedNetwork?.name == "Fiat" ? fiatAmount : fromAmount}
             value={
               !Boolean(Number(fromAmount)) &&
               isFocused &&
               !String(fromAmount).includes(".")
-                ? undefined
+                ? ""
                 : fromAmount
             }
-            onFocus={() => {
-              handleFocus(inputRef);
-              setIsFocused(true);
-            }}
-            onBlur={() => setIsFocused(false)}
-            onChange={(e) => setFromAmount(formatNumber(e.target.value))}
+            onChange={handleInputChange}
           />
         </div>
         <div className="w-full flex flex-row flex-nowrap justify-between items-center text-white">

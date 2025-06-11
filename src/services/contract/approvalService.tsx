@@ -97,7 +97,7 @@ class ApprovalService {
       if (error?.code === "ACTION_REJECTED") {
         toast.error("Transaction rejected by user");
       } else {
-        toast.error(`Error: ${error?.reason || "Something went wrong"}`);
+        toast.error("Something went wrong");
       }
 
       console.error("Error approving token:", error);

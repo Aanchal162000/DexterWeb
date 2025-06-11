@@ -88,12 +88,8 @@ const Assets = ({
 
             return {
               tokenAmount: data.balanceFormatted,
-              usdAmount: Number(data.usdValue)
-                ? Number(data.usdValue)?.toFixed(4)
-                : 0,
-              perUsd: Number(data?.usdPrice)
-                ? Number(data?.usdPrice)?.toFixed(4)
-                : 0,
+              usdAmount: Number(data.usdValue) ? Number(data.usdValue) : 0,
+              perUsd: Number(data?.usdPrice) ? Number(data?.usdPrice) : 0,
               difference: Number(data?.usdPrice24hrUsdChange)?.toFixed(4) ?? 0,
               percentageDifference:
                 Number(data?.usdPrice24hrPercentChange)?.toFixed(4) ?? 0,

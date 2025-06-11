@@ -36,7 +36,7 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
   virtual,
 }) => {
   const { selectedVitualtoken, setSelctedVirtualToken } = useSwapContext();
-  const { balances } = useWalletBalance();
+  const { balances, isLoading: isBalanceLoading } = useWalletBalance();
   const balance =
     selectedVitualtoken.symbol === "ETH" ? balances.ETH : balances.VIRT;
   const calculatedAmount = (parseFloat(balance || "0") * 10) / 100;
@@ -273,7 +273,7 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
                       <button
                         key={token.symbol}
                         onClick={() => handleTokenSelect(token)}
-                        disabled={token.symbol === "DEXTER"}
+                        disabled={token.symbol === "DEXTER" || isBalanceLoading}
                         className="w-full px-4 py-2 text-left text-white hover:bg-primary-100/10 flex border-b last:border-b-0 border-primary-100/20 items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         <img
@@ -286,7 +286,12 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
                             {token.symbol}
                           </span>
                           <span className="text-xs text-gray-400">
-                            Balance: {Number(token.balance).toFixed(6)}
+                            Balance:{" "}
+                            {isBalanceLoading ? (
+                              <div className="inline-block animate-spin rounded-full h-2 w-2 border-b-2 border-gray-400"></div>
+                            ) : (
+                              Number(token.balance).toFixed(6)
+                            )}
                           </span>
                         </div>
                       </button>
@@ -299,16 +304,20 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
             <div className="flex justify-between items-center my-2">
               <div className="text-gray-400 text-[11px] text-nowrap">
                 Available:{" "}
-                {selectedVitualtoken?.symbol === "ETH"
-                  ? Number(balances.ETH).toFixed(6)
-                  : Number(balances.VIRT).toFixed(6)}
+                {isBalanceLoading ? (
+                  <div className="inline-block animate-spin rounded-full h-3 w-3 border-b-2 border-gray-400"></div>
+                ) : selectedVitualtoken?.symbol === "ETH" ? (
+                  Number(balances.ETH).toFixed(6)
+                ) : (
+                  Number(balances.VIRT).toFixed(6)
+                )}
               </div>
               <div className="flex flex-row gap-1">
                 {percentageButtons.map((percentage) => (
                   <button
                     key={percentage}
                     onClick={() => handlePercentageClick(percentage)}
-                    disabled={isLoading || isProcessing}
+                    disabled={isLoading || isProcessing || isBalanceLoading}
                     className={`text-white/80 text-[11px] rounded font-bold border ${
                       selectedPercentage == percentage
                         ? "border-primary-100"

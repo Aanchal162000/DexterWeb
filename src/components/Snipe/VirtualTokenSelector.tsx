@@ -32,7 +32,7 @@ const VirtualTokenSelector: React.FC<VirtualTokenSelectorProps> = ({
     "sentient" | "prototype" | "base"
   >("sentient");
   const [showAllTokens, setShowAllTokens] = useState(false);
-  const { balances } = useWalletBalance();
+  const { balances, isLoading: balanceLoading } = useWalletBalance();
   const { prices, loading: pricesLoading } = useTokenPrices();
 
   const baseTokens: IVirtual[] = [
@@ -237,6 +237,10 @@ const VirtualTokenSelector: React.FC<VirtualTokenSelectorProps> = ({
           <div className="flex justify-center items-center h-32">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-100"></div>
           </div>
+        ) : selectedTab === "base" && (balanceLoading || pricesLoading) ? (
+          <div className="flex justify-center items-center h-32">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-100"></div>
+          </div>
         ) : filteredTokens.length === 0 ? (
           <div className="text-center text-gray-400 py-8">No tokens found</div>
         ) : (
@@ -266,15 +270,26 @@ const VirtualTokenSelector: React.FC<VirtualTokenSelectorProps> = ({
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="font-medium text-white">
-                    {formatCurrency(
-                      Number(virtual.userBalance || 0) * (virtual.price || 0)
-                    )}
-                  </div>
-                  <div className="text-sm text-gray-400">
-                    {Number(virtual.userBalance || 0).toFixed(4)}{" "}
-                    {virtual.symbol}
-                  </div>
+                  {selectedTab === "base" &&
+                  (balanceLoading || pricesLoading) ? (
+                    <div className="animate-pulse">
+                      <div className="h-4 bg-gray-700 rounded w-20 mb-1"></div>
+                      <div className="h-3 bg-gray-700 rounded w-16"></div>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="font-medium text-white">
+                        {formatCurrency(
+                          Number(virtual.userBalance || 0) *
+                            (virtual.price || 0)
+                        )}
+                      </div>
+                      <div className="text-sm text-gray-400">
+                        {Number(virtual.userBalance || 0).toFixed(4)}{" "}
+                        {virtual.symbol}
+                      </div>
+                    </>
+                  )}
                 </div>
               </button>
             ))}

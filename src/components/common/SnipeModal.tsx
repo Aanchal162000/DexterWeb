@@ -11,6 +11,7 @@ import {
   SnipeContract,
   VIRTUALS_TOKEN_ADDRESS,
   WRAPPED_ETH_ADDRESS,
+  networkCards,
 } from "@/constants/config";
 import { useLoginContext } from "@/context/LoginContext";
 import { TiArrowSortedDown } from "react-icons/ti";
@@ -22,6 +23,7 @@ import {
 } from "@/utils/helper";
 import useClickOutside from "@/hooks/useClickOutside";
 import Slider from "./Slider";
+import TransactionSuccessModal from "./TransactionSuccessModal";
 
 interface SnipeModalProps {
   isOpen: boolean;
@@ -50,7 +52,7 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
   fetchSubscriptionData,
 }) => {
   const { selectedVitualtoken, setSelctedVirtualToken } = useSwapContext();
-  const { balances } = useWalletBalance();
+  const { balances, isLoading: isBalanceLoading } = useWalletBalance();
   const { triggerAPIs } = useLoginContext();
   const balance =
     selectedVitualtoken.symbol === "ETH" ? balances.ETH : balances.VIRT;
@@ -71,6 +73,12 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
     "slider"
   );
   const coinSelectRef = useRef<HTMLDivElement>(null);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [swapHash, setSwapHash] = useState<string>("");
+  const { networkData: selectedNetwork } = useLoginContext();
+  const currentNetwork = networkCards.find(
+    (network) => network.id === selectedNetwork?.chainId
+  );
 
   useClickOutside(coinSelectRef, () => {
     if (isFromCoinOpen) {
@@ -234,7 +242,8 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
           throw new Error(response.message);
         }
         if (processToastId) toast.dismiss(processToastId);
-        toast.success("Snipe successful!");
+        setSwapHash(receipt.transactionHash);
+        setShowSuccessModal(true);
         onClose();
       } else {
         if (processToastId) toast.dismiss(processToastId);
@@ -271,182 +280,202 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
   };
 
   return (
-    <div
-      className={`w-[95%] mx-auto transition-all duration-300 ease-in-out overflow-hidden ${
-        isOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
-      }`}
-    >
-      <div className="rounded-b-xl bg-primary-100/10 py-2 px-4">
-        <div className="relative flex flex-col pt-3">
-          <div className="absolute top-3 right-1 flex justify-end items-start">
-            {/* <h3 className="text-lg font-semibold text-white">Snipe {name}</h3> */}
-            <button
-              onClick={onClose}
-              className="text-gray-400 hover:text-white"
-            >
-              ✕
-            </button>
-          </div>
-
-          <div className="">
-            <label
-              htmlFor="amount"
-              className="block text-sm font-medium text-gray-300 mb-2"
-            >
-              Max Amount
-            </label>
-            <div className="relative items-center justify-center">
-              <div className="relative w-full border border-primary-100/70 rounded flex flex-col items-start justify-center px-4">
-                <div className="relative w-full flex flex-row items-center justify-between px-2">
-                  <input
-                    id="amount"
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
-                    disabled={isLoading || isProcessing}
-                    className="w-full  py-3 bg-transparent rounded-lg text-white focus:outline-none focus:border-primary-100 disabled:opacity-50 disabled:cursor-not-allowed"
-                    placeholder="Enter amount"
-                  />
-                  <button
-                    className="flex items-center gap-2"
-                    onClick={() => setIsFromCoinOpen((prev) => !prev)}
-                  >
-                    {selectedVitualtoken?.logo && (
-                      <img
-                        src={selectedVitualtoken.logo}
-                        alt={selectedVitualtoken.symbol}
-                        className="w-6 h-6 rounded-full"
-                      />
-                    )}
-                    <span className="text-primary-100 text-sm">
-                      {selectedVitualtoken?.symbol || "VIRT"}
-                    </span>
-                    <button className="text-primary-100 hover:text-primary-100/80 transition-colors">
-                      <TiArrowSortedDown className="size-5" />
-                    </button>
-                  </button>
-                </div>
-              </div>
+    <>
+      <div
+        className={`w-[95%] mx-auto transition-all duration-300 ease-in-out overflow-hidden ${
+          isOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
+        }`}
+      >
+        <div className="rounded-b-xl bg-primary-100/10 py-2 px-4">
+          <div className="relative flex flex-col pt-3">
+            <div className="absolute top-3 right-1 flex justify-end items-start">
+              {/* <h3 className="text-lg font-semibold text-white">Snipe {name}</h3> */}
+              <button
+                onClick={onClose}
+                className="text-gray-400 hover:text-white"
+              >
+                ✕
+              </button>
             </div>
 
-            {/* Token Selector Dropdown */}
-            {isFromCoinOpen && (
-              <div
-                ref={coinSelectRef}
-                className="absolute right-0 mt-2 w-48  border border-primary-100/30  backdrop-blur-sm  bg-black/40 drop-shadow-lg rounded shadow-lg z-10"
+            <div className="">
+              <label
+                htmlFor="amount"
+                className="block text-sm font-medium text-gray-300 mb-2"
               >
-                <div className="py-1">
-                  {tokenOptions.map((token) => (
+                Max Amount
+              </label>
+              <div className="relative items-center justify-center">
+                <div className="relative w-full border border-primary-100/70 rounded flex flex-col items-start justify-center px-4">
+                  <div className="relative w-full flex flex-row items-center justify-between px-2">
+                    <input
+                      id="amount"
+                      value={amount}
+                      onChange={(e) => setAmount(e.target.value)}
+                      disabled={isLoading || isProcessing}
+                      className="w-full  py-3 bg-transparent rounded-lg text-white focus:outline-none focus:border-primary-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                      placeholder="Enter amount"
+                    />
                     <button
-                      key={token.symbol}
-                      onClick={() => handleTokenSelect(token)}
-                      disabled={token.symbol === "DEXTER"}
-                      className={`disabled:opacity-50 disabled:cursor-not-allowed w-full px-4 py-2 text-left text-white hover:bg-primary-100/10 flex items-center gap-2 ${
-                        token?.symbol != "VIRT"
-                          ? "border-t border-primary-100/30"
-                          : ""
-                      }`}
+                      className="flex items-center gap-2"
+                      onClick={() => setIsFromCoinOpen((prev) => !prev)}
                     >
-                      <img
-                        src={token.logo}
-                        alt={token.symbol}
-                        className="w-6 h-6 rounded-full"
-                      />
-                      <div className="flex flex-col">
-                        <span className="text-sm font-medium">
-                          {token.symbol}
-                        </span>
-                        <span className="text-xs text-gray-400">
-                          Balance: {Number(token.balance).toFixed(6)}
-                        </span>
-                      </div>
+                      {selectedVitualtoken?.logo && (
+                        <img
+                          src={selectedVitualtoken.logo}
+                          alt={selectedVitualtoken.symbol}
+                          className="w-6 h-6 rounded-full"
+                        />
+                      )}
+                      <span className="text-primary-100 text-sm">
+                        {selectedVitualtoken?.symbol || "VIRT"}
+                      </span>
+                      <button className="text-primary-100 hover:text-primary-100/80 transition-colors">
+                        <TiArrowSortedDown className="size-5" />
+                      </button>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Token Selector Dropdown */}
+              {isFromCoinOpen && (
+                <div
+                  ref={coinSelectRef}
+                  className="absolute right-0 mt-2 w-48  border border-primary-100/30  backdrop-blur-sm  bg-black/40 drop-shadow-lg rounded shadow-lg z-10"
+                >
+                  <div className="py-1">
+                    {tokenOptions.map((token) => (
+                      <button
+                        key={token.symbol}
+                        onClick={() => handleTokenSelect(token)}
+                        disabled={token.symbol === "DEXTER" || isBalanceLoading}
+                        className={`disabled:opacity-50 disabled:cursor-not-allowed w-full px-4 py-2 text-left text-white hover:bg-primary-100/10 flex items-center gap-2 ${
+                          token?.symbol != "VIRT"
+                            ? "border-t border-primary-100/30"
+                            : ""
+                        }`}
+                      >
+                        <img
+                          src={token.logo}
+                          alt={token.symbol}
+                          className="w-6 h-6 rounded-full"
+                        />
+                        <div className="flex flex-col">
+                          <span className="text-sm font-medium">
+                            {token.symbol}
+                          </span>
+                          <span className="text-xs text-gray-400">
+                            Balance:{" "}
+                            {isBalanceLoading ? (
+                              <div className="inline-block animate-spin rounded-full h-2 w-2 border-b-2 border-gray-400"></div>
+                            ) : (
+                              Number(token.balance).toFixed(6)
+                            )}
+                          </span>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="flex justify-between items-center my-2">
+                <div className="text-gray-300 text-[11px] text-nowrap">
+                  Available:{" "}
+                  {isBalanceLoading ? (
+                    <div className="inline-block animate-spin rounded-full h-3 w-3 border-b-2 border-gray-300"></div>
+                  ) : selectedVitualtoken?.symbol === "ETH" ? (
+                    Number(balances.ETH).toFixed(6)
+                  ) : (
+                    Number(balances.VIRT).toFixed(6)
+                  )}
+                </div>
+                <div className="flex flex-row gap-1">
+                  {percentageButtons.map((percentage) => (
+                    <button
+                      key={percentage}
+                      onClick={() => handlePercentageClick(percentage)}
+                      disabled={isLoading || isProcessing || isBalanceLoading}
+                      className={`text-white/80 text-[11px] rounded font-bold border ${
+                        selectedPercentage == percentage
+                          ? "border-primary-100"
+                          : "border-[#818284]"
+                      }  px-[0.1875rem]  disabled:bg-white/5 disabled:text-white/20`}
+                    >
+                      {percentage}%
                     </button>
                   ))}
                 </div>
               </div>
-            )}
-
-            <div className="flex justify-between items-center my-2">
-              <div className="text-gray-300 text-[11px] text-nowrap">
-                Available:{" "}
-                {selectedVitualtoken?.symbol === "ETH"
-                  ? Number(balances.ETH).toFixed(6)
-                  : Number(balances.VIRT).toFixed(6)}
-              </div>
-              <div className="flex flex-row gap-1">
-                {percentageButtons.map((percentage) => (
-                  <button
-                    key={percentage}
-                    onClick={() => handlePercentageClick(percentage)}
-                    disabled={isLoading || isProcessing}
-                    className={`text-white/80 text-[11px] rounded font-bold border ${
-                      selectedPercentage == percentage
-                        ? "border-primary-100"
-                        : "border-[#818284]"
-                    }  px-[0.1875rem]  disabled:bg-white/5 disabled:text-white/20`}
-                  >
-                    {percentage}%
-                  </button>
-                ))}
-              </div>
             </div>
-          </div>
-          <div className="mt-2">
-            <label
-              htmlFor="amount"
-              className="block text-sm font-medium text-gray-300 mb-2"
-            >
-              Market Cap Buy Range
-            </label>
-            <div className="relative items-center justify-center">
-              <div className="relative w-full border border-primary-100/70 rounded flex flex-col items-start justify-center px-4">
-                <input
-                  id="marketCap"
-                  value={formatNumberWithCommas(marketCapBuyRange)}
-                  onChange={handleInputChange}
-                  onFocus={() => setActiveControl("input")}
-                  disabled={isLoading || isProcessing}
-                  className="w-full py-3 bg-transparent rounded-lg text-white focus:outline-none focus:border-primary-100 disabled:opacity-50 disabled:cursor-not-allowed"
-                  placeholder="Enter market cap"
+            <div className="mt-2">
+              <label
+                htmlFor="amount"
+                className="block text-sm font-medium text-gray-300 mb-2"
+              >
+                Market Cap Buy Range
+              </label>
+              <div className="relative items-center justify-center">
+                <div className="relative w-full border border-primary-100/70 rounded flex flex-col items-start justify-center px-4">
+                  <input
+                    id="marketCap"
+                    value={formatNumberWithCommas(marketCapBuyRange)}
+                    onChange={handleInputChange}
+                    onFocus={() => setActiveControl("input")}
+                    disabled={isLoading || isProcessing}
+                    className="w-full py-3 bg-transparent rounded-lg text-white focus:outline-none focus:border-primary-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                    placeholder="Enter market cap"
+                  />
+                </div>
+              </div>
+              <div className="flex justify-between items-center my-2 px-2">
+                <Slider
+                  marketCapBuyRange={
+                    activeControl === "slider" ? marketCapBuyRange : 0
+                  }
+                  setMarketCapBuyRange={handleMarketCapChange}
                 />
               </div>
             </div>
-            <div className="flex justify-between items-center my-2 px-2">
-              <Slider
-                marketCapBuyRange={
-                  activeControl === "slider" ? marketCapBuyRange : 0
-                }
-                setMarketCapBuyRange={handleMarketCapChange}
-              />
+            <div className="my-4 flex justify-center items-center relative w-full">
+              <button
+                onClick={handleSnipe}
+                disabled={isButtonDisabled}
+                className={`w-[80%] px-4 py-3 rounded-lg font-medium transition-colors duration-200 ${
+                  isButtonDisabled
+                    ? "bg-gray-600 text-white cursor-not-allowed"
+                    : "bg-primary-100 text-black hover:bg-primary-100/90"
+                }`}
+              >
+                {isLoading ? (
+                  <div className="flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-black mr-2"></div>
+                    Processing...
+                  </div>
+                ) : isProcessing ? (
+                  <div className="flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-black mr-2"></div>
+                    Transaction in Progress...
+                  </div>
+                ) : (
+                  "Smart Buy"
+                )}
+              </button>
             </div>
-          </div>
-          <div className="my-4 flex justify-center items-center relative w-full">
-            <button
-              onClick={handleSnipe}
-              disabled={isButtonDisabled}
-              className={`w-[80%] px-4 py-3 rounded-lg font-medium transition-colors duration-200 ${
-                isButtonDisabled
-                  ? "bg-gray-600 text-white cursor-not-allowed"
-                  : "bg-primary-100 text-black hover:bg-primary-100/90"
-              }`}
-            >
-              {isLoading ? (
-                <div className="flex items-center justify-center">
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-black mr-2"></div>
-                  Processing...
-                </div>
-              ) : isProcessing ? (
-                <div className="flex items-center justify-center">
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-black mr-2"></div>
-                  Transaction in Progress...
-                </div>
-              ) : (
-                "Smart Buy"
-              )}
-            </button>
           </div>
         </div>
       </div>
-    </div>
+
+      <TransactionSuccessModal
+        isOpen={showSuccessModal}
+        onClose={() => setShowSuccessModal(false)}
+        transactionHash={swapHash || ""}
+        explorerUrl={currentNetwork?.explorer || ""}
+        title="Snipe Successful"
+        message="Your snipe transaction has been completed successfully!"
+      />
+    </>
   );
 };
 

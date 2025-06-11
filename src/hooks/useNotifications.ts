@@ -35,7 +35,7 @@ export const useNotifications = (walletAddress: string | null) => {
 
     const connectSSE = () => {
       try {
-        const url = `https://dexter-backend-ucdt5.ondigitalocean.app/api/notifications/${walletAddress}`;
+        const url = `https://dexters-backend.zkcross.exchange/api/notifications/${walletAddress}`;
         console.log("[Notifications] Connecting to SSE endpoint:", url);
 
         eventSource = new EventSource(url);
@@ -50,13 +50,30 @@ export const useNotifications = (walletAddress: string | null) => {
         eventSource.onmessage = (event) => {
           console.log("[Notifications] Received message:", event.data);
           try {
-            const newNotification = JSON.parse(event.data);
-            console.log(
-              "[Notifications] Parsed notification:",
-              newNotification
-            );
-            setNotifications((prev) => [newNotification, ...prev]);
-            setHasUnread(true);
+            const parsedData = JSON.parse(event.data);
+
+            // Skip ping events
+            if (parsedData.type === "ping") {
+              return;
+            }
+
+            // Only process if there's a message in the data
+            if (parsedData.data?.message) {
+              const newNotification = {
+                id: parsedData.id || Date.now().toString(),
+                message: parsedData.data.message,
+                type: parsedData.type || "info",
+                timestamp: parsedData.timestamp || new Date().toISOString(),
+                read: false,
+              };
+
+              console.log(
+                "[Notifications] Processed notification:",
+                newNotification
+              );
+              setNotifications((prev) => [newNotification, ...prev]);
+              setHasUnread(true);
+            }
           } catch (error) {
             console.error("[Notifications] Error parsing notification:", error);
           }

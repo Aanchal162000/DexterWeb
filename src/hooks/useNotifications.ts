@@ -1,12 +1,24 @@
 import { useState, useEffect } from "react";
 
+interface EventData {
+  agentId: string;
+  agentName: string;
+  genesisId: string;
+  tokenAddress: string;
+  txHash: string;
+  blockNumber: number;
+  userAmount: string;
+  userMarketCap: string;
+  virtualPrice: string;
+}
+
 interface Notification {
   id: string;
   message: string;
   type: string;
   timestamp: string;
   read: boolean;
-  eventData: any;
+  eventData: EventData;
 }
 
 export const useNotifications = (walletAddress: string | null) => {
@@ -15,6 +27,37 @@ export const useNotifications = (walletAddress: string | null) => {
   const [connectionStatus, setConnectionStatus] = useState<
     "connecting" | "connected" | "error"
   >("connecting");
+
+  const processEventData = (event: MessageEvent) => {
+    try {
+      const parsedData = JSON.parse(event.data);
+      console.log("[Notifications] Processing event data:", parsedData);
+
+      // Skip ping events
+      if (parsedData.type === "ping") {
+        console.log("[Notifications] Skipping ping event");
+        return null;
+      }
+
+      // Validate required fields
+      if (!parsedData.message || !parsedData.type) {
+        console.error("[Notifications] Missing required fields in event data");
+        return null;
+      }
+
+      return {
+        id: parsedData.id || Date.now().toString(),
+        message: parsedData.message,
+        type: parsedData.type,
+        timestamp: parsedData.timestamp || new Date().toISOString(),
+        read: false,
+        eventData: parsedData.data || {},
+      };
+    } catch (error) {
+      console.error("[Notifications] Error processing event data:", error);
+      return null;
+    }
+  };
 
   useEffect(() => {
     console.log(
@@ -45,60 +88,101 @@ export const useNotifications = (walletAddress: string | null) => {
         eventSource.onopen = () => {
           console.log("[Notifications] SSE connection opened successfully");
           setConnectionStatus("connected");
-          retryCount = 0; // Reset retry count on successful connection
+          retryCount = 0;
         };
 
         eventSource.onmessage = (event) => {
           console.log("[Notifications] Raw event received:", event);
-          console.log("[Notifications] Event type:", event.type);
-          console.log("[Notifications] Event data:", event.data);
+          const notification = processEventData(event);
 
-          try {
-            const parsedData = JSON.parse(event.data);
-            console.log("[Notifications] Parsed data:", parsedData);
-
-            // Skip ping events
-            if (parsedData.type === "ping") {
-              console.log("[Notifications] Skipping ping event");
-              return;
-            }
-
-            // Process all non-ping events
-            const newNotification = {
-              id: parsedData.id || Date.now().toString(),
-              message:
-                parsedData.message ||
-                parsedData.data?.message ||
-                `New ${parsedData.type} event received`,
-              type: parsedData.type || "info",
-              timestamp: parsedData.timestamp || new Date().toISOString(),
-              read: false,
-              eventData: parsedData.data || {},
-            };
-
-            console.log(
-              "[Notifications] Creating new notification:",
-              newNotification
-            );
-
+          if (notification) {
             setNotifications((prev) => {
-              const updated = [newNotification, ...prev];
+              const updated = [notification, ...prev];
               console.log(
                 "[Notifications] Updated notifications array:",
                 updated
               );
               return updated;
             });
-
             setHasUnread(true);
-            console.log("[Notifications] Set hasUnread to true");
-          } catch (error) {
-            console.error("[Notifications] Error parsing notification:", error);
           }
         };
 
         eventSource.addEventListener("event_captured", (event) => {
           console.log("[Notifications] Event captured event received:", event);
+          const notification = processEventData(event);
+
+          if (notification) {
+            setNotifications((prev) => {
+              const updated = [notification, ...prev];
+              console.log(
+                "[Notifications] Updated notifications array:",
+                updated
+              );
+              return updated;
+            });
+            setHasUnread(true);
+          }
+        });
+
+        eventSource.addEventListener("transaction_success", (event) => {
+          console.log(
+            "[Notifications] Transaction success event received:",
+            event
+          );
+          const notification = processEventData(event);
+
+          if (notification) {
+            setNotifications((prev) => {
+              const updated = [notification, ...prev];
+              console.log(
+                "[Notifications] Updated notifications array:",
+                updated
+              );
+              return updated;
+            });
+            setHasUnread(true);
+          }
+        });
+
+        eventSource.addEventListener("transaction_sent", (event) => {
+          console.log(
+            "[Notifications] Transaction sent event received:",
+            event
+          );
+          const notification = processEventData(event);
+
+          if (notification) {
+            setNotifications((prev) => {
+              const updated = [notification, ...prev];
+              console.log(
+                "[Notifications] Updated notifications array:",
+                updated
+              );
+              return updated;
+            });
+            setHasUnread(true);
+          }
+        });
+
+        eventSource.addEventListener("transaction_critical_error", (event) => {
+          console.log(
+            "[Notifications] Transaction critical error event received:",
+            event
+          );
+          const notification = processEventData(event);
+
+          if (notification) {
+            setNotifications((prev) => {
+              const updated = [notification, ...prev];
+              console.log(
+                "[Notifications] Updated notifications array:",
+                updated
+              );
+              return updated;
+            });
+            setHasUnread(true);
+          }
         });
 
         eventSource.addEventListener("connection", (event) => {
@@ -114,13 +198,12 @@ export const useNotifications = (walletAddress: string | null) => {
             eventSource = null;
           }
 
-          // Implement retry logic
           if (retryCount < maxRetries) {
             retryCount++;
             console.log(
               `[Notifications] Retrying connection (${retryCount}/${maxRetries})...`
             );
-            setTimeout(connectSSE, 2000 * retryCount); // Exponential backoff
+            setTimeout(connectSSE, 2000 * retryCount);
           } else {
             console.error("[Notifications] Max retries reached, giving up");
           }
@@ -165,7 +248,6 @@ export const useNotifications = (walletAddress: string | null) => {
     setHasUnread(false);
   };
 
-  // Log state changes
   useEffect(() => {
     console.log("[Notifications] Current state:", {
       connectionStatus,

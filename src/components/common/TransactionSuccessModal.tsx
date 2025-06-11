@@ -27,8 +27,8 @@ const TransactionSuccessModal: React.FC<TransactionSuccessModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="w-[95%] max-w-md rounded-xl bg-primary-100/10 p-6 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center  bg-black/50 backdrop-blur-sm">
+      <div className="w-[95%] max-w-md rounded-xl bg-black/50 p-6 backdrop-blur-sm">
         <div className="flex flex-col gap-4">
           {/* Header */}
           <div className="flex items-center justify-between">

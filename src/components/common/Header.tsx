@@ -23,6 +23,28 @@ import { IoMenu } from "react-icons/io5";
 import { IoMdArrowDropup } from "react-icons/io";
 import { IoMdArrowDropright } from "react-icons/io";
 import { useNotifications } from "@/hooks/useNotifications";
+import NotificationDetails from "./NotificationDetails";
+
+interface EventData {
+  agentId: string;
+  agentName: string;
+  genesisId: string;
+  tokenAddress: string;
+  txHash: string;
+  blockNumber: number;
+  userAmount: string;
+  userMarketCap: string;
+  virtualPrice: string;
+}
+
+interface Notification {
+  id: string;
+  message: string;
+  type: string;
+  timestamp: string;
+  read: boolean;
+  eventData: EventData;
+}
 
 const Header = () => {
   const tabs = ["Trade", "Virtuals", "Support"];
@@ -41,6 +63,8 @@ const Header = () => {
     markAllAsRead,
     connectionStatus,
   } = useNotifications(address!);
+  const [selectedNotification, setSelectedNotification] =
+    useState<Notification | null>(null);
 
   const handleTabClick = (item: string) => {
     let tab = headerRoutes.filter((route: IRouter) => route.name == item);
@@ -55,6 +79,11 @@ const Header = () => {
 
   const handleSettingsClick = () => {
     setShowSettings(true);
+  };
+
+  const handleNotificationClick = (notification: Notification) => {
+    markAsRead(notification.id);
+    setSelectedNotification(notification);
   };
 
   return (
@@ -106,9 +135,7 @@ const Header = () => {
                         connectionStatus === "error" ? "opacity-50" : ""
                       }`}
                     />
-                    {hasUnread && (
-                      <div className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full" />
-                    )}
+
                     {connectionStatus === "error" && (
                       <div className="absolute -top-1 -right-1 w-2 h-2 bg-yellow-500 rounded-full" />
                     )}
@@ -159,17 +186,19 @@ const Header = () => {
                         notifications.map((notification) => (
                           <MenuItem key={notification.id}>
                             <button
-                              onClick={() => markAsRead(notification.id)}
-                              className={`flex w-full items-center px-4 py-5 text-sm text-white border-t border-primary-100/30 ${
+                              onClick={() =>
+                                handleNotificationClick(notification)
+                              }
+                              className={`flex w-full items-start justify-start px-4 py-5 text-sm text-white border-t border-primary-100/30 ${
                                 !notification.read ? "bg-green-500/30" : ""
                               }`}
                             >
                               <img
-                                src={"/alert/bell-on.png"}
+                                src={"/alert/bell-off.png"}
                                 alt="notifications"
-                                className="mr-3 h-5 w-5 border border-green-100 rounded-full"
+                                className="mr-3 h-7 w-7 border border-green-100 rounded-full translate-y-2"
                               />
-                              <div className="flex flex-col items-start justify-center">
+                              <div className="flex flex-col items-start justify-start text-left">
                                 <p className="text-white text-sm">
                                   {notification.message}
                                 </p>
@@ -344,6 +373,13 @@ const Header = () => {
           </div>
         </div>
       </div>
+
+      {selectedNotification && (
+        <NotificationDetails
+          eventData={selectedNotification.eventData}
+          onClose={() => setSelectedNotification(null)}
+        />
+      )}
     </div>
   );
 };

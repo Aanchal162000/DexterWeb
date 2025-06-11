@@ -467,14 +467,14 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
         </div>
       </div>
 
-      <TransactionSuccessModal
+      {/* <TransactionSuccessModal
         isOpen={showSuccessModal}
         onClose={() => setShowSuccessModal(false)}
         transactionHash={swapHash || ""}
         explorerUrl={currentNetwork?.explorer || ""}
         title="Snipe Successful"
         message="Your snipe transaction has been completed successfully!"
-      />
+      /> */}
     </>
   );
 };

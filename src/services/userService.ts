@@ -131,3 +131,24 @@ export const getTransactionsAll = async (request: {
     throw error;
   }
 };
+
+export const getUnifiedTransactions = async (request: {
+  address: string;
+  page: number;
+  itemsPerPage: number;
+  controller?: AbortController;
+}) => {
+  try {
+    let res = await axios.get(
+      `${baseURL}/wallet/unified/transactions/${request.address}`,
+      {
+        params: { page: request.page, limit: request.itemsPerPage },
+        signal: request?.controller?.signal,
+      }
+    );
+    console.log("Response", res);
+    return res?.data;
+  } catch (error: any) {
+    throw error;
+  }
+};

@@ -444,7 +444,7 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
         selectedToCoin?.address,
         toAddress,
         isContractSymbiosisFlow && !(await canUseAdminLiquidity()) ? 1 : 0,
-        "dexter",
+        ethers.utils.formatBytes32String("dexter"),
       ];
 
       // Prepare transaction options with a higher base gas limit

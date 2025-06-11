@@ -16,7 +16,7 @@ import buyService from "@/services/contract/buyService";
 import { IVirtual } from "@/utils/interface";
 import { TiArrowSortedDown } from "react-icons/ti";
 import useClickOutside from "@/hooks/useClickOutside";
-import { toastProcess } from "@/utils/toast";
+import { toastError, toastProcess, toastSuccess } from "@/utils/toast";
 
 interface SmartBuyModalProps {
   isOpen: boolean;
@@ -167,11 +167,11 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
       if (receipt.transactionHash) {
         if (processToastId) toast.dismiss(processToastId);
         triggerAPIs();
-        toast.success("Smart Buy successful! 🎉");
+        toastSuccess("Smart Buy successful!");
         onClose();
       } else {
         if (processToastId) toast.dismiss(processToastId);
-        toast.error("Smart Buy Failed. Please try again.");
+        toastError("Smart Buy Failed. Please try again.");
       }
     } catch (error: any) {
       if (approveToastId) toast.dismiss(approveToastId);
@@ -181,21 +181,21 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
 
       // Handle specific error cases
       if (error.code === "INSUFFICIENT_FUNDS") {
-        toast.error("Insufficient funds to complete the transaction");
+        toastError("Insufficient funds to complete the transaction");
       } else if (error.code === "UNPREDICTABLE_GAS_LIMIT") {
-        toast.error(
+        toastError(
           "Transaction would fail. Please check your input amounts and try again"
         );
       } else if (error.message?.includes("user rejected")) {
-        toast.error("Transaction was rejected by user");
+        toastError("Transaction was rejected by user");
       } else if (error.message?.includes("insufficient funds")) {
-        toast.error("Insufficient balance to complete the transaction");
+        toastError("Insufficient balance to complete the transaction");
       } else if (error.message?.includes("execution reverted")) {
-        toast.error("Transaction failed: Contract execution reverted");
+        toastError("Transaction failed: Contract execution reverted");
       } else {
         // For other errors, show a more user-friendly message
 
-        toast.error(`Transaction failed. Please try again.`);
+        toastError(`Transaction failed. Please try again.`);
       }
     } finally {
       setIsLoading(false);

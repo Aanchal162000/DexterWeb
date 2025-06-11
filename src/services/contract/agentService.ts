@@ -46,7 +46,7 @@ interface IUserDeposit {
 }
 
 interface ITransaction {
-  status: "not_started" | "pending" | "completed" | "failed";
+  status: "not_started" | "pending" | "completed" | "failed" | "withdrawn";
   hash: string;
 }
 
@@ -84,6 +84,11 @@ interface ITransactionResponse {
       previousPage: number | null;
     };
   };
+}
+
+interface WithdrawApiParams {
+  txHash: string;
+  genesisId: string;
 }
 
 class AgentService {
@@ -348,6 +353,43 @@ class AgentService {
     } catch (error) {
       console.error("Error fetching user transactions:", error);
       throw error;
+    }
+  }
+
+  public async notifyWithdraw(
+    params: WithdrawApiParams
+  ): Promise<AgentResponse> {
+    try {
+      this.loading = true;
+
+      const response = await fetch(
+        "https://dexter-backend-ucdt5.ondigitalocean.app/api/agent/withdraw",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(params),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to notify withdraw");
+      }
+
+      const result = await response.json();
+      return result;
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error
+          ? err.message
+          : "An error occurred while notifying withdraw";
+      return {
+        success: false,
+        message: errorMessage,
+      };
+    } finally {
+      this.loading = false;
     }
   }
 }

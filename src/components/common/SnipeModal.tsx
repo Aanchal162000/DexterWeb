@@ -24,7 +24,7 @@ import {
 import useClickOutside from "@/hooks/useClickOutside";
 import Slider from "./Slider";
 import TransactionSuccessModal from "./TransactionSuccessModal";
-import { toastProcess } from "@/utils/toast";
+import { toastError, toastProcess, toastSuccess } from "@/utils/toast";
 
 interface SnipeModalProps {
   isOpen: boolean;
@@ -209,12 +209,13 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
       });
 
       if (receipt.transactionHash) {
+        toastSuccess("Snipe Successful!");
         // Convert to wei without scientific notation
         const amountInWei = BigInt(
           Math.floor(Number(amount) * 10 ** 18) -
             Math.floor(Number(amount) * 0.003 * 10 ** 18)
         ).toString();
-        console.log("amountinWei", amountInWei);
+
         const response = await agentService.createAgent({
           genesisId,
           name,
@@ -237,7 +238,7 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
         onClose();
       } else {
         if (processToastId) toast.dismiss(processToastId);
-        toast.error("Snipe Failed. Please try again.");
+        toastError("Snipe Failed. Please try again.");
       }
     } catch (error: any) {
       if (approveToastId) toast.dismiss(approveToastId);
@@ -245,21 +246,21 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
 
       // Handle specific error cases
       if (error.code === "INSUFFICIENT_FUNDS") {
-        toast.error("Insufficient funds to complete the transaction");
+        toastError("Insufficient funds to complete the transaction");
       } else if (error.code === "UNPREDICTABLE_GAS_LIMIT") {
-        toast.error(
+        toastError(
           "Transaction would fail. Please check your input amounts and try again"
         );
       } else if (error.message?.includes("user rejected")) {
-        toast.error("Transaction was rejected by user");
+        toastError("Transaction was rejected by user");
       } else if (error.message?.includes("insufficient funds")) {
-        toast.error("Insufficient balance to complete the transaction");
+        toastError("Insufficient balance to complete the transaction");
       } else if (error.message?.includes("execution reverted")) {
-        toast.error("Transaction failed: Contract execution reverted");
+        toastError("Transaction failed: Contract execution reverted");
       } else {
         // For other errors, show a more user-friendly message
         const errorMessage = error.message || "Unknown error occurred";
-        toast.error(`Transaction failed. Please try again.`);
+        toastError(`Transaction failed. Please try again.`);
       }
     } finally {
       setIsLoading(false);

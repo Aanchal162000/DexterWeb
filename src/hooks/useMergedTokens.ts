@@ -47,7 +47,7 @@ export const useMergedTokens = () => {
     genesisTokens.forEach((genesis: IGenesis) => {
       if (genesis.genesisAddress) {
         tokens.push({
-          id: genesis.virtual.id.toString(),
+          id: genesis.genesisId,
           name: genesis.virtual.name,
           symbol: genesis.virtual.symbol,
           logo: genesis.virtual.image?.url || "",

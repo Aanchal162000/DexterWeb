@@ -6,7 +6,12 @@ import clsx from "clsx";
 import ImageNext from "../common/ImageNext";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { formatAddress } from "@/utils/helper";
-import { toastSuccess, toastError, toastInfo } from "@/utils/toast";
+import {
+  toastSuccess,
+  toastError,
+  toastInfo,
+  toastProcess,
+} from "@/utils/toast";
 import CopyTooltip from "../common/CopyTooltip";
 import InfoTooltip from "../common/InfoTooltip";
 import { MdCallMade, MdCallReceived } from "react-icons/md";
@@ -166,11 +171,7 @@ const VirtualTransactions = () => {
     setProcessingTx(hash);
 
     try {
-      processToastId = toast.info("Processing Transaction...", {
-        autoClose: false,
-        closeOnClick: false,
-        closeButton: false,
-      });
+      processToastId = toastProcess("Processing Transaction...");
       const tokenAddress =
         token === "VIRT"
           ? VIRTUALS_TOKEN_ADDRESS

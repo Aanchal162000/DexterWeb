@@ -16,6 +16,7 @@ import buyService from "@/services/contract/buyService";
 import { IVirtual } from "@/utils/interface";
 import { TiArrowSortedDown } from "react-icons/ti";
 import useClickOutside from "@/hooks/useClickOutside";
+import { toastProcess } from "@/utils/toast";
 
 interface SmartBuyModalProps {
   isOpen: boolean;
@@ -115,11 +116,7 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
     try {
       setIsLoading(true);
       setIsProcessing(true);
-      processToastId = toast.info("Processing Transaction...", {
-        autoClose: false,
-        closeOnClick: false,
-        closeButton: false,
-      });
+      processToastId = toastProcess("Processing Transaction...");
 
       const isEth = selectedVitualtoken.symbol === "ETH" ? true : false;
 
@@ -149,7 +146,7 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
           }
         } catch (error: any) {
           if (approveToastId) toast.dismiss(approveToastId);
-          toast.error("Failed to approve token:");
+          // toast.error("Failed to approve token");
           throw error;
         }
       }
@@ -174,7 +171,7 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
         onClose();
       } else {
         if (processToastId) toast.dismiss(processToastId);
-        toast.error("Smart Buy Failed!");
+        toast.error("Smart Buy Failed. Please try again.");
       }
     } catch (error: any) {
       if (approveToastId) toast.dismiss(approveToastId);
@@ -198,7 +195,7 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
       } else {
         // For other errors, show a more user-friendly message
 
-        toast.error(`Transaction failed`);
+        toast.error(`Transaction failed. Please try again.`);
       }
     } finally {
       setIsLoading(false);

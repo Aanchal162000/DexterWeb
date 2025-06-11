@@ -24,6 +24,7 @@ import {
 import useClickOutside from "@/hooks/useClickOutside";
 import Slider from "./Slider";
 import TransactionSuccessModal from "./TransactionSuccessModal";
+import { toastProcess } from "@/utils/toast";
 
 interface SnipeModalProps {
   isOpen: boolean;
@@ -155,11 +156,7 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
     try {
       setIsLoading(true);
       setIsProcessing(true);
-      processToastId = toast.info("Processing Transaction...", {
-        autoClose: false,
-        closeOnClick: false,
-        closeButton: false,
-      });
+      processToastId = toastProcess("Processing Transaction...");
 
       const isEth = selectedVitualtoken.symbol === "ETH" ? true : false;
 
@@ -187,11 +184,7 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
           // If allowance is less than amount, approve first
           if (Number(allowance) < amountWithBuffer) {
             if (approveToastId) toast.dismiss(approveToastId);
-            approveToastId = toast.info("Approving token spend...", {
-              autoClose: false,
-              closeOnClick: false,
-              closeButton: false,
-            });
+            approveToastId = toastProcess("Approving token spend...");
             await approvalService.approveVirtualToken(
               (Number(amount) + 0.1).toString(),
               networkData?.provider!,
@@ -205,9 +198,6 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
           }
         } catch (error: any) {
           if (approveToastId) toast.dismiss(approveToastId);
-          toast.error(
-            "Failed to approve token: " + (error.message || "Unknown error")
-          );
           throw error;
         }
       }
@@ -247,13 +237,11 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
         onClose();
       } else {
         if (processToastId) toast.dismiss(processToastId);
-        toast.error("Snipe Failed!");
+        toast.error("Snipe Failed. Please try again.");
       }
     } catch (error: any) {
       if (approveToastId) toast.dismiss(approveToastId);
       if (processToastId) toast.dismiss(processToastId);
-      console.error("Error in snipe:", error);
-      console.error("Error in quick buy:", error);
 
       // Handle specific error cases
       if (error.code === "INSUFFICIENT_FUNDS") {
@@ -271,7 +259,7 @@ const SnipeModal: React.FC<SnipeModalProps> = ({
       } else {
         // For other errors, show a more user-friendly message
         const errorMessage = error.message || "Unknown error occurred";
-        toast.error(`Transaction failed`);
+        toast.error(`Transaction failed. Please try again.`);
       }
     } finally {
       setIsLoading(false);

@@ -6,6 +6,7 @@ interface Notification {
   type: string;
   timestamp: string;
   read: boolean;
+  eventData: any;
 }
 
 export const useNotifications = (walletAddress: string | null) => {
@@ -48,36 +49,61 @@ export const useNotifications = (walletAddress: string | null) => {
         };
 
         eventSource.onmessage = (event) => {
-          console.log("[Notifications] Received message:", event.data);
+          console.log("[Notifications] Raw event received:", event);
+          console.log("[Notifications] Event type:", event.type);
+          console.log("[Notifications] Event data:", event.data);
+
           try {
             const parsedData = JSON.parse(event.data);
+            console.log("[Notifications] Parsed data:", parsedData);
 
             // Skip ping events
             if (parsedData.type === "ping") {
+              console.log("[Notifications] Skipping ping event");
               return;
             }
 
-            // Only process if there's a message in the data
-            if (parsedData.data?.message) {
-              const newNotification = {
-                id: parsedData.id || Date.now().toString(),
-                message: parsedData.data.message,
-                type: parsedData.type || "info",
-                timestamp: parsedData.timestamp || new Date().toISOString(),
-                read: false,
-              };
+            // Process all non-ping events
+            const newNotification = {
+              id: parsedData.id || Date.now().toString(),
+              message:
+                parsedData.message ||
+                parsedData.data?.message ||
+                `New ${parsedData.type} event received`,
+              type: parsedData.type || "info",
+              timestamp: parsedData.timestamp || new Date().toISOString(),
+              read: false,
+              eventData: parsedData.data || {},
+            };
 
+            console.log(
+              "[Notifications] Creating new notification:",
+              newNotification
+            );
+
+            setNotifications((prev) => {
+              const updated = [newNotification, ...prev];
               console.log(
-                "[Notifications] Processed notification:",
-                newNotification
+                "[Notifications] Updated notifications array:",
+                updated
               );
-              setNotifications((prev) => [newNotification, ...prev]);
-              setHasUnread(true);
-            }
+              return updated;
+            });
+
+            setHasUnread(true);
+            console.log("[Notifications] Set hasUnread to true");
           } catch (error) {
             console.error("[Notifications] Error parsing notification:", error);
           }
         };
+
+        eventSource.addEventListener("event_captured", (event) => {
+          console.log("[Notifications] Event captured event received:", event);
+        });
+
+        eventSource.addEventListener("connection", (event) => {
+          console.log("[Notifications] Connection event received:", event);
+        });
 
         eventSource.onerror = (error) => {
           console.error("[Notifications] SSE connection error:", error);

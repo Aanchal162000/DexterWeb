@@ -18,7 +18,7 @@ import AgentSection from "./AgentSection";
 import FilterDropdown from "./FilterDropdown";
 import AlertsSettings from "./AlertsSettings";
 import { useSettings } from "@/context/SettingsContext";
-import TransactionHistory from "./TransactionHistory";
+
 import VirtualTransactions from "./VirtualTransactions";
 
 const Snipe = () => {

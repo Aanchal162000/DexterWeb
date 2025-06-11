@@ -69,22 +69,27 @@ function SendFrom({
   };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    let val: string | number = e.target.value;
+    let val: string = e.target.value;
 
-    // Set only floating number
+    // Allow only numbers and one decimal point
     val = val.replace(/[^0-9.]/g, "");
+
+    // Handle decimal point
     if (val === ".") val = "0.";
-    else {
-      if (!val.includes(".") && val.endsWith("0") && Number(val) === 0)
-        val = "0";
-      else {
-        if (!val.includes(".")) val = val.replace(/^0+/, "");
-        if (val.slice(0, -1).includes(".") && val.endsWith("."))
-          val = val.slice(0, -1);
-      }
+
+    // Remove leading zeros except for decimal numbers
+    if (!val.includes(".")) {
+      val = val.replace(/^0+/, "");
+      if (val === "") val = "0";
     }
 
-    setFromAmount(formatNumberWithCommas(val));
+    // Ensure only one decimal point
+    const parts = val.split(".");
+    if (parts.length > 2) {
+      val = parts[0] + "." + parts.slice(1).join("");
+    }
+
+    setFromAmount(val);
   };
 
   const handlePercentCost = (value: number) => {

@@ -448,33 +448,6 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
       ];
 
       // Prepare transaction options with a higher base gas limit
-      const txOptions = {
-        gasLimit: undefined as any,
-        value: isNativeToken ? value : undefined,
-      };
-
-      try {
-        // First attempt with normal gas estimation
-        const gasEstimate = await bridgingContract.estimateGas[
-          isSameChain ? "swap" : "lock"
-        ](...(isSameChain ? swapArgs : lockArgs), txOptions);
-
-        // Add 50% buffer for safety
-        const gasWithBuffer = gasEstimate.mul(150).div(100);
-        txOptions.gasLimit = gasWithBuffer;
-      } catch (gasError: any) {
-        console.error("Initial gas estimation failed:", gasError);
-
-        // If initial estimation fails, try with a higher fixed gas limit
-        // Use different limits for different operations
-        const baseGasLimit = isSameChain ? 500000 : 1000000;
-        txOptions.gasLimit = baseGasLimit;
-
-        // For cross-chain transactions, add extra buffer
-        if (!isSameChain) {
-          txOptions.gasLimit = baseGasLimit * 2;
-        }
-      }
 
       if (isSameChain) {
         // Call Swap function with retry mechanism
@@ -483,7 +456,7 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
 
         while (retryCount < maxRetries) {
           try {
-            bridgeData = await bridgingContract.swap(...swapArgs, txOptions);
+            bridgeData = await bridgingContract.swap(...swapArgs);
             setIsSwapped(true);
             setSwapHash(bridgeData.hash);
             break;
@@ -491,8 +464,6 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
             retryCount++;
             if (retryCount === maxRetries) throw swapError;
 
-            // Increase gas limit for next retry
-            txOptions.gasLimit = txOptions.gasLimit.mul(120).div(100);
             await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait 1 second before retry
           }
         }
@@ -504,7 +475,7 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
           );
         }
 
-        bridgeData = await bridgingContract.lock(...lockArgs, txOptions);
+        bridgeData = await bridgingContract.lock(...lockArgs);
         setIsSwapped(true);
         setSwapHash(bridgeData.hash);
       }

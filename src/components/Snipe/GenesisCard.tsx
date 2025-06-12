@@ -201,7 +201,7 @@ const GenesisCard: React.FC<GenesisCardProps> = ({
             </div>
             <div className="flex flex-col gap-2">
               <div className="flex items-start justify-center  text-center gap-1">
-                <h3 className="text-sm font-semibold leading-none text-white ">
+                <h3 className="text-sm font-semibold leading-none text-white truncate max-w-[120px]">
                   {genesis.virtual.name}
                 </h3>
                 <span className="text-[10px] text-center leading-none text-gray-400 font-light">

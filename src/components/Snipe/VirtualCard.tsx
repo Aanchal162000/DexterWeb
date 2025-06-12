@@ -55,7 +55,7 @@ const VirtualCard: React.FC<VirtualCardProps> = ({ virtual, onClick }) => {
     });
   };
   function trimName(name: string): string {
-    return name.length > 10 ? name.slice(0, 10) + ".." : name;
+    return name.length > 10 ? name.slice(0, 10) + "..." : name;
   }
 
   const handleCardClick = (e: React.MouseEvent) => {

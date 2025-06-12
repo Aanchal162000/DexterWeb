@@ -1,7 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Dialog, Transition } from "@headlessui/react";
-import { Fragment } from "react";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useWalletBalance } from "@/hooks/useWalletBalance";
 import { agentService } from "@/services/contract/agentService";
 import { toast } from "react-toastify";

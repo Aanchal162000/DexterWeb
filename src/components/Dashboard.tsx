@@ -6,10 +6,10 @@ import Footer from "./common/Footer";
 import Image from "next/image";
 import Header from "./common/Header";
 import Swap from "./Swap/Swap";
-import { IRouter, TRoute } from "@/utils/interface";
 import { headerRoutes } from "@/constants/config";
 import Snipe from "./Snipe/Snipe";
 import HelpCenter from "./HelpCenter/HelpCenter";
+import ActionCenter from "./ActionCenter/ActionCenter";
 
 export type IRouterKey = (typeof headerRoutes)[number]["id"];
 
@@ -17,6 +17,7 @@ export const Router: { [key: IRouterKey]: ReactNode } = {
   Trade: <Swap />,
   Virtuals: <Snipe />,
   Support: <HelpCenter />,
+  "Action Center": <ActionCenter />,
 };
 
 const Dashboard = () => {

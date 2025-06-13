@@ -47,7 +47,7 @@ interface Notification {
 }
 
 const Header = () => {
-  const tabs = ["Trade", "Virtuals", "Support"];
+  const tabs = ["Action Center", "Trade", "Virtuals", "Support"];
   // "Alerts", "DCA"
   const { activeTab, address, setActiveTab, networkData, setAddress } =
     useLoginContext();

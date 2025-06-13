@@ -164,6 +164,7 @@ const config: Config = {
         blinker: "blink 1s linear infinite",
         slow: "spin 4s linear infinite",
         lineAnim: "lineAnim 1.2s linear infinite",
+        scroll: "scroll 20s linear infinite",
       },
       keyframes: {
         blink: {
@@ -230,6 +231,13 @@ const config: Config = {
           "0%": { transform: "rotate(0deg)" },
           "100%": { transform: "rotate(360deg)" },
         },
+        scroll: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
+      },
+      clipPath: {
+        triangle: "polygon(0 0, 0% 100%, 100% 0)",
       },
     },
   },

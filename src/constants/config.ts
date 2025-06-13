@@ -505,6 +505,11 @@ export const headerRoutes: IRouter[] = [
     isActive: true,
   },
   {
+    id: "actionCenter",
+    name: "Action Center",
+    isActive: true,
+  },
+  {
     id: "virtuals",
     name: "Virtuals",
     isActive: true,
@@ -512,11 +517,6 @@ export const headerRoutes: IRouter[] = [
   {
     id: "alerts",
     name: "Alerts",
-    isActive: true,
-  },
-  {
-    id: "DCA",
-    name: "DCA",
     isActive: true,
   },
   {

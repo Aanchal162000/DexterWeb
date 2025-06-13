@@ -35,7 +35,7 @@ export const useNotifications = (walletAddress: string | null) => {
 
     const connectSSE = () => {
       try {
-        const url = `https://dexter-backend-ucdt5.ondigitalocean.app/api/notifications/${walletAddress}`;
+        const url = `https://dexters-backend.zkcross.exchange/api/notifications/${walletAddress}`;
         console.log("[Notifications] Connecting to SSE endpoint:", url);
 
         eventSource = new EventSource(url);

@@ -90,7 +90,7 @@ const Snipe = () => {
     if (address) {
       try {
         const response = await fetch(
-          `https://dexter-backend-ucdt5.ondigitalocean.app/api/agent/subscriptions/${address}`
+          `https://dexters-backend.zkcross.exchange/api/agent/subscriptions/${address}`
         );
 
         const data = await response.json();

@@ -5,6 +5,7 @@ import WalletSelect from "./WalletSelect";
 import DexterAccessChecklist from "./DexterAccessChecklist";
 import AccessService from "@/services/accessService";
 import { useLoginContext } from "@/context/LoginContext";
+import { formatAddress } from "@/utils/helper";
 
 interface EarlyAccessProps {
   isOpen: boolean;
@@ -23,7 +24,7 @@ interface Step {
 }
 
 const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
-  const { connectWallet, address } = useLoginContext();
+  const { connectWallet, address, setIsWhitelisted } = useLoginContext();
   const [selectedWallet, setSelectedWallet] = useState("");
   const [isInviteCodeVisible, setIsInviteCodeVisible] = useState(false);
   const [showChecklist, setShowChecklist] = useState(false);
@@ -35,23 +36,94 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [isOtpVerified, setIsOtpVerified] = useState(false);
   const [isTwitterConnected, setIsTwitterConnected] = useState(false);
+  const [twitterUrl, setTwitterUrl] = useState("");
+  const [isTwitterUrlValid, setIsTwitterUrlValid] = useState(false);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isWalletLoading, setIsWalletLoading] = useState(false);
+  const [isInviteCodeFlow, setIsInviteCodeFlow] = useState(false);
+  const [inviteCode, setInviteCode] = useState("");
+  const [showEnterLab, setShowEnterLab] = useState(false);
+  const [isWhitelistedLocal, setIsWhitelistedLocal] = useState(false);
 
   const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const twitterUrlPattern =
+    /^https?:\/\/(www\.)?(twitter\.com|x\.com)\/[a-zA-Z0-9_]{1,15}$/;
   const accessService = AccessService.getInstance();
 
   // Reset verification state when email changes
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleEmailChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const newEmail = e.target.value;
     setEmail(newEmail);
-    // Reset verification states
+
+    if (emailPattern.test(newEmail)) {
+      try {
+        const response = await accessService.getUserInfo(newEmail);
+        if (response.success) {
+          const { user } = response.data;
+
+          // If user is already whitelisted
+          if (user.isWhitelisted) {
+            setIsWhitelistedLocal(true);
+            // Show only email and wallet connection
+            setIsInviteCodeFlow(false);
+            return;
+          }
+
+          // If user has verified email and completed profile but not whitelisted
+          if (
+            user.isEmailVerified &&
+            user.isProfileCompleted &&
+            !user.isWhitelisted
+          ) {
+            setIsOtpVerified(true);
+            setIsTwitterConnected(true);
+            setTwitterUrl(user.twitterProfile);
+            if (user.walletAddress) {
+              setSelectedWallet("metamask");
+              handleWalletChange("metamask");
+            }
+            setIsInviteCodeVisible(true);
+            return;
+          }
+
+          // If user has verified email but not completed profile
+          if (user.isEmailVerified && !user.isProfileCompleted) {
+            setIsOtpVerified(true);
+            if (user.walletAddress) {
+              setSelectedWallet("metamask");
+              handleWalletChange("metamask");
+            }
+            if (user.twitterProfile) {
+              setIsTwitterConnected(true);
+              setTwitterUrl(user.twitterProfile);
+            }
+            return;
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching user info:", error);
+      }
+    }
+
+    // Reset verification states if email is invalid or no user info found
     setIsOtpSent(false);
     setIsOtpVerified(false);
     setOtp("");
     setTimer(0);
     setError("");
+    setShowEnterLab(false);
+    setIsWhitelistedLocal(false);
   };
+
+  // Add effect to handle whitelist status when wallet connects
+  useEffect(() => {
+    if (address && isWhitelistedLocal) {
+      setShowEnterLab(true);
+    } else {
+      setShowEnterLab(false);
+    }
+  }, [address, isWhitelistedLocal]);
 
   useEffect(() => {
     setIsEmailValid(emailPattern.test(email));
@@ -71,8 +143,13 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
     try {
       setIsLoading(true);
       setError("");
-      setIsOtpSent(true);
-      setTimer(60);
+      const response = await accessService.register({ email });
+      if (response.success) {
+        setIsOtpSent(true);
+        setTimer(60);
+      } else {
+        setError(response.message);
+      }
     } catch (err) {
       setError("Failed to send OTP. Please try again.");
     } finally {
@@ -84,8 +161,12 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
     try {
       setIsLoading(true);
       setError("");
-      // Simulate successful OTP verification
-      setIsOtpVerified(true);
+      const response = await accessService.verifyOtp({ email, otp });
+      if (response.success) {
+        setIsOtpVerified(true);
+      } else {
+        setError(response.message);
+      }
     } catch (err) {
       setError("Invalid OTP. Please try again.");
     } finally {
@@ -93,15 +174,52 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
     }
   };
 
-  const handleTwitterConnect = () => {
-    // Simulate successful Twitter connection
-    setIsTwitterConnected(true);
+  const handleResendOtp = async () => {
+    try {
+      setIsLoading(true);
+      setError("");
+      const response = await accessService.resendOtp(email);
+      if (response.success) {
+        setTimer(60);
+      } else {
+        setError(response.message);
+      }
+    } catch (err) {
+      setError("Failed to resend OTP. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Validate Twitter URL
+  useEffect(() => {
+    setIsTwitterUrlValid(twitterUrlPattern.test(twitterUrl));
+  }, [twitterUrl]);
+
+  // Handle Twitter URL submission
+  const handleTwitterSubmit = async () => {
+    if (!isTwitterUrlValid) {
+      setError("Please enter a valid Twitter/X profile URL");
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      setError("");
+      // Here you would typically make an API call to verify the Twitter profile
+      // For now, we'll simulate a successful connection
+      setIsTwitterConnected(true);
+    } catch (err) {
+      setError("Failed to verify Twitter profile. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleWalletChange = async (walletId: string) => {
     setSelectedWallet(walletId);
     try {
-      setIsLoading(true);
+      setIsWalletLoading(true);
       setError("");
       // Map wallet ID to wallet name for connectWallet function
       const walletNameMap: { [key: string]: string } = {
@@ -114,12 +232,23 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
     } catch (err) {
       setError("Failed to connect wallet. Please try again.");
     } finally {
-      setIsLoading(false);
+      setIsWalletLoading(false);
     }
   };
 
+  // Get wallet logo based on selected wallet
+  const getWalletLogo = () => {
+    const walletLogos: { [key: string]: string } = {
+      metamask: "/Login/Metamask.png",
+      coinbase: "/Login/Coinbase.png",
+      walletconnect: "/Login/Walletconnect.png",
+      trust: "/Login/Trustwallet.png",
+    };
+    return walletLogos[selectedWallet] || "";
+  };
+
   const handleSecureSpot = async () => {
-    if (!isOtpVerified || !selectedWallet || !isTwitterConnected) {
+    if (!isSecureSpotEnabled) {
       setError("Please complete all required steps");
       return;
     }
@@ -127,8 +256,35 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
     try {
       setIsLoading(true);
       setError("");
-      // Simulate successful spot securing
-      setShowChecklist(true);
+      if (inviteCode.trim() !== "") {
+        // Handle invite code flow
+        const response = await accessService.completeWhitelist({
+          email,
+          accessCode: inviteCode,
+        });
+
+        if (response.success) {
+          setIsWhitelisted(true);
+          setShowSuccess(true);
+          setIsInviteCodeFlow(true);
+        } else {
+          setError(response.message);
+        }
+      } else {
+        // Handle regular flow
+        const response = await accessService.completeProfile({
+          email,
+          walletAddress: address || "",
+          twitterProfile: twitterUrl,
+        });
+
+        if (response.success) {
+          setIsInviteCodeFlow(true);
+          setShowChecklist(true);
+        } else {
+          setError(response.message);
+        }
+      }
     } catch (err) {
       setError("Failed to secure your spot. Please try again.");
     } finally {
@@ -136,7 +292,12 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
     }
   };
 
-  const isFormComplete = isOtpVerified && selectedWallet && isTwitterConnected;
+  const isInviteCodeFlowComplete =
+    selectedWallet && email && inviteCode.trim() !== "";
+  const isRegularFlowComplete =
+    isOtpVerified && selectedWallet && isTwitterConnected;
+
+  const isSecureSpotEnabled = isInviteCodeFlowComplete || isRegularFlowComplete;
 
   const [steps, setSteps] = useState<Step[]>([
     {
@@ -216,6 +377,7 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
     if (!isOpen) {
       setShowChecklist(false);
       setShowSuccess(false);
+      setShowEnterLab(false);
       setSteps((prevSteps) =>
         prevSteps.map((step) => ({
           ...step,
@@ -231,8 +393,28 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
               : undefined,
         }))
       );
+      setEmail("");
+      setOtp("");
+      setTimer(0);
+      setIsEmailValid(false);
+      setIsOtpSent(false);
+      setIsOtpVerified(false);
+      setIsTwitterConnected(false);
+      setTwitterUrl("");
+      setIsTwitterUrlValid(false);
+      setError("");
+      setIsLoading(false);
+      setInviteCode("");
+      setIsInviteCodeFlow(false);
+      setIsInviteCodeVisible(false);
+      setSelectedWallet("");
+      setIsWhitelistedLocal(false);
+      setIsWhitelisted(false);
     }
   }, [isOpen]);
+
+  const isInviteCodeFormComplete =
+    isEmailValid && selectedWallet && inviteCode.trim() !== "";
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -244,14 +426,22 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
           setIsInviteCodeVisible(false);
           setShowChecklist(false);
           setShowSuccess(false);
+          setShowEnterLab(false);
           setEmail("");
           setOtp("");
           setTimer(0);
           setIsOtpSent(false);
           setIsOtpVerified(false);
           setIsTwitterConnected(false);
+          setTwitterUrl("");
+          setIsTwitterUrlValid(false);
           setError("");
           setIsLoading(false);
+          setInviteCode("");
+          setIsInviteCodeFlow(false);
+          setIsInviteCodeVisible(false);
+          setSelectedWallet("");
+          setIsWhitelistedLocal(false);
         }}
       >
         <Transition.Child
@@ -317,8 +507,7 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
                   </div>
 
                   {/* Content Section */}
-
-                  {!showChecklist ? (
+                  {!isInviteCodeFlow ? (
                     <div className="py-7 px-20 space-y-3">
                       {/* Email Field */}
                       <div className="space-y-2">
@@ -336,147 +525,257 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
                         </div>
                       </div>
 
-                      {/* Verification Code Field */}
-                      <div className="space-y-2">
-                        <label className="text-white text-sm font-medium">
-                          Email verification code
-                        </label>
-                        <div className="relative">
-                          <input
-                            type="text"
-                            value={otp}
-                            onChange={(e) => setOtp(e.target.value)}
-                            placeholder="6-digits verification code"
-                            className="w-full px-4 py-3 bg-transparent border border-primary-100/40 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary-100"
-                          />
-                          {!isOtpSent ? (
-                            <button
-                              onClick={handleSendOtp}
-                              disabled={!isEmailValid || isLoading}
-                              className={`absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1.5 text-primary-100 hover:bg-primary-100/10 rounded transition-colors ${
-                                (!isEmailValid || isLoading) &&
-                                "opacity-50 cursor-not-allowed"
-                              }`}
-                            >
-                              {isLoading ? "Sending..." : "Send"}
-                            </button>
+                      {/* Show only wallet connection for whitelisted users */}
+                      {isWhitelistedLocal && (
+                        <div className="space-y-2">
+                          <label className="text-white text-sm font-medium">
+                            Connect your wallet
+                          </label>
+                          {address ? (
+                            <div className="w-full px-4 py-3 bg-transparent border border-primary-100/40 rounded-lg flex items-center justify-between">
+                              <div className="flex items-center gap-2">
+                                <img
+                                  src={getWalletLogo()}
+                                  alt="Wallet"
+                                  className="w-6 h-6"
+                                />
+                                <span className="text-white">
+                                  {formatAddress(address, 4)}
+                                </span>
+                              </div>
+                              <button
+                                onClick={() => {
+                                  setSelectedWallet("");
+                                  handleWalletChange("");
+                                }}
+                                className="text-primary-100 hover:text-primary-100/80 transition-colors"
+                              >
+                                Change
+                              </button>
+                            </div>
                           ) : (
-                            <button
-                              onClick={handleVerifyOtp}
-                              disabled={otp.length !== 6 || isLoading}
-                              className={`absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1.5 text-primary-100 hover:bg-primary-100/10 rounded transition-colors ${
-                                (otp.length !== 6 || isLoading) &&
-                                "opacity-50 cursor-not-allowed"
-                              }`}
-                            >
-                              {isLoading ? "Verifying..." : "Verify"}
-                            </button>
+                            <WalletSelect
+                              value={selectedWallet}
+                              onChange={handleWalletChange}
+                            />
                           )}
                         </div>
-                        {isOtpSent && (
-                          <div className="flex items-center justify-between mt-1">
+                      )}
+
+                      {/* Show Enter Lab button for whitelisted users with connected wallet */}
+                      {isWhitelistedLocal && (
+                        <div className="relative w-full flex justify-center items-center py-4">
+                          <button
+                            onClick={() => {
+                              setShowSuccess(true);
+                              setIsWhitelisted(true);
+                              setIsInviteCodeFlow(true);
+                            }}
+                            className="px-10 py-3 bg-primary-100 text-black font-bold rounded-lg hover:bg-primary-100/90 transition-colors"
+                          >
+                            Enter Lab
+                          </button>
+                        </div>
+                      )}
+
+                      {/* Show full form for non-whitelisted users */}
+                      {!isWhitelistedLocal && (
+                        <>
+                          {/* Verification Code Field */}
+                          <div className="space-y-2">
+                            <label className="text-white text-sm font-medium">
+                              Email verification code
+                            </label>
+                            <div className="relative">
+                              <input
+                                type="text"
+                                value={otp}
+                                onChange={(e) => setOtp(e.target.value)}
+                                placeholder="6-digits verification code"
+                                className={`w-full px-4 py-3 bg-transparent border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-1 ${
+                                  isOtpVerified
+                                    ? "border-green-500 focus:ring-green-500"
+                                    : "border-primary-100/40 focus:ring-primary-100"
+                                }`}
+                              />
+                              {!isOtpSent ? (
+                                <button
+                                  onClick={handleSendOtp}
+                                  disabled={!isEmailValid || isLoading}
+                                  className={`absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1.5 text-primary-100 hover:bg-primary-100/10 rounded transition-colors ${
+                                    (!isEmailValid || isLoading) &&
+                                    "opacity-50 cursor-not-allowed"
+                                  }`}
+                                >
+                                  {isLoading ? "Sending..." : "Send"}
+                                </button>
+                              ) : (
+                                <button
+                                  onClick={handleVerifyOtp}
+                                  disabled={otp.length !== 6 || isLoading}
+                                  className={`absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1.5 text-primary-100 hover:bg-primary-100/10 rounded transition-colors ${
+                                    (otp.length !== 6 || isLoading) &&
+                                    "opacity-50 cursor-not-allowed"
+                                  }`}
+                                >
+                                  {isLoading ? "Verifying..." : "Verify"}
+                                </button>
+                              )}
+                            </div>
+                            {isOtpSent && (
+                              <div className="flex items-center justify-between mt-1">
+                                <button
+                                  onClick={handleResendOtp}
+                                  disabled={timer > 0 || isLoading}
+                                  className={`text-sm font-semibold text-primary-100 hover:text-primary-100/80 transition-colors ${
+                                    (timer > 0 || isLoading) &&
+                                    "opacity-50 cursor-not-allowed"
+                                  }`}
+                                >
+                                  {timer > 0
+                                    ? `Resend in ${timer}s`
+                                    : "Resend code"}
+                                </button>
+                                {otp.length > 0 && otp.length !== 6 && (
+                                  <span className="text-xs text-red-500">
+                                    Please enter 6 digits
+                                  </span>
+                                )}
+                              </div>
+                            )}
+                            {isOtpVerified && (
+                              <div className="flex items-center gap-2 mt-1">
+                                <svg
+                                  className="w-4 h-4 text-green-500"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M5 13l4 4L19 7"
+                                  />
+                                </svg>
+                                <span className="text-xs text-green-500">
+                                  Email verified successfully
+                                </span>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Wallet Selection */}
+                          <div className="space-y-2">
+                            <label className="text-white text-sm font-medium">
+                              Connect your wallet
+                            </label>
+                            {address ? (
+                              <div className="w-full px-4 py-3 bg-transparent border border-primary-100/40 rounded-lg flex items-center justify-between">
+                                <div className="flex items-center gap-2">
+                                  <img
+                                    src={getWalletLogo()}
+                                    alt="Wallet"
+                                    className="w-6 h-6"
+                                  />
+                                  <span className="text-white">
+                                    {formatAddress(address, 4)}
+                                  </span>
+                                </div>
+                                <button
+                                  onClick={() => {
+                                    setSelectedWallet("");
+                                    handleWalletChange("");
+                                  }}
+                                  className="text-primary-100 hover:text-primary-100/80 transition-colors"
+                                >
+                                  Change
+                                </button>
+                              </div>
+                            ) : (
+                              <WalletSelect
+                                value={selectedWallet}
+                                onChange={handleWalletChange}
+                              />
+                            )}
+                          </div>
+
+                          {/* X Account Connection */}
+                          <div className="space-y-2">
+                            <label className="text-white text-sm font-medium">
+                              Connect X
+                            </label>
+                            {isTwitterConnected ? (
+                              <div className="w-full px-4 py-3 bg-transparent border border-green-500 rounded-lg flex items-center justify-between">
+                                <div className="flex items-center gap-2">
+                                  <svg
+                                    className="w-5 h-5 text-green-500"
+                                    viewBox="0 0 24 24"
+                                    fill="currentColor"
+                                  >
+                                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                                  </svg>
+                                  <span className="text-white truncate">
+                                    {twitterUrl}
+                                  </span>
+                                </div>
+                                <button
+                                  onClick={() => {
+                                    setIsTwitterConnected(false);
+                                    setTwitterUrl("");
+                                  }}
+                                  className="text-primary-100 hover:text-primary-100/80 transition-colors"
+                                >
+                                  Change
+                                </button>
+                              </div>
+                            ) : (
+                              <div className="space-y-2">
+                                <div className="relative">
+                                  <input
+                                    type="text"
+                                    value={twitterUrl}
+                                    onChange={(e) =>
+                                      setTwitterUrl(e.target.value)
+                                    }
+                                    placeholder="Enter your Twitter/X profile URL"
+                                    className="w-full px-4 py-3 bg-transparent border border-primary-100/40 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary-100"
+                                  />
+                                  <button
+                                    onClick={handleTwitterSubmit}
+                                    disabled={!isTwitterUrlValid || isLoading}
+                                    className={`absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1.5 text-primary-100 hover:bg-primary-100/10 rounded transition-colors ${
+                                      (!isTwitterUrlValid || isLoading) &&
+                                      "opacity-50 cursor-not-allowed"
+                                    }`}
+                                  >
+                                    {isLoading ? "Verifying..." : "Connect"}
+                                  </button>
+                                </div>
+                                {twitterUrl && !isTwitterUrlValid && (
+                                  <p className="text-red-500 text-sm">
+                                    Please enter a valid Twitter/X profile URL
+                                  </p>
+                                )}
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Secure Your Spot button for non-whitelisted users */}
+                          <div className="relative w-full flex justify-center items-center py-4">
                             <button
-                              onClick={handleSendOtp}
-                              disabled={timer > 0 || isLoading}
-                              className={`text-sm font-semibold text-primary-100 hover:text-primary-100/80 transition-colors ${
-                                (timer > 0 || isLoading) &&
+                              onClick={handleSecureSpot}
+                              disabled={!isSecureSpotEnabled || isLoading}
+                              className={`px-10 py-3 bg-primary-100 text-black font-bold rounded-lg hover:bg-primary-100/90 transition-colors ${
+                                !isSecureSpotEnabled &&
                                 "opacity-50 cursor-not-allowed"
                               }`}
                             >
-                              {timer > 0
-                                ? `Resend in ${timer}s`
-                                : "Resend code"}
+                              {isLoading ? "Processing..." : "Secure Your Spot"}
                             </button>
-                            {otp.length > 0 && otp.length !== 6 && (
-                              <span className="text-xs text-red-500">
-                                Please enter 6 digits
-                              </span>
-                            )}
                           </div>
-                        )}
-                      </div>
-
-                      {error && (
-                        <p className="text-red-500 text-sm mt-2">{error}</p>
+                        </>
                       )}
-
-                      {/* Wallet Selection */}
-                      <div className="space-y-2">
-                        <label className="text-white text-sm font-medium">
-                          Connect your wallet
-                        </label>
-                        <WalletSelect
-                          value={selectedWallet}
-                          onChange={handleWalletChange}
-                        />
-                      </div>
-
-                      {/* X Account Connection */}
-                      <div className="space-y-2">
-                        <label className="text-white text-sm font-medium">
-                          Connect X
-                        </label>
-                        <button
-                          onClick={handleTwitterConnect}
-                          className={`w-full px-4 py-3 bg-gradient-to-r from-black to-zinc-800 border border-primary-100/40 rounded-lg text-gray-400 hover:bg-opacity-90 transition-colors flex items-center justify-between ${
-                            isTwitterConnected ? "border-green-500" : ""
-                          }`}
-                        >
-                          <span>
-                            {isTwitterConnected
-                              ? "Connected to X"
-                              : "Link your X account"}
-                          </span>
-                          <svg
-                            className="w-5 h-5 text-gray-400"
-                            viewBox="0 0 24 24"
-                            fill="currentColor"
-                          >
-                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                          </svg>
-                        </button>
-                      </div>
-
-                      {/* Invite Code Section */}
-                      <div className="space-y-4">
-                        {!isInviteCodeVisible && (
-                          <button
-                            onClick={() =>
-                              setIsInviteCodeVisible(!isInviteCodeVisible)
-                            }
-                            className="text-gray-400 hover:text-white transition-colors"
-                          >
-                            Got an exclusive Invite code?{" "}
-                            <span className="text-white">Click here</span>
-                          </button>
-                        )}
-
-                        {isInviteCodeVisible && (
-                          <div className="space-y-4">
-                            <div className="space-y-2">
-                              <label className="text-white text-sm font-medium">
-                                Exclusive access code
-                              </label>
-                              <input
-                                type="text"
-                                placeholder="Enter access code"
-                                className="w-full px-4 py-3 bg-transparent border border-primary-100/40 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary-100"
-                              />
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                      <div className="relative w-full flex justify-center items-center py-4">
-                        <button
-                          onClick={handleSecureSpot}
-                          disabled={!isFormComplete}
-                          className={`px-10 py-3 bg-primary-100 text-black font-bold rounded-lg hover:bg-primary-100/90 transition-colors ${
-                            !isFormComplete && "opacity-50 cursor-not-allowed"
-                          }`}
-                        >
-                          {isLoading ? "Processing..." : "Secure your Spot"}
-                        </button>
-                      </div>
                     </div>
                   ) : (
                     <div className="py-7 px-12 relative">

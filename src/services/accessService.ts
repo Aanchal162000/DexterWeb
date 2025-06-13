@@ -1,10 +1,9 @@
 import axios from "axios";
 
-const baseURL = "https://dexter-backend-ucdt5.ondigitalocean.app/api/agent";
+const baseURL = "https://dexters-backend.zkcross.exchange";
 
 interface RegisterRequest {
   email: string;
-  walletAddress?: string;
 }
 
 interface VerifyOtpRequest {
@@ -16,6 +15,33 @@ interface AccessResponse {
   success: boolean;
   message: string;
   data?: any;
+}
+interface profilePayload {
+  email: string;
+  walletAddress: string;
+  twitterProfile: string;
+}
+interface whitelistPayload {
+  email: string;
+  accessCode: string;
+}
+
+interface UserInfo {
+  email: string;
+  walletAddress: string;
+  twitterProfile: string;
+  isEmailVerified: boolean;
+  isProfileCompleted: boolean;
+  isWhitelisted: boolean;
+  lastLoginAt: string;
+  createdAt: string;
+}
+
+interface UserInfoResponse {
+  success: boolean;
+  data: {
+    user: UserInfo;
+  };
 }
 
 class AccessService {
@@ -49,7 +75,7 @@ class AccessService {
     } catch (error: any) {
       return {
         success: false,
-        message: error.response?.data?.message || "Registration failed",
+        message: error.response?.data?.message || "Sent OTP failed",
       };
     }
   }
@@ -61,7 +87,10 @@ class AccessService {
    */
   async verifyOtp(request: VerifyOtpRequest): Promise<AccessResponse> {
     try {
-      const { data } = await axios.post(`${baseURL}/api/auth/verify`, request);
+      const { data } = await axios.post(
+        `${baseURL}/api/auth/verify-otp`,
+        request
+      );
       return {
         success: true,
         message: "OTP verified successfully",
@@ -118,6 +147,77 @@ class AccessService {
         success: false,
         message:
           error.response?.data?.message || "Failed to check access status",
+      };
+    }
+  }
+
+  async completeProfile(request: profilePayload): Promise<AccessResponse> {
+    try {
+      const { data } = await axios.post(
+        `${baseURL}/api/auth/complete-profile`,
+
+        request
+      );
+      return {
+        success: true,
+        message: "OTP resent successfully",
+        data,
+      };
+    } catch (error: any) {
+      return {
+        success: false,
+        message: error.response?.data?.message || "Failed to resend OTP",
+      };
+    }
+  }
+  async completeWhitelist(request: whitelistPayload): Promise<AccessResponse> {
+    try {
+      const { data } = await axios.post(
+        `${baseURL}/api/auth/whitelist`,
+        request
+      );
+      return {
+        success: true,
+        message: "OTP resent successfully",
+        data,
+      };
+    } catch (error: any) {
+      return {
+        success: false,
+        message: error.response?.data?.message || "Failed to resend OTP",
+      };
+    }
+  }
+
+  /**
+   * Get user information by email
+   * @param email - User's email address
+   * @returns Promise with user information response
+   */
+  async getUserInfo(email: string): Promise<UserInfoResponse> {
+    try {
+      const { data } = await axios.get(`${baseURL}/api/auth/user-info`, {
+        params: { email },
+      });
+      return {
+        success: true,
+        data: data.data,
+      };
+    } catch (error: any) {
+      return {
+        success: false,
+        data: {
+          user: {
+            email,
+            walletAddress: "",
+            twitterProfile: "",
+            isEmailVerified: false,
+            isProfileCompleted: false,
+            isWhitelisted: false,
+            lastLoginAt: "",
+            createdAt: "",
+          },
+        },
       };
     }
   }

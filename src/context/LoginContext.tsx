@@ -60,6 +60,8 @@ interface ILoginState {
   setActiveTab: Dispatch<SetStateAction<string>>;
   trigger: number;
   triggerAPIs: () => void;
+  isWhitelisted: boolean;
+  setIsWhitelisted: Dispatch<SetStateAction<boolean>>;
 }
 
 let ethereum: any = null;
@@ -93,6 +95,7 @@ export default function LoginProvider({ children }: { children: ReactNode }) {
   const [activeTab, setActiveTab] = useState<string>(headerRoutes[1]?.name);
   const [trigger, setTrigger] = useState<number>(0);
   const isFirstLoad = useIsFirstEffect();
+  const [isWhitelisted, setIsWhitelisted] = useState<boolean>(false);
   const [trustWallet] = initializeConnector<TrustWallet>(
     (actions) => new TrustWallet({ actions })
   );
@@ -412,6 +415,8 @@ export default function LoginProvider({ children }: { children: ReactNode }) {
         setActiveTab,
         trigger,
         triggerAPIs,
+        isWhitelisted,
+        setIsWhitelisted,
       }}
     >
       {children}

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:9000";
+const baseURL = "https://dexter-backend-ucdt5.ondigitalocean.app/api/agent";
 
 interface RegisterRequest {
   email: string;

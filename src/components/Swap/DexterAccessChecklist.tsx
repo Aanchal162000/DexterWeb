@@ -43,11 +43,11 @@ const DexterAccessChecklist: React.FC<DexterAccessChecklistProps> = ({
   return (
     <div ref={containerRef} className="w-full py-2 relative">
       {showSuccess && (
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute inset-0 w-[400px] h-[400px] overflow-hidden pointer-events-none">
           <ReactConfetti
             width={dimensions.width}
             height={800}
-            numberOfPieces={100}
+            numberOfPieces={1000}
             recycle={false}
             gravity={-0.05} // reverse gravity (upward)
             initialVelocityY={120} // positive Y velocity means upward due to negative gravity

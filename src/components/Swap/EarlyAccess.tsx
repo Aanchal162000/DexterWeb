@@ -4,6 +4,7 @@ import { Fragment } from "react";
 import WalletSelect from "./WalletSelect";
 import DexterAccessChecklist from "./DexterAccessChecklist";
 import AccessService from "@/services/accessService";
+import { useLoginContext } from "@/context/LoginContext";
 
 interface EarlyAccessProps {
   isOpen: boolean;
@@ -22,6 +23,7 @@ interface Step {
 }
 
 const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
+  const { connectWallet, address } = useLoginContext();
   const [selectedWallet, setSelectedWallet] = useState("");
   const [isInviteCodeVisible, setIsInviteCodeVisible] = useState(false);
   const [showChecklist, setShowChecklist] = useState(false);
@@ -69,7 +71,6 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
     try {
       setIsLoading(true);
       setError("");
-      // Simulate successful OTP send
       setIsOtpSent(true);
       setTimer(60);
     } catch (err) {
@@ -95,6 +96,26 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
   const handleTwitterConnect = () => {
     // Simulate successful Twitter connection
     setIsTwitterConnected(true);
+  };
+
+  const handleWalletChange = async (walletId: string) => {
+    setSelectedWallet(walletId);
+    try {
+      setIsLoading(true);
+      setError("");
+      // Map wallet ID to wallet name for connectWallet function
+      const walletNameMap: { [key: string]: string } = {
+        metamask: "Metamask",
+        trust: "Trust Wallet",
+        walletconnect: "Wallet Connect",
+        coinbase: "Coinbase Wallet",
+      };
+      await connectWallet(walletNameMap[walletId]);
+    } catch (err) {
+      setError("Failed to connect wallet. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleSecureSpot = async () => {
@@ -326,34 +347,52 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
                             value={otp}
                             onChange={(e) => setOtp(e.target.value)}
                             placeholder="6-digits verification code"
-                            className="w-full px-4 py-3 bg-transparent border border-primary-100/40 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary-100 pr-24"
+                            className="w-full px-4 py-3 bg-transparent border border-primary-100/40 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary-100"
                           />
-                          <button
-                            onClick={handleSendOtp}
-                            disabled={!isEmailValid || timer > 0 || isLoading}
-                            className={`absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1.5 text-primary-100 hover:bg-primary-100/10 rounded transition-colors ${
-                              (!isEmailValid || timer > 0 || isLoading) &&
-                              "opacity-50 cursor-not-allowed"
-                            }`}
-                          >
-                            {isLoading
-                              ? "Sending..."
-                              : timer > 0
-                              ? `Resend (${timer}s)`
-                              : "Send"}
-                          </button>
+                          {!isOtpSent ? (
+                            <button
+                              onClick={handleSendOtp}
+                              disabled={!isEmailValid || isLoading}
+                              className={`absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1.5 text-primary-100 hover:bg-primary-100/10 rounded transition-colors ${
+                                (!isEmailValid || isLoading) &&
+                                "opacity-50 cursor-not-allowed"
+                              }`}
+                            >
+                              {isLoading ? "Sending..." : "Send"}
+                            </button>
+                          ) : (
+                            <button
+                              onClick={handleVerifyOtp}
+                              disabled={otp.length !== 6 || isLoading}
+                              className={`absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1.5 text-primary-100 hover:bg-primary-100/10 rounded transition-colors ${
+                                (otp.length !== 6 || isLoading) &&
+                                "opacity-50 cursor-not-allowed"
+                              }`}
+                            >
+                              {isLoading ? "Verifying..." : "Verify"}
+                            </button>
+                          )}
                         </div>
-                        {isOtpSent && !isOtpVerified && (
-                          <button
-                            onClick={handleVerifyOtp}
-                            disabled={!otp || isLoading}
-                            className={`w-full mt-2 px-4 py-2 bg-primary-100 text-black font-medium rounded-lg hover:bg-primary-100/90 transition-colors ${
-                              (!otp || isLoading) &&
-                              "opacity-50 cursor-not-allowed"
-                            }`}
-                          >
-                            {isLoading ? "Verifying..." : "Verify OTP"}
-                          </button>
+                        {isOtpSent && (
+                          <div className="flex items-center justify-between mt-1">
+                            <button
+                              onClick={handleSendOtp}
+                              disabled={timer > 0 || isLoading}
+                              className={`text-sm font-semibold text-primary-100 hover:text-primary-100/80 transition-colors ${
+                                (timer > 0 || isLoading) &&
+                                "opacity-50 cursor-not-allowed"
+                              }`}
+                            >
+                              {timer > 0
+                                ? `Resend in ${timer}s`
+                                : "Resend code"}
+                            </button>
+                            {otp.length > 0 && otp.length !== 6 && (
+                              <span className="text-xs text-red-500">
+                                Please enter 6 digits
+                              </span>
+                            )}
+                          </div>
                         )}
                       </div>
 
@@ -368,7 +407,7 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
                         </label>
                         <WalletSelect
                           value={selectedWallet}
-                          onChange={setSelectedWallet}
+                          onChange={handleWalletChange}
                         />
                       </div>
 

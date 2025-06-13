@@ -11,9 +11,13 @@ import {
 } from "react";
 
 import { ConnectorNotFoundError } from "wagmi";
-import { Account, ProviderRpcError, RpcError, WalletClient } from "viem";
 
 import { toastError, toastInfo } from "@/utils/toast";
+import { TrustWallet } from "@trustwallet/web3-react-trust-wallet";
+import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet";
+import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
+import { Account, ProviderRpcError, RpcError, WalletClient } from "viem";
+import { initializeConnector } from "@web3-react/core";
 import {
   INetworkData,
   IWalletProp,
@@ -89,6 +93,9 @@ export default function LoginProvider({ children }: { children: ReactNode }) {
   const [activeTab, setActiveTab] = useState<string>(headerRoutes[1]?.name);
   const [trigger, setTrigger] = useState<number>(0);
   const isFirstLoad = useIsFirstEffect();
+  const [trustWallet] = initializeConnector<TrustWallet>(
+    (actions) => new TrustWallet({ actions })
+  );
 
   const triggerAPIs = () => setTrigger(trigger + 1);
 
@@ -148,13 +155,139 @@ export default function LoginProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const connectTrustWallet = async () => {
+    try {
+      console.log("connect trust");
+      await trustWallet.activate(42161);
+      const currProvider = trustWallet.provider!;
+
+      let justProvider =
+        currProvider ||
+        ethereum?.providers.find((e: any) => e?.isTrust) ||
+        ethereum;
+      let account = justProvider?.selectedAddress;
+
+      let client: WalletClient;
+      if (!account) {
+        client = await createWalletClient({
+          transport: custom(justProvider, {
+            retryCount: 3,
+            retryDelay: 1000,
+          }),
+        });
+        try {
+          await client.switchChain({ id: base.id });
+        } catch (e) {
+          try {
+            await client.addChain({ chain: base });
+          } catch (e) {
+            setTimeout(
+              async () => await client.switchChain({ id: base.id }),
+              100
+            );
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+            console.log("error", e);
+          }
+        }
+        const [address] = await client?.requestAddresses();
+        account = address;
+      }
+
+      await sleepTimer(1000);
+
+      setCurrentProvider(justProvider);
+      setAddress(account);
+      setLoading(false);
+      setCurrentConnector("trust");
+    } catch (error) {
+      toastError(
+        (error as any)?.message
+          ? `Error: ${(error as any)?.message}`
+          : "Something went wrong"
+      );
+      console.log(error, "details");
+    } finally {
+      setLoading(false);
+      setSteps(["Select a wallet", "Create or connect wallet"]);
+    }
+  };
+
+  const connectCoinbase = async () => {
+    try {
+      console.log("connect coinbase");
+      const coinbaseConnector = new CoinbaseWalletConnector({
+        options: {
+          appName: "zkCrossDEX",
+        },
+      });
+      const { account } = await coinbaseConnector.connect({ chainId: 42161 });
+      let justProvider =
+        (await coinbaseConnector.getProvider()) ||
+        ethereum?.providers?.find((e: any) => e?.isCoinbaseWallet) ||
+        ethereum;
+      await sleepTimer(1000);
+
+      setCurrentProvider(justProvider);
+      setCurrentConnector("coinbase");
+      setAddress(account);
+      setLoading(false);
+    } catch (error) {
+      toastError(
+        (error as any)?.reason
+          ? `Error: ${(error as any)?.reason}`
+          : error instanceof Error
+          ? error?.message
+          : "Something went wrong"
+      );
+      setLoading(false);
+      console.log("error", error, "reason");
+      setSteps(["Select a wallet", "Create or connect wallet"]);
+    }
+  };
+
+  const connectWalletConnect = async () => {
+    try {
+      const coinbaseConnector = new WalletConnectConnector({
+        options: {
+          projectId: "1e4b6054faba3bc73e6fa5945a3b3a61",
+        },
+      });
+      const { account } = await coinbaseConnector.connect({ chainId: 42161 });
+      let justProvider =
+        (await coinbaseConnector.getProvider()) ||
+        ethereum?.providers?.find((e: any) => e?.isWalletConnect) ||
+        ethereum;
+      await sleepTimer(1000);
+
+      setCurrentProvider(justProvider);
+      setCurrentConnector("walletConnect");
+      setAddress(account);
+      setLoading(false);
+    } catch (error) {
+      toastError(
+        error instanceof Error ? error?.message : "Something went wrong"
+      );
+      setLoading(false);
+      // console.log("error", Object.keys(error), error, [])
+      setSteps(["Select a wallet", "Create or connect wallet"]);
+    }
+  };
+
   const connectWallet = async (walletName: string) => {
     setLoading(true);
     switch (walletName) {
       case "Metamask":
         await connectMetamask();
         break;
-
+      case "Trust Wallet":
+        await connectTrustWallet();
+        break;
+      case "Wallet Connect":
+        await connectWalletConnect();
+        break;
+      case "Coinbase Wallet":
+        await connectCoinbase();
+        break;
       default:
         toastError("Currently not supported!");
         setLoading(false);

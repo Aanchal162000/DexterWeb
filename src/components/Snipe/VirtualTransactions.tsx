@@ -6,7 +6,12 @@ import clsx from "clsx";
 import ImageNext from "../common/ImageNext";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { formatAddress } from "@/utils/helper";
-import { toastSuccess, toastError, toastInfo } from "@/utils/toast";
+import {
+  toastSuccess,
+  toastError,
+  toastInfo,
+  toastProcess,
+} from "@/utils/toast";
 import CopyTooltip from "../common/CopyTooltip";
 import InfoTooltip from "../common/InfoTooltip";
 import { MdCallMade, MdCallReceived } from "react-icons/md";
@@ -116,6 +121,7 @@ const VirtualTransactions = () => {
               : "in";
 
           return {
+            tokenObj: tokenObj,
             type: transactionType,
             fromNetwork: chainObj?.code || "",
             toNetwork: chainObj?.code || "",
@@ -127,7 +133,10 @@ const VirtualTransactions = () => {
               trx.transaction.status === "not_started"
                 ? trx.userDeposit.depositTxHash
                 : trx.transaction.hash || "", // Store full hash
-            processed: statusType[trx.transaction.status],
+            processed:
+              trx.transaction.status == "withdrawn"
+                ? "Completed"
+                : statusType[trx.transaction.status],
             ago: dayjs(trx.timestamps.createdAt).fromNow(),
             date: dayjs(trx.timestamps.createdAt).format("DD-MM-YYYY HH:mm:ss"),
             dateShort: dayjs(trx.timestamps.createdAt).format(
@@ -138,7 +147,11 @@ const VirtualTransactions = () => {
             imgFromNetwork: chainLogo,
             imgToNetwork: chainLogo,
             actionType:
-              trx.transaction.status === "not_started" ? "Smart Buy" : "Stake",
+              trx.transaction.status === "not_started"
+                ? "Smart Buy"
+                : trx.transaction.status == "withdrawn"
+                ? "Withdraw"
+                : "Stake",
           };
         });
 
@@ -160,17 +173,19 @@ const VirtualTransactions = () => {
   const handleWithdraw = async (
     amount: string,
     token: string,
-    hash: string
+    hash: string,
+    item: any
   ) => {
     let processToastId: string | number | null = null;
     setProcessingTx(hash);
+    const apiResponse = await agentService.notifyWithdraw({
+      txHash:
+        "0xab6ae048285cb4249af8af556a155d888738e9e3f9ff252927e610a16bb20876",
+      genesisId: item?.tokenObj.id, // Using the original hash as genesisId
+    });
 
     try {
-      processToastId = toast.info("Processing Transaction...", {
-        autoClose: false,
-        closeOnClick: false,
-        closeButton: false,
-      });
+      processToastId = toastProcess("Processing Transaction...");
       const tokenAddress =
         token === "VIRT"
           ? VIRTUALS_TOKEN_ADDRESS
@@ -181,7 +196,18 @@ const VirtualTransactions = () => {
         amount: amount,
         provider: networkData?.provider!,
       });
+
       if (receipt.transactionHash) {
+        // Call the withdraw API endpoint
+        const apiResponse = await agentService.notifyWithdraw({
+          txHash: receipt.transactionHash,
+          genesisId: item?.tokenObj.id, // Using the original hash as genesisId
+        });
+
+        if (!apiResponse.success) {
+          console.error("Failed to notify withdraw:", apiResponse.message);
+        }
+
         if (processToastId) toast.dismiss(processToastId);
         toastSuccess("Withdrawal initiated successfully!");
       }
@@ -362,7 +388,8 @@ const VirtualTransactions = () => {
                         handleWithdraw(
                           item.srcAmount,
                           item.depositToken,
-                          item.hash
+                          item.hash,
+                          item
                         );
                       }}
                     >

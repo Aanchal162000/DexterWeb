@@ -118,7 +118,7 @@ export class TRXService {
       return dataRes?.data;
     } catch (error: any) {
       console.log("Error in getSwapTransactionData", error);
-      throw new Error(error.message);
+      throw new Error("Server Error, Please try again");
     }
   }
 
@@ -269,7 +269,6 @@ export class TRXService {
         slippage,
         userWalletAddress
       );
-      console.log("SwapData", swapData);
 
       if (!swapData || swapData.length === 0 || !swapData[0].tx) {
         throw new Error("Invalid swap data received");
@@ -304,7 +303,7 @@ export class TRXService {
       return { success: true, chainTxInfo: receipt };
     } catch (error: any) {
       console.error("Error executing swap transaction:", error);
-      return { success: false, error };
+      return { success: false, error: "Swap Failed" };
     }
   }
 }

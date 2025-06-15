@@ -111,6 +111,39 @@ export default function LoginProvider({ children }: { children: ReactNode }) {
       if (!justProvider) {
         throw new ConnectorNotFoundError("MetaMask is not installed.");
       }
+
+      // First disconnect any existing connection
+      if (currentProvider) {
+        try {
+          await currentProvider.request({
+            method: "wallet_requestPermissions",
+            params: [{ eth_accounts: {} }],
+          });
+        } catch (error) {
+          console.log("Error disconnecting:", error);
+        }
+      }
+
+      // Request connection and get the currently selected account
+      const [selectedAddress] = await justProvider.request({
+        method: "eth_requestAccounts",
+        params: [],
+      });
+
+      if (!selectedAddress) {
+        throw new Error("No account selected");
+      }
+
+      // Verify this is the currently selected account in MetaMask
+      const currentAccounts = await justProvider.request({
+        method: "eth_accounts",
+      });
+      if (currentAccounts[0] !== selectedAddress) {
+        throw new Error("Selected account mismatch");
+      }
+
+      setAddress(selectedAddress);
+
       console.log("justProvider", justProvider);
       const client: WalletClient = await createWalletClient({
         transport: custom(justProvider, {
@@ -124,16 +157,12 @@ export default function LoginProvider({ children }: { children: ReactNode }) {
         await client.addChain({ chain: base });
       }
 
-      const [address] = await client.requestAddresses();
-
       await sleepTimer(1000);
 
-      setAddress(address);
       setCurrentConnector("metamask");
       setCurrentProvider(justProvider);
       setLoading(false);
     } catch (error) {
-      // console.log("metaee", error);
       if (error instanceof ConnectorNotFoundError) {
         toastInfo("Request installation");
         await sleepTimer(1500);
@@ -141,7 +170,6 @@ export default function LoginProvider({ children }: { children: ReactNode }) {
       } else if (
         error?.toString().includes("ChainNotConfiguredForConnectorError")
       ) {
-        // console.log("er", error)
         let switched = await switchNetwork(42161);
         if (switched) await connectMetamask();
       } else if (error instanceof RpcError) toastError(error?.shortMessage);
@@ -374,12 +402,36 @@ export default function LoginProvider({ children }: { children: ReactNode }) {
 
     if (!currentProvider && !address) return;
 
+    // Listen for chain changes
     currentProvider.on("chainChanged", (id: any) => {
-      let chainId: any = id; //as CurrentProvider is giving hexDecimal network id
+      let chainId: any = id;
       loadWallet().then((res: any) => {
         console.log("Wallet Info Loaded", res);
       });
     });
+
+    // Listen for account changes
+    currentProvider.on("accountsChanged", async (accounts: string[]) => {
+      if (accounts.length === 0) {
+        // User disconnected their wallet
+        setAddress(null);
+        setNetworkData(null);
+        setCurrentProvider(null);
+        setCurrentConnector("metamask");
+      } else {
+        // User switched accounts
+        setAddress(accounts[0]);
+        await loadWallet();
+      }
+    });
+
+    // Cleanup function to remove event listeners
+    return () => {
+      if (currentProvider) {
+        currentProvider.removeListener("chainChanged", () => {});
+        currentProvider.removeListener("accountsChanged", () => {});
+      }
+    };
   }, [address, currentProvider]);
 
   useEffectAsync(async () => {

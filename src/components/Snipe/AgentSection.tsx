@@ -9,9 +9,14 @@ const AgentSection: React.FC<AgentSectionProps> = ({
   error,
   renderItem,
 }) => {
+  // Filter genesis items to only show BASE chain
+  const filteredData =
+    type === "genesis"
+      ? data?.filter((item: any) => item.virtual?.chain === "BASE")
+      : data;
   return (
     <div
-      className={`flex flex-col relative w-1/3 ${
+      className={`flex flex-col relative sm:w-1/3 w-[90%] shrink-0 ${
         type != "sentient" ? "border-r" : ""
       }  border-primary-100 h-full`}
     >
@@ -24,10 +29,10 @@ const AgentSection: React.FC<AgentSectionProps> = ({
             <div className="flex justify-center items-center h-32">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-100"></div>
             </div>
-          ) : error && !data?.length ? (
+          ) : error && !filteredData?.length ? (
             <div className="text-red-500 text-center p-4">{error}</div>
-          ) : data?.length > 0 ? (
-            data.map((item) => renderItem(item))
+          ) : filteredData?.length > 0 ? (
+            filteredData.map((item) => renderItem(item))
           ) : (
             <div className="text-center text-gray-400 py-8">
               No {type} agents found

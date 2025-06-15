@@ -15,6 +15,7 @@ import { TRXService } from "@/services/transaction";
 import useEffectAsync from "@/hooks/useEffectAsync";
 import approvalService from "@/services/contract/approvalService";
 import { ethers } from "ethers";
+import { toastError, toastSuccess } from "@/utils/toast";
 
 interface SnipeSwapProps {
   virtuals: IVirtual[];
@@ -98,7 +99,7 @@ const SnipeSwap: React.FC<SnipeSwapProps> = ({
   const handleSwap = async () => {
     setIsFinalStep(true);
     if (!address || balanceLoading || !selectedVirtual || !selectedToVirtual) {
-      toast.error("Please connect your wallet and select a token");
+      toastError("Please connect your wallet and select a token");
       return;
     }
 
@@ -108,7 +109,7 @@ const SnipeSwap: React.FC<SnipeSwapProps> = ({
       isNaN(Number(fromAmount)) ||
       isNaN(Number(toAmount))
     ) {
-      toast.error("Invalid amount values");
+      toastError("Invalid amount values");
       return;
     }
 
@@ -142,14 +143,14 @@ const SnipeSwap: React.FC<SnipeSwapProps> = ({
         setReleaseHash(result?.chainTxInfo?.transactionHash!);
         setSwapHash(result?.chainTxInfo?.transactionHash!);
         triggerAPIs();
-        toast.success("Swap transaction successful! 🎉");
+        toastSuccess("Swap transaction successful!");
         await refetchBalances();
       } else {
-        throw new Error(result.error?.message || "Swap failed");
+        throw new Error("Swap failed. Please try again.");
       }
     } catch (error) {
       console.error("Swap error:", error);
-      toast.error(error instanceof Error ? error.message : "Swap failed");
+      toastError("Swap failed. Please try again.");
       setIsFinalStep(false);
       setIsTokenRelease(false);
       setIsConvert(false);

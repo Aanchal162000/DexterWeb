@@ -6,11 +6,37 @@ import Link from "next/link";
 import { useLoginContext } from "../context/LoginContext";
 import Footer from "./common/Footer";
 import Image from "next/image";
+import { Swiper, SwiperSlide } from "swiper/react";
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/pagination";
+import { useRef } from "react";
 import { useState } from "react";
 import EarlyAccess from "./Swap/EarlyAccess";
 
 const Login = () => {
   const { connectWallet, address, loading } = useLoginContext();
+
+  var settings = {
+    dots: false,
+    arrows: false,
+    swipe: true,
+    autoplay: false,
+    autoplaySpeed: 3000,
+    swipeToSlide: true,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 1.2,
+    slidesToScroll: 1,
+    focusOnSelect: true,
+    pauseOnHover: false,
+    centerMode: true,
+    initialSlide: 1,
+    centerPadding: "0px",
+    className: "approach",
+  };
+
+  const sliderRef = useRef(null);
   const [isEarlyAccessOpen, setIsEarlyAccessOpen] = useState(false);
 
   const handleEnterLab = async () => {
@@ -80,7 +106,39 @@ const Login = () => {
             <h1 className="sm:text-start text-center text-[#e4e8ea] text-xl md:text-3xl font-bold">
               How it works
             </h1>
-            <div className="relative flex flex-row sm:flex-nowrap flex-wrap gap-x-3 gap-y-4 md:gap-y-0 md:gap-x-4 w-full">
+            <div className="-mx-4 w-screen sm:hidden block overflow-hidden">
+              <Swiper
+                slidesPerView={1.3}
+                spaceBetween={20}
+                centeredSlides={true}
+                className="mySwiper mt-10"
+              >
+                {features.map((box, index) => (
+                  <SwiperSlide>
+                    <div
+                      key={index}
+                      className="relative p-0.5 max-w-[340px] xs:mx-0 mx-auto h-[156px] before:absolute before:inset-0 before:p-[1px] sm:before:rounded-3xl before:rounded-xl before:bg-gradient-to-tl before:from-[#465e64] before:via-[#00f0ff] before:to-[#00cfff] before:-z-10 before:content-[''] after:absolute after:inset-[1px] after:rounded-3xl after:bg-black/40 after:-z-10 after:content-['']"
+                    >
+                      <div className="relative w-full h-full bg-[#041820] sm:rounded-3xl rounded-xl items-center justify-start p-5">
+                        <h3 className="text-primary-100 sm:text-lg text-base font-normal mb-2">
+                          0{index + 1}
+                        </h3>
+                        <h3 className="text-primary-100 sm:text-lg text-sm font-bold mb-2">
+                          {box.title}
+                        </h3>
+                        <p
+                          className="text-[#e4e8ea] font-semibold sm:text-base text-[0.6875rem] leading-5"
+                          style={{ whiteSpace: "pre-line" }}
+                        >
+                          {box.description}
+                        </p>
+                      </div>
+                    </div>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </div>
+            <div className="relative sm:flex hidden flex-row sm:flex-nowrap flex-wrap gap-x-3 gap-y-4 md:gap-y-0 md:gap-x-4 w-full">
               {features.map((box, index) => (
                 <div
                   key={index}

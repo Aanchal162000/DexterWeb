@@ -16,6 +16,7 @@ import buyService from "@/services/contract/buyService";
 import { IVirtual } from "@/utils/interface";
 import { TiArrowSortedDown } from "react-icons/ti";
 import useClickOutside from "@/hooks/useClickOutside";
+import { toastError, toastProcess, toastSuccess } from "@/utils/toast";
 
 interface SmartBuyModalProps {
   isOpen: boolean;
@@ -36,7 +37,7 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
   virtual,
 }) => {
   const { selectedVitualtoken, setSelctedVirtualToken } = useSwapContext();
-  const { balances } = useWalletBalance();
+  const { balances, isLoading: isBalanceLoading } = useWalletBalance();
   const balance =
     selectedVitualtoken.symbol === "ETH" ? balances.ETH : balances.VIRT;
   const calculatedAmount = (parseFloat(balance || "0") * 10) / 100;
@@ -115,11 +116,7 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
     try {
       setIsLoading(true);
       setIsProcessing(true);
-      processToastId = toast.info("Processing Transaction...", {
-        autoClose: false,
-        closeOnClick: false,
-        closeButton: false,
-      });
+      processToastId = toastProcess("Processing Transaction...");
 
       const isEth = selectedVitualtoken.symbol === "ETH" ? true : false;
 
@@ -149,9 +146,7 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
           }
         } catch (error: any) {
           if (approveToastId) toast.dismiss(approveToastId);
-          toast.error(
-            "Failed to approve token: " + (error.message || "Unknown error")
-          );
+          // toast.error("Failed to approve token");
           throw error;
         }
       }
@@ -172,11 +167,11 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
       if (receipt.transactionHash) {
         if (processToastId) toast.dismiss(processToastId);
         triggerAPIs();
-        toast.success("Smart Buy successful! 🎉");
+        toastSuccess("Smart Buy successful!");
         onClose();
       } else {
         if (processToastId) toast.dismiss(processToastId);
-        toast.error("Smart Buy Failed!");
+        toastError("Smart Buy Failed. Please try again.");
       }
     } catch (error: any) {
       if (approveToastId) toast.dismiss(approveToastId);
@@ -186,21 +181,21 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
 
       // Handle specific error cases
       if (error.code === "INSUFFICIENT_FUNDS") {
-        toast.error("Insufficient funds to complete the transaction");
+        toastError("Insufficient funds to complete the transaction");
       } else if (error.code === "UNPREDICTABLE_GAS_LIMIT") {
-        toast.error(
+        toastError(
           "Transaction would fail. Please check your input amounts and try again"
         );
       } else if (error.message?.includes("user rejected")) {
-        toast.error("Transaction was rejected by user");
+        toastError("Transaction was rejected by user");
       } else if (error.message?.includes("insufficient funds")) {
-        toast.error("Insufficient balance to complete the transaction");
+        toastError("Insufficient balance to complete the transaction");
       } else if (error.message?.includes("execution reverted")) {
-        toast.error("Transaction failed: Contract execution reverted");
+        toastError("Transaction failed: Contract execution reverted");
       } else {
         // For other errors, show a more user-friendly message
-        const errorMessage = error.message || "Unknown error occurred";
-        toast.error(`Transaction failed`);
+
+        toastError(`Transaction failed. Please try again.`);
       }
     } finally {
       setIsLoading(false);
@@ -275,7 +270,7 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
                       <button
                         key={token.symbol}
                         onClick={() => handleTokenSelect(token)}
-                        disabled={token.symbol === "DEXTER"}
+                        disabled={token.symbol === "DEXTER" || isBalanceLoading}
                         className="w-full px-4 py-2 text-left text-white hover:bg-primary-100/10 flex border-b last:border-b-0 border-primary-100/20 items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         <img
@@ -288,7 +283,12 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
                             {token.symbol}
                           </span>
                           <span className="text-xs text-gray-400">
-                            Balance: {Number(token.balance).toFixed(6)}
+                            Balance:{" "}
+                            {isBalanceLoading ? (
+                              <div className="inline-block animate-spin rounded-full h-2 w-2 border-b-2 border-gray-400"></div>
+                            ) : (
+                              Number(token.balance).toFixed(6)
+                            )}
                           </span>
                         </div>
                       </button>
@@ -301,16 +301,20 @@ const SmartBuyModal: React.FC<SmartBuyModalProps> = ({
             <div className="flex justify-between items-center my-2">
               <div className="text-gray-400 text-[11px] text-nowrap">
                 Available:{" "}
-                {selectedVitualtoken?.symbol === "ETH"
-                  ? Number(balances.ETH).toFixed(6)
-                  : Number(balances.VIRT).toFixed(6)}
+                {isBalanceLoading ? (
+                  <div className="inline-block animate-spin rounded-full h-3 w-3 border-b-2 border-gray-400"></div>
+                ) : selectedVitualtoken?.symbol === "ETH" ? (
+                  Number(balances.ETH).toFixed(6)
+                ) : (
+                  Number(balances.VIRT).toFixed(6)
+                )}
               </div>
               <div className="flex flex-row gap-1">
                 {percentageButtons.map((percentage) => (
                   <button
                     key={percentage}
                     onClick={() => handlePercentageClick(percentage)}
-                    disabled={isLoading || isProcessing}
+                    disabled={isLoading || isProcessing || isBalanceLoading}
                     className={`text-white/80 text-[11px] rounded font-bold border ${
                       selectedPercentage == percentage
                         ? "border-primary-100"

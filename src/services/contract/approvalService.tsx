@@ -93,14 +93,14 @@ class ApprovalService {
 
       return receipt;
     } catch (error: any) {
-      // Handle specific error cases
-      if (error?.code === "ACTION_REJECTED") {
-        toast.error("Transaction rejected by user");
-      } else {
-        toast.error(`Error: ${error?.reason || "Something went wrong"}`);
-      }
+      // // Handle specific error cases
+      // if (error?.code === "ACTION_REJECTED") {
+      //   toast.error("Transaction rejected by user");
+      // } else {
+      //   toast.error("Failed to approve token");
+      // }
 
-      console.error("Error approving token:", error);
+      // console.error("Error approving token:", error);
       throw error;
     }
   }

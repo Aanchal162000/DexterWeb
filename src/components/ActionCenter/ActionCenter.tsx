@@ -4,7 +4,7 @@ import TrendingTokens from "./TrendingTokens";
 import Overview from "./Overview/Overview";
 import SwapOverview from "../Swap/Overview";
 import Adborad from "./Adborad";
-import AssetOverview from "./AssetOverview";
+import AssetOverview from "./AssetOverview/AssetOverview";
 import ActivityLogs from "./ActivityLogs";
 
 const ActionCenter = () => {
@@ -44,22 +44,22 @@ const ActionCenter = () => {
                 <TrendingTokens />
                 {/* Overview */}
                 <div className="relative flex flex-row gap-6 w-full h-[500px]">
-                    <div className="relative h-full w-[40%] border border-primary-100/40 backdrop-blur-sm bg-[#15181B]/60 rounded-2xl before:absolute before:top-0 before:left-0 before:w-44 before:h-44 before:bg-[radial-gradient(circle_at_top_left,#26fcfc_0%,rgba(38,252,252,0)_100%)] before:opacity-30 before:[clip-path:polygon(0_0,0%_100%,100%_0)] before:rounded-tl-2xl">
+                    <div className="relative h-full w-[40%] border border-primary-100/40 backdrop-blur-sm bg-[#15181B]/60 rounded-2xl overflow-hidden">
                         <Overview {...overviewData} />
                     </div>
-                    <div className="relative h-full w-[60%] border border-primary-100/40 backdrop-blur-sm bg-[#15181B]/60 rounded-2xl before:absolute before:top-0 before:left-0 before:w-44 before:h-44 before:bg-[radial-gradient(circle_at_top_left,#26fcfc_0%,rgba(38,252,252,0)_100%)] before:opacity-30 before:[clip-path:polygon(0_0,0%_100%,100%_0)] before:rounded-tl-2xl overflow-hidden">
+                    <div className="relative h-full w-[60%] border border-primary-100/40 backdrop-blur-sm bg-[#15181B]/60 rounded-2xl overflow-hidden">
                         <Adborad />
                     </div>
                 </div>
                 <div className="relative flex flex-row gap-6 w-full h-[600px]">
-                    <div className="relative h-full w-full border border-primary-100/40 backdrop-blur-sm bg-[#15181B]/60 rounded-2xl before:absolute before:top-0 before:left-0 before:w-44 before:h-44 before:bg-[radial-gradient(circle_at_top_left,#26fcfc_0%,rgba(38,252,252,0)_100%)] before:opacity-30 before:[clip-path:polygon(0_0,0%_100%,100%_0)] before:rounded-tl-2xl">
+                    <div className="relative h-full w-full border border-primary-100/40 backdrop-blur-sm bg-[#15181B]/60 rounded-2xl">
                         <AssetOverview />
                     </div>
                 </div>
             </div>
             <div className="relative flex flex-col gap-6  w-[30%] h-screen">
-                <div className="relative h-[48.2%] w-full border border-primary-100/40 backdrop-blur-sm bg-[#15181B]/60 rounded-2xl before:absolute before:top-0 before:left-0 before:w-44 before:h-44 before:bg-[radial-gradient(circle_at_top_left,#26fcfc_0%,rgba(38,252,252,0)_100%)] before:opacity-30 before:[clip-path:polygon(0_0,0%_100%,100%_0)] before:rounded-tl-2xl"></div>
-                <div className="relative flex-1 w-full border border-primary-100/40 backdrop-blur-sm bg-[#15181B]/60 rounded-2xl before:absolute before:top-0 before:left-0 before:w-44 before:h-44 before:bg-[radial-gradient(circle_at_top_left,#26fcfc_0%,rgba(38,252,252,0)_100%)] before:opacity-30 before:[clip-path:polygon(0_0,0%_100%,100%_0)] before:rounded-tl-2xl">
+                <div className="relative h-[48.2%] w-full border border-primary-100/40 backdrop-blur-sm bg-[#15181B]/60 rounded-2xl"></div>
+                <div className="relative flex-1 w-full border border-primary-100/40 backdrop-blur-sm bg-[#15181B]/60 rounded-2xl">
                     <ActivityLogs />
                 </div>
             </div>

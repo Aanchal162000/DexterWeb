@@ -43,15 +43,15 @@ const Overview: React.FC<OverviewData> = ({
   const [timeRange, setTimeRange] = useState("Daily");
 
   return (
-    <div className="relative h-full w-full justify-center items-center">
+    <div className="relative h-full w-full justify-center items-center bg-gradient-to-br from-primary-100/50 via-10% via-transparent to-transparent">
       {/* Header Section */}
-      <div className="flex justify-between items-center mb-6 p-4 border-b border-primary-100/40">
-        <h2 className="text-[#26fcfc] text-xl font-medium">Overview</h2>
+      <div className="flex justify-between items-center mb-6 px-4 py-3 border-b border-primary-100/40">
+        <h2 className="text-[#26fcfc] sm:text-base text-sm font-semibold">Overview</h2>
         <div className="relative">
           <select
             value={timeRange}
             onChange={(e) => setTimeRange(e.target.value)}
-            className="bg-[#0F172A]/80 text-white border border-[#444B5A] rounded-lg px-3 py-1.5 pr-8 appearance-none focus:outline-none focus:ring-2 focus:ring-[#26fcfc]/50 font-light"
+            className="bg-[#0F172A]/80 text-white border border-[#444B5A] rounded-lg px-3 py-1.5 pr-8 appearance-none focus:outline-none focus:ring-2 focus:ring-[#26fcfc]/50 font-light text-sm"
           >
             <option value="Daily">Daily</option>
             <option value="Weekly">Weekly</option>

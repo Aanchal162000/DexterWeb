@@ -43,11 +43,11 @@ const ActionCenter = () => {
                 {/* Trending Tokens */}
                 <TrendingTokens />
                 {/* Overview */}
-                <div className="relative flex flex-row gap-6 w-full h-[500px]">
-                    <div className="relative h-full w-[40%] border border-primary-100/40 backdrop-blur-sm bg-[#15181B]/60 rounded-2xl overflow-hidden">
+                <div className="relative flex flex-row gap-6 w-full">
+                    <div className="relative h-[450px] w-[40%] border border-primary-100/40 backdrop-blur-sm bg-[#15181B]/60 rounded-2xl overflow-hidden">
                         <Overview {...overviewData} />
                     </div>
-                    <div className="relative h-full w-[60%] border border-primary-100/40 backdrop-blur-sm bg-[#15181B]/60 rounded-2xl overflow-hidden">
+                    <div className="relative h-[450px] w-[60%] border border-primary-100/40 backdrop-blur-sm bg-[#15181B]/60 rounded-2xl overflow-hidden">
                         <Adborad />
                     </div>
                 </div>
@@ -58,8 +58,8 @@ const ActionCenter = () => {
                 </div>
             </div>
             <div className="relative flex flex-col gap-6  w-[30%] h-screen">
-                <div className="relative h-[48.2%] w-full border border-primary-100/40 backdrop-blur-sm bg-[#15181B]/60 rounded-2xl"></div>
-                <div className="relative flex-1 w-full border border-primary-100/40 backdrop-blur-sm bg-[#15181B]/60 rounded-2xl">
+                <div className="relative min-h-[calc(450px+42px+21px)] w-full border border-primary-100/40 backdrop-blur-sm bg-[#15181B]/60 rounded-2xl"></div>
+                <div className="relative flex-1 w-full h-[600px] border border-primary-100/40 backdrop-blur-sm bg-[#15181B]/60 rounded-2xl">
                     <ActivityLogs />
                 </div>
             </div>

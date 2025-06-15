@@ -89,6 +89,69 @@ const mockVolumeLoopData: VolumeLoopData[] = [
       end: "15/06/25 11:20:45"
     },
     balance: 440
+  },
+  {
+    id: "4",
+    token: {
+      name: "aixbt",
+      symbol: "AIXBT",
+      icon: "/tokens/aixbt.png"
+    },
+    maxVolume: 50000,
+    status: "Active",
+    progress: {
+      amount: 12500,
+      percentage: 25
+    },
+    pointsEarned: 220,
+    swaps: 55,
+    startEnd: {
+      start: "06/06/25 13:54:15",
+      end: "12/06/25 13:54:15"
+    },
+    balance: 825
+  },
+  {
+    id: "5",
+    token: {
+      name: "WAI Combo",
+      symbol: "WAI",
+      icon: "/tokens/wai.png"
+    },
+    maxVolume: 70000,
+    status: "Completed",
+    progress: {
+      amount: 70000,
+      percentage: 100
+    },
+    pointsEarned: 1570,
+    swaps: 389,
+    startEnd: {
+      start: "01/06/25 09:30:22",
+      end: "05/06/25 18:45:10"
+    },
+    balance: 1250
+  },
+  {
+    id: "6",
+    token: {
+      name: "Dexter Picks",
+      symbol: "DXT",
+      icon: "/tokens/dexter.png"
+    },
+    maxVolume: 35000,
+    status: "Active",
+    progress: {
+      amount: 8750,
+      percentage: 25
+    },
+    pointsEarned: 125,
+    swaps: 28,
+    startEnd: {
+      start: "08/06/25 11:20:45",
+      end: "15/06/25 11:20:45"
+    },
+    balance: 440
   }
 ];
 

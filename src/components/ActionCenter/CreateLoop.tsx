@@ -2,6 +2,9 @@ import React, { useState, useRef } from "react";
 import { TiArrowSortedDown } from "react-icons/ti";
 import { useWalletBalance } from "../../hooks/useWalletBalance";
 import { Info } from "lucide-react";
+import { actionService } from "../../services/contract/actionService";
+import { useActionContext } from "../../context/ActionContext";
+import { toastError, toastSuccess } from "../../utils/toast";
 
 interface TokenOption {
     name: string;
@@ -19,6 +22,7 @@ interface SelectedToken {
 
 function CreateLoop() {
     const { balances, isLoading: isBalanceLoading } = useWalletBalance();
+    const { authToken } = useActionContext();
 
     // States for Max Amount section
     const [amount, setAmount] = useState("");
@@ -107,14 +111,56 @@ function CreateLoop() {
         setTimelineDays(Number(e.target.value));
     };
 
-    const handleCreateLoop = () => {
-        console.log("Creating loop with:", {
-            amount,
-            selectedToken: selectedVitualtoken,
-            timeline: timelineDays,
-            tokenSelection: selectedTokenOption,
-            recommendedAmount,
-        });
+    const handleCreateLoop = async () => {
+        if (!amount || !recommendedAmount) {
+            toastError("Please fill in all required fields");
+            return;
+        }
+
+        setIsLoading(true);
+        setIsProcessing(true);
+
+        try {
+            if (!authToken) {
+                toastError("Please authenticate first");
+                setIsLoading(false);
+                setIsProcessing(false);
+                return;
+            }
+
+            // Prepare the request data
+            const startLoopRequest = {
+                privateKey: "", // This needs to be provided by user - you may want to add an input field
+                tokenInfo: {
+                    address: selectedVitualtoken?.symbol === "VIRT" ? "0x0b3e328455c4059eeb9e3f84b5543f74e24e7e1b" : selectedVitualtoken?.symbol === "ETH" ? "0x0000000000000000000000000000000000000000" : "",
+                    name: selectedVitualtoken?.name || "",
+                    imageUrl: selectedVitualtoken?.logo,
+                },
+                maxVolumeInVirtual: amount,
+                recommendedVolumeInVirtual: recommendedAmount,
+                timelineDays: timelineDays,
+            };
+
+            console.log("Creating loop with:", startLoopRequest);
+
+            const response = await actionService.startLoop(startLoopRequest, authToken);
+
+            if (response.success) {
+                toastSuccess("Loop created successfully!");
+                // Reset form or redirect as needed
+                setAmount("");
+                setRecommendedAmount("707.55");
+                setTimelineDays(2);
+            } else {
+                toastError(response.message || "Failed to create loop");
+            }
+        } catch (error: any) {
+            console.error("Error creating loop:", error);
+            toastError("Failed to create loop. Please try again.");
+        } finally {
+            setIsLoading(false);
+            setIsProcessing(false);
+        }
     };
 
     return (
@@ -177,7 +223,9 @@ function CreateLoop() {
 
                 <div className="py-2 flex justify-between gap-2 text-xs">
                     <p className="text-gray-400 mb-1">Total Staked: $80,687</p>
-                    <p className="text-primary-100 hover:text-primary-100/80 cursor-pointer">Stake <span className="text-white"> $59,313</span> more to maximize Points earnings</p>
+                    <p className="text-primary-100 hover:text-primary-100/80 cursor-pointer">
+                        Stake <span className="text-white"> $59,313</span> more to maximize Points earnings
+                    </p>
                 </div>
             </div>
             <div className="flex items-start justify-between gap-5 flex-nowrap px-8">

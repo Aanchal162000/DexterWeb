@@ -27,7 +27,33 @@ const KPICard: React.FC<KPIData> = ({ title, todayValue, todayChange, allTimeVal
     );
 };
 
-const Overview: React.FC<OverviewData> = ({ volumeData, virgenPointsData, chartData }) => {
+const Overview: React.FC<any> = () => {
+    // Mock data for Overview component
+    const overviewData = {
+        volumeData: {
+            title: "Volume",
+            todayValue: 43500,
+            todayChange: -11.22,
+            allTimeValue: 179500,
+            isCurrency: true,
+        },
+        virgenPointsData: {
+            title: "Virgen Points",
+            todayValue: 765,
+            todayChange: -13.03,
+            allTimeValue: 3420,
+        },
+        chartData: [
+            { date: "June 5", volume: 43500, virgenPoints: 765, transactions: 276 },
+            { date: "June 6", volume: 43500, virgenPoints: 765, transactions: 276 },
+            { date: "June 7", volume: 43500, virgenPoints: 765, transactions: 276 },
+            { date: "June 8", volume: 43500, virgenPoints: 765, transactions: 276 },
+            { date: "June 9", volume: 43500, virgenPoints: 765, transactions: 276 },
+            { date: "June 10", volume: 43500, virgenPoints: 765, transactions: 276 },
+            { date: "June 11", volume: 43500, virgenPoints: 765, transactions: 276 },
+        ],
+    };
+
     const [timeRange, setTimeRange] = useState("Daily");
 
     return (
@@ -51,13 +77,13 @@ const Overview: React.FC<OverviewData> = ({ volumeData, virgenPointsData, chartD
 
             {/* KPI Cards */}
             <div className="grid grid-cols-2 gap-4 mb-6 mx-6">
-                <KPICard {...volumeData} isCurrency={true} />
-                <KPICard {...virgenPointsData} />
+                <KPICard {...overviewData.volumeData} isCurrency={true} />
+                <KPICard {...overviewData.virgenPointsData} />
             </div>
 
             {/* Chart Section */}
 
-            <OverviewChart data={chartData} />
+            <OverviewChart data={overviewData.chartData} />
         </div>
     );
 };

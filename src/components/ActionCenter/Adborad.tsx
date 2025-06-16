@@ -67,9 +67,9 @@ function Adboard() {
                                     </div>
 
                                     {/* Main Content */}
-                                    <div className="space-y-4 my-8 w-[70%]">
+                                    <div className="space-y-4 my-6 w-[70%]">
                                         <h1 className="text-xl font-bold text-white leading-tight">{slide.title}</h1>
-                                        <p className="text-teal-200 text-sm opacity-90 pb-8">{slide.subtitle}</p>
+                                        <p className="text-teal-200 text-sm opacity-90 pb-7">{slide.subtitle}</p>
                                         <p className="text-gray-300 text-base leading-relaxed max-w-md">{slide.description}</p>
                                     </div>
 

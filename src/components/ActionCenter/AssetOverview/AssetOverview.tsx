@@ -21,7 +21,7 @@ const Overview = () => {
 
     return (
         <>
-            <div className="relative h-full w-full backdrop-blur-sm bg-[#15181B]/80 border border-primary-100 rounded-xl text-white flex flex-col sm:px-8 px-2 bg-gradient-to-br from-primary-100/50 via-10% via-transparent to-transparent">
+            <div className="relative h-full w-full border border-primary-100 rounded-xl text-white flex flex-col sm:px-8 px-2 bg-gradient-to-br from-primary-100/50 via-10% via-transparent to-transparent">
                 <div className="flex items-center justify-between pt-4 pb-4">
                     <div className="gap-4 sm:gap-6 flex [&>button]:py-2 sm:w-fit w-full">
                         <button

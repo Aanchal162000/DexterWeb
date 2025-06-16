@@ -6,6 +6,7 @@ import SwapOverview from "../Swap/Overview";
 import Adborad from "./Adborad";
 import AssetOverview from "./AssetOverview/AssetOverview";
 import ActivityLogs from "./ActivityLogs";
+import CreateLoop from "./CreateLoop";
 
 const ActionCenter = () => {
     const isMd = useMediaQuery({ minWidth: 768 });
@@ -44,22 +45,24 @@ const ActionCenter = () => {
                 <TrendingTokens />
                 {/* Overview */}
                 <div className="relative flex flex-row gap-6 w-full">
-                    <div className="relative h-[450px] w-[40%] border border-primary-100/40 backdrop-blur-sm bg-[#15181B]/60 rounded-2xl overflow-hidden">
+                    <div className="relative h-[440px] w-[40%] border border-primary-100/40 backdrop-blur-sm bg-[#15181B]/80 rounded-2xl overflow-hidden">
                         <Overview {...overviewData} />
                     </div>
-                    <div className="relative h-[450px] w-[60%] border border-primary-100/40 backdrop-blur-sm bg-[#15181B]/60 rounded-2xl overflow-hidden">
+                    <div className="relative h-[440px] w-[60%] border border-primary-100/40 backdrop-blur-sm bg-[#15181B]/80 rounded-2xl overflow-hidden">
                         <Adborad />
                     </div>
                 </div>
                 <div className="relative flex flex-row gap-6 w-full h-[600px]">
-                    <div className="relative h-full w-full border border-primary-100/40 backdrop-blur-sm bg-[#15181B]/60 rounded-2xl">
+                    <div className="relative h-full w-full border border-primary-100/40 backdrop-blur-sm bg-[#15181B]/80 rounded-2xl">
                         <AssetOverview />
                     </div>
                 </div>
             </div>
             <div className="relative flex flex-col gap-6  w-[30%] h-screen">
-                <div className="relative min-h-[calc(450px+42px+21px)] w-full border border-primary-100/40 backdrop-blur-sm bg-[#15181B]/60 rounded-2xl"></div>
-                <div className="relative flex-1 w-full h-[600px] border border-primary-100/40 backdrop-blur-sm bg-[#15181B]/60 rounded-2xl">
+                <div className="relative min-h-[calc(440px+42px+21px)] w-full border border-primary-100/40 backdrop-blur-sm bg-[#15181B]/80 rounded-2xl">
+                    <CreateLoop />
+                </div>
+                <div className="relative flex-1 w-full h-[600px] border border-primary-100/40 backdrop-blur-sm bg-[#15181B]/80 rounded-2xl">
                     <ActivityLogs />
                 </div>
             </div>

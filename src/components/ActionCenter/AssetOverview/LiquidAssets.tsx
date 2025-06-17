@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import clsx from "clsx";
-import ImageNext from "../common/ImageNext";
+import ImageNext from "../../common/ImageNext";
 import { formatPrecision } from "@/utils/helper";
 
 interface LiquidAssetData {
@@ -105,13 +105,13 @@ const LiquidAssets = ({
     <div className="flex flex-col h-full w-full text-white overflow-hidden text-[0.94rem] leading-4 small-bar">
       <div className="flex w-full h-full overflow-x-auto overflow-y-auto small-bar">
         <table className="table-auto w-full h-fit text-left relative border-collapse">
-          <thead className="top-0 transition-colors duration-300 bg-[#201926]/80 sticky z-40 backdrop-blur-md">
+          <thead className="top-0 transition-colors duration-300 sticky z-40">
             <tr>
               {new Array(6).fill(0).map((_, index) => (
-                <th key={index} className="h-[1px] p-0 bg-[#26fcfc]/70"></th>
+                <th key={index} className="h-[1px] p-0 bg-[#26fcfc]/30"></th>
               ))}
             </tr>
-            <tr className="text-prime-zinc-100 text-sm [&>th:first-child]:pl-8 [&>th:last-child]:pr-8 [&>th]:py-2 [&>th]:px-[0.7rem]">
+            <tr className="text-white text-sm [&>th:first-child]:pl-8 [&>th:last-child]:pr-8 [&>th]:py-2 [&>th]:px-[0.7rem]">
               <th>Asset</th>
               <th>Network</th>
               <th>Balance</th>
@@ -121,7 +121,7 @@ const LiquidAssets = ({
             </tr>
             <tr>
               {new Array(6).fill(0).map((_, index) => (
-                <th key={index} className="h-[1px] p-0 bg-[#26fcfc]/70"></th>
+                <th key={index} className="h-[1.1px] p-0 bg-[#26fcfc]/30"></th>
               ))}
             </tr>
           </thead>
@@ -167,7 +167,7 @@ const LiquidAssets = ({
                 <td>
                   {isAmountMasked
                     ? "XXXXXX"
-                    : formatPrecision(item.balance, 4)}
+                    : formatPrecision(item.balance)}
                 </td>
                 <td>
                   {isAmountMasked

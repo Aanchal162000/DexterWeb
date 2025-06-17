@@ -51,10 +51,10 @@ const activities = [
 
 function ActivityLogs() {
     return (
-        <div className="w-full h-full flex flex-col bg-gradient-to-br from-teal-900 via-transparent to-emerald-900 rounded-2xl overflow-hidden shadow-2xl">
+        <div className="w-full h-full flex flex-col bg-gradient-to-br from-primary-100/50 via-20% via-transparent to-transparent rounded-2xl overflow-hidden shadow-2xl">
             {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b border-teal-300/50">
-                <h2 className="text-xl font-semibold text-white">Dexter's Activity Logs</h2>
+            <div className="flex items-center justify-between px-6 py-4 border-b border-teal-300/50">
+                <h2 className="sm:text-base text-sm font-semibold text-primary-100">Dexter's Activity Logs</h2>
                 <div className="flex items-center gap-3">
                     <MoreHorizontal className="w-5 h-5 text-gray-400 hover:text-white cursor-pointer transition-colors" />
                     <X className="w-5 h-5 text-gray-400 hover:text-white cursor-pointer transition-colors" />

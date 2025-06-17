@@ -5,7 +5,7 @@ import LiquidAssets from "./LiquidAssets";
 import StakedAssets from "./StakedAssets";
 import { PiEyeFill, PiEyeSlash } from "react-icons/pi";
 import { addTrailZeros, numberWithCommas } from "@/utils/helper";
-import { useLoginContext } from "../../context/LoginContext";
+import { useLoginContext } from "../../../context/LoginContext";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import VolumeLoop from "./VolumeLoop";
 
@@ -21,7 +21,7 @@ const Overview = () => {
 
     return (
         <>
-            <div className="relative h-full w-full backdrop-blur-sm bg-[#15181B]/80 border border-primary-100 rounded-xl text-white flex flex-col sm:px-8 px-2">
+            <div className="relative h-full w-full border border-primary-100 rounded-xl text-white flex flex-col sm:px-8 px-2 bg-gradient-to-br from-primary-100/50 via-10% via-transparent to-transparent">
                 <div className="flex items-center justify-between pt-4 pb-4">
                     <div className="gap-4 sm:gap-6 flex [&>button]:py-2 sm:w-fit w-full">
                         <button
@@ -54,7 +54,7 @@ const Overview = () => {
                             Staked Assets
                         </button>
                     </div>
-                    <div className="text-sm sm:text-sm gap-4 font-medium hidden sm:flex items-center">
+                    {/* <div className="text-sm sm:text-sm gap-4 font-medium hidden sm:flex items-center">
                         <div>
                             <span className="opacity-70">Balance: &nbsp;</span>
                             <span className="font-bold text-primary-100 text-sm sm:text-[1.063rem] font-sans">${printedAmount}</span>
@@ -62,7 +62,7 @@ const Overview = () => {
                         <button onClick={() => setIsAmountMasked(!isAmountMasked)} className="select-none">
                             <IconEyed className="size-5" />
                         </button>
-                    </div>
+                    </div> */}
                 </div>
                 {selectedTab === "volumeLoop" ? (
                     <VolumeLoop setBalance={setBalance} isAmountMasked={isAmountMasked!} />

@@ -54,10 +54,10 @@ function Adboard() {
             >
                 {slides.map((slide, index) => (
                     <SwiperSlide key={index} className="">
-                        <div className="w-full h-full flex flex-row bg-gradient-to-br from-cyan-900 via-teal-800 to-emerald-900 overflow-hidden relative shadow-2xl p-10">
+                        <div className="w-full h-full flex flex-row bg-[linear-gradient(145deg,rgba(38,252,252,0.5)_0%,rgba(87,89,199,0)_10%,rgba(118,113,208,0)_90%,rgba(38,252,252,0.5)_100%)] overflow-hidden relative shadow-2xl p-10">
                             <div className="relative z-10 flex h-full flex-1">
                                 {/* Left Content */}
-                                <div className="flex-1 p-8 flex flex-col justify-between">
+                                <div className="flex-1 p-4 flex flex-col justify-between">
                                     {/* Header Badge */}
                                     <div className="flex items-center gap-2 mb-6">
                                         <div className="flex items-center gap-2 text-nowrap text-sm font-medium">
@@ -67,16 +67,16 @@ function Adboard() {
                                     </div>
 
                                     {/* Main Content */}
-                                    <div className="space-y-4 w-[60%]">
+                                    <div className="space-y-4 my-6 w-[70%]">
                                         <h1 className="text-xl font-bold text-white leading-tight">{slide.title}</h1>
-                                        <p className="text-teal-200 text-sm opacity-90">{slide.subtitle}</p>
+                                        <p className="text-teal-200 text-sm opacity-90 pb-7">{slide.subtitle}</p>
                                         <p className="text-gray-300 text-base leading-relaxed max-w-md">{slide.description}</p>
                                     </div>
 
                                     {/* Action Buttons */}
                                     <div className="flex gap-4 mt-6">
-                                        <button className="bg-cyan-400 hover:bg-cyan-300 text-black font-semibold px-6 py-3 rounded-sm transition-all duration-200 transform hover:scale-105 shadow-lg">{slide.primaryButton}</button>
-                                        <button className="border-2 border-gray-400 text-gray-300 hover:text-white hover:border-white font-semibold px-6 py-3 rounded-lg transition-all duration-200">{slide.secondaryButton}</button>
+                                        <button className="bg-primary-100 text-black font-semibold px-6 py-2 rounded-sm transition-all duration-200 transform hover:scale-105 shadow-lg text-sm">{slide.primaryButton}</button>
+                                        <button className="border-2 border-primary-100 text-primary-100 font-semibold px-6 py-2 rounded-sm transition-all duration-200 text-sm hover:scale-105">{slide.secondaryButton}</button>
                                     </div>
                                 </div>
                             </div>

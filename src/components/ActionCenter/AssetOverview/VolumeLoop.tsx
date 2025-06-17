@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import clsx from "clsx";
-import ImageNext from "../common/ImageNext";
+import ImageNext from "../../common/ImageNext";
 import { formatPrecision } from "@/utils/helper";
 
 interface VolumeLoopData {
@@ -89,6 +89,69 @@ const mockVolumeLoopData: VolumeLoopData[] = [
       end: "15/06/25 11:20:45"
     },
     balance: 440
+  },
+  {
+    id: "4",
+    token: {
+      name: "aixbt",
+      symbol: "AIXBT",
+      icon: "/tokens/aixbt.png"
+    },
+    maxVolume: 50000,
+    status: "Active",
+    progress: {
+      amount: 12500,
+      percentage: 25
+    },
+    pointsEarned: 220,
+    swaps: 55,
+    startEnd: {
+      start: "06/06/25 13:54:15",
+      end: "12/06/25 13:54:15"
+    },
+    balance: 825
+  },
+  {
+    id: "5",
+    token: {
+      name: "WAI Combo",
+      symbol: "WAI",
+      icon: "/tokens/wai.png"
+    },
+    maxVolume: 70000,
+    status: "Completed",
+    progress: {
+      amount: 70000,
+      percentage: 100
+    },
+    pointsEarned: 1570,
+    swaps: 389,
+    startEnd: {
+      start: "01/06/25 09:30:22",
+      end: "05/06/25 18:45:10"
+    },
+    balance: 1250
+  },
+  {
+    id: "6",
+    token: {
+      name: "Dexter Picks",
+      symbol: "DXT",
+      icon: "/tokens/dexter.png"
+    },
+    maxVolume: 35000,
+    status: "Active",
+    progress: {
+      amount: 8750,
+      percentage: 25
+    },
+    pointsEarned: 125,
+    swaps: 28,
+    startEnd: {
+      start: "08/06/25 11:20:45",
+      end: "15/06/25 11:20:45"
+    },
+    balance: 440
   }
 ];
 
@@ -137,13 +200,13 @@ const VolumeLoop = ({
         className="flex w-full h-full overflow-x-auto overflow-y-auto small-bar"
       >
         <table className="table-auto w-full h-fit text-left relative border-collapse">
-          <thead className="top-0 transition-colors duration-300 bg-[#201926]/80 sticky z-40 backdrop-blur-md">
+          <thead className="top-0 transition-colors duration-300 bg-[#201926]/10 sticky z-40 backdrop-blur-md">
             <tr>
               {new Array(9).fill(0).map((_, index) => (
-                <th key={index} className="h-[1px] p-0 bg-[#26fcfc]/70"></th>
+                <th key={index} className="h-[1px] p-0 bg-[#26fcfc]/30"></th>
               ))}
             </tr>
-            <tr className="text-prime-zinc-100 text-sm [&>th:first-child]:pl-8 [&>th:last-child]:pr-8 [&>th]:py-2 [&>th]:px-[0.7rem]">
+            <tr className="text-white text-sm [&>th:first-child]:pl-8 [&>th:last-child]:pr-8 [&>th]:py-2 [&>th]:px-[0.7rem]">
               <th>Token</th>
               <th>Max Volume</th>
               <th>Status</th>
@@ -156,7 +219,7 @@ const VolumeLoop = ({
             </tr>
             <tr>
               {new Array(9).fill(0).map((_, index) => (
-                <th key={index} className="h-[1px] p-0 bg-[#26fcfc]/70"></th>
+                <th key={index} className="h-[1.1px] p-0 bg-[#26fcfc]/30"></th>
               ))}
             </tr>
           </thead>
@@ -229,7 +292,7 @@ const VolumeLoop = ({
                 <td>
                   <div className="flex flex-col gap-1 text-xs">
                     <div>{item.startEnd.start}</div>
-                    <div className="text-prime-zinc-100">{item.startEnd.end}</div>
+                    <div className="">{item.startEnd.end}</div>
                   </div>
                 </td>
                 <td className="text-right">
@@ -241,7 +304,7 @@ const VolumeLoop = ({
                   <button
                     onClick={() => handleAction(item.id, item.status)}
                     className={clsx(
-                      "px-4 py-2 rounded-lg text-sm font-medium transition-colors",
+                      "px-4 py-2 rounded text-sm font-medium transition-colors",
                       item.status === "Active"
                         ? "bg-[#1F2D3D] text-white hover:bg-[#2D3B4F]"
                         : "bg-[#00E0FF] text-[#0B111A] hover:bg-[#00BBD6]"

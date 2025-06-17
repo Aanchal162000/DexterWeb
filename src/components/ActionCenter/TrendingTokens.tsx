@@ -21,7 +21,7 @@ const TrendingTokens: React.FC = () => {
       <div className="absolute top-0 left-0 w-[100px] h-12 bg-gradient-to-r from-[#26fcfc]/40 via-[#26fcfc]/20 to-transparent pointer-events-none z-0 rounded-2xl"></div>
       <div className="absolute top-0 right-0 w-[100px] h-12 bg-gradient-to-l from-black/40 via-black/60 to-transparent pointer-events-none z-20 rounded-2xl"></div>
       <div className="flex items-center h-full">
-        <h2 className="text-white text-lg font-semibold whitespace-nowrap mr-6">
+        <h2 className="text-primary-100 sm:text-base text-sm font-semibold whitespace-nowrap mr-6">
           Trending Tokens
         </h2>
         <div className="relative z-10 flex-1 h-full overflow-x-hidden">

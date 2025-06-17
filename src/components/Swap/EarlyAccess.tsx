@@ -43,6 +43,7 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
   const [showChecklist, setShowChecklist] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isSendingOtp, setIsSendingOtp] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const [steps, setSteps] = useState<Step[]>([
     {
@@ -75,18 +76,47 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
     },
   ]);
 
-  const handleStepAction = useCallback((stepId: number) => {
-    switch (stepId) {
-      case 2:
-        window.open("https://twitter.com/dexter", "_blank");
-        break;
-      case 3:
-        window.open("https://twitter.com/dexter/status/123456789", "_blank");
-        break;
-      default:
-        break;
-    }
-  }, []);
+  const handleStepAction = (stepId: number) => {
+    setSteps((prevSteps) => {
+      const newSteps = [...prevSteps];
+      const currentStepIndex = newSteps.findIndex((step) => step.id === stepId);
+
+      // Update current step to completed
+      newSteps[currentStepIndex] = {
+        ...newSteps[currentStepIndex],
+        status: "completed",
+        buttonText: undefined,
+        buttonAction: undefined,
+      };
+
+      // If there's a next step, update it to active after delay
+      if (currentStepIndex < newSteps.length - 1) {
+        setTimeout(() => {
+          setSteps((prevSteps) => {
+            const updatedSteps = [...prevSteps];
+            const nextStep = updatedSteps[currentStepIndex + 1];
+            updatedSteps[currentStepIndex + 1] = {
+              ...nextStep,
+              status: "active",
+              buttonText: nextStep.buttonText,
+              buttonAction: nextStep.buttonAction,
+            };
+
+            // If this is the last step becoming active, show success after 2 seconds
+            if (currentStepIndex + 1 === newSteps.length - 1) {
+              setTimeout(() => {
+                setShowSuccess(true);
+              }, 2000);
+            }
+
+            return updatedSteps;
+          });
+        }, 1000); // 15 seconds delay
+      }
+
+      return newSteps;
+    });
+  };
 
   // Initialize state when component mounts or userProfile changes
   useEffect(() => {

@@ -141,15 +141,14 @@ const SwapSection: React.FC<SwapSectionProps> = ({
         pmm: 1,
         gasDropType: 0,
         forbiddenBridgeTypes: 0,
-        dexIds: "34,29",
+        dexIds:
+          "34,29,30,53,51,55,58,81,113,166,178,194,200,210,330,218,219,227,229,235,239,242,241,318,236,238,245,243,237,244,240,247,246,262,265,316,334,405,381,380,384,397,394,401,406,420,438,450,447",
       };
 
       const estimate = await agentService.getQuote(params);
-      setToAmount(
-        formatNumberWithCommas(
-          Number((estimate - 0.001 * Number(estimate)).toFixed(4))
-        )
-      );
+      // Format the number to avoid locale string issues
+      const formattedEstimate = Number(estimate).toFixed(8);
+      setToAmount(Number(formattedEstimate));
       setIsEstimating(false);
     } catch (error: any) {
       console.error("Estimation failed:", error);

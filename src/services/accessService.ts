@@ -190,35 +190,43 @@ class AccessService {
   }
 
   /**
-   * Get user information by email
-   * @param email - User's email address
+   * Get user information by wallet address
+   * @param walletAddress - User's wallet address
+   * @param authToken - Authentication token
    * @returns Promise with user information response
    */
-  async getUserInfo(email: string): Promise<UserInfoResponse> {
+  async getUserInfo(
+    walletAddress: string,
+    authToken: string
+  ): Promise<UserInfoResponse> {
     try {
       const { data } = await axios.get(`${baseURL}/api/auth/user-info`, {
-        params: { email },
+        params: { walletAddress },
+        headers: { authorization: `Bearer ${authToken}` },
       });
       return {
         success: true,
         data: data.data,
       };
     } catch (error: any) {
-      return {
-        success: false,
-        data: {
-          user: {
-            email,
-            walletAddress: "",
-            twitterProfile: "",
-            isEmailVerified: false,
-            isProfileCompleted: false,
-            isWhitelisted: false,
-            lastLoginAt: "",
-            createdAt: "",
+      if (error.response?.status === 404) {
+        return {
+          success: false,
+          data: {
+            user: {
+              email: "",
+              walletAddress: "",
+              twitterProfile: "",
+              isEmailVerified: false,
+              isProfileCompleted: false,
+              isWhitelisted: false,
+              lastLoginAt: "",
+              createdAt: "",
+            },
           },
-        },
-      };
+        };
+      }
+      throw error;
     }
   }
 }

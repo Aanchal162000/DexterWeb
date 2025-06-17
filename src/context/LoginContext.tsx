@@ -34,7 +34,13 @@ import { chainNetworkParams, headerRoutes } from "@/constants/config";
 import { getCrossPower } from "@/services/apiCross";
 import { createWalletClient, custom } from "viem";
 import { mainnet, base } from "viem/chains";
+import { actionService } from "@/services/contract/actionService";
+import AccessService from "@/services/accessService";
+
+const accessService = AccessService.getInstance();
+
 import "viem/window";
+import { useActionContext } from "./ActionContext";
 
 interface ILoginState {
   selectedWallet: IWalletProp | null;
@@ -62,6 +68,8 @@ interface ILoginState {
   triggerAPIs: () => void;
   isWhitelisted: boolean;
   setIsWhitelisted: Dispatch<SetStateAction<boolean>>;
+  isEarlyAccessOpen: boolean;
+  setIsEarlyAccessOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 let ethereum: any = null;
@@ -96,13 +104,98 @@ export default function LoginProvider({ children }: { children: ReactNode }) {
   const [trigger, setTrigger] = useState<number>(0);
   const isFirstLoad = useIsFirstEffect();
   const [isWhitelisted, setIsWhitelisted] = useState<boolean>(false);
+  const [isEarlyAccessOpen, setIsEarlyAccessOpen] = useState(false);
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
+  const [isProfileCompleted, setIsProfileCompleted] = useState(false);
   const [trustWallet] = initializeConnector<TrustWallet>(
     (actions) => new TrustWallet({ actions })
   );
 
   const triggerAPIs = () => setTrigger(trigger + 1);
+  const [error, setError] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
+  const { setAuthToken } = useActionContext();
+
+  const getAuthToken = async (
+    message: string,
+    addressFetched: string
+  ): Promise<string> => {
+    let signature = "";
+    try {
+      const web3Provider = new ethers.providers.Web3Provider(currentProvider);
+      const Signer = await web3Provider.getSigner();
+      signature = await Signer.signMessage(message);
+
+      const response = await actionService.createAuthToken({
+        walletAddress: addressFetched!,
+        message: message,
+        signature: signature,
+      });
+      const authToken = response.data.data.authToken;
+      setAuthToken(authToken);
+      return authToken;
+    } catch (error) {
+      console.log("metaaaee", error);
+      if ((error as AxiosError).code === "ERR_BAD_RESPONSE")
+        toastError("Server is down. Please try again later.");
+      if ((error as AxiosError).code === "ERR_NETWORK")
+        toastError("Server CORS Error !");
+      else toastError("Something went wrong");
+      throw error;
+    }
+  };
+
+  const setAuthentication = async (addressFetched: string) => {
+    if (!addressFetched) {
+      throw new Error("No wallet address available");
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await actionService.generateMessage();
+
+      if (response.success) {
+        setMessage(response.data.message);
+        const authToken = await getAuthToken(
+          response.data.data.message,
+          addressFetched
+        );
+
+        // Automatically call getUserInfo after getting token
+        const userInfo = await accessService.getUserInfo(
+          addressFetched,
+          authToken
+        );
+        if (!userInfo.success) {
+          // User not found, start fresh
+          setIsEarlyAccessOpen(true);
+        } else {
+          const { isEmailVerified, isProfileCompleted, isWhitelisted } =
+            userInfo.data.user;
+          if (isWhitelisted) {
+            setIsWhitelisted(true);
+          } else {
+            setIsEmailVerified(isEmailVerified);
+            setIsProfileCompleted(isProfileCompleted);
+            setIsWhitelisted(isWhitelisted);
+            setIsEarlyAccessOpen(true);
+          }
+        }
+      } else {
+        setError(response.message);
+      }
+    } catch (error) {
+      setError("Failed to generate message");
+      console.error("Authentication error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const connectMetamask = async () => {
+    setIsEarlyAccessOpen(true);
     try {
       console.log("connect metamask");
       let justProvider =
@@ -130,10 +223,6 @@ export default function LoginProvider({ children }: { children: ReactNode }) {
         params: [],
       });
 
-      if (!selectedAddress) {
-        throw new Error("No account selected");
-      }
-
       // Verify this is the currently selected account in MetaMask
       const currentAccounts = await justProvider.request({
         method: "eth_accounts",
@@ -143,6 +232,7 @@ export default function LoginProvider({ children }: { children: ReactNode }) {
       }
 
       setAddress(selectedAddress);
+      setAuthentication(selectedAddress);
 
       console.log("justProvider", justProvider);
       const client: WalletClient = await createWalletClient({
@@ -162,6 +252,7 @@ export default function LoginProvider({ children }: { children: ReactNode }) {
       setCurrentConnector("metamask");
       setCurrentProvider(justProvider);
       setLoading(false);
+      return selectedAddress;
     } catch (error) {
       if (error instanceof ConnectorNotFoundError) {
         toastInfo("Request installation");
@@ -469,6 +560,8 @@ export default function LoginProvider({ children }: { children: ReactNode }) {
         triggerAPIs,
         isWhitelisted,
         setIsWhitelisted,
+        isEarlyAccessOpen,
+        setIsEarlyAccessOpen,
       }}
     >
       {children}

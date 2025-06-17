@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import FiatProvider from "@/context/FiatContext";
 import SwapProvider from "@/context/SwapContext";
 import { SettingsProvider } from "@/context/SettingsContext";
+import { ActionProvider } from "@/context/ActionContext";
 
 export const metadata: Metadata = {
   title: "Dexter",
@@ -28,13 +29,15 @@ export default function RootLayout({
         <link rel="icon" type="image/png" href="/Trade/dexterLogo.png" />
       </head>
       <body className={` w-screen h-screen  antialiased`}>
-        <LoginProvider>
-          <SwapProvider>
-            <FiatProvider>
-              <SettingsProvider>{children}</SettingsProvider>
-            </FiatProvider>
-          </SwapProvider>
-        </LoginProvider>
+        <ActionProvider>
+          <LoginProvider>
+            <SwapProvider>
+              <FiatProvider>
+                <SettingsProvider>{children}</SettingsProvider>
+              </FiatProvider>
+            </SwapProvider>
+          </LoginProvider>
+        </ActionProvider>
         <ToastContainer
           position="top-right"
           autoClose={5000}

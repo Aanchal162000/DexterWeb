@@ -10,12 +10,18 @@ import { Swiper, SwiperSlide } from "swiper/react";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/pagination";
-import { useRef } from "react";
+
 import { useState } from "react";
 import EarlyAccess from "./Swap/EarlyAccess";
 
 const Login = () => {
-  const { connectWallet, address, loading } = useLoginContext();
+  const {
+    connectWallet,
+    loading,
+    setLoading,
+    setIsEarlyAccessOpen,
+    isEarlyAccessOpen,
+  } = useLoginContext();
 
   var settings = {
     dots: false,
@@ -36,12 +42,25 @@ const Login = () => {
     className: "approach",
   };
 
-  const sliderRef = useRef(null);
-  const [isEarlyAccessOpen, setIsEarlyAccessOpen] = useState(false);
+  const [buttonText, setButtonText] = useState("Enter Lab");
 
-  const handleEnterLab = async () => {
-    // await connectWallet("Metamask");
-    setIsEarlyAccessOpen(true);
+  const handleApiCall = async (action: string) => {
+    setLoading(true);
+
+    try {
+      switch (action) {
+        case "Enter Lab":
+          await connectWallet("Metamask");
+          // Add a small delay to allow state to update
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+
+          break;
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleCloseEarlyAccess = () => {
@@ -165,7 +184,8 @@ const Login = () => {
           <div className="relative sm:w-full w-[50%] flex justify-center md:justify-start sm:pt-0 pt-4 pb-8">
             <button
               className="w-full md:w-auto py-4 px-8 md:px-24 bg-primary-100 text-black text-base sm:text-xl text-center font-bold sm:rounded-xl rounded-lg hover:shadow-lg shadow-primary-100/20 transition-all duration-300"
-              onClick={handleEnterLab}
+              onClick={() => handleApiCall(buttonText)}
+              disabled={loading}
             >
               {loading ? (
                 <div className="flex flex-row space-x-2 items-center justify-center">
@@ -189,10 +209,10 @@ const Login = () => {
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                     />
                   </svg>
-                  Connecting...
+                  Processing...
                 </div>
               ) : (
-                <>Early Access</>
+                buttonText
               )}
             </button>
           </div>

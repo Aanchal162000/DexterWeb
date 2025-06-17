@@ -197,7 +197,7 @@ class AgentService {
       this.loading = true;
 
       const response = await fetch(
-        "https://dexter-backend-ucdt5.ondigitalocean.app/api/agent/subscribe",
+        "https://dexters-backend.zkcross.exchange/api/agent/subscribe",
         {
           method: "POST",
           headers: {
@@ -235,7 +235,7 @@ class AgentService {
       this.loading = true;
 
       const response = await fetch(
-        `https://dexter-backend-ucdt5.ondigitalocean.app/api/agent/${genesisId}/status/${walletAddress}`,
+        `https://dexters-backend.zkcross.exchange/api/agent/${genesisId}/status/${walletAddress}`,
         {
           method: "GET",
           headers: {
@@ -346,7 +346,7 @@ class AgentService {
   ): Promise<ITransactionResponse> {
     try {
       const response = await fetch(
-        `https://dexter-backend-ucdt5.ondigitalocean.app/api/user-transactions/${walletAddress}`
+        `https://dexters-backend.zkcross.exchange/api/user-transactions/${walletAddress}`
       );
       const data = await response.json();
       return data;
@@ -363,7 +363,7 @@ class AgentService {
       this.loading = true;
 
       const response = await fetch(
-        "https://dexter-backend-ucdt5.ondigitalocean.app/api/agent/withdraw",
+        "https://dexters-backend.zkcross.exchange/api/agent/withdraw",
         {
           method: "POST",
           headers: {

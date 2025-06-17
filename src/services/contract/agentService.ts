@@ -311,8 +311,7 @@ class AgentService {
         throw new Error(`API error: ${data.message}`);
       }
 
-      return data.data?.singleChainSwapInfo?.youSaveDTO?.topTenDexInfoList[0]
-        .amountOut;
+      return data.data?.singleChainSwapInfo?.minimumReceived;
     } catch (error) {
       console.error("Error fetching quote:", error);
       throw error;

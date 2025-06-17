@@ -15,8 +15,7 @@ interface TokenInfo {
 }
 
 interface StartLoopRequest {
-  privateKey: string;
-  tokenInfo: TokenInfo;
+  tokenList: TokenInfo[];
   maxVolumeInVirtual: string;
   recommendedVolumeInVirtual: string;
   timelineDays: number;
@@ -129,6 +128,20 @@ interface VolumeChartDataResponse {
 
 interface ChartDataQuery {
   includePrediction: boolean;
+}
+
+interface RecommendedVolumeQuery {
+  timelineDays: number;
+  tokenCount: number;
+}
+
+interface RecommendedVolumeResponse {
+  success: boolean;
+  message: string;
+  data: {
+    recommendedVolume: string;
+    maxVolume: string;
+  };
 }
 
 class ActionService {
@@ -325,6 +338,36 @@ class ActionService {
             predictionMonths: 0,
             historicalMonths: 0,
           },
+        },
+      };
+    }
+  }
+
+  async getRecommendedVolume(
+    query: RecommendedVolumeQuery,
+    token: string
+  ): Promise<RecommendedVolumeResponse> {
+    try {
+      const { data } = await axios.get(
+        `${baseURL}/api/volume-loop-calculator/recommended-volume`,
+        {
+          params: query,
+          headers: { authorization: `Bearer ${token}` },
+        }
+      );
+      return {
+        success: true,
+        message: "Recommended volume retrieved successfully",
+        data,
+      };
+    } catch (error: any) {
+      return {
+        success: false,
+        message:
+          error.response?.data?.message || "Failed to get recommended volume",
+        data: {
+          recommendedVolume: "0",
+          maxVolume: "0",
         },
       };
     }

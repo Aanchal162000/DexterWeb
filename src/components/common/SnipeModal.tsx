@@ -12,7 +12,7 @@ import {
 } from "@/constants/config";
 import { useLoginContext } from "@/context/LoginContext";
 import { TiArrowSortedDown } from "react-icons/ti";
-import SliderHandler from "./Slider";
+
 import {
   addCommas,
   formatNumberWithCommas,

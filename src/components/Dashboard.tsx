@@ -14,30 +14,30 @@ import { ActionProvider } from "@/context/ActionContext";
 export type IRouterKey = (typeof headerRoutes)[number]["id"];
 
 export const Router: { [key: IRouterKey]: ReactNode } = {
-    Trade: <Swap />,
-    Virtuals: <Snipe />,
-    Support: <HelpCenter />,
-    "Action Center": (
-        <ActionProvider>
-            <ActionCenter />
-        </ActionProvider>
-    ),
+  Wallet: <Swap />,
+  Trenches: <Snipe />,
+  Support: <HelpCenter />,
+  "Action Center": (
+    <ActionProvider>
+      <ActionCenter />
+    </ActionProvider>
+  ),
 };
 
 const Dashboard = () => {
-    const { address, activeTab } = useLoginContext();
+  const { address, activeTab } = useLoginContext();
 
-    return (
-        <div className="relative h-full w-full">
-            <div className="absolute h-full w-full !bg-[url('/Trade/background.jpg')] bg-[position:30%] bg-[size:cover] bg-[repeat:no-repeat] z-10 p-5 after:content-[''] after:absolute after:top-0 after:left-0 after:w-full after:h-full after:shadow-[0px_0px_0px_9999px_rgba(0,0,0,0.68)]"></div>
+  return (
+    <div className="relative h-full w-full">
+      <div className="absolute h-full w-full !bg-[url('/Trade/background.jpg')] bg-[position:30%] bg-[size:cover] bg-[repeat:no-repeat] z-10 p-5 after:content-[''] after:absolute after:top-0 after:left-0 after:w-full after:h-full after:shadow-[0px_0px_0px_9999px_rgba(0,0,0,0.68)]"></div>
 
-            <div className="relative flex flex-col z-20 w-full h-[calc(100vh-6.8vh)]">
-                <Header />
-                {Router[activeTab]}
-            </div>
-            <Footer />
-        </div>
-    );
+      <div className="relative flex flex-col z-20 w-full h-[calc(100vh-6.8vh)]">
+        <Header />
+        {Router[activeTab]}
+      </div>
+      <Footer />
+    </div>
+  );
 };
 
 export default Dashboard;

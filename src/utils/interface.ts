@@ -233,8 +233,8 @@ export interface IAssetsData {
 }
 
 export type TRoute =
-  | "Trade"
-  | "Virtuals"
+  | "Trenches"
+  | "Wallet"
   | "Alerts"
   | "Support"
   | "Action Center";

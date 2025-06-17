@@ -70,6 +70,8 @@ interface ILoginState {
   setIsWhitelisted: Dispatch<SetStateAction<boolean>>;
   isEarlyAccessOpen: boolean;
   setIsEarlyAccessOpen: Dispatch<SetStateAction<boolean>>;
+  userProfile: any;
+  setUerProfile: Dispatch<any>;
 }
 
 let ethereum: any = null;
@@ -105,8 +107,8 @@ export default function LoginProvider({ children }: { children: ReactNode }) {
   const isFirstLoad = useIsFirstEffect();
   const [isWhitelisted, setIsWhitelisted] = useState<boolean>(false);
   const [isEarlyAccessOpen, setIsEarlyAccessOpen] = useState(false);
-  const [isEmailVerified, setIsEmailVerified] = useState(false);
-  const [isProfileCompleted, setIsProfileCompleted] = useState(false);
+
+  const [userProfile, setUerProfile] = useState<any>(null);
   const [trustWallet] = initializeConnector<TrustWallet>(
     (actions) => new TrustWallet({ actions })
   );
@@ -145,6 +147,7 @@ export default function LoginProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  // For authentication  flow
   const setAuthentication = async (addressFetched: string) => {
     if (!addressFetched) {
       throw new Error("No wallet address available");
@@ -168,18 +171,14 @@ export default function LoginProvider({ children }: { children: ReactNode }) {
           addressFetched,
           authToken
         );
-        if (!userInfo.success) {
-          // User not found, start fresh
-          setIsEarlyAccessOpen(true);
-        } else {
-          const { isEmailVerified, isProfileCompleted, isWhitelisted } =
-            userInfo.data.user;
-          if (isWhitelisted) {
+        console.log("Profile", userInfo);
+        if (userInfo.success) {
+          setUerProfile(userInfo.data.user);
+
+          if (userInfo.data.user.isWhitelisted) {
             setIsWhitelisted(true);
           } else {
-            setIsEmailVerified(isEmailVerified);
-            setIsProfileCompleted(isProfileCompleted);
-            setIsWhitelisted(isWhitelisted);
+            setIsWhitelisted(false);
             setIsEarlyAccessOpen(true);
           }
         }
@@ -195,7 +194,6 @@ export default function LoginProvider({ children }: { children: ReactNode }) {
   };
 
   const connectMetamask = async () => {
-    setIsEarlyAccessOpen(true);
     try {
       console.log("connect metamask");
       let justProvider =
@@ -562,6 +560,8 @@ export default function LoginProvider({ children }: { children: ReactNode }) {
         setIsWhitelisted,
         isEarlyAccessOpen,
         setIsEarlyAccessOpen,
+        userProfile,
+        setUerProfile,
       }}
     >
       {children}

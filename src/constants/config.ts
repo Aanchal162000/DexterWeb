@@ -500,8 +500,8 @@ export const chainNetworkParams: { [key: number]: any } = {
 
 export const headerRoutes: IRouter[] = [
   {
-    id: "trade",
-    name: "Trade",
+    id: "wallet",
+    name: "Wallet",
     isActive: true,
   },
   {
@@ -510,8 +510,8 @@ export const headerRoutes: IRouter[] = [
     isActive: true,
   },
   {
-    id: "virtuals",
-    name: "Virtuals",
+    id: "trenches",
+    name: "Trenches",
     isActive: true,
   },
   {

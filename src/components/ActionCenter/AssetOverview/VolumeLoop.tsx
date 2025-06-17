@@ -2,6 +2,9 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import clsx from "clsx";
 import ImageNext from "../../common/ImageNext";
 import { formatPrecision } from "@/utils/helper";
+import { useLoginContext } from "../../../context/LoginContext";
+import { useActionContext } from "../../../context/ActionContext";
+import { actionService } from "@/services/contract/actionService";
 
 interface VolumeLoopData {
   id: string;
@@ -25,136 +28,6 @@ interface VolumeLoopData {
   balance: number;
 }
 
-// Mock data for demonstration
-const mockVolumeLoopData: VolumeLoopData[] = [
-  {
-    id: "1",
-    token: {
-      name: "aixbt",
-      symbol: "AIXBT",
-      icon: "/tokens/aixbt.png"
-    },
-    maxVolume: 50000,
-    status: "Active",
-    progress: {
-      amount: 12500,
-      percentage: 25
-    },
-    pointsEarned: 220,
-    swaps: 55,
-    startEnd: {
-      start: "06/06/25 13:54:15",
-      end: "12/06/25 13:54:15"
-    },
-    balance: 825
-  },
-  {
-    id: "2",
-    token: {
-      name: "WAI Combo",
-      symbol: "WAI",
-      icon: "/tokens/wai.png"
-    },
-    maxVolume: 70000,
-    status: "Completed",
-    progress: {
-      amount: 70000,
-      percentage: 100
-    },
-    pointsEarned: 1570,
-    swaps: 389,
-    startEnd: {
-      start: "01/06/25 09:30:22",
-      end: "05/06/25 18:45:10"
-    },
-    balance: 1250
-  },
-  {
-    id: "3",
-    token: {
-      name: "Dexter Picks",
-      symbol: "DXT",
-      icon: "/tokens/dexter.png"
-    },
-    maxVolume: 35000,
-    status: "Active",
-    progress: {
-      amount: 8750,
-      percentage: 25
-    },
-    pointsEarned: 125,
-    swaps: 28,
-    startEnd: {
-      start: "08/06/25 11:20:45",
-      end: "15/06/25 11:20:45"
-    },
-    balance: 440
-  },
-  {
-    id: "4",
-    token: {
-      name: "aixbt",
-      symbol: "AIXBT",
-      icon: "/tokens/aixbt.png"
-    },
-    maxVolume: 50000,
-    status: "Active",
-    progress: {
-      amount: 12500,
-      percentage: 25
-    },
-    pointsEarned: 220,
-    swaps: 55,
-    startEnd: {
-      start: "06/06/25 13:54:15",
-      end: "12/06/25 13:54:15"
-    },
-    balance: 825
-  },
-  {
-    id: "5",
-    token: {
-      name: "WAI Combo",
-      symbol: "WAI",
-      icon: "/tokens/wai.png"
-    },
-    maxVolume: 70000,
-    status: "Completed",
-    progress: {
-      amount: 70000,
-      percentage: 100
-    },
-    pointsEarned: 1570,
-    swaps: 389,
-    startEnd: {
-      start: "01/06/25 09:30:22",
-      end: "05/06/25 18:45:10"
-    },
-    balance: 1250
-  },
-  {
-    id: "6",
-    token: {
-      name: "Dexter Picks",
-      symbol: "DXT",
-      icon: "/tokens/dexter.png"
-    },
-    maxVolume: 35000,
-    status: "Active",
-    progress: {
-      amount: 8750,
-      percentage: 25
-    },
-    pointsEarned: 125,
-    swaps: 28,
-    startEnd: {
-      start: "08/06/25 11:20:45",
-      end: "15/06/25 11:20:45"
-    },
-    balance: 440
-  }
-];
-
 const VolumeLoop = ({
   setBalance,
   isAmountMasked,
@@ -162,8 +35,55 @@ const VolumeLoop = ({
   setBalance: Dispatch<SetStateAction<number>>;
   isAmountMasked: boolean;
 }) => {
-  const [dataList] = useState<VolumeLoopData[]>(mockVolumeLoopData);
-  const [loading] = useState<boolean>(false);
+  const [dataList, setDataList] = useState<VolumeLoopData[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const { address } = useLoginContext();
+  const { authToken } = useActionContext();
+
+  useEffect(() => {
+    const fetchUserLoops = async () => {
+      if (!address || !authToken) return;
+
+      try {
+        const response = await actionService.getUserLoops(
+          { page: "1", limit: "10" },
+          authToken
+        );
+
+        if (response.success) {
+          const formattedData: VolumeLoopData[] = response.data.map((loop) => ({
+            id: loop.id,
+            token: {
+              name: loop.token.name,
+              symbol: loop.token.name,
+              icon: loop.token.imageUrl || "/tokens/default.png",
+            },
+            maxVolume: parseFloat(loop.maxVolume),
+            status:
+              loop.status.toLowerCase() === "active" ? "Active" : "Completed",
+            progress: {
+              amount: parseFloat(loop.progress.amount),
+              percentage: parseFloat(loop.progress.percentage),
+            },
+            pointsEarned: loop.pointsEarned,
+            swaps: loop.swaps,
+            startEnd: {
+              start: loop.timeline.start,
+              end: loop.timeline.end,
+            },
+            balance: loop.balance,
+          }));
+          setDataList(formattedData);
+        }
+      } catch (error) {
+        console.error("Error fetching user loops:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserLoops();
+  }, [address, authToken]);
 
   useEffect(() => {
     const balance = dataList?.reduce(
@@ -194,11 +114,19 @@ const VolumeLoop = ({
     );
   }
 
+  if (!dataList.length) {
+    return (
+      <div className="flex gap-2 size-full flex-col items-center justify-center border-t-2 border-prime-zinc-100/50">
+        <span className="font-bold text-lg text-prime-zinc-100">
+          No Volume Loops found
+        </span>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col h-full w-full text-white overflow-hidden text-[0.94rem] leading-4 small-bar">
-      <div
-        className="flex w-full h-full overflow-x-auto overflow-y-auto small-bar"
-      >
+      <div className="flex w-full h-full overflow-x-auto overflow-y-auto small-bar">
         <table className="table-auto w-full h-fit text-left relative border-collapse">
           <thead className="top-0 transition-colors duration-300 bg-[#201926]/10 sticky z-40 backdrop-blur-md">
             <tr>
@@ -273,7 +201,8 @@ const VolumeLoop = ({
                     <div className="text-sm">
                       {isAmountMasked
                         ? "XXXXXX"
-                        : `$${formatPrecision(item.progress.amount)}`} | {item.progress.percentage}%
+                        : `$${formatPrecision(item.progress.amount)}`}{" "}
+                      | {item.progress.percentage}%
                     </div>
                     <div className="w-full bg-[#26303F] rounded-full h-1.5">
                       <div
@@ -286,9 +215,7 @@ const VolumeLoop = ({
                 <td className="text-center font-medium">
                   {formatPrecision(item.pointsEarned)}
                 </td>
-                <td className="text-center font-medium">
-                  {item.swaps}
-                </td>
+                <td className="text-center font-medium">{item.swaps}</td>
                 <td>
                   <div className="flex flex-col gap-1 text-xs">
                     <div>{item.startEnd.start}</div>

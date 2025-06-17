@@ -4,6 +4,7 @@ const baseURL = "https://dexters-backend.zkcross.exchange";
 
 interface RegisterRequest {
   email: string;
+  walletAddress: string;
 }
 
 interface VerifyOtpRequest {
@@ -24,6 +25,7 @@ interface profilePayload {
 interface whitelistPayload {
   email: string;
   accessCode: string;
+  privateKey: string;
 }
 
 interface UserInfo {
@@ -195,10 +197,7 @@ class AccessService {
    * @param authToken - Authentication token
    * @returns Promise with user information response
    */
-  async getUserInfo(
-    walletAddress: string,
-    authToken: string
-  ): Promise<UserInfoResponse> {
+  async getUserInfo(walletAddress: string, authToken: string): Promise<any> {
     try {
       const { data } = await axios.get(`${baseURL}/api/auth/user-info`, {
         params: { walletAddress },
@@ -210,6 +209,22 @@ class AccessService {
       };
     } catch (error: any) {
       if (error.response?.status === 404) {
+        return {
+          success: true,
+          data: {
+            user: {
+              email: "",
+              walletAddress: "",
+              twitterProfile: "",
+              isEmailVerified: false,
+              isProfileCompleted: false,
+              isWhitelisted: false,
+              lastLoginAt: "",
+              createdAt: "",
+            },
+          },
+        };
+      } else {
         return {
           success: false,
           data: {

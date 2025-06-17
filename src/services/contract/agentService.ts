@@ -235,7 +235,11 @@ class AgentService {
       this.loading = true;
 
       const response = await fetch(
+<<<<<<< HEAD
         `https://dexters-backend.zkcross.exchange/api/agent/${genesisId}/status/${walletAddress}`,
+=======
+        ` https://dexters-backend.zkcross.exchange /api/agent/${genesisId}/status/${walletAddress}`,
+>>>>>>> 142933ee955780d0a178c0a221f4e8d0f1941193
         {
           method: "GET",
           headers: {
@@ -346,7 +350,11 @@ class AgentService {
   ): Promise<ITransactionResponse> {
     try {
       const response = await fetch(
+<<<<<<< HEAD
         `https://dexters-backend.zkcross.exchange/api/user-transactions/${walletAddress}`
+=======
+        ` https://dexters-backend.zkcross.exchange/api/user-transactions/${walletAddress}`
+>>>>>>> 142933ee955780d0a178c0a221f4e8d0f1941193
       );
       const data = await response.json();
       return data;

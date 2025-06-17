@@ -5,7 +5,7 @@ import Dashboard from "../components/Dashboard";
 import { useLoginContext } from "../context/LoginContext";
 
 export default function Home() {
-  const { address } = useLoginContext();
+  const { isWhitelisted } = useLoginContext();
 
-  return address ? <Dashboard /> : <Login />;
+  return isWhitelisted ? <Dashboard /> : <Login />;
 }

@@ -52,13 +52,13 @@ const OverviewChart: React.FC<OverviewChartProps> = ({ data }) => {
     Math.ceil(Math.max(...data.map((d) => d.virgenPoints)) / 250) * 250;
 
   return (
-    <div className="flex relative w-[440px] h-[240px]">
+    <div className="relative w-[90%] h-[240px]">
       <ResponsiveContainer width="120%" height="100%">
         <BarChart
           data={data.slice(0, 6)}
           margin={{ top: 20, right: 40, bottom: 5 }}
-          barGap={4}
-          barCategoryGap={30}
+          barGap={2}
+          barCategoryGap={"20%"}
         >
           <defs>
             <linearGradient id="volumeGradient" x1="0" y1="0" x2="0" y2="1">
@@ -98,7 +98,7 @@ const OverviewChart: React.FC<OverviewChartProps> = ({ data }) => {
 
           <CartesianGrid
             strokeDasharray="3 3"
-            stroke="#444B5A"
+            stroke="#CDCECF"
             vertical={false}
           />
           <XAxis
@@ -123,7 +123,7 @@ const OverviewChart: React.FC<OverviewChartProps> = ({ data }) => {
               value: "Volume",
               angle: -90,
               position: "insideLeft",
-              offset: 14,
+              offset: 12,
               fill: "#B0BEC5",
               fontSize: 10,
               fontWeight: 500,
@@ -142,7 +142,7 @@ const OverviewChart: React.FC<OverviewChartProps> = ({ data }) => {
               value: "Virgen Points",
               angle: 90,
               position: "insideRight",
-              offset: 14,
+              offset: 12,
               fill: "#B0BEC5",
               fontSize: 10,
               fontWeight: 500,
@@ -170,7 +170,6 @@ const OverviewChart: React.FC<OverviewChartProps> = ({ data }) => {
             dataKey="volume"
             fill="url(#volumeGradient)"
             radius={[2, 2, 0, 0]}
-            maxBarSize={30}
             filter="url(#shadow)"
             stackId="aligned"
           />
@@ -179,7 +178,6 @@ const OverviewChart: React.FC<OverviewChartProps> = ({ data }) => {
             dataKey="virgenPoints"
             fill="url(#pointsGradient)"
             radius={[2, 2, 0, 0]}
-            maxBarSize={30}
             filter="url(#shadow)"
             stackId="aligned"
           />

@@ -25,7 +25,6 @@ interface profilePayload {
 interface whitelistPayload {
   email: string;
   accessCode: string;
-  privateKey: string;
 }
 
 interface UserInfo {

@@ -8,16 +8,17 @@ import { actionService } from "@/services/contract/actionService";
 
 interface VolumeLoopData {
   id: string;
-  token: {
+  tokens: {
     name: string;
     symbol: string;
     icon: string;
-  };
-  maxVolume: number;
+    order: number;
+  }[];
+  maxVolume: string;
   status: "Active" | "Completed";
   progress: {
-    amount: number;
-    percentage: number;
+    amount: string;
+    percentage: string;
   };
   pointsEarned: number;
   swaps: number;
@@ -26,6 +27,7 @@ interface VolumeLoopData {
     end: string;
   };
   balance: number;
+  sequenceDescription?: string;
 }
 
 const VolumeLoop = ({
@@ -53,17 +55,18 @@ const VolumeLoop = ({
         if (response.success) {
           const formattedData: VolumeLoopData[] = response.data.map((loop) => ({
             id: loop.id,
-            token: {
-              name: loop.token.name,
-              symbol: loop.token.name,
-              icon: loop.token.imageUrl || "/tokens/default.png",
-            },
-            maxVolume: parseFloat(loop.maxVolume),
+            tokens: loop.tokens.map((token) => ({
+              name: token.name,
+              symbol: token.name,
+              icon: token.imageUrl || "/tokens/default.png",
+              order: token.order,
+            })),
+            maxVolume: loop.maxVolume,
             status:
               loop.status.toLowerCase() === "active" ? "Active" : "Completed",
             progress: {
-              amount: parseFloat(loop.progress.amount),
-              percentage: parseFloat(loop.progress.percentage),
+              amount: loop.progress.amount,
+              percentage: loop.progress.percentage,
             },
             pointsEarned: loop.pointsEarned,
             swaps: loop.swaps,
@@ -72,6 +75,7 @@ const VolumeLoop = ({
               end: loop.timeline.end,
             },
             balance: loop.balance,
+            sequenceDescription: loop.sequenceDescription,
           }));
           setDataList(formattedData);
         }
@@ -162,27 +166,42 @@ const VolumeLoop = ({
                 )}
               >
                 <td>
-                  <div className="flex flex-row gap-2 items-center">
-                    <ImageNext
-                      src={item.token.icon}
-                      className="size-10 rounded-full"
-                      alt="token-logo"
-                      fullRadius
-                    />
-                    <div className="flex flex-col gap-1">
-                      <div className="font-bold text-nowrap">
-                        {item.token.name}
+                  <div className="flex items-center gap-2">
+                    <div className="flex">
+                      {item.tokens[0] && (
+                        <div
+                          className="relative group"
+                          title={item.tokens[0].name}
+                        >
+                          <ImageNext
+                            src={item.tokens[0].icon}
+                            className="size-6 rounded-full border border-[#201926]"
+                            alt={`${item.tokens[0].name}-logo`}
+                            fullRadius
+                          />
+                          {item.tokens.length > 1 && (
+                            <div className="absolute -right-1 -bottom-1 bg-[#201926]/80 backdrop-blur-sm text-[#26fcfc] text-[10px] font-medium rounded-full size-4 flex items-center justify-center">
+                              +{item.tokens.length - 1}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex flex-col">
+                      <div
+                        className="font-medium text-sm text-white/90 truncate max-w-[100px]"
+                        title={item.tokens[0]?.name}
+                      >
+                        {item.tokens[0]?.name}
                       </div>
-                      <div className="text-sm text-prime-zinc-100">
-                        {item.token.symbol}
+                      <div className="text-xs text-white/50 truncate max-w-[120px]">
+                        {item.tokens[0]?.symbol}
                       </div>
                     </div>
                   </div>
                 </td>
                 <td className="text-right">
-                  {isAmountMasked
-                    ? "XXXXXX"
-                    : `$${formatPrecision(item.maxVolume)}`}
+                  {isAmountMasked ? "XXXXXX" : item.maxVolume}
                 </td>
                 <td>
                   <span
@@ -199,15 +218,13 @@ const VolumeLoop = ({
                 <td>
                   <div className="flex flex-col gap-2">
                     <div className="text-sm">
-                      {isAmountMasked
-                        ? "XXXXXX"
-                        : `$${formatPrecision(item.progress.amount)}`}{" "}
-                      | {item.progress.percentage}%
+                      {isAmountMasked ? "XXXXXX" : item.progress.amount} |{" "}
+                      {item.progress.percentage}
                     </div>
                     <div className="w-full bg-[#26303F] rounded-full h-1.5">
                       <div
                         className="bg-[#00E0FF] h-1.5 rounded-full transition-all duration-300"
-                        style={{ width: `${item.progress.percentage}%` }}
+                        style={{ width: item.progress.percentage }}
                       ></div>
                     </div>
                   </div>
@@ -225,7 +242,7 @@ const VolumeLoop = ({
                 <td className="text-right">
                   {isAmountMasked
                     ? "XXXXXX"
-                    : `$${formatPrecision(item.balance)}`}
+                    : `${formatPrecision(item.balance)}`}
                 </td>
                 <td>
                   <button
@@ -233,8 +250,8 @@ const VolumeLoop = ({
                     className={clsx(
                       "px-4 py-2 rounded text-sm font-medium transition-colors",
                       item.status === "Active"
-                        ? "bg-[#1F2D3D] text-white hover:bg-[#2D3B4F]"
-                        : "bg-[#00E0FF] text-[#0B111A] hover:bg-[#00BBD6]"
+                        ? "border border-primary-100 text-primary-100 hover:bg-primary-100/40"
+                        : "bg-primary-100 text-[#0B111A] hover:bg-[#00BBD6]"
                     )}
                   >
                     {item.status === "Active" ? "Cancel" : "Restart"}

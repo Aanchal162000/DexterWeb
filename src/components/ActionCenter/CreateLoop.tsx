@@ -10,6 +10,8 @@ import { usePrototypeVirtuals } from "../../hooks/usePrototypeVirtuals";
 import { useTokenPrices } from "../../hooks/useTokenPrices";
 import useDebounce from "../../hooks/useDebounce";
 import useClickOutside from "../../hooks/useClickOutside";
+import { useLoginContext } from "@/context/LoginContext";
+import { ethers } from "ethers";
 
 interface TokenOption {
   name: string;
@@ -33,7 +35,11 @@ interface TokenSelectionOption {
 }
 
 function CreateLoop() {
-  const { balances, isLoading: isBalanceLoading } = useWalletBalance();
+  const { userProfile } = useLoginContext();
+  const { balances, isLoading: isBalanceLoading } = useWalletBalance({
+    targetAddress: userProfile.managedWalletAddress,
+    isManagedWallet: true,
+  });
   const { authToken, totalStaked } = useActionContext();
   const { virtuals: sentientVirtuals } = useSentientVirtuals();
   const { virtuals: prototypeVirtuals } = usePrototypeVirtuals();
@@ -118,6 +124,10 @@ function CreateLoop() {
   useEffect(() => {
     if (!isBalanceLoading) {
       setSelectedtokenRecommed((prev) => ({
+        ...prev,
+        balance: balances[prev.symbol] || "0",
+      }));
+      setSelectedVitualtoken((prev) => ({
         ...prev,
         balance: balances[prev.symbol] || "0",
       }));
@@ -222,7 +232,7 @@ function CreateLoop() {
           name: token.name,
           imageUrl: token.logo,
         })),
-        maxVolumeInVirtual: amount,
+        maxVolumeInVirtual: ethers.utils.parseUnits(amount, 18).toString(),
         recommendedVolumeInVirtual: recommendedAmount,
         timelineDays: timelineDays,
       };
@@ -598,7 +608,7 @@ function CreateLoop() {
             isProcessing ||
             !amount ||
             selectedTokenOptions.length === 0 ||
-            Number(amount) > Number(selectedVitualtoken.balance)
+            parseFloat(amount) > parseFloat(selectedVitualtoken.balance)
           }
           className="w-full bg-primary-100 hover:bg-primary-100/80 disabled:bg-primary-100/50 text-black font-semibold py-3 px-4 rounded-lg transition-colors disabled:cursor-not-allowed"
         >
@@ -608,7 +618,7 @@ function CreateLoop() {
             ? "Enter Amount"
             : selectedTokenOptions.length === 0
             ? "Select Token"
-            : Number(amount) > Number(selectedVitualtoken.balance)
+            : parseFloat(amount) > parseFloat(selectedVitualtoken.balance)
             ? "Insufficient Balance"
             : "Create Loop"}
         </button>

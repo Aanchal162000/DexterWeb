@@ -8,6 +8,7 @@ import React, {
   useEffect,
 } from "react";
 import { actionService } from "@/services/contract/actionService";
+import { useLoginContext } from "./LoginContext";
 
 interface ActionContextType {
   authToken: string;
@@ -21,6 +22,7 @@ const ActionContext = createContext<ActionContextType | undefined>(undefined);
 export const ActionProvider = ({ children }: { children: ReactNode }) => {
   const [authToken, setAuthTokenState] = useState("");
   const [totalStaked, setTotalStaked] = useState("0");
+  const { address } = useLoginContext();
 
   const setAuthToken = async (token: string): Promise<void> => {
     setAuthTokenState(token);
@@ -28,7 +30,7 @@ export const ActionProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const calculateTotalStaked = async (): Promise<void> => {
-    if (!authToken) return;
+    if (!authToken || !address) return;
 
     try {
       const response = await actionService.getUserLoops(

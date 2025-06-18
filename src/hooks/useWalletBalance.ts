@@ -14,12 +14,20 @@ interface WalletBalances {
   [key: string]: string;
 }
 
+interface UseWalletBalanceProps {
+  targetAddress?: string;
+  isManagedWallet?: boolean;
+}
+
 let ethereum: any = null;
 if (typeof window !== "undefined") {
   ethereum = window?.ethereum;
 }
 
-export const useWalletBalance = () => {
+export const useWalletBalance = ({
+  targetAddress,
+  isManagedWallet = false,
+}: UseWalletBalanceProps = {}) => {
   const [balances, setBalances] = useState<WalletBalances>({});
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -33,12 +41,17 @@ export const useWalletBalance = () => {
     decimals: number = 18
   ): Promise<{ symbol: string; balance: string }> => {
     try {
+      const targetAddr = targetAddress || address;
+      if (!targetAddr) {
+        return { symbol, balance: "0" };
+      }
+
       if (
         tokenAddress.toLowerCase() ===
         "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
       ) {
         // Handle native token (ETH)
-        const balance = await provider.getBalance(address!);
+        const balance = await provider.getBalance(targetAddr);
         return {
           symbol,
           balance: ethers.utils.formatEther(balance),
@@ -51,7 +64,7 @@ export const useWalletBalance = () => {
         ["function balanceOf(address) view returns (uint256)"],
         provider
       );
-      const balance = await tokenContract.balanceOf(address);
+      const balance = await tokenContract.balanceOf(targetAddr);
       return {
         symbol,
         balance: ethers.utils.formatUnits(balance, decimals),
@@ -66,7 +79,8 @@ export const useWalletBalance = () => {
   };
 
   const fetchBalances = async () => {
-    if (!address || !networkData?.provider) {
+    const targetAddr = targetAddress || address;
+    if (!targetAddr || !networkData?.provider) {
       setError("Wallet not connected");
       setIsLoading(false);
       return;
@@ -122,19 +136,19 @@ export const useWalletBalance = () => {
   useEffect(() => {
     fetchBalances();
 
-    // Listen for account changes
-    if (window.ethereum) {
+    // Only listen for account changes if we're not using a managed wallet
+    if (!isManagedWallet && window.ethereum) {
       window.ethereum.on("accountsChanged", fetchBalances);
       window.ethereum.on("chainChanged", fetchBalances);
     }
 
     return () => {
-      if (window.ethereum) {
+      if (!isManagedWallet && window.ethereum) {
         window.ethereum.removeListener("accountsChanged", fetchBalances);
         window.ethereum.removeListener("chainChanged", fetchBalances);
       }
     };
-  }, [address, networkData?.provider, trigger]);
+  }, [address, targetAddress, networkData?.provider, trigger, isManagedWallet]);
 
   return { balances, isLoading, error, refetch: fetchBalances };
 };

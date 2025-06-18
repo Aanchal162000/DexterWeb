@@ -30,6 +30,7 @@ interface UserLoopToken {
   name: string;
   address: string;
   imageUrl: string | null;
+  order: number;
 }
 
 interface UserLoopProgress {
@@ -64,7 +65,7 @@ interface UserLoopRawData {
 
 interface UserLoop {
   id: string;
-  token: UserLoopToken;
+  tokens: UserLoopToken[];
   maxVolume: string;
   status: string;
   progress: UserLoopProgress;
@@ -74,6 +75,7 @@ interface UserLoop {
   balance: number;
   actions: UserLoopActions;
   raw: UserLoopRawData;
+  sequenceDescription?: string;
 }
 
 interface UserLoopsResponse {
@@ -274,10 +276,11 @@ class ActionService {
           headers: { authorization: `Bearer ${token}` },
         }
       );
+      console.log("data we get", data);
       return {
         success: true,
         message: "User loops retrieved successfully",
-        data,
+        data: data.data.loops,
       };
     } catch (error: any) {
       return {

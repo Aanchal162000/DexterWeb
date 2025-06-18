@@ -231,6 +231,18 @@ export interface IAssetsData {
   imgToken: any;
   imgNetwork: string;
 }
+export interface ILiquidData {
+  tokenAmount: any;
+  usdAmount: string | number;
+  perUsd: string | number;
+  difference: string;
+  percentageDifference: string;
+  network: any;
+  token: any;
+  imgToken: any;
+  imgNetwork: string;
+  tokenName: string;
+}
 
 export type TRoute =
   | "Trenches"

@@ -116,7 +116,7 @@ export default function LoginProvider({ children }: { children: ReactNode }) {
   const triggerAPIs = () => setTrigger(trigger + 1);
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
-  const { setAuthToken } = useActionContext();
+  const { setAuthToken, authToken } = useActionContext();
 
   const getAuthToken = async (
     message: string,
@@ -194,6 +194,22 @@ export default function LoginProvider({ children }: { children: ReactNode }) {
   };
 
   const connectMetamask = async () => {
+    if (address && authToken) {
+      // Automatically call getUserInfo after getting token
+      const userInfo = await accessService.getUserInfo(address, authToken);
+      console.log("Profile", userInfo);
+      if (userInfo.success) {
+        setUerProfile(userInfo.data.user);
+
+        if (userInfo.data.user.isWhitelisted) {
+          setIsWhitelisted(true);
+        } else {
+          setIsWhitelisted(false);
+          setIsEarlyAccessOpen(true);
+        }
+      }
+      return;
+    }
     try {
       console.log("connect metamask");
       let justProvider =

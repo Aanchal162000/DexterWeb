@@ -15,13 +15,14 @@ interface Step {
 interface DexterAccessChecklistProps {
   steps: Step[];
   showSuccess: boolean;
+  containerRef: React.RefObject<HTMLDivElement>;
 }
 
 const DexterAccessChecklist: React.FC<DexterAccessChecklistProps> = ({
   steps,
   showSuccess,
+  containerRef,
 }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({
     width: 0,
     height: 0,
@@ -41,7 +42,7 @@ const DexterAccessChecklist: React.FC<DexterAccessChecklistProps> = ({
   const isLastStepActive = steps[steps.length - 1]?.status === "active";
 
   return (
-    <div ref={containerRef} className="w-full py-2 relative">
+    <div className="w-full py-2 relative">
       {showSuccess && (
         <div className="absolute inset-0 w-[400px] h-[400px] overflow-hidden pointer-events-none">
           <ReactConfetti

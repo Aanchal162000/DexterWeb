@@ -591,7 +591,8 @@ function CreateLoop() {
             isLoading ||
             isProcessing ||
             !amount ||
-            selectedTokenOptions.length === 0
+            selectedTokenOptions.length === 0 ||
+            Number(amount) > Number(selectedVitualtoken.balance)
           }
           className="w-full bg-primary-100 hover:bg-primary-100/80 disabled:bg-primary-100/50 text-black font-semibold py-3 px-4 rounded-lg transition-colors disabled:cursor-not-allowed"
         >
@@ -601,6 +602,8 @@ function CreateLoop() {
             ? "Enter Amount"
             : selectedTokenOptions.length === 0
             ? "Select Token"
+            : Number(amount) > Number(selectedVitualtoken.balance)
+            ? "Insufficient Balance"
             : "Create Loop"}
         </button>
       </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Dialog, DialogPanel, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import AccessService from "../../services/accessService";
@@ -8,6 +8,7 @@ import { useLoginContext } from "@/context/LoginContext";
 import { toastError, toastSuccess } from "@/utils/toast";
 import { useActionContext } from "@/context/ActionContext";
 import DexterAccessChecklist from "./DexterAccessChecklist";
+import { ShowerHead } from "lucide-react";
 
 const accessService = AccessService.getInstance();
 
@@ -26,7 +27,8 @@ interface EarlyAccessProps {
 }
 
 const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
-  const { userProfile, address, setUerProfile } = useLoginContext();
+  const { userProfile, address, setUerProfile, setIsWhitelisted } =
+    useLoginContext();
   const { authToken } = useActionContext();
   const [showInviteCode, setShowInviteCode] = useState(false);
   const [email, setEmail] = useState("");
@@ -42,6 +44,7 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isSendingOtp, setIsSendingOtp] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const [steps, setSteps] = useState<Step[]>([
     {
@@ -342,6 +345,7 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
           const userInfo = await accessService.getUserInfo(address, authToken);
           if (userInfo.success) {
             setUerProfile(userInfo.data.user);
+            setIsWhitelisted(true);
           }
         }
       } else {
@@ -404,7 +408,10 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
                   </div>
 
                   {/* Right Section - Content */}
-                  <div className="w-1/2 bg-black/20 relative">
+                  <div
+                    ref={containerRef}
+                    className="w-1/2 bg-black/20 relative"
+                  >
                     {/* Header */}
                     <div className="border-b border-primary-100 py-6 flex flex-col justify-center items-center relative">
                       <button
@@ -435,250 +442,252 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
                     </div>
 
                     {/* Content Section */}
-                    <div className="py-7 px-20 space-y-3">
-                      {!showChecklist ? (
-                        <>
-                          {/* Email Field */}
-                          <div className="space-y-2">
-                            <label className="text-white text-sm font-medium">
-                              Your email address
-                            </label>
-                            <div className="relative">
-                              <input
-                                type="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                placeholder="Enter your email"
-                                className={`w-full px-4 py-3 bg-transparent border ${
-                                  userProfile?.isEmailVerified
-                                    ? "border-green-500"
-                                    : "border-primary-100/40"
-                                } rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary-100`}
-                                disabled={userProfile?.isEmailVerified}
-                              />
-                              {userProfile?.isEmailVerified && (
-                                <div className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1.5 text-green-500">
-                                  Verified
-                                </div>
-                              )}
-                            </div>
-                          </div>
 
-                          {/* Verification Code Field - Only show if email not verified */}
-                          {!userProfile?.isEmailVerified && (
-                            <div className="space-y-2">
-                              <label className="text-white text-sm font-medium">
-                                Email verification code
-                              </label>
-                              <div className="relative">
-                                <input
-                                  id="otp-input"
-                                  type="text"
-                                  value={otp}
-                                  onChange={(e) => setOtp(e.target.value)}
-                                  placeholder="6-digits verification code"
-                                  className={`w-full px-4 py-3 bg-transparent border ${
-                                    isOtpValid === true
-                                      ? "border-green-500"
-                                      : isOtpValid === false
-                                      ? "border-red-500"
-                                      : "border-primary-100/40"
-                                  } rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary-100`}
-                                />
-                                {!isOtpSent ? (
-                                  <button
-                                    onClick={handleSendOtp}
-                                    disabled={isSendingOtp}
-                                    className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1.5 text-primary-100 hover:bg-primary-100/10 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                                  >
-                                    {isSendingOtp ? (
-                                      <div className="flex items-center space-x-2">
-                                        <svg
-                                          className="animate-spin h-4 w-4"
-                                          viewBox="0 0 24 24"
-                                        >
-                                          <circle
-                                            className="opacity-25"
-                                            cx="12"
-                                            cy="12"
-                                            r="10"
-                                            stroke="currentColor"
-                                            strokeWidth="4"
-                                            fill="none"
-                                          />
-                                          <path
-                                            className="opacity-75"
-                                            fill="currentColor"
-                                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                                          />
-                                        </svg>
-                                        <span>Sending...</span>
-                                      </div>
-                                    ) : (
-                                      "Send"
-                                    )}
-                                  </button>
-                                ) : (
-                                  <button
-                                    onClick={handleVerifyOtp}
-                                    disabled={otp.length !== 6 || isVerifying}
-                                    className={`absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1.5 ${
-                                      otp.length === 6
-                                        ? "text-primary-100 hover:bg-primary-100/10"
-                                        : "text-gray-500 cursor-not-allowed"
-                                    } rounded transition-colors`}
-                                  >
-                                    {isVerifying ? "Verifying..." : "Verify"}
-                                  </button>
-                                )}
-                              </div>
-                              {isOtpSent && (
-                                <div className="flex justify-end">
-                                  {countdown > 0 ? (
-                                    <span className="text-gray-400 text-xs">
-                                      Resend in {countdown}s
-                                    </span>
-                                  ) : (
-                                    <button
-                                      onClick={handleResendOtp}
-                                      className="text-primary-100 hover:text-primary-100/80 text-xs transition-colors"
-                                    >
-                                      Resend OTP
-                                    </button>
-                                  )}
-                                </div>
-                              )}
-                            </div>
-                          )}
-
-                          {/* X Account Connection */}
-                          <div className="space-y-2">
-                            <label className="text-white text-sm font-medium">
-                              Connect X
-                            </label>
-                            <div className="relative">
-                              <input
-                                type="text"
-                                value={twitterProfile}
-                                onChange={(e) =>
-                                  setTwitterProfile(e.target.value)
-                                }
-                                placeholder="Enter your Twitter/X profile URL"
-                                className={`w-full px-4 py-3 bg-transparent border ${
-                                  userProfile?.isProfileCompleted
-                                    ? "border-green-500"
-                                    : "border-primary-100/40"
-                                } rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary-100`}
-                                disabled={userProfile?.isProfileCompleted}
-                              />
-                            </div>
-                          </div>
-
-                          {/* Invite Code Section - Always show if profile is completed */}
-                          <div className="space-y-2">
-                            {!showInviteCode &&
-                              !userProfile?.isProfileCompleted && (
-                                <button
-                                  onClick={() =>
-                                    setShowInviteCode(!showInviteCode)
-                                  }
-                                  className="text-gray-400 text-sm font-medium transition-colors"
-                                >
-                                  Got an exclusive invite code?
-                                  <span className="text-white hover:text-primary-100/80">
-                                    {" "}
-                                    Click Here!
-                                  </span>
-                                </button>
-                              )}
-                            {(showInviteCode ||
-                              userProfile?.isProfileCompleted) && (
-                              <div className="relative space-y-4">
-                                <div className="space-y-2">
-                                  <label className="text-white text-sm font-medium">
-                                    Exclusive access code
-                                  </label>
-                                  <input
-                                    type="text"
-                                    value={inviteCode}
-                                    onChange={(e) =>
-                                      setInviteCode(e.target.value)
-                                    }
-                                    placeholder="Enter your access code"
-                                    className="w-full px-4 py-3 bg-transparent border border-primary-100/40 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary-100"
-                                  />
-                                </div>
+                    {!showChecklist ? (
+                      <div className="py-7 px-20 space-y-3">
+                        {/* Email Field */}
+                        <div className="space-y-2">
+                          <label className="text-white text-sm font-medium">
+                            Your email address
+                          </label>
+                          <div className="relative">
+                            <input
+                              type="email"
+                              value={email}
+                              onChange={(e) => setEmail(e.target.value)}
+                              placeholder="Enter your email"
+                              className={`w-full px-4 py-3 bg-transparent border ${
+                                userProfile?.isEmailVerified
+                                  ? "border-green-500"
+                                  : "border-primary-100/40"
+                              } rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary-100`}
+                              disabled={userProfile?.isEmailVerified}
+                            />
+                            {userProfile?.isEmailVerified && (
+                              <div className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1.5 text-green-500">
+                                Verified
                               </div>
                             )}
                           </div>
+                        </div>
 
-                          {/* Secure Your Spot button */}
-                          <div className="relative w-full flex justify-center items-center py-4">
-                            <button
-                              onClick={
-                                userProfile?.isProfileCompleted
-                                  ? handleWhitelist
-                                  : handleSecureSpot
-                              }
-                              disabled={
-                                isSecuring ||
-                                (userProfile?.isProfileCompleted
-                                  ? !inviteCode
-                                  : !userProfile?.isEmailVerified ||
-                                    !twitterProfile)
-                              }
-                              className={`px-10 py-3 bg-primary-100 text-black font-bold rounded-lg transition-colors ${
-                                isSecuring ||
-                                (userProfile?.isProfileCompleted
-                                  ? !inviteCode
-                                  : !userProfile?.isEmailVerified ||
-                                    !twitterProfile)
-                                  ? "opacity-50 cursor-not-allowed"
-                                  : "hover:bg-primary-100/90"
-                              }`}
-                            >
-                              {isSecuring ? (
-                                <div className="flex items-center space-x-2">
-                                  <svg
-                                    className="animate-spin h-5 w-5"
-                                    viewBox="0 0 24 24"
-                                  >
-                                    <circle
-                                      className="opacity-25"
-                                      cx="12"
-                                      cy="12"
-                                      r="10"
-                                      stroke="currentColor"
-                                      strokeWidth="4"
-                                      fill="none"
-                                    />
-                                    <path
-                                      className="opacity-75"
-                                      fill="currentColor"
-                                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                                    />
-                                  </svg>
-                                  <span>
-                                    {userProfile?.isProfileCompleted
-                                      ? "Whitelisting..."
-                                      : "Securing..."}
-                                  </span>
-                                </div>
-                              ) : userProfile?.isProfileCompleted ? (
-                                "Get Whitelisted"
+                        {/* Verification Code Field - Only show if email not verified */}
+                        {!userProfile?.isEmailVerified && (
+                          <div className="space-y-2">
+                            <label className="text-white text-sm font-medium">
+                              Email verification code
+                            </label>
+                            <div className="relative">
+                              <input
+                                id="otp-input"
+                                type="text"
+                                value={otp}
+                                onChange={(e) => setOtp(e.target.value)}
+                                placeholder="6-digits verification code"
+                                className={`w-full px-4 py-3 bg-transparent border ${
+                                  isOtpValid === true
+                                    ? "border-green-500"
+                                    : isOtpValid === false
+                                    ? "border-red-500"
+                                    : "border-primary-100/40"
+                                } rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary-100`}
+                              />
+                              {!isOtpSent ? (
+                                <button
+                                  onClick={handleSendOtp}
+                                  disabled={isSendingOtp}
+                                  className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1.5 text-primary-100 hover:bg-primary-100/10 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                  {isSendingOtp ? (
+                                    <div className="flex items-center space-x-2">
+                                      <svg
+                                        className="animate-spin h-4 w-4"
+                                        viewBox="0 0 24 24"
+                                      >
+                                        <circle
+                                          className="opacity-25"
+                                          cx="12"
+                                          cy="12"
+                                          r="10"
+                                          stroke="currentColor"
+                                          strokeWidth="4"
+                                          fill="none"
+                                        />
+                                        <path
+                                          className="opacity-75"
+                                          fill="currentColor"
+                                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                        />
+                                      </svg>
+                                      <span>Sending...</span>
+                                    </div>
+                                  ) : (
+                                    "Send"
+                                  )}
+                                </button>
                               ) : (
-                                "Secure Your Spot"
+                                <button
+                                  onClick={handleVerifyOtp}
+                                  disabled={otp.length !== 6 || isVerifying}
+                                  className={`absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1.5 ${
+                                    otp.length === 6
+                                      ? "text-primary-100 hover:bg-primary-100/10"
+                                      : "text-gray-500 cursor-not-allowed"
+                                  } rounded transition-colors`}
+                                >
+                                  {isVerifying ? "Verifying..." : "Verify"}
+                                </button>
                               )}
-                            </button>
+                            </div>
+                            {isOtpSent && (
+                              <div className="flex justify-end">
+                                {countdown > 0 ? (
+                                  <span className="text-gray-400 text-xs">
+                                    Resend in {countdown}s
+                                  </span>
+                                ) : (
+                                  <button
+                                    onClick={handleResendOtp}
+                                    className="text-primary-100 hover:text-primary-100/80 text-xs transition-colors"
+                                  >
+                                    Resend OTP
+                                  </button>
+                                )}
+                              </div>
+                            )}
                           </div>
-                        </>
-                      ) : (
+                        )}
+
+                        {/* X Account Connection */}
+                        <div className="space-y-2">
+                          <label className="text-white text-sm font-medium">
+                            Connect X
+                          </label>
+                          <div className="relative">
+                            <input
+                              type="text"
+                              value={twitterProfile}
+                              onChange={(e) =>
+                                setTwitterProfile(e.target.value)
+                              }
+                              placeholder="Enter your Twitter/X profile URL"
+                              className={`w-full px-4 py-3 bg-transparent border ${
+                                userProfile?.isProfileCompleted
+                                  ? "border-green-500"
+                                  : "border-primary-100/40"
+                              } rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary-100`}
+                              disabled={userProfile?.isProfileCompleted}
+                            />
+                          </div>
+                        </div>
+
+                        {/* Invite Code Section - Always show if profile is completed */}
+                        <div className="space-y-2">
+                          {!showInviteCode &&
+                            !userProfile?.isProfileCompleted && (
+                              <button
+                                onClick={() =>
+                                  setShowInviteCode(!showInviteCode)
+                                }
+                                className="text-gray-400 text-sm font-medium transition-colors"
+                              >
+                                Got an exclusive invite code?
+                                <span className="text-white hover:text-primary-100/80">
+                                  {" "}
+                                  Click Here!
+                                </span>
+                              </button>
+                            )}
+                          {(showInviteCode ||
+                            userProfile?.isProfileCompleted) && (
+                            <div className="relative space-y-4">
+                              <div className="space-y-2">
+                                <label className="text-white text-sm font-medium">
+                                  Exclusive access code
+                                </label>
+                                <input
+                                  type="text"
+                                  value={inviteCode}
+                                  onChange={(e) =>
+                                    setInviteCode(e.target.value)
+                                  }
+                                  placeholder="Enter your access code"
+                                  className="w-full px-4 py-3 bg-transparent border border-primary-100/40 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary-100"
+                                />
+                              </div>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Secure Your Spot button */}
+                        <div className="relative w-full flex justify-center items-center py-4">
+                          <button
+                            onClick={
+                              userProfile?.isProfileCompleted
+                                ? handleWhitelist
+                                : handleSecureSpot
+                            }
+                            disabled={
+                              isSecuring ||
+                              (userProfile?.isProfileCompleted
+                                ? !inviteCode
+                                : !userProfile?.isEmailVerified ||
+                                  !twitterProfile)
+                            }
+                            className={`px-10 py-3 bg-primary-100 text-black font-bold rounded-lg transition-colors ${
+                              isSecuring ||
+                              (userProfile?.isProfileCompleted
+                                ? !inviteCode
+                                : !userProfile?.isEmailVerified ||
+                                  !twitterProfile)
+                                ? "opacity-50 cursor-not-allowed"
+                                : "hover:bg-primary-100/90"
+                            }`}
+                          >
+                            {isSecuring ? (
+                              <div className="flex items-center space-x-2">
+                                <svg
+                                  className="animate-spin h-5 w-5"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <circle
+                                    className="opacity-25"
+                                    cx="12"
+                                    cy="12"
+                                    r="10"
+                                    stroke="currentColor"
+                                    strokeWidth="4"
+                                    fill="none"
+                                  />
+                                  <path
+                                    className="opacity-75"
+                                    fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                  />
+                                </svg>
+                                <span>
+                                  {userProfile?.isProfileCompleted
+                                    ? "Whitelisting..."
+                                    : "Securing..."}
+                                </span>
+                              </div>
+                            ) : userProfile?.isProfileCompleted ? (
+                              "Get Whitelisted"
+                            ) : (
+                              "Secure Your Spot"
+                            )}
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="py-7 px-14 space-y-3">
                         <DexterAccessChecklist
                           steps={steps}
-                          showSuccess={true}
+                          showSuccess={showSuccess}
+                          containerRef={containerRef}
                         />
-                      )}
-                    </div>
+                      </div>
+                    )}
                   </div>
                 </DialogPanel>
               </Transition.Child>

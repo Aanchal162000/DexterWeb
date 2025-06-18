@@ -52,14 +52,14 @@ export const useTrendingTokens = () => {
 
     // Take top 10 tokens
     return combinedTokens.slice(0, 10);
-  }, [sentientVirtuals, prototypeVirtuals, isLoading, previousTokens]);
+  }, [sentientVirtuals, prototypeVirtuals, isLoading]);
 
-  // Update previous tokens when we have new data
+  // Update previous tokens when we have new data and not loading
   useEffect(() => {
     if (!isLoading && trendingTokens.length > 0) {
       setPreviousTokens(trendingTokens);
     }
-  }, [trendingTokens, isLoading]);
+  }, [isLoading, trendingTokens]);
 
   return {
     trendingTokens,

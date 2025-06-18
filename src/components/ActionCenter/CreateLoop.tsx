@@ -114,6 +114,16 @@ function CreateLoop() {
   const [selectedtokenRecommed, setSelectedtokenRecommed] =
     useState<SelectedToken>(tokenOptions[0]);
 
+  // Add effect to update balance when balances are loaded
+  useEffect(() => {
+    if (!isBalanceLoading) {
+      setSelectedtokenRecommed((prev) => ({
+        ...prev,
+        balance: balances[prev.symbol] || "0",
+      }));
+    }
+  }, [isBalanceLoading, balances]);
+
   // Debounce the amount value
   const debouncedAmount = useDebounce(amount, 500); // 500ms delay
 
@@ -125,16 +135,16 @@ function CreateLoop() {
 
       setIsLoadingRecommended(true);
       try {
-        const response = await actionService.getRecommendedVolume(
-          {
-            timelineDays: timelineDays,
-            tokenCount: Number(amount),
-          },
-          authToken
-        );
+        const response = await actionService.getRecommendedVolume({
+          timelineDays: timelineDays,
+          tokenCount: selectedTokenOptions.length,
+        });
+        console.log("Response", response);
 
-        if (response.success && response.data) {
-          setRecommendedAmount(response.data.recommendedVolume);
+        if (response.success) {
+          setRecommendedAmount(
+            response.data.calculations.baseRecommendedVolumeVIRTUAL.toFixed(4)
+          );
         }
       } catch (error) {
         console.error("Error fetching recommended volume:", error);
@@ -155,14 +165,6 @@ function CreateLoop() {
   const handleRemmTokenSelect = (token: TokenOption) => {
     setSelectedtokenRecommed(token);
     setIsRemmCoinOpen(false);
-  };
-
-  const handlePercentageClick = (percentage: number) => {
-    setSelectedPercentage(percentage);
-    const balance =
-      selectedVitualtoken?.symbol === "ETH" ? balances.ETH : balances.VIRT;
-    const calculatedAmount = (Number(balance) * percentage) / 100;
-    setAmount(calculatedAmount.toString());
   };
 
   const formatNumberWithCommas = (num: number | string) => {
@@ -236,7 +238,7 @@ function CreateLoop() {
         toastSuccess("Loop created successfully!");
         // Reset form or redirect as needed
         setAmount("");
-        setRecommendedAmount("707.55");
+        setRecommendedAmount("0.0");
         setTimelineDays(2);
       } else {
         toastError(response.message || "Failed to create loop");
@@ -257,7 +259,7 @@ function CreateLoop() {
         <h2 className="sm:text-base text-sm font-semibold text-primary-100">
           Max Volume
         </h2>
-        <button className="opacity-80 text-xs">Reset</button>
+        <button className="opacity-80 text-gray-500 text-sm">Reset</button>
       </div>
 
       {/* Max Amount Section - Keep existing */}
@@ -345,7 +347,7 @@ function CreateLoop() {
           <p className="text-gray-400 mb-1">
             Total Staked: ${formatNumberWithCommas(totalStaked)}
           </p>
-          <p className="text-primary-100 hover:text-primary-100/80 cursor-pointer">
+          <p className="text-primary-100 hover:text-primary-100/80 cursor-pointer animate-blinker">
             Stake <span className="text-white"> $59,313</span> more to maximize
             Points earnings
           </p>
@@ -464,7 +466,7 @@ function CreateLoop() {
                     );
                     return (
                       <button
-                        key={option.symbol}
+                        key={option.name}
                         onClick={() => {
                           if (isSelected) {
                             setSelectedTokenOptions((prev) =>
@@ -579,7 +581,11 @@ function CreateLoop() {
           )}
         </div>
         <div className="text-gray-400 text-xs mt-1">
-          Available: {selectedtokenRecommed.balance || "0.0"}
+          {isBalanceLoading ? (
+            <div className="inline-block animate-spin rounded-full h-2 w-2 border-b-2 border-gray-400"></div>
+          ) : (
+            `Available: ${Number(selectedtokenRecommed.balance).toFixed(6)}`
+          )}
         </div>
       </div>
 

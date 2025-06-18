@@ -135,13 +135,64 @@ interface RecommendedVolumeQuery {
   tokenCount: number;
 }
 
+interface RecommendedVolumeInput {
+  timelineDays: number;
+  tokenCount: number;
+  transactionsPerDay: number;
+  deductionPercentage: number;
+}
+
+interface RecommendedVolumeCalculations {
+  totalTransactions: number;
+  totalSequences: number;
+  tradesPerSequence: number;
+  volumeDegradationRatio: number;
+  minimumViableVolumeVIRTUAL: number;
+  baseRecommendedVolumeVIRTUAL: number;
+  bufferMultiplier: number;
+}
+
+interface RecommendedVolumeRecommendations {
+  recommendedVolumeVIRTUAL: number;
+  recommendedVolumeWei: string;
+  recommendedVolumeUSD: number;
+  avgVolumePerTransaction: number;
+}
+
+interface GasBreakdown {
+  gasPerSwap: number;
+  gasPerApproval: number;
+  averageGasPriceGwei: number;
+  totalGasUnits: number;
+  gasCostPerTransaction: number;
+}
+
+interface RecommendedVolumeCosts {
+  estimatedGasCostETH: number;
+  estimatedGasCostUSD: number;
+  totalCostUSD: number;
+  gasBreakdown: GasBreakdown;
+}
+
+interface RecommendedVolumePriceInfo {
+  virtualTokenPriceUSD: number;
+  calculatedAt: string;
+}
+
+interface RecommendedVolumeData {
+  input: RecommendedVolumeInput;
+  calculations: RecommendedVolumeCalculations;
+  recommendations: RecommendedVolumeRecommendations;
+  costs: RecommendedVolumeCosts;
+  priceInfo: RecommendedVolumePriceInfo;
+  warnings: string[];
+  tips: string[];
+}
+
 interface RecommendedVolumeResponse {
   success: boolean;
   message: string;
-  data: {
-    recommendedVolume: string;
-    maxVolume: string;
-  };
+  data: RecommendedVolumeData;
 }
 
 class ActionService {
@@ -344,21 +395,19 @@ class ActionService {
   }
 
   async getRecommendedVolume(
-    query: RecommendedVolumeQuery,
-    token: string
+    query: RecommendedVolumeQuery
   ): Promise<RecommendedVolumeResponse> {
     try {
-      const { data } = await axios.get(
+      const { data }: any = await axios.get(
         `${baseURL}/api/volume-loop-calculator/recommended-volume`,
         {
           params: query,
-          headers: { authorization: `Bearer ${token}` },
         }
       );
       return {
         success: true,
         message: "Recommended volume retrieved successfully",
-        data,
+        data: data.data,
       };
     } catch (error: any) {
       return {
@@ -366,8 +415,45 @@ class ActionService {
         message:
           error.response?.data?.message || "Failed to get recommended volume",
         data: {
-          recommendedVolume: "0",
-          maxVolume: "0",
+          input: {
+            timelineDays: 0,
+            tokenCount: 0,
+            transactionsPerDay: 0,
+            deductionPercentage: 0,
+          },
+          calculations: {
+            totalTransactions: 0,
+            totalSequences: 0,
+            tradesPerSequence: 0,
+            volumeDegradationRatio: 0,
+            minimumViableVolumeVIRTUAL: 0,
+            baseRecommendedVolumeVIRTUAL: 0,
+            bufferMultiplier: 0,
+          },
+          recommendations: {
+            recommendedVolumeVIRTUAL: 0,
+            recommendedVolumeWei: "0",
+            recommendedVolumeUSD: 0,
+            avgVolumePerTransaction: 0,
+          },
+          costs: {
+            estimatedGasCostETH: 0,
+            estimatedGasCostUSD: 0,
+            totalCostUSD: 0,
+            gasBreakdown: {
+              gasPerSwap: 0,
+              gasPerApproval: 0,
+              averageGasPriceGwei: 0,
+              totalGasUnits: 0,
+              gasCostPerTransaction: 0,
+            },
+          },
+          priceInfo: {
+            virtualTokenPriceUSD: 0,
+            calculatedAt: "",
+          },
+          warnings: [],
+          tips: [],
         },
       };
     }

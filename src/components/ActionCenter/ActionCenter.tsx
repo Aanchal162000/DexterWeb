@@ -32,15 +32,15 @@ const ActionCenter = () => {
             <Adborad />
           </div>
         </div>
-        <div className="relative flex flex-row gap-6 w-full h-[600px] border border-primary-100/40 backdrop-blur-sm bg-[#15181B]/80 rounded-2xl">
+        <div className="relative flex flex-row gap-6 w-full flex-1 h-[600px] border border-primary-100/40 backdrop-blur-sm bg-[#15181B]/80 rounded-2xl overflow-hidden">
           <AssetOverview />
         </div>
       </div>
-      <div className="relative flex flex-col gap-6 w-[30%] flex-1">
+      <div className="relative flex flex-col gap-6 w-[30%] h-screen">
         <div className="relative min-h-[calc(440px+42px+21px)] w-full border border-primary-100/40 backdrop-blur-sm bg-[#15181B]/80 rounded-2xl">
           <CreateLoop />
         </div>
-        <div className="relative w-full min-h-[calc(100vh-440px-42px-21px-24px)] border border-primary-100/40 backdrop-blur-sm bg-[#15181B]/80 rounded-2xl">
+        <div className="relative w-full flex-1 border border-primary-100/40 backdrop-blur-sm bg-[#15181B]/80 rounded-2xl overflow-hidden">
           <ActivityLogs />
         </div>
       </div>

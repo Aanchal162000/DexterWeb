@@ -59,7 +59,22 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
       description: "Stay updated with our latest news",
       status: "active",
       buttonText: "Follow",
-      buttonAction: () => handleStepAction(2),
+      buttonAction: () => {
+        window.open("https://x.com/DextersLabAI", "_blank");
+        setSteps((prevSteps) => {
+          const newSteps = [...prevSteps];
+          newSteps[1] = {
+            ...newSteps[1],
+            buttonText: "loading",
+            status: "active",
+          };
+          return newSteps;
+        });
+        // Simulate tracking for 15 seconds
+        setTimeout(() => {
+          handleStepAction(2);
+        }, 15000);
+      },
     },
     {
       id: 3,
@@ -67,7 +82,22 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
       description: "Help us grow our community",
       status: "inactive",
       buttonText: "Share",
-      buttonAction: () => handleStepAction(3),
+      buttonAction: () => {
+        window.open("https://x.com/DextersLabAI", "_blank");
+        setSteps((prevSteps) => {
+          const newSteps = [...prevSteps];
+          newSteps[2] = {
+            ...newSteps[2],
+            buttonText: "loading",
+            status: "active",
+          };
+          return newSteps;
+        });
+        // Simulate tracking for 15 seconds
+        setTimeout(() => {
+          handleStepAction(3);
+        }, 15000);
+      },
     },
     {
       id: 4,

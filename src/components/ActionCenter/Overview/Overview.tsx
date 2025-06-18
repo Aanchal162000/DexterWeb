@@ -3,19 +3,33 @@ import { IoIosArrowDown } from "react-icons/io";
 import { OverviewData, KPIData, ChartDataPoint } from "./interfaces";
 import OverviewChart from "./OverviewChart";
 
-const KPICard: React.FC<KPIData> = ({
+const KPICard: React.FC<KPIData & { timeRange: string }> = ({
   title,
   todayValue,
   todayChange,
   allTimeValue,
   isCurrency = false,
+  timeRange,
 }) => {
+  const getTimeRangeLabel = () => {
+    switch (timeRange) {
+      case "Daily":
+        return "Today's";
+      case "Weekly":
+        return "Week's";
+      case "Monthly":
+        return "Month's";
+      default:
+        return "Today's";
+    }
+  };
+
   return (
-    <div className="backdrop-blur-sm rounded-md p-2 border border-primary-100/40">
+    <div className="rounded-xl p-2 border border-primary-100/40">
       <h3 className="text-primary-100 text-sm mb-1">{title}</h3>
       <div className="flex items-baseline gap-2">
         <span className="text-white text-lg font-medium flex items-center gap-1">
-          <span className="text-[#B0BEC5] text-sm">Today's:</span>
+          <span className="text-[#B0BEC5] text-sm">{getTimeRangeLabel()}:</span>
           {isCurrency ? "$" : ""}
           {todayValue.toLocaleString()}
         </span>
@@ -131,7 +145,7 @@ const Overview: React.FC<any> = () => {
           <select
             value={timeRange}
             onChange={(e) => setTimeRange(e.target.value)}
-            className="bg-[#15181B]/80 backdrop-blur-sm text-white border border-primary-100/40 rounded-lg px-3 py-1.5 pr-8 appearance-none focus:outline-none focus:ring-2 focus:ring-[#26fcfc]/50 font-light text-sm"
+            className="bg-[#15181B]/80 backdrop-blur-sm text-white border border-primary-100/40 rounded-xl px-3 py-1.5 pr-8 appearance-none focus:outline-none focus:ring-2 focus:ring-[#26fcfc]/50 font-light text-sm"
           >
             <option value="Daily">Daily</option>
             <option value="Weekly">Weekly</option>
@@ -143,8 +157,12 @@ const Overview: React.FC<any> = () => {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 gap-4 mb-6 mx-6">
-        <KPICard {...overviewData.volumeData} isCurrency={true} />
-        <KPICard {...overviewData.virgenPointsData} />
+        <KPICard
+          {...overviewData.volumeData}
+          isCurrency={true}
+          timeRange={timeRange}
+        />
+        <KPICard {...overviewData.virgenPointsData} timeRange={timeRange} />
       </div>
 
       {/* Chart Section */}

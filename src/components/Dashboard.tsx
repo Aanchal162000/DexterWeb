@@ -10,18 +10,14 @@ import { headerRoutes } from "@/constants/config";
 import Snipe from "./Snipe/Snipe";
 import HelpCenter from "./HelpCenter/HelpCenter";
 import ActionCenter from "./ActionCenter/ActionCenter";
-import { ActionProvider } from "@/context/ActionContext";
+
 export type IRouterKey = (typeof headerRoutes)[number]["id"];
 
 export const Router: { [key: IRouterKey]: ReactNode } = {
   Wallet: <Swap />,
   Trenches: <Snipe />,
   Support: <HelpCenter />,
-  "Action Center": (
-    <ActionProvider>
-      <ActionCenter />
-    </ActionProvider>
-  ),
+  Laboratory: <ActionCenter />,
 };
 
 const Dashboard = () => {

@@ -59,7 +59,7 @@ const activities = [
 
 function ActivityLogs() {
   return (
-    <div className="w-full h-full relative  flex flex-col bg-gradient-to-br from-primary-100/50 via-20% via-transparent to-transparent rounded-2xl overflow-hidden shadow-2xl">
+    <div className="w-full h-full relative  flex flex-col bg-gradient-to-br from-primary-100/50 via-20% via-transparent to-transparent rounded-xl overflow-hidden shadow-2xl">
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-4 border-b border-teal-300/50">
         <h2 className="sm:text-base text-sm font-semibold text-primary-100">

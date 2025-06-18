@@ -263,11 +263,11 @@ function CreateLoop() {
   };
 
   return (
-    <div className="w-full h-full flex flex-col bg-gradient-to-br from-primary-100/40 via-20% via-transparent to-transparent rounded-2xl overflow-hidden shadow-2xl">
+    <div className="w-full h-full flex flex-col bg-gradient-to-br from-primary-100/40 via-20% via-transparent to-transparent rounded-xl overflow-hidden shadow-2xl">
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-4 border-b border-teal-300/50">
         <h2 className="sm:text-base text-sm font-semibold text-primary-100">
-          Max Volume
+          Volume Loop
         </h2>
         <button className="opacity-80 text-gray-500 text-sm">Reset</button>
       </div>
@@ -281,7 +281,7 @@ function CreateLoop() {
           Max Volume
         </label>
         <div className="relative items-center justify-center">
-          <div className="relative w-full border border-primary-100/70 rounded flex flex-col items-start justify-center px-4">
+          <div className="relative w-full border border-primary-100/70 rounded-xl flex flex-col items-start justify-center px-4">
             <div className="relative w-full flex flex-row items-center justify-between">
               <input
                 id="amount"
@@ -317,7 +317,7 @@ function CreateLoop() {
           {isFromCoinOpen && (
             <div
               ref={coinSelectRef}
-              className="absolute z-[100] right-0  mt-2 w-48 overflow-auto border border-primary-100/20 backdrop-blur-sm bg-black/40 drop-shadow-lg rounded shadow-lg max-h-[200px]"
+              className="absolute z-[100] right-0  mt-2 w-48 overflow-auto border border-primary-100/20 backdrop-blur-sm bg-black/40 drop-shadow-lg rounded-xl shadow-lg max-h-[200px]"
               style={{ top: "100%" }}
             >
               <div className="py-1">
@@ -373,7 +373,7 @@ function CreateLoop() {
             Timeline (Days)
           </label>
           <div className="relative items-center justify-center">
-            <div className="relative w-full border border-primary-100/70 rounded flex flex-col items-start justify-center px-4">
+            <div className="relative w-full border border-primary-100/70 rounded-xl flex flex-col items-start justify-center px-4">
               <div className="relative w-full flex flex-row items-center justify-between">
                 <input
                   id="timeline"
@@ -417,7 +417,7 @@ function CreateLoop() {
           <div className="relative">
             <button
               onClick={() => setIsTokenDropdownOpen(!isTokenDropdownOpen)}
-              className="w-full border border-primary-100/70 rounded px-4 py-3 bg-transparent text-white flex items-center justify-between"
+              className="w-full border border-primary-100/70 rounded-xl px-4 py-3 bg-transparent text-white flex items-center justify-between"
             >
               <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide flex-nowrap w-full pr-12">
                 {selectedTokenOptions.length > 0 ? (
@@ -511,6 +511,16 @@ function CreateLoop() {
               </div>
             )}
           </div>
+          {/* Volume per Day Section */}
+          <div className="text-gray-400 text-xs mt-2">
+            Volume / Day:{" "}
+            <span>
+              {amount && timelineDays
+                ? (Number(amount) / timelineDays).toFixed(6)
+                : "0.000000"}{" "}
+              {selectedVitualtoken?.symbol || "VIRT"}
+            </span>
+          </div>
         </div>
       </div>
 
@@ -520,7 +530,7 @@ function CreateLoop() {
           Amount Recommendation
         </label>
         <div className="relative items-center justify-center">
-          <div className="relative w-full border border-primary-100/70 rounded flex flex-col items-start justify-center px-4">
+          <div className="relative w-full border border-primary-100/70 rounded-xl flex flex-col items-start justify-center px-4">
             <div className="relative w-full flex flex-row items-center justify-between">
               <input
                 value={
@@ -610,7 +620,7 @@ function CreateLoop() {
             selectedTokenOptions.length === 0 ||
             parseFloat(amount) > parseFloat(selectedVitualtoken.balance)
           }
-          className="w-full bg-primary-100 hover:bg-primary-100/80 disabled:bg-primary-100/50 text-black font-semibold py-3 px-4 rounded-lg transition-colors disabled:cursor-not-allowed"
+          className="w-full bg-primary-100 hover:bg-primary-100/80 disabled:bg-primary-100/50 text-black font-semibold py-3 px-4 rounded-xl transition-colors disabled:cursor-not-allowed"
         >
           {isLoading || isProcessing
             ? "Processing..."

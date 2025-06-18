@@ -102,7 +102,7 @@ export default function LoginProvider({ children }: { children: ReactNode }) {
   ]);
   const [networkData, setNetworkData] = useState<INetworkData | null>(null);
   const [crossPower, setCrossPower] = useState<number>(0.0);
-  const [activeTab, setActiveTab] = useState<string>(headerRoutes[2]?.name);
+  const [activeTab, setActiveTab] = useState<string>(headerRoutes[1]?.name);
   const [trigger, setTrigger] = useState<number>(0);
   const isFirstLoad = useIsFirstEffect();
   const [isWhitelisted, setIsWhitelisted] = useState<boolean>(false);

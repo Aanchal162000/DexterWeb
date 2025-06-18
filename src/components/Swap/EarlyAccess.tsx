@@ -149,33 +149,6 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
     });
   };
 
-  // Initialize state when component mounts or userProfile changes
-  useEffect(() => {
-    if (userProfile) {
-      if (userProfile.isEmailVerified) {
-        setEmail(userProfile.email);
-        setIsOtpValid(true);
-      }
-      if (userProfile.isProfileCompleted) {
-        setTwitterProfile(userProfile.twitterProfile);
-        setShowInviteCode(true);
-      }
-    }
-  }, [userProfile]);
-
-  // Handle countdown timer
-  useEffect(() => {
-    let timer: NodeJS.Timeout;
-    if (countdown > 0) {
-      timer = setInterval(() => {
-        setCountdown((prev) => prev - 1);
-      }, 1000);
-    }
-    return () => {
-      if (timer) clearInterval(timer);
-    };
-  }, [countdown]);
-
   // Initialize dialog state when isOpen prop changes
   useEffect(() => {
     if (isOpen) {
@@ -208,8 +181,36 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
       setIsSecuring(false);
       setInviteCode("");
       setShowChecklist(false);
+      setShowSuccess(false);
     }
   }, [isDialogOpen]);
+
+  // Initialize state when component mounts or userProfile changes
+  useEffect(() => {
+    if (userProfile) {
+      if (userProfile.isEmailVerified) {
+        setEmail(userProfile.email);
+        setIsOtpValid(true);
+      }
+      if (userProfile.isProfileCompleted) {
+        setTwitterProfile(userProfile.twitterProfile);
+        setShowInviteCode(true);
+      }
+    }
+  }, [userProfile]);
+
+  // Handle countdown timer
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (countdown > 0) {
+      timer = setInterval(() => {
+        setCountdown((prev) => prev - 1);
+      }, 1000);
+    }
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [countdown]);
 
   const handleSendOtp = useCallback(async () => {
     if (!email) {
@@ -526,7 +527,9 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
                                 <button
                                   onClick={handleSendOtp}
                                   disabled={isSendingOtp}
-                                  className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1.5 text-primary-100 hover:bg-primary-100/10 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                  className={`absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1.5 ${
+                                    !isSendingOtp && "animate-blinker"
+                                  } text-primary-100 hover:bg-primary-100/10 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed`}
                                 >
                                   {isSendingOtp ? (
                                     <div className="flex items-center space-x-2">
@@ -563,7 +566,11 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
                                     otp.length === 6
                                       ? "text-primary-100 hover:bg-primary-100/10"
                                       : "text-gray-500 cursor-not-allowed"
-                                  } rounded transition-colors`}
+                                  } ${
+                                    otp.length === 6 &&
+                                    !isVerifying &&
+                                    "animate-blinker"
+                                  }  rounded transition-colors`}
                                 >
                                   {isVerifying ? "Verifying..." : "Verify"}
                                 </button>

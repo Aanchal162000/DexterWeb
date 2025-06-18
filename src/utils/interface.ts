@@ -249,7 +249,7 @@ export type TRoute =
   | "Wallet"
   | "Alerts"
   | "Support"
-  | "Action Center";
+  | "Laboratory";
 
 export interface IRouter {
   id: string;

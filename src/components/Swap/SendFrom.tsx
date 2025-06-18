@@ -111,7 +111,7 @@ function SendFrom({
   return (
     <>
       <div
-        className="border border-[#818284] rounded-lg py-3 px-4 mb-2 flex flex-col items-center gap-3"
+        className="border border-primary-100 rounded-lg py-3 px-4 mb-2 flex flex-col items-center gap-3"
         onClick={() => inputRef?.current?.focus()}
       >
         <div className="flex w-full items-center  text-prime-zinc-50  justify-between">

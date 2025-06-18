@@ -89,10 +89,10 @@ function Adboard() {
 
                   {/* Action Buttons */}
                   <div className="flex gap-4 mt-6">
-                    <button className="bg-primary-100 text-black font-semibold px-6 py-2 rounded-sm transition-all duration-200 transform hover:scale-105 shadow-lg text-sm">
+                    <button className="bg-primary-100 text-black font-semibold px-6 py-2 rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg text-sm">
                       {slide.primaryButton}
                     </button>
-                    <button className="border-2 border-primary-100 text-primary-100 font-semibold px-6 py-2 rounded-sm transition-all duration-200 text-sm hover:scale-105">
+                    <button className="border-2 border-primary-100 text-primary-100 font-semibold px-6 py-2 rounded-xl transition-all duration-200 text-sm hover:scale-105">
                       {slide.secondaryButton}
                     </button>
                   </div>

@@ -7,7 +7,7 @@ const TrendingTokens: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="w-full h-12 backdrop-blur-sm bg-[#15181B]/60 rounded-2xl border border-primary-100/40 px-4 py-2">
+      <div className="w-full h-12 backdrop-blur-sm bg-[#15181B]/60 rounded-xl border border-primary-100/40 px-4 py-2">
         <div className="flex items-center h-full">
           <h2 className="text-primary-100 sm:text-base text-sm font-semibold whitespace-nowrap mr-6 py-4">
             Trending Tokens
@@ -34,9 +34,9 @@ const TrendingTokens: React.FC = () => {
   }
 
   return (
-    <div className="w-full h-12 backdrop-blur-sm bg-[#15181B]/60 rounded-2xl border border-primary-100/40 px-4 py-2">
-      <div className="absolute top-0 left-0 w-[100px] h-12 bg-gradient-to-r from-[#26fcfc]/40 via-[#26fcfc]/20 to-transparent pointer-events-none z-0 rounded-2xl"></div>
-      <div className="absolute top-0 right-0 w-[100px] h-12 bg-gradient-to-l from-black/40 via-black/60 to-transparent pointer-events-none z-20 rounded-2xl"></div>
+    <div className="w-full h-12 backdrop-blur-sm bg-[#15181B]/60 rounded-xl border border-primary-100/40 px-4 py-2">
+      <div className="absolute top-0 left-0 w-[100px] h-12 bg-gradient-to-r from-[#26fcfc]/40 via-[#26fcfc]/20 to-transparent pointer-events-none z-0 rounded-xl"></div>
+      <div className="absolute top-0 right-0 w-[100px] h-12 bg-gradient-to-l from-black/40 via-black/60 to-transparent pointer-events-none z-20 rounded-xl"></div>
       <div className="flex items-center h-full">
         <h2 className="text-primary-100 sm:text-base text-sm font-semibold whitespace-nowrap mr-6 py-4">
           Trending Tokens

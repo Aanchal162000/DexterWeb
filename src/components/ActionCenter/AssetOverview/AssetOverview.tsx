@@ -9,10 +9,10 @@ import { useLoginContext } from "../../../context/LoginContext";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import VolumeLoop from "./VolumeLoop";
 
-type TOverviewTabs = "volumeLoop" | "liquidAssets" | "stakedAssets";
+type TOverviewTabs = "volumeLoops" | "liquidAssets" | "stakedAssets";
 
 const Overview = () => {
-  const [selectedTab, setSelectedTab] = useState<TOverviewTabs>("volumeLoop");
+  const [selectedTab, setSelectedTab] = useState<TOverviewTabs>("volumeLoops");
   const { address } = useLoginContext();
   const [isAmountMasked, setIsAmountMasked] = useLocalStorage<boolean>(
     "arbt-isMasked",
@@ -32,13 +32,13 @@ const Overview = () => {
             <button
               className={clsx(
                 "text-sm sm:text-base flex items-center gap-2 font-semibold font-primary sm:w-fit w-full justify-center underline-offset-[0.625rem]",
-                selectedTab === "volumeLoop"
+                selectedTab === "volumeLoops"
                   ? "text-primary-100 underline"
                   : "text-prime-zinc-100"
               )}
-              onClick={() => setSelectedTab("volumeLoop")}
+              onClick={() => setSelectedTab("volumeLoops")}
             >
-              Volume Loop
+              Active Loops
             </button>
             <div className="h-10 w-px bg-prime-background-100 sm:hidden" />
             <button
@@ -75,7 +75,7 @@ const Overview = () => {
                         </button>
                     </div> */}
         </div>
-        {selectedTab === "volumeLoop" ? (
+        {selectedTab === "volumeLoops" ? (
           <VolumeLoop
             setBalance={setBalance}
             isAmountMasked={isAmountMasked!}

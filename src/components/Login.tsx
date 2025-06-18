@@ -50,10 +50,18 @@ const Login = () => {
     try {
       switch (action) {
         case "Enter Lab":
-          await connectWallet("Metamask");
-          // Add a small delay to allow state to update
-          await new Promise((resolve) => setTimeout(resolve, 1000));
-
+          try {
+            await connectWallet("Metamask");
+            // Add a small delay to allow state to update
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+          } catch (error: any) {
+            // Handle MetaMask rejection gracefully
+            if (error?.code === 4001) {
+              console.log("User rejected the request");
+              return;
+            }
+            throw error;
+          }
           break;
       }
     } catch (error) {

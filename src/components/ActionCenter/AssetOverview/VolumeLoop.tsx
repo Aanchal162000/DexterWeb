@@ -112,7 +112,7 @@ const VolumeLoop = ({
       <div className="flex gap-2 size-full flex-col items-center justify-center border-t-2 border-prime-zinc-100/50">
         <div className="size-20 text-prime-zinc-100 animate-spin rounded-full border-4 border-transparent border-t-primary-100" />
         <span className="font-bold text-lg text-prime-zinc-100">
-          Loading volume loops...
+          Loading active loops...
         </span>
       </div>
     );
@@ -122,7 +122,7 @@ const VolumeLoop = ({
     return (
       <div className="flex gap-2 size-full flex-col items-center justify-center border-t-2 border-prime-zinc-100/50">
         <span className="font-bold text-lg text-prime-zinc-100">
-          No Volume Loops found
+          No Active Loops found
         </span>
       </div>
     );

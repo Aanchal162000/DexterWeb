@@ -126,7 +126,7 @@ function Swidget() {
   };
 
   return (
-    <div className="bg-[#15181B]/80 backdrop-blur-sm text-white border border-primary-100 rounded-xl relative h-full w-full shadow-md overflow-y-hidden">
+    <div className="bg-[#15181B]/80 backdrop-blur-sm text-white border border-primary-100/40 rounded-xl relative h-full w-full shadow-md overflow-y-hidden">
       <SwapHeader selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
       {openFiatModal && !isFinalStep && (
         <DialogContainer setClose={() => {}} title="Transak Payment">

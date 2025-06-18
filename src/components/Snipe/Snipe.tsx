@@ -155,7 +155,7 @@ const Snipe = () => {
       {(isMd || bottomTab === "list") && (
         <div className="w-full h-full flex overflow-hidden">
           {/* OverView section  */}
-          <div className="relative h-full w-full backdrop-blur-sm bg-[#15181B]/80 border border-primary-100 rounded-xl text-white flex flex-col ">
+          <div className="relative h-full w-full backdrop-blur-sm bg-[#15181B]/80 border border-primary-100/40 rounded-xl text-white flex flex-col ">
             <div className="flex items-center justify-between pt-4 pb-4 border-b border-primary-100 px-8">
               <div className="gap-4 sm:gap-6 flex [&>button]:py-2 sm:w-fit w-full">
                 <button
@@ -267,7 +267,7 @@ const Snipe = () => {
       {/* Swap/Create Section */}
       {(isMd || bottomTab === "dex") && (
         <div className="sm:!w-[clamp(38%,30rem,43%)] min-w-[23.75rem] w-full flex justify-center items-center h-full">
-          <div className="bg-[#15181B]/80 backdrop-blur-sm text-white border border-primary-100 rounded-xl relative h-full w-full shadow-md overflow-y-hidden">
+          <div className="bg-[#15181B]/80 backdrop-blur-sm text-white border border-primary-100/40 rounded-xl relative h-full w-full shadow-md overflow-y-hidden">
             {/* Tab Selection */}
             <div className="gap-x-5 flex flex-row items-center justify-around lg:justify-start border-[#818284] w-full px-4 lg:px-8 py-4 lg:py-6">
               <button

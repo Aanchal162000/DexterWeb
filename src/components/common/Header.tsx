@@ -47,7 +47,7 @@ interface Notification {
 }
 
 const Header = () => {
-  const tabs = ["Action Center", "Trenches", "Wallet", "Support"];
+  const tabs = ["Laboratory", "Trenches", "Wallet", "Support"];
   // "Alerts", "DCA"
   const { activeTab, address, setActiveTab, networkData, setAddress } =
     useLoginContext();
@@ -78,6 +78,7 @@ const Header = () => {
   };
 
   const handleSettingsClick = () => {
+    setActiveTab(headerRoutes[2]?.name);
     setShowSettings(true);
   };
 

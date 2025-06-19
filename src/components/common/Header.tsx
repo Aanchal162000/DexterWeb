@@ -27,11 +27,33 @@ import NotificationDetails from "./NotificationDetails";
 import { useActionContext } from "@/context/ActionContext";
 import { INotification } from "@/utils/interface";
 
+// Notification type key map
+const NOTIFICATION_TYPE_LABELS: Record<string, string> = {
+  event_captured: "Token Launch",
+  transaction_sent: "Transaction Sent",
+  transaction_success: "Transaction Success",
+  transaction_critical_error: "Transaction Failed",
+  genesis_window_alert: "Genesis Launch Alert",
+  fundraising_alert: "Fundraising Alert",
+  token_launch_alert: "New Token Launch",
+  price_alert: "Price Alert",
+  bonding_phase_alert: "Bonding Phase Update",
+  volume_loop_alert: "Volume Loop Update",
+  broadcast: "Announcement",
+  custom: "Notification",
+};
+
 const Header = () => {
   const tabs = ["Laboratory", "Trenches", "Wallet", "Support"];
   // "Alerts", "DCA"
-  const { activeTab, address, setActiveTab, networkData, setAddress } =
-    useLoginContext();
+  const {
+    activeTab,
+    address,
+    setActiveTab,
+    networkData,
+    setAddress,
+    setIsFromHeader,
+  } = useLoginContext();
   const { setShowSettings } = useSettings();
   const network = networkCards.filter(
     (network) => network?.id == networkData?.chainId!
@@ -61,6 +83,7 @@ const Header = () => {
   };
 
   const handleSettingsClick = () => {
+    setIsFromHeader(true);
     setActiveTab(headerRoutes[2]?.name);
     setShowSettings(true);
   };
@@ -158,39 +181,44 @@ const Header = () => {
                           </button>
                         </div>
                       </div>
-                      {unreadNotifications.length === 0 ? (
-                        <div className="px-4 py-5 text-sm text-white/70 text-center">
-                          No unread notifications
-                        </div>
-                      ) : (
-                        unreadNotifications.map((notification) => (
-                          <MenuItem key={notification.id}>
-                            <button
-                              onClick={() =>
-                                handleNotificationClick(notification)
-                              }
-                              className={`flex w-full items-start justify-start px-4 py-5 text-sm text-white border-t border-primary-100/30 bg-green-500/30`}
-                            >
-                              <img
-                                src={"/alert/bell-off.png"}
-                                alt="notifications"
-                                className="mr-3 h-7 w-7 border border-green-100 rounded-full translate-y-2"
-                              />
-                              <div className="flex flex-col items-start justify-start text-left">
-                                <p className="text-white text-sm">
-                                  {notification.message}
-                                </p>
-                                <p className="opacity-70 text-xs">
-                                  {new Date(
-                                    notification.timestamp
-                                  ).toLocaleTimeString()}{" "}
-                                  • {notification.type}
-                                </p>
-                              </div>
-                            </button>
-                          </MenuItem>
-                        ))
-                      )}
+                      <div className="max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-primary-100/40 scrollbar-track-transparent">
+                        {unreadNotifications.length === 0 ? (
+                          <div className="px-4 py-5 text-sm text-white/70 text-center">
+                            No unread notifications
+                          </div>
+                        ) : (
+                          unreadNotifications.map((notification) => (
+                            <MenuItem key={notification.id}>
+                              <button
+                                onClick={() =>
+                                  handleNotificationClick(notification)
+                                }
+                                className={`flex w-full items-start justify-start px-4 py-5 text-sm text-white border-t border-primary-100/30 bg-green-500/30`}
+                              >
+                                <img
+                                  src={"/alert/bell-off.png"}
+                                  alt="notifications"
+                                  className="mr-3 h-7 w-7 border border-green-100 rounded-full translate-y-2"
+                                />
+                                <div className="flex flex-col items-start justify-start text-left">
+                                  <p className="text-white text-sm">
+                                    {notification.message}
+                                  </p>
+                                  <p className="opacity-70 text-xs">
+                                    {new Date(
+                                      notification.timestamp
+                                    ).toLocaleTimeString()}{" "}
+                                    •{" "}
+                                    {NOTIFICATION_TYPE_LABELS[
+                                      notification.type
+                                    ] || notification.type}
+                                  </p>
+                                </div>
+                              </button>
+                            </MenuItem>
+                          ))
+                        )}
+                      </div>
                       {unreadNotifications.length > 0 && (
                         <div className="flex w-full items-center justify-between px-4 py-3 border-t border-primary-100/30">
                           <button

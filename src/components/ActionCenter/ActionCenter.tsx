@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import TrendingTokens from "./TrendingTokens";
 import Overview from "./Overview/Overview";
@@ -9,11 +9,16 @@ import ActivityLogs from "./ActivityLogs";
 import CreateLoop from "./CreateLoop";
 import AuthModal from "./AuthModal";
 import { useActionContext } from "@/context/ActionContext";
+import { useLoginContext } from "@/context/LoginContext";
 
 const ActionCenter = () => {
   const isMd = useMediaQuery({ minWidth: 768 });
   const [bottomTab, setBottomTab] = useState<"list" | "dex">("list");
   const { authToken } = useActionContext();
+  const { setIsFromHeader } = useLoginContext();
+  useEffect(() => {
+    setIsFromHeader(false);
+  });
 
   return (
     <div

@@ -25,7 +25,7 @@ import { useMediaQuery } from "react-responsive";
 const Snipe = () => {
   const [selectedTab, setSelectedTab] = useState<"swap" | "create">("swap");
   const { virtuals, loading, error, fetchVirtuals } = useSentientVirtuals();
-  const { address } = useLoginContext();
+  const { address, isFromHeader, setIsFromHeader } = useLoginContext();
   const isMd = useMediaQuery({ minWidth: 768 });
 
   const {
@@ -59,8 +59,17 @@ const Snipe = () => {
     { id: "holders", name: "Holders" },
   ];
   useEffect(() => {
-    setShowSettings(false);
+    if (!isFromHeader) {
+      setShowSettings(false);
+    } else {
+      setSelectedSnipeTab(null);
+    }
   }, []);
+  useEffect(() => {
+    if (isFromHeader) {
+      setSelectedSnipeTab(null);
+    }
+  }, [isFromHeader]);
 
   const handleFilterSelect = (option: any, isDescending: boolean) => {
     setSelectedFilter(option);
@@ -166,6 +175,7 @@ const Snipe = () => {
                       : "text-prime-zinc-100"
                   )}
                   onClick={() => {
+                    setIsFromHeader(false);
                     setSelectedSnipeTab("aiAgents");
                     setShowSettings(false);
                   }}
@@ -181,7 +191,9 @@ const Snipe = () => {
                       : "text-prime-zinc-100"
                   )}
                   onClick={() => {
+                    setIsFromHeader(false);
                     setSelectedSnipeTab("transaction");
+
                     setShowSettings(false);
                   }}
                 >
@@ -211,8 +223,8 @@ const Snipe = () => {
                 />
                 <button
                   onClick={() => {
-                    setShowSettings(true);
                     setSelectedSnipeTab(null);
+                    setShowSettings(true);
                   }}
                 >
                   <Image

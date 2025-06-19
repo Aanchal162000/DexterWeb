@@ -398,7 +398,25 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
     const response = await axios.get(`${baseUrl}/api/auth/twitter/auth/link`, {
       headers: { authorization: `Bearer ${authToken}`, "ngrok-skip-browser-warning": "true" },
     });
-    window.open(response.data?.data?.url, "_self");
+    // window.open(response.data?.data?.url, "_self");
+    const popup = window.open(
+      response.data?.data?.url,
+      'twitter-auth',
+      'width=600,height=700,scrollbars=yes,resizable=yes'
+    );
+
+    const onMessage = (event: MessageEvent) => {
+      if (event.data.type === 'TWITTER_AUTH_SUCCESS') {
+        // Update UI immediately - no page refresh needed!
+        console.log("event.data.data.user", event.data);
+        // updateProfileUI(event.data.data.user);
+        // showSuccess(`Twitter linked: @${event.data.data.twitterUsername}`);
+        window.removeEventListener('message', onMessage);
+        popup?.close();
+      }
+    };
+
+    window.addEventListener('message', onMessage);
 };
 
   return (
@@ -595,7 +613,8 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
                         <label className="text-white text-sm font-medium">
                           Connect X
                         </label>
-                        {/* <div className="relative">
+                        {userProfile?.isProfileCompleted ?
+                        <div className="relative">
                           <input
                             type="text"
                             value={twitterProfile}
@@ -606,12 +625,12 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
                                 ? "border-green-500"
                                 : "border-primary-100/40"
                             } rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary-100`}
-                            disabled={userProfile?.isProfileCompleted}
+                            disabled={true}
                           />
-                        </div> */}
+                        </div> :
                         <button onClick={getTwitterAuthAPI} className="text-primary-100 hover:text-primary-100/80 text-base transition-colors py-3 px-5 w-full bg-primary-100/10 rounded-lg">
                           Click to connect X
-                        </button>
+                        </button>}
                       </div>
 
                       {/* Invite Code Section - Always show if profile is completed */}

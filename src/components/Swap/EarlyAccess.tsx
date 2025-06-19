@@ -9,6 +9,7 @@ import { useActionContext } from "@/context/ActionContext";
 import DexterAccessChecklist from "./DexterAccessChecklist";
 import { ShowerHead } from "lucide-react";
 import axios from "axios";
+import { RiTwitterXLine } from "react-icons/ri";
 
 const accessService = AccessService.getInstance();
 
@@ -405,13 +406,21 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
       'width=600,height=700,scrollbars=yes,resizable=yes'
     );
 
+    const checkClosed = setInterval(() => {
+      if (popup?.closed) {
+        clearInterval(checkClosed);
+        toastError("Twitter authentication cancelled!!");
+      }
+    }, 1000);
+
     const onMessage = (event: MessageEvent) => {
       if (event.data.type === 'TWITTER_AUTH_SUCCESS') {
         // Update UI immediately - no page refresh needed!
-        console.log("event.data.data.user", event.data);
-        // updateProfileUI(event.data.data.user);
-        // showSuccess(`Twitter linked: @${event.data.data.twitterUsername}`);
+        // console.log("event.data.data.user", event.data.data.user);
+        setUerProfile(event.data.data.user);
+        toastSuccess("Twitter linked successfully");
         window.removeEventListener('message', onMessage);
+        clearInterval(checkClosed);
         popup?.close();
       }
     };
@@ -628,8 +637,9 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
                             disabled={true}
                           />
                         </div> :
-                        <button onClick={getTwitterAuthAPI} className="text-primary-100 hover:text-primary-100/80 text-base transition-colors py-3 px-5 w-full bg-primary-100/10 rounded-lg">
-                          Click to connect X
+                        <button onClick={getTwitterAuthAPI} className="text-zinc-300 text-base transition-colors py-2.5 px-3 w-full bg-gradient-to-r from-black/60 to-transparent rounded-lg flex items-center justify-center border border-primary-100/40">
+                          Link your X account
+                          <RiTwitterXLine className="text-zinc-300 ml-auto size-7" />
                         </button>}
                       </div>
 

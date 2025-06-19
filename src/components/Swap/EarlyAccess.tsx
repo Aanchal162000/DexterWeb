@@ -392,7 +392,7 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
 
   const getTwitterAuthAPI = async () => {
     if (!authToken) {
-        toast.error("Wallet not connected!!");
+        toastError("Authentication failed. Retry login!");
         return;
     }
     const baseUrl = "https://dexters-backend.zkcross.exchange";

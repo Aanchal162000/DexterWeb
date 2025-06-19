@@ -8,6 +8,7 @@ import { toastError, toastSuccess } from "@/utils/toast";
 import { useActionContext } from "@/context/ActionContext";
 import DexterAccessChecklist from "./DexterAccessChecklist";
 import { ShowerHead } from "lucide-react";
+import axios from "axios";
 
 const accessService = AccessService.getInstance();
 
@@ -388,6 +389,18 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
     }
   }, [email, inviteCode, authToken, address, setUerProfile]);
 
+  const getTwitterAuthAPI = async () => {
+    if (!authToken) {
+        toast.error("Wallet not connected!!");
+        return;
+    }
+    const baseUrl = "https://e447-2401-4900-8841-2a13-e855-817f-6444-dc9.ngrok-free.app";
+    const response = await axios.get(`${baseUrl}/api/auth/twitter/auth/link`, {
+      headers: { authorization: `Bearer ${authToken}`, "ngrok-skip-browser-warning": "true" },
+    });
+    window.open(response.data?.data?.url, "_blank");
+};
+
   return (
     <Transition.Root show={isDialogOpen} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={handleClose} static>
@@ -582,7 +595,7 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
                         <label className="text-white text-sm font-medium">
                           Connect X
                         </label>
-                        <div className="relative">
+                        {/* <div className="relative">
                           <input
                             type="text"
                             value={twitterProfile}
@@ -595,7 +608,10 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
                             } rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary-100`}
                             disabled={userProfile?.isProfileCompleted}
                           />
-                        </div>
+                        </div> */}
+                        <button onClick={getTwitterAuthAPI} className="text-primary-100 hover:text-primary-100/80 text-base transition-colors py-3 px-5 w-full bg-primary-100/10 rounded-lg">
+                          Click to connect X
+                        </button>
                       </div>
 
                       {/* Invite Code Section - Always show if profile is completed */}

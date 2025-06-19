@@ -24,27 +24,8 @@ import { IoMdArrowDropup } from "react-icons/io";
 import { IoMdArrowDropright } from "react-icons/io";
 import { useNotifications } from "@/hooks/useNotifications";
 import NotificationDetails from "./NotificationDetails";
-
-interface EventData {
-  agentId: string;
-  agentName: string;
-  genesisId: string;
-  tokenAddress: string;
-  txHash: string;
-  blockNumber: number;
-  userAmount: string;
-  userMarketCap: string;
-  virtualPrice: string;
-}
-
-interface Notification {
-  id: string;
-  message: string;
-  type: string;
-  timestamp: string;
-  read: boolean;
-  eventData: EventData;
-}
+import { useActionContext } from "@/context/ActionContext";
+import { INotification } from "@/utils/interface";
 
 const Header = () => {
   const tabs = ["Laboratory", "Trenches", "Wallet", "Support"];
@@ -56,15 +37,17 @@ const Header = () => {
     (network) => network?.id == networkData?.chainId!
   );
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { authToken } = useActionContext();
   const {
     notifications,
     hasUnread,
     markAsRead,
     markAllAsRead,
+    clearAllNotifications,
     connectionStatus,
-  } = useNotifications(address!);
+  } = useNotifications(address!, authToken);
   const [selectedNotification, setSelectedNotification] =
-    useState<Notification | null>(null);
+    useState<INotification | null>(null);
 
   const handleTabClick = (item: string) => {
     let tab = headerRoutes.filter((route: IRouter) => route.name == item);
@@ -82,10 +65,13 @@ const Header = () => {
     setShowSettings(true);
   };
 
-  const handleNotificationClick = (notification: Notification) => {
+  const handleNotificationClick = (notification: INotification) => {
     markAsRead(notification.id);
     setSelectedNotification(notification);
   };
+
+  // Filter to show only unread notifications
+  const unreadNotifications = notifications.filter((n) => !n.read);
 
   return (
     <div className="relative w-full bg-[#15181B]/80 border-b-[1px] border-primary-100/60 z-30">
@@ -162,14 +148,7 @@ const Header = () => {
                               Connection error
                             </span>
                           )}
-                          {notifications.length > 0 && (
-                            <button
-                              onClick={markAllAsRead}
-                              className="text-xs text-primary-100 hover:text-primary-100/80"
-                            >
-                              Mark all as read
-                            </button>
-                          )}
+
                           <button onClick={handleSettingsClick}>
                             <img
                               src={"/alert/settings.png"}
@@ -179,20 +158,18 @@ const Header = () => {
                           </button>
                         </div>
                       </div>
-                      {notifications.length === 0 ? (
+                      {unreadNotifications.length === 0 ? (
                         <div className="px-4 py-5 text-sm text-white/70 text-center">
-                          No notifications
+                          No unread notifications
                         </div>
                       ) : (
-                        notifications.map((notification) => (
+                        unreadNotifications.map((notification) => (
                           <MenuItem key={notification.id}>
                             <button
                               onClick={() =>
                                 handleNotificationClick(notification)
                               }
-                              className={`flex w-full items-start justify-start px-4 py-5 text-sm text-white border-t border-primary-100/30 ${
-                                !notification.read ? "bg-green-500/30" : ""
-                              }`}
+                              className={`flex w-full items-start justify-start px-4 py-5 text-sm text-white border-t border-primary-100/30 bg-green-500/30`}
                             >
                               <img
                                 src={"/alert/bell-off.png"}
@@ -214,11 +191,21 @@ const Header = () => {
                           </MenuItem>
                         ))
                       )}
-                      {notifications.length > 0 && (
-                        <button className="flex w-full items-center justify-center px-4 py-3 border-t border-primary-100/30 text-primary-100 text-xs">
-                          See all activity
-                          <IoMdArrowDropright className="size-5 object-contain" />
-                        </button>
+                      {unreadNotifications.length > 0 && (
+                        <div className="flex w-full items-center justify-between px-4 py-3 border-t border-primary-100/30">
+                          <button
+                            onClick={markAllAsRead}
+                            className="text-primary-100 text-xs mr-2"
+                          >
+                            Mark all as read
+                          </button>
+                          <button
+                            onClick={clearAllNotifications}
+                            className="text-red-400 text-xs"
+                          >
+                            Clear All
+                          </button>
+                        </div>
                       )}
                     </div>
                   </MenuItems>

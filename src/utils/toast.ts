@@ -1,4 +1,9 @@
-import { ToastContent, ToastOptions, UpdateOptions, toast } from "react-toastify";
+import {
+  ToastContent,
+  ToastOptions,
+  UpdateOptions,
+  toast,
+} from "react-toastify";
 import { IDialogToast } from "./interface";
 
 export enum TOAST_ID {
@@ -9,7 +14,10 @@ export enum TOAST_ID {
   DIALOG = 7,
 }
 
-export const toastError = (textData: ToastContent<unknown>, options?: ToastOptions<unknown> | undefined) =>
+export const toastError = (
+  textData: ToastContent<unknown>,
+  options?: ToastOptions<unknown> | undefined
+) =>
   toast.error(textData, {
     position: "top-right",
     toastId: TOAST_ID.ERROR,
@@ -22,7 +30,10 @@ export const toastError = (textData: ToastContent<unknown>, options?: ToastOptio
     ...options,
   });
 
-export const toastProcess = (textData: ToastContent<unknown>, options?: ToastOptions<unknown> | undefined) =>
+export const toastProcess = (
+  textData: ToastContent<unknown>,
+  options?: ToastOptions<unknown> | undefined
+) =>
   toast.info(textData, {
     toastId: TOAST_ID.PROCESS,
     autoClose: 5000,
@@ -35,7 +46,10 @@ export const toastProcess = (textData: ToastContent<unknown>, options?: ToastOpt
     ...options,
   });
 
-export const toastInfo = (textData: ToastContent<unknown>, options?: ToastOptions<unknown> | undefined) =>
+export const toastInfo = (
+  textData: ToastContent<unknown>,
+  options?: ToastOptions<unknown> | undefined
+) =>
   toast.info(textData, {
     toastId: TOAST_ID.INFO,
     autoClose: 5000,
@@ -47,7 +61,10 @@ export const toastInfo = (textData: ToastContent<unknown>, options?: ToastOption
     ...options,
   });
 
-export const toastSuccess = (textData: ToastContent<unknown>, options?: ToastOptions<unknown> | undefined) =>
+export const toastSuccess = (
+  textData: ToastContent<unknown>,
+  options?: ToastOptions<unknown> | undefined
+) =>
   toast.success(textData, {
     position: "top-right",
     toastId: TOAST_ID.SUCCESS,
@@ -60,7 +77,10 @@ export const toastSuccess = (textData: ToastContent<unknown>, options?: ToastOpt
     ...options,
   });
 
-export const toastDialog = (reactNode: React.ReactNode, options: ToastOptions<unknown> & IDialogToast) =>
+export const toastDialog = (
+  reactNode: React.ReactNode,
+  options: ToastOptions<unknown> & IDialogToast
+) =>
   toast.info(reactNode, {
     toastId: TOAST_ID.DIALOG,
     position: "top-right",
@@ -73,7 +93,10 @@ export const toastDialog = (reactNode: React.ReactNode, options: ToastOptions<un
     ...options,
   });
 
-export const toastUpdate = (toastID: TOAST_ID, options?: UpdateOptions<unknown> | undefined) => {
+export const toastUpdate = (
+  toastID: TOAST_ID,
+  options?: UpdateOptions<unknown> | undefined
+) => {
   toast.update(toastID, {
     autoClose: 3000,
     isLoading: false,

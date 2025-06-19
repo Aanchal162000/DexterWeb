@@ -423,3 +423,25 @@ export interface IGenesisResponse {
     };
   };
 }
+
+// Notification system interfaces
+export interface INotificationEventData {
+  agentId: string;
+  agentName: string;
+  genesisId: string;
+  tokenAddress: string;
+  txHash: string;
+  blockNumber: number;
+  userAmount: string;
+  userMarketCap: string;
+  virtualPrice: string;
+}
+
+export interface INotification {
+  id: string;
+  message: string;
+  type: string;
+  timestamp: string;
+  read: boolean;
+  eventData: INotificationEventData;
+}

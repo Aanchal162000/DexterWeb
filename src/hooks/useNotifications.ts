@@ -1,28 +1,11 @@
 import { useState, useEffect } from "react";
+import { INotification, INotificationEventData } from "@/utils/interface";
 
-interface EventData {
-  agentId: string;
-  agentName: string;
-  genesisId: string;
-  tokenAddress: string;
-  txHash: string;
-  blockNumber: number;
-  userAmount: string;
-  userMarketCap: string;
-  virtualPrice: string;
-}
-
-interface Notification {
-  id: string;
-  message: string;
-  type: string;
-  timestamp: string;
-  read: boolean;
-  eventData: EventData;
-}
-
-export const useNotifications = (walletAddress: string | null) => {
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+export const useNotifications = (
+  walletAddress: string | null,
+  jwtToken: string | null
+) => {
+  const [notifications, setNotifications] = useState<INotification[]>([]);
   const [hasUnread, setHasUnread] = useState(false);
   const [connectionStatus, setConnectionStatus] = useState<
     "connecting" | "connected" | "error"
@@ -94,95 +77,37 @@ export const useNotifications = (walletAddress: string | null) => {
         eventSource.onmessage = (event) => {
           console.log("[Notifications] Raw event received:", event);
           const notification = processEventData(event);
-
           if (notification) {
             setNotifications((prev) => {
-              const updated = [notification, ...prev];
-              console.log(
-                "[Notifications] Updated notifications array:",
-                updated
-              );
-              return updated;
+              // Avoid duplicates by id
+              if (prev.some((n) => n.id === notification.id)) return prev;
+              return [notification, ...prev];
             });
             setHasUnread(true);
+            // Optionally, refetch history for perfect sync
+            fetchNotificationHistory();
           }
         };
 
-        eventSource.addEventListener("event_captured", (event) => {
-          console.log("[Notifications] Event captured event received:", event);
-          const notification = processEventData(event);
-
-          if (notification) {
-            setNotifications((prev) => {
-              const updated = [notification, ...prev];
-              console.log(
-                "[Notifications] Updated notifications array:",
-                updated
-              );
-              return updated;
-            });
-            setHasUnread(true);
-          }
-        });
-
-        eventSource.addEventListener("transaction_success", (event) => {
-          console.log(
-            "[Notifications] Transaction success event received:",
-            event
-          );
-          const notification = processEventData(event);
-
-          if (notification) {
-            setNotifications((prev) => {
-              const updated = [notification, ...prev];
-              console.log(
-                "[Notifications] Updated notifications array:",
-                updated
-              );
-              return updated;
-            });
-            setHasUnread(true);
-          }
-        });
-
-        eventSource.addEventListener("transaction_sent", (event) => {
-          console.log(
-            "[Notifications] Transaction sent event received:",
-            event
-          );
-          const notification = processEventData(event);
-
-          if (notification) {
-            setNotifications((prev) => {
-              const updated = [notification, ...prev];
-              console.log(
-                "[Notifications] Updated notifications array:",
-                updated
-              );
-              return updated;
-            });
-            setHasUnread(true);
-          }
-        });
-
-        eventSource.addEventListener("transaction_critical_error", (event) => {
-          console.log(
-            "[Notifications] Transaction critical error event received:",
-            event
-          );
-          const notification = processEventData(event);
-
-          if (notification) {
-            setNotifications((prev) => {
-              const updated = [notification, ...prev];
-              console.log(
-                "[Notifications] Updated notifications array:",
-                updated
-              );
-              return updated;
-            });
-            setHasUnread(true);
-          }
+        // Listen for other event types and handle similarly
+        [
+          "event_captured",
+          "transaction_success",
+          "transaction_sent",
+          "transaction_critical_error",
+        ].forEach((eventType) => {
+          eventSource!.addEventListener(eventType, (event) => {
+            console.log(`[Notifications] ${eventType} event received:`, event);
+            const notification = processEventData(event);
+            if (notification) {
+              setNotifications((prev) => {
+                if (prev.some((n) => n.id === notification.id)) return prev;
+                return [notification, ...prev];
+              });
+              setHasUnread(true);
+              fetchNotificationHistory();
+            }
+          });
         });
 
         eventSource.addEventListener("connection", (event) => {
@@ -225,28 +150,117 @@ export const useNotifications = (walletAddress: string | null) => {
     };
   }, [walletAddress]);
 
-  const markAsRead = (notificationId: string) => {
-    console.log(
-      "[Notifications] Marking notification as read:",
-      notificationId
-    );
-    setNotifications((prev) =>
-      prev.map((notification) =>
-        notification.id === notificationId
-          ? { ...notification, read: true }
-          : notification
-      )
-    );
-    setHasUnread(false);
+  // Helper to fetch notification history
+  const fetchNotificationHistory = async () => {
+    if (!jwtToken) return;
+    try {
+      const res = await fetch(
+        `https://dexters-backend.zkcross.exchange/api/user-notifications?limit=100`,
+        {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        }
+      );
+      const data = await res.json();
+      if (data.success && data.data?.notifications) {
+        setNotifications(
+          data.data.notifications.map((n: any) => ({
+            id: n.id,
+            message: n.message,
+            type: n.type,
+            timestamp: n.timestamp,
+            read: n.isRead,
+            eventData: n.data || {},
+          }))
+        );
+        setHasUnread(data.data.summary?.unreadCount > 0);
+      }
+    } catch (error) {
+      console.error(
+        "[Notifications] Error fetching notification history:",
+        error
+      );
+    }
   };
 
-  const markAllAsRead = () => {
-    console.log("[Notifications] Marking all notifications as read");
-    setNotifications((prev) =>
-      prev.map((notification) => ({ ...notification, read: true }))
-    );
-    setHasUnread(false);
+  // Mark a notification as read (API)
+  const markAsRead = async (notificationId: string) => {
+    if (!jwtToken) return;
+    try {
+      await fetch(
+        `https://dexters-backend.zkcross.exchange/api/user-notifications/${notificationId}/read`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        }
+      );
+      setNotifications((prev) =>
+        prev.map((notification) =>
+          notification.id === notificationId
+            ? { ...notification, read: true }
+            : notification
+        )
+      );
+      setHasUnread(false);
+    } catch (error) {
+      console.error("[Notifications] Error marking as read:", error);
+    }
   };
+
+  // Mark all notifications as read (API)
+  const markAllAsRead = async () => {
+    if (!jwtToken) return;
+    try {
+      await fetch(
+        `https://dexters-backend.zkcross.exchange/api/user-notifications/mark-all-read`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        }
+      );
+      setNotifications((prev) =>
+        prev.map((notification) => ({ ...notification, read: true }))
+      );
+      setHasUnread(false);
+    } catch (error) {
+      console.error("[Notifications] Error marking all as read:", error);
+    }
+  };
+
+  // Clear all notifications (API)
+  const clearAllNotifications = async () => {
+    if (!jwtToken) return;
+    try {
+      await fetch(
+        `https://dexters-backend.zkcross.exchange/api/user-notifications/clear-all`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        }
+      );
+      setNotifications([]);
+      setHasUnread(false);
+    } catch (error) {
+      console.error("[Notifications] Error clearing all notifications:", error);
+    }
+  };
+
+  // Fetch notification history on mount and when wallet/jwtToken changes
+  useEffect(() => {
+    if (walletAddress && jwtToken) {
+      fetchNotificationHistory();
+    } else {
+      setNotifications([]);
+      setHasUnread(false);
+    }
+  }, [walletAddress, jwtToken]);
 
   useEffect(() => {
     console.log("[Notifications] Current state:", {
@@ -262,6 +276,7 @@ export const useNotifications = (walletAddress: string | null) => {
     hasUnread,
     markAsRead,
     markAllAsRead,
+    clearAllNotifications,
     connectionStatus,
   };
 };

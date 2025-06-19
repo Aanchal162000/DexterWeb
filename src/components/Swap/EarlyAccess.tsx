@@ -394,11 +394,11 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
         toast.error("Wallet not connected!!");
         return;
     }
-    const baseUrl = "https://e447-2401-4900-8841-2a13-e855-817f-6444-dc9.ngrok-free.app";
+    const baseUrl = "https://dexters-backend.zkcross.exchange";
     const response = await axios.get(`${baseUrl}/api/auth/twitter/auth/link`, {
       headers: { authorization: `Bearer ${authToken}`, "ngrok-skip-browser-warning": "true" },
     });
-    window.open(response.data?.data?.url, "_blank");
+    window.open(response.data?.data?.url, "_self");
 };
 
   return (

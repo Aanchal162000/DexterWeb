@@ -1,14 +1,14 @@
 import React from "react";
 import { Switch } from "@headlessui/react";
 import clsx from "clsx";
+import { AlertOption } from "@/utils/interface";
+import { useNotificationPermission } from "@/hooks/useNotificationPermission";
+import { useLoginContext } from "@/context/LoginContext";
+import Input from "@/components/HelpCenter/Input";
+import AccessService from "@/services/accessService";
+import { toastError, toastSuccess } from "@/utils/toast";
 
-interface AlertOption {
-  id: string;
-  title: string;
-  description?: string;
-  enabled: boolean;
-  onChange: (enabled: boolean) => void;
-}
+const accessService = AccessService.getInstance();
 
 interface AlertsSettingsProps {
   onClose: () => void;
@@ -16,9 +16,9 @@ interface AlertsSettingsProps {
 
 const AlertsSettings: React.FC<AlertsSettingsProps> = ({ onClose }) => {
   const [deliveryChannels, setDeliveryChannels] = React.useState({
-    inTerminal: true,
-    browser: true,
-    email: true,
+    inTerminal: false,
+    browser: false,
+    email: false,
     mobile: false,
   });
 
@@ -29,13 +29,75 @@ const AlertsSettings: React.FC<AlertsSettingsProps> = ({ onClose }) => {
     tokenLaunch: true,
   });
 
-  const handleDeliveryChannelChange = (
+  const { permission, requestPermission } = useNotificationPermission();
+
+  // Email modal state
+  const [showEmailModal, setShowEmailModal] = React.useState(false);
+  const [emailInput, setEmailInput] = React.useState("");
+  const [emailLoading, setEmailLoading] = React.useState(false);
+
+  const { userProfile, address } = useLoginContext();
+
+  React.useEffect(() => {
+    if (showEmailModal && userProfile?.email) {
+      setEmailInput(userProfile.email);
+    }
+  }, [showEmailModal, userProfile]);
+
+  const handleDeliveryChannelChange = async (
     channel: keyof typeof deliveryChannels
   ) => {
+    if (channel === "browser") {
+      if (!deliveryChannels.browser) {
+        // User is enabling browser notifications
+        const result = await requestPermission();
+        if (result !== "granted") {
+          toastError("You must allow notifications to enable browser alerts.");
+          return;
+        }
+      }
+    }
+    if (channel === "email") {
+      if (!deliveryChannels.email) {
+        setShowEmailModal(true);
+        return;
+      }
+    }
     setDeliveryChannels((prev) => ({
       ...prev,
       [channel]: !prev[channel],
     }));
+  };
+
+  const handleEmailSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!emailInput || !address) {
+      toastError("Email and wallet address are required.");
+      return;
+    }
+    setEmailLoading(true);
+    try {
+      const res = await accessService.register({
+        email: emailInput,
+        walletAddress: address,
+      });
+      if (res.success) {
+        setDeliveryChannels((prev) => ({ ...prev, email: true }));
+        setShowEmailModal(false);
+        toastSuccess("Subscribed to email alerts!");
+      } else {
+        toastError(res.message || "Failed to subscribe.");
+      }
+    } catch (err: any) {
+      toastError(err?.message || "Failed to subscribe.");
+    } finally {
+      setEmailLoading(false);
+    }
+  };
+
+  const handleEmailModalClose = () => {
+    setShowEmailModal(false);
+    setEmailInput(userProfile?.email || "");
   };
 
   const handleAlertOptionChange = (option: keyof typeof alertOptions) => {
@@ -126,6 +188,7 @@ const AlertsSettings: React.FC<AlertsSettingsProps> = ({ onClose }) => {
               className={`py-4 px-8 flex flex-row  ${
                 (index + 1) % 2 != 0 ? "bg-[#818284]/10" : "bg-none"
               }   `}
+              key={option.id}
             >
               <div className="relative w-[45%]  items-center justify-start">
                 {!index && (
@@ -141,10 +204,7 @@ const AlertsSettings: React.FC<AlertsSettingsProps> = ({ onClose }) => {
               </div>
 
               <div className="relative w-[55%]  items-center justify-start">
-                <div
-                  key={option.id}
-                  className="flex  gap-8 items-center justify-start py-1"
-                >
+                <div className="flex  gap-8 items-center justify-start py-1">
                   <Switch
                     checked={option.enabled}
                     onChange={option.onChange}
@@ -172,6 +232,7 @@ const AlertsSettings: React.FC<AlertsSettingsProps> = ({ onClose }) => {
               className={`py-4 px-8  flex flex-row ${
                 (index + 1) % 2 != 0 ? "bg-[#818284]/10" : "bg-none"
               }  `}
+              key={option.id}
             >
               <div className="relative w-[45%]  items-center justify-start">
                 {!index && (
@@ -188,7 +249,6 @@ const AlertsSettings: React.FC<AlertsSettingsProps> = ({ onClose }) => {
 
               <div className="relative w-[55%]  items-center justify-start">
                 <div
-                  key={option.id}
                   className={`flex  gap-8 items-center justify-center py-1 `}
                 >
                   <Switch
@@ -286,6 +346,45 @@ const AlertsSettings: React.FC<AlertsSettingsProps> = ({ onClose }) => {
           </div>
         </div> */}
       </div>
+      {/* Email Modal */}
+      {showEmailModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+          <form
+            onSubmit={handleEmailSubscribe}
+            className="bg-[#181A20] rounded-xl p-8 w-full max-w-md shadow-lg flex flex-col gap-6 border border-primary-100"
+          >
+            <h3 className="text-lg font-bold text-white">
+              Subscribe to Email Alerts
+            </h3>
+            <Input
+              label="Email"
+              name="email"
+              type="email"
+              placeholder="Enter your email"
+              value={emailInput}
+              onChange={(e: any) => setEmailInput(e.target.value)}
+              isMandatory
+            />
+            <div className="flex gap-4 justify-end">
+              <button
+                type="button"
+                className="px-4 py-2 rounded bg-gray-700 text-white hover:bg-gray-600"
+                onClick={handleEmailModalClose}
+                disabled={emailLoading}
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="px-4 py-2 rounded bg-primary-100 text-black font-semibold hover:bg-primary-200 disabled:opacity-60"
+                disabled={emailLoading}
+              >
+                {emailLoading ? "Subscribing..." : "Subscribe"}
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
     </div>
   );
 };

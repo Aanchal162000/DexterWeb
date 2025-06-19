@@ -68,6 +68,8 @@ interface ILoginState {
   triggerAPIs: () => void;
   isWhitelisted: boolean;
   setIsWhitelisted: Dispatch<SetStateAction<boolean>>;
+  isFromHeader: boolean;
+  setIsFromHeader: Dispatch<SetStateAction<boolean>>;
   isEarlyAccessOpen: boolean;
   setIsEarlyAccessOpen: Dispatch<SetStateAction<boolean>>;
   userProfile: any;
@@ -106,6 +108,7 @@ export default function LoginProvider({ children }: { children: ReactNode }) {
   const [trigger, setTrigger] = useState<number>(0);
   const isFirstLoad = useIsFirstEffect();
   const [isWhitelisted, setIsWhitelisted] = useState<boolean>(false);
+  const [isFromHeader, setIsFromHeader] = useState<boolean>(false);
   const [isEarlyAccessOpen, setIsEarlyAccessOpen] = useState(false);
 
   const [userProfile, setUerProfile] = useState<any>(null);
@@ -578,6 +581,8 @@ export default function LoginProvider({ children }: { children: ReactNode }) {
         setIsEarlyAccessOpen,
         userProfile,
         setUerProfile,
+        isFromHeader,
+        setIsFromHeader,
       }}
     >
       {children}

@@ -445,3 +445,11 @@ export interface INotification {
   read: boolean;
   eventData: INotificationEventData;
 }
+
+export interface AlertOption {
+  id: string;
+  title: string;
+  description?: string;
+  enabled: boolean;
+  onChange: (enabled: boolean) => void;
+}

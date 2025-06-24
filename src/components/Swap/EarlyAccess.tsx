@@ -8,6 +8,8 @@ import { toastError, toastSuccess } from "@/utils/toast";
 import { useActionContext } from "@/context/ActionContext";
 import DexterAccessChecklist from "./DexterAccessChecklist";
 import { ShowerHead } from "lucide-react";
+import axios from "axios";
+import { RiTwitterXLine } from "react-icons/ri";
 
 const accessService = AccessService.getInstance();
 
@@ -388,6 +390,44 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
     }
   }, [email, inviteCode, authToken, address, setUerProfile]);
 
+  const getTwitterAuthAPI = async () => {
+    if (!authToken) {
+        toastError("Authentication failed. Retry login!");
+        return;
+    }
+    const baseUrl = "https://dexters-backend.zkcross.exchange";
+    const response = await axios.get(`${baseUrl}/api/auth/twitter/auth/link`, {
+      headers: { authorization: `Bearer ${authToken}`, "ngrok-skip-browser-warning": "true" },
+    });
+    // window.open(response.data?.data?.url, "_self");
+    const popup = window.open(
+      response.data?.data?.url,
+      'twitter-auth',
+      'width=600,height=700,scrollbars=yes,resizable=yes'
+    );
+
+    const checkClosed = setInterval(() => {
+      if (popup?.closed) {
+        clearInterval(checkClosed);
+        toastError("Twitter authentication cancelled!!");
+      }
+    }, 1000);
+
+    const onMessage = (event: MessageEvent) => {
+      if (event.data.type === 'TWITTER_AUTH_SUCCESS') {
+        // Update UI immediately - no page refresh needed!
+        // console.log("event.data.data.user", event.data.data.user);
+        setUerProfile(event.data.data.user);
+        toastSuccess("Twitter linked successfully");
+        window.removeEventListener('message', onMessage);
+        clearInterval(checkClosed);
+        popup?.close();
+      }
+    };
+
+    window.addEventListener('message', onMessage);
+};
+
   return (
     <Transition.Root show={isDialogOpen} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={handleClose} static>
@@ -582,6 +622,7 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
                         <label className="text-white text-sm font-medium">
                           Connect X
                         </label>
+                        {userProfile?.isProfileCompleted ?
                         <div className="relative">
                           <input
                             type="text"
@@ -593,9 +634,13 @@ const EarlyAccess: React.FC<EarlyAccessProps> = ({ isOpen, onClose }) => {
                                 ? "border-green-500"
                                 : "border-primary-100/40"
                             } rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary-100`}
-                            disabled={userProfile?.isProfileCompleted}
+                            disabled={true}
                           />
-                        </div>
+                        </div> :
+                        <button onClick={getTwitterAuthAPI} className="text-zinc-300 text-base transition-colors py-2.5 px-3 w-full bg-gradient-to-r from-black/60 to-transparent rounded-lg flex items-center justify-center border border-primary-100/40">
+                          Link your X account
+                          <RiTwitterXLine className="text-zinc-300 ml-auto size-7" />
+                        </button>}
                       </div>
 
                       {/* Invite Code Section - Always show if profile is completed */}

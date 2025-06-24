@@ -461,6 +461,26 @@ class ActionService {
       };
     }
   }
+
+  async claimLoopPoints(loopId: string, token: string): Promise<any> {
+    try {
+      const { data } = await axios.post(
+        `${baseURL}/api/volume-loop/claim/${loopId}`,
+        {},
+        { headers: { authorization: `Bearer ${token}` } }
+      );
+      return {
+        success: true,
+        message: "Points claimed successfully",
+        data,
+      };
+    } catch (error: any) {
+      return {
+        success: false,
+        message: error.response?.data?.message || "Failed to claim points",
+      };
+    }
+  }
 }
 
 export const actionService = ActionService.getInstance();

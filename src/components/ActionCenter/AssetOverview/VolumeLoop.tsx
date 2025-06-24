@@ -5,6 +5,7 @@ import { formatPrecision } from "@/utils/helper";
 import { useLoginContext } from "../../../context/LoginContext";
 import { useActionContext } from "../../../context/ActionContext";
 import { actionService } from "@/services/contract/actionService";
+import { toastSuccess, toastError } from "@/utils/toast";
 
 interface VolumeLoopData {
   id: string;
@@ -40,7 +41,8 @@ const VolumeLoop = ({
   const [dataList, setDataList] = useState<VolumeLoopData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const { address } = useLoginContext();
-  const { authToken } = useActionContext();
+  const { authToken, volumeLoopRefreshKey } = useActionContext();
+  const [claimingId, setClaimingId] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchUserLoops = async () => {
@@ -87,7 +89,7 @@ const VolumeLoop = ({
     };
 
     fetchUserLoops();
-  }, [address, authToken]);
+  }, [address, authToken, volumeLoopRefreshKey]);
 
   useEffect(() => {
     const balance = dataList?.reduce(
@@ -104,6 +106,24 @@ const VolumeLoop = ({
     } else {
       // Handle restart action
       console.log("Restarting volume loop:", id);
+    }
+  };
+
+  const handleClaim = async (id: string) => {
+    if (!authToken) return;
+    setClaimingId(id);
+    try {
+      const response = await actionService.claimLoopPoints(id, authToken);
+      if (response.success) {
+        toastSuccess("Points claimed successfully!");
+        // Refresh the list if needed
+      } else {
+        toastError(response.message || "Failed to claim points");
+      }
+    } catch (error) {
+      toastError("Failed to claim points");
+    } finally {
+      setClaimingId(null);
     }
   };
 
@@ -256,6 +276,21 @@ const VolumeLoop = ({
                   >
                     {item.status === "Active" ? "Cancel" : "Restart"}
                   </button>
+                  {/* {item.status === "Completed" && (
+                    <div className=" w-full">
+                      <button
+                        onClick={() => handleClaim(item.id)}
+                        disabled={claimingId === item.id}
+                        className={clsx(
+                          "mt-2 px-4 py-2 rounded text-sm font-medium transition-colors border border-primary-100 text-primary-100 hover:bg-primary-100/40 ",
+                          claimingId === item.id &&
+                            "opacity-60 cursor-not-allowed"
+                        )}
+                      >
+                        {claimingId === item.id ? "Claiming..." : "Claim"}
+                      </button>
+                    </div>
+                  )} */}
                 </td>
               </tr>
             ))}

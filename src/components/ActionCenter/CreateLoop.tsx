@@ -40,7 +40,7 @@ function CreateLoop() {
     targetAddress: userProfile.managedWalletAddress,
     isManagedWallet: true,
   });
-  const { authToken, totalStaked } = useActionContext();
+  const { authToken, totalStaked, refreshVolumeLoop } = useActionContext();
   const { virtuals: sentientVirtuals } = useSentientVirtuals();
   const { virtuals: prototypeVirtuals } = usePrototypeVirtuals();
   const { prices } = useTokenPrices();
@@ -234,7 +234,7 @@ function CreateLoop() {
         })),
         maxVolumeInVirtual: ethers.utils.parseUnits(amount, 18).toString(),
         recommendedVolumeInVirtual: recommendedAmount,
-        timelineDays: timelineDays,
+        timelineDays: 0.043,
       };
 
       console.log("Creating loop with:", startLoopRequest);
@@ -250,6 +250,7 @@ function CreateLoop() {
         setAmount("");
         setRecommendedAmount("0.0");
         setTimelineDays(2);
+        refreshVolumeLoop();
       } else {
         toastError(response.message || "Failed to create loop");
       }

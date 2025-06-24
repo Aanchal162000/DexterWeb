@@ -15,6 +15,8 @@ interface ActionContextType {
   setAuthToken: (token: string) => void;
   totalStaked: string;
   calculateTotalStaked: () => Promise<void>;
+  volumeLoopRefreshKey: number;
+  refreshVolumeLoop: () => void;
 }
 
 const ActionContext = createContext<ActionContextType | undefined>(undefined);
@@ -23,6 +25,8 @@ export const ActionProvider = ({ children }: { children: ReactNode }) => {
   const [authToken, setAuthTokenState] = useState("");
   const [totalStaked, setTotalStaked] = useState("0");
   const { address } = useLoginContext();
+  const [volumeLoopRefreshKey, setVolumeLoopRefreshKey] = useState(0);
+  const refreshVolumeLoop = () => setVolumeLoopRefreshKey((k) => k + 1);
 
   const setAuthToken = async (token: string): Promise<void> => {
     setAuthTokenState(token);
@@ -71,6 +75,8 @@ export const ActionProvider = ({ children }: { children: ReactNode }) => {
         setAuthToken,
         totalStaked,
         calculateTotalStaked,
+        volumeLoopRefreshKey,
+        refreshVolumeLoop,
       }}
     >
       {children}

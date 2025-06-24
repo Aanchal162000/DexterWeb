@@ -198,7 +198,7 @@ const Header = () => {
                                 <img
                                   src={"/alert/bell-off.png"}
                                   alt="notifications"
-                                  className="mr-3 h-7 w-7 border border-green-100 rounded-full translate-y-2"
+                                  className="mr-3 h-7 w-7  rounded-full translate-y-2"
                                 />
                                 <div className="flex flex-col items-start justify-start text-left">
                                   <p className="text-white text-sm">

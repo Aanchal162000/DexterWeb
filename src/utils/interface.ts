@@ -426,15 +426,13 @@ export interface IGenesisResponse {
 
 // Notification system interfaces
 export interface INotificationEventData {
-  agentId: string;
-  agentName: string;
   genesisId: string;
-  tokenAddress: string;
-  txHash: string;
-  blockNumber: number;
-  userAmount: string;
-  userMarketCap: string;
-  virtualPrice: string;
+  name: string;
+  symbol: string;
+  startsAt: string;
+  description: string;
+  isVerified: boolean;
+  imageUrl: string;
 }
 
 export interface INotification {

@@ -171,7 +171,7 @@ export const useNotifications = (
             type: n.type,
             timestamp: n.timestamp,
             read: n.isRead,
-            eventData: n.data || {},
+            eventData: n.data.data || {},
           }))
         );
         setHasUnread(data.data.summary?.unreadCount > 0);
